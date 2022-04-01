@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
@@ -10,22 +11,95 @@ namespace CodeGenerator
     {
         public static System.Guid PanelId => typeof(CodeGenPanelView).GUID;
 
-        private CodeGenPanelCtrl controller;
-        
+        public static CodeGenPanelView Instance { get; private set; }
+
+        protected CodeGenPanelCtrl Controller;
+
+        protected CodeGenPanelModel Model;
+
+        // Set to True once ctrl/ model are wired up
+        // XXX: We need this because rhino calls the constructor for us
+        public bool Initialized { get; set; }
+
+        private Button _btnGenerateModel;
+        private Button _btnInspectPython;
+        private Button _btnMouseSelect;
+        private Button _btnAddLayer;
+        private DropDown _dropdownLayers;
+        private TableLayout _keyValueProperties;
+        private TextBox _tbLayerToAdd;
+        private GroupBox _gbPropertiesForLayer;
+
         public CodeGenPanelView()
         {
-            controller = new CodeGenPanelCtrl();
-            this.BuildGui();
+            Rhino.RhinoApp.WriteLine("Creating view");
+            Instance = this;
+            BuildGui();
+        }
+
+        public void RegisterModel(CodeGenPanelModel model)
+        {
+            this.Model = model;
+        }
+
+        public void RegisterController(CodeGenPanelCtrl ctrl)
+        {
+            Controller = ctrl;
+            _btnGenerateModel.Click += (sender, e) => ctrl.OnGenerateModel();
+            _btnInspectPython.Click += (sender, e) => ctrl.OnInspectPython();
+            _btnAddLayer.Click += (sender, e) => ctrl.OnAddLayer(_tbLayerToAdd.Text);
+            _btnMouseSelect.Click += (sender, e) => ctrl.OnMouseSelectLayer();
+            _dropdownLayers.SelectedIndexChanged += (sender, e) =>
+            {
+                ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);
+            };
+        }
+
+        public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
+        {
+        }
+
+        public void PanelHidden(uint documentSerialNumber, ShowPanelReason reason)
+        {
+        }
+
+        public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
+        {
+        }
+
+        public void UpdateView()
+        {
+            _tbLayerToAdd.Text = Model.LayerToAdd;
+            List<string> dbLayers = new List<string>();
+
+            {
+                int i = 0;
+                int selection = 0;
+                foreach (var l in Model.Layers)
+                {
+                    if (l == Model.CurrentLayer)
+                    {
+                        selection = i;
+                    }
+
+                    dbLayers.Add(l.Name);
+                    i++;
+                }
+
+                _dropdownLayers.SelectedIndex = selection;
+                _dropdownLayers.DataStore = dbLayers;
+            }
+
+            _gbPropertiesForLayer.Visible = Model.CurrentLayer != null;
+            if (Model.CurrentLayer != null)
+            {
+                _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
+                _gbPropertiesForLayer.Visible = true;
+            }
         }
 
         private void BuildGui()
         {
-            // selectLayerButton.Click += (sender, e) =>
-            // {
-            //     var doc = Rhino.RhinoDoc.ActiveDoc;
-            //     var str = CodeGeneratorCommand.SelectLayer(doc);
-            //     txtVal1.Text = str;
-            // };
             var layout = new DynamicLayout();
             layout.Padding = new Padding(10, 10);
             layout.Spacing = new Size(0, 10);
@@ -40,8 +114,10 @@ namespace CodeGenerator
                         Rows =
                         {
                             new TableRow(
-                                TableLayout.AutoSized(new Button {Text = "Inspect Python"}),
-                                TableLayout.AutoSized(new Button {Text = "Generate Model"}))
+                                TableLayout.AutoSized(
+                                    (_btnInspectPython = new Button {Text = "Inspect Python"})),
+                                TableLayout.AutoSized(
+                                    (_btnGenerateModel = new Button {Text = "Generate Model"})))
                         }
                     }
                 });
@@ -52,8 +128,8 @@ namespace CodeGenerator
                     Padding = new Padding(5),
                     Content = new DynamicLayout
                     {
-                        Padding = new Padding(5), // padding around cells
-                        Spacing = new Size(5, 5), // spacing between each cell
+                        Padding = new Padding(5),
+                        Spacing = new Size(5, 5),
                         Rows =
                         {
                             new DynamicLayout
@@ -61,10 +137,10 @@ namespace CodeGenerator
                                 Spacing = new Size(5, 5),
                                 Rows =
                                 {
-                                    new TextBox
+                                    (_tbLayerToAdd = new TextBox
                                     {
-                                        PlaceholderText = "Type or Select Layer to add"
-                                    }
+                                        PlaceholderText = "Type or Select Layer to add",
+                                    })
                                 }
                             },
                             new TableLayout
@@ -73,8 +149,11 @@ namespace CodeGenerator
                                 Rows =
                                 {
                                     new TableRow(
-                                        TableLayout.AutoSized(new Button {Text = "Mouse Select"}),
-                                        TableLayout.AutoSized(new Button {Text = "Add"})
+                                        TableLayout.AutoSized(
+                                            _btnMouseSelect = new Button {Text = "Mouse Select"}
+                                        ),
+                                        TableLayout.AutoSized(
+                                            _btnAddLayer = new Button {Text = "Add"})
                                     )
                                 }
                             }
@@ -97,48 +176,34 @@ namespace CodeGenerator
                                 Spacing = new Size(5, 5),
                                 Rows =
                                 {
-                                    new DropDown
+                                    (_dropdownLayers = new DropDown
                                     {
-                                    }
+                                    })
                                 }
                             },
                         }
                     }
                 });
             layout.AddRow(
-                new GroupBox
-                {
-                    Text = "Properties for Layer",
-                    Padding = new Padding(5),
-                    Content = new TableLayout
+                (_gbPropertiesForLayer = new GroupBox
                     {
+                        Text = "Properties for Layer",
                         Padding = new Padding(5),
-                        Spacing = new Size(5, 1),
-                        Rows =
+                        Visible = false, // Hidden if no layer selected
+                        Content = (_keyValueProperties = new TableLayout
                         {
-                            TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox()),
-                            // TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox()),
-                            // TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox()),
-                            // TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox())
-                        }
+                            Padding = new Padding(5),
+                            Spacing = new Size(5, 1),
+                            Rows =
+                            {
+                                TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox()),
+                            }
+                        })
                     }
-                });
-            Content = new Scrollable
-            {
-                Content = layout
-            };
-        }
-        
-        public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
-        {
-        }
+                ));
 
-        public void PanelHidden(uint documentSerialNumber, ShowPanelReason reason)
-        {
-        }
-
-        public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
-        {
+            layout.AddRow(new Label {Text = ""});
+            Content = new Scrollable {Content = layout};
         }
     }
 }

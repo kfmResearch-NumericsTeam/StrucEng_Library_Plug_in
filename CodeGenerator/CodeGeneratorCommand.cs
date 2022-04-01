@@ -28,57 +28,21 @@ namespace CodeGenerator
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
+            Rhino.RhinoApp.WriteLine("Running command");
             var panelId = CodeGenPanelView.PanelId;
+            
+            Rhino.RhinoApp.WriteLine("Before");
             Panels.OpenPanel(panelId);
-            string layer = SelectLayer(doc);
+            Rhino.RhinoApp.WriteLine("After");
+            
+            if (!CodeGenPanelView.Instance.Initialized)
+            {
+                Rhino.RhinoApp.WriteLine("Gluing view");
+                CodeGenPanelView.Instance.RegisterController(CodeGeneratorPlugin.Instance.CodeGenPanelCtrl);
+                CodeGenPanelView.Instance.RegisterModel(CodeGeneratorPlugin.Instance.CodeGenPanelModel);
+                CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
+            }
             return Result.Success;
-        }
-
-        public static string SelectLayer(RhinoDoc doc)
-        {
-            const ObjectType selectionType = ObjectType.AnyObject;
-            GetObject go = new GetObject();
-            go.SetCommandPrompt("Select an object");
-            go.GeometryFilter = selectionType;
-            go.GroupSelect = false;
-            go.SubObjectSelect = false;
-            go.EnableClearObjectsOnEntry(true);
-            go.EnableUnselectObjectsOnExit(false);
-            go.DeselectAllBeforePostSelect = true;
-            RhinoObject selected = null;
-
-            // select a single element
-            for (;;)
-            {
-                GetResult res = go.GetMultiple(1, 1);
-                if (res != GetResult.Object)
-                    return null;
-
-                if (go.ObjectsWerePreselected)
-                {
-                    go.EnablePreSelect(false, true);
-                    continue;
-                }
-
-                break;
-            }
-
-            // keep selection
-            RhinoObject rhinoObject = go.Object(0).Object();
-            if (null == rhinoObject)
-            {
-                return null;
-            }
-
-            selected = rhinoObject;
-            rhinoObject.Select(true);
-            doc.Views.Redraw();
-
-
-            // get name
-            int index = selected.Attributes.LayerIndex;
-            string name = doc.Layers[index].Name;
-            return name;
         }
     }
 }
