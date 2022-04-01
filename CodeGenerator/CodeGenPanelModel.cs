@@ -1,11 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace CodeGenerator
 {
     public class CodeGenPanelModel
     {
+        public string Test
+        {
+            get { return Test; }
+            set
+            {
+                Rhino.RhinoApp.WriteLine("set: {0}", value);
+                Test = value;
+            }
+        }
+
         public string LayerToAdd { get; set; }
 
         public List<Layer> Layers { get; set; } = new List<Layer>();
@@ -40,6 +52,7 @@ namespace CodeGenerator
 
                 i++;
             }
+
             if (!found)
             {
                 throw new Exception("Invalid layer l");
@@ -50,7 +63,8 @@ namespace CodeGenerator
     public class Layer
     {
         public string Name { get; set; }
-        public List<LayerProperty> Properties { get; set; }
+        
+        public string KeyVal1 { get; set; }
     }
 
     public class LayerProperty

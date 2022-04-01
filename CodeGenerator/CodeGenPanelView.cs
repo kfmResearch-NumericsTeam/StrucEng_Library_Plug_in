@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
+using Rhino.UI.CodeEditor;
 
 namespace CodeGenerator
 {
@@ -56,6 +58,13 @@ namespace CodeGenerator
             {
                 ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);
             };
+
+            // XXX: We write here "enabled" logic in view to reduce boilerplate code
+            _tbLayerToAdd.TextBinding.Bind(() => _tbLayerToAdd.Text, val =>
+            {
+                _btnAddLayer.Enabled = val != "";
+
+            });
         }
 
         public void UpdateView()
@@ -91,11 +100,14 @@ namespace CodeGenerator
             {
                 _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
                 _gbPropertiesForLayer.Visible = true;
+                UpdatePropertyLayer(Model.CurrentLayer);
             }
         }
 
         private void BuildGui()
         {
+            DataContext = Model;
+
             var layout = new DynamicLayout();
             layout.Padding = new Padding(10, 10);
             layout.Spacing = new Size(0, 10);
@@ -111,7 +123,7 @@ namespace CodeGenerator
                         {
                             new TableRow(
                                 new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Python"}),
+                                    (_btnInspectPython = new Button {Text = "Inspect Code"}),
                                     true
                                 ),
                                 new TableCell(
@@ -160,7 +172,7 @@ namespace CodeGenerator
                                 {
                                     new TableRow(
                                         TableLayout.AutoSized(
-                                            _btnAddLayer = new Button {Text = "Add"})
+                                            _btnAddLayer = new Button {Text = "Add", Enabled = false})
                                     )
                                 }
                             }
@@ -196,26 +208,38 @@ namespace CodeGenerator
                         }
                     }
                 });
+
             layout.AddRow(
                 (_gbPropertiesForLayer = new GroupBox
                     {
                         Text = "Properties for Layer",
                         Padding = new Padding(5),
                         Visible = false, // Hidden if no layer selected
-                        Content = (_keyValueProperties = new TableLayout
-                        {
-                            Padding = new Padding(5),
-                            Spacing = new Size(5, 1),
-                            Rows =
-                            {
-                                TableLayout.HorizontalScaled(new Label {Text = "Key"}, new TextBox()),
-                            }
-                        })
+                        // Content = 
                     }
                 ));
 
             layout.AddRow(new Label {Text = ""});
             Content = new Scrollable {Content = layout};
+        }
+
+        private void UpdatePropertyLayer(Layer l)
+        {
+            var tb = new TextBox();
+            tb.TextBinding.Bind(() => l.KeyVal1, val => l.KeyVal1 = val);
+            // tb.TextBinding.Bind(() => Model.Test, val => Rhino.RhinoApp.WriteLine("Set value to {0} directly", val));
+            var res = new Collection<TableRow>()
+            {
+            };
+            _gbPropertiesForLayer.Content = new TableLayout
+            {
+                Padding = new Padding(5),
+                Spacing = new Size(5, 1),
+                Rows =
+                {
+                    TableLayout.HorizontalScaled(new Label {Text = "Key 1"}, tb)
+                }
+            };
         }
 
         public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)

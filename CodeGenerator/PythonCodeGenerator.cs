@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace CodeGenerator
 {
@@ -13,7 +14,12 @@ namespace CodeGenerator
 
         public string Generate()
         {
-            var gen = String.Format(PythonCodeSnippets.CODEGEN_HEADER, _model.ToString());
+            var b = new StringBuilder();
+            foreach (var l in _model.Layers)
+            {
+                b.Append(String.Format("{0}: val: {1}, ", l.Name, l.KeyVal1));
+            }
+            var gen = String.Format(PythonCodeSnippets.CODEGEN_HEADER, b.ToString());
             return gen;
         }
     }
