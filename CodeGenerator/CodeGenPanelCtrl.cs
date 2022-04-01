@@ -1,7 +1,9 @@
 using Rhino;
+using Rhino.Commands;
 using Rhino.DocObjects;
 using Rhino.Input;
 using Rhino.Input.Custom;
+using Rhino.UI;
 
 namespace CodeGenerator
 {
@@ -22,14 +24,39 @@ namespace CodeGenerator
 
         public void OnGenerateModel()
         {
+            PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
+            var generated = codeGen.Generate();
+            ExecutePython(generated);
         }
 
         public void OnInspectPython()
         {
+            PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
+            var sourceCode = codeGen.Generate();
+            
+            var dialog = new InspectPythonDialog(sourceCode);
+            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (dialogRc == Eto.Forms.DialogResult.Ok)
+            {
+                sourceCode = dialog.Source;
+            }
+
+            ExecutePython(sourceCode);
+        }
+
+        protected void ExecutePython(string s)
+        {
+            Rhino.RhinoApp.WriteLine(s);
         }
 
         public void OnAddLayer(string layerName)
         {
+            if (layerName == "")
+            {
+                Rhino.RhinoApp.WriteLine("Layer name is empty");
+                return;
+            }
+
             // TODO: Validate name?
             _model.AddNewLayer(layerName);
             _model.LayerToAdd = "";
@@ -46,14 +73,13 @@ namespace CodeGenerator
 
         public void OnMouseSelectLayer()
         {
-            Rhino.RhinoApp.WriteLine("OnMouse select");
             var doc = Rhino.RhinoDoc.ActiveDoc;
             var str = SelectLayer(doc);
-            Rhino.RhinoApp.WriteLine("val {0}", str);
             if (str != null)
             {
                 _model.LayerToAdd = str;
             }
+
             _view.UpdateView();
         }
 
@@ -76,15 +102,15 @@ namespace CodeGenerator
                 GetResult res = go.GetMultiple(1, 1);
                 if (res != GetResult.Object)
                 {
-                    Rhino.RhinoApp.WriteLine("A");
                     return null;
                 }
+
                 if (go.ObjectsWerePreselected)
                 {
-                    Rhino.RhinoApp.WriteLine("B");
                     go.EnablePreSelect(false, true);
                     continue;
                 }
+
                 break;
             }
 
@@ -92,7 +118,6 @@ namespace CodeGenerator
             RhinoObject rhinoObject = go.Object(0).Object();
             if (null == rhinoObject)
             {
-                Rhino.RhinoApp.WriteLine("C");
                 return null;
             }
 

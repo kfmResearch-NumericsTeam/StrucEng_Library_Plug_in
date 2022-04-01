@@ -23,6 +23,11 @@ namespace CodeGenerator
     public class Layer
     {
         public string Name { get; set; }
+        public List<LayerProperty> Properties { get; set; }
+    }
+
+    public class LayerProperty
+    {
         
     }
 }
