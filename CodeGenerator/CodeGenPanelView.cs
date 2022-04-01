@@ -92,10 +92,10 @@ namespace CodeGenerator
             }
 
             _gbPropertiesForLayer.Visible = Model.CurrentLayer != null;
-            
+
             _btnInspectPython.Enabled = Model.Layers.Count > 0;
             _btnGenerateModel.Enabled = Model.Layers.Count > 0;
-            
+
             if (Model.CurrentLayer != null)
             {
                 _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
@@ -183,7 +183,8 @@ namespace CodeGenerator
                                 {
                                     (_dropdownLayers = new DropDown
                                     {
-                                    })
+                                    }),
+                                    TableLayout.AutoSized(new Button {Text = "Delete"})
                                 }
                             },
                         }

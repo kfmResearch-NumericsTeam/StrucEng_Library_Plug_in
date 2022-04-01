@@ -28,12 +28,8 @@ namespace CodeGenerator
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            Rhino.RhinoApp.WriteLine("Running command");
             var panelId = CodeGenPanelView.PanelId;
-            
-            Rhino.RhinoApp.WriteLine("Before");
             Panels.OpenPanel(panelId);
-            Rhino.RhinoApp.WriteLine("After");
             
             if (!CodeGenPanelView.Instance.Initialized)
             {
