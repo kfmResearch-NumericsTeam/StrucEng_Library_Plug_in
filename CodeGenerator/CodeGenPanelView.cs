@@ -25,6 +25,7 @@ namespace CodeGenerator
         private Button _btnInspectPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
+        private Button _btnDeleteLayer;
         private DropDown _dropdownLayers;
         private TableLayout _keyValueProperties;
         private TextBox _tbLayerToAdd;
@@ -50,22 +51,11 @@ namespace CodeGenerator
             _btnInspectPython.Click += (sender, e) => ctrl.OnInspectPython();
             _btnAddLayer.Click += (sender, e) => ctrl.OnAddLayer(_tbLayerToAdd.Text);
             _btnMouseSelect.Click += (sender, e) => ctrl.OnMouseSelectLayer();
+            _btnDeleteLayer.Click += (sender, e) => ctrl.OnLayerDelete();
             _dropdownLayers.SelectedIndexChanged += (sender, e) =>
             {
                 ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);
             };
-        }
-
-        public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
-        {
-        }
-
-        public void PanelHidden(uint documentSerialNumber, ShowPanelReason reason)
-        {
-        }
-
-        public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
-        {
         }
 
         public void UpdateView()
@@ -95,6 +85,7 @@ namespace CodeGenerator
 
             _btnInspectPython.Enabled = Model.Layers.Count > 0;
             _btnGenerateModel.Enabled = Model.Layers.Count > 0;
+            _btnDeleteLayer.Enabled = Model.Layers.Count > 0;
 
             if (Model.CurrentLayer != null)
             {
@@ -119,10 +110,15 @@ namespace CodeGenerator
                         Rows =
                         {
                             new TableRow(
-                                TableLayout.AutoSized(
-                                    (_btnInspectPython = new Button {Text = "Inspect Python"})),
-                                TableLayout.AutoSized(
-                                    (_btnGenerateModel = new Button {Text = "Generate Model"})))
+                                new TableCell(
+                                    (_btnInspectPython = new Button {Text = "Inspect Python"}),
+                                    true
+                                ),
+                                new TableCell(
+                                    (_btnGenerateModel = new Button {Text = "Generate Model"}),
+                                    true
+                                )
+                            )
                         }
                     }
                 });
@@ -134,18 +130,27 @@ namespace CodeGenerator
                     Content = new DynamicLayout
                     {
                         Padding = new Padding(5),
-                        Spacing = new Size(5, 5),
+                        Spacing = new Size(5, 10),
                         Rows =
                         {
-                            new DynamicLayout
+                            new TableLayout()
                             {
                                 Spacing = new Size(5, 5),
+
                                 Rows =
                                 {
-                                    (_tbLayerToAdd = new TextBox
+                                    new TableRow
                                     {
-                                        PlaceholderText = "Type or Select Layer to add",
-                                    })
+                                        ScaleHeight = false, Cells =
+                                        {
+                                            new TableCell(
+                                                (_tbLayerToAdd = new TextBox
+                                                    {PlaceholderText = "Type or Select Layer to add",}
+                                                ),
+                                                true),
+                                            new TableCell((_btnMouseSelect = new Button {Text = "Select..."}))
+                                        }
+                                    },
                                 }
                             },
                             new TableLayout
@@ -154,9 +159,6 @@ namespace CodeGenerator
                                 Rows =
                                 {
                                     new TableRow(
-                                        TableLayout.AutoSized(
-                                            _btnMouseSelect = new Button {Text = "Mouse Select"}
-                                        ),
                                         TableLayout.AutoSized(
                                             _btnAddLayer = new Button {Text = "Add"})
                                     )
@@ -176,15 +178,19 @@ namespace CodeGenerator
                         Spacing = new Size(5, 1),
                         Rows =
                         {
-                            new DynamicLayout
+                            new TableLayout
                             {
                                 Spacing = new Size(5, 5),
                                 Rows =
                                 {
-                                    (_dropdownLayers = new DropDown
+                                    new TableRow
                                     {
-                                    }),
-                                    TableLayout.AutoSized(new Button {Text = "Delete"})
+                                        ScaleHeight = false, Cells =
+                                        {
+                                            new TableCell((_dropdownLayers = new DropDown { }), true),
+                                            new TableCell((_btnDeleteLayer = new Button {Text = "Delete"}))
+                                        }
+                                    },
                                 }
                             },
                         }
@@ -210,6 +216,18 @@ namespace CodeGenerator
 
             layout.AddRow(new Label {Text = ""});
             Content = new Scrollable {Content = layout};
+        }
+
+        public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
+        {
+        }
+
+        public void PanelHidden(uint documentSerialNumber, ShowPanelReason reason)
+        {
+        }
+
+        public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
+        {
         }
     }
 }

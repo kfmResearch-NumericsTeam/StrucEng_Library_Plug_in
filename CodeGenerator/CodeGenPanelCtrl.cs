@@ -33,7 +33,7 @@ namespace CodeGenerator
         {
             PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
             var sourceCode = codeGen.Generate();
-            
+
             var dialog = new InspectPythonDialog(sourceCode);
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
@@ -65,7 +65,10 @@ namespace CodeGenerator
 
         public void OnSelectLayerInDropdown(int index)
         {
-            // TODO: Validate index
+            if (index < 0 || index >= _model.Layers.Count)
+            {
+                return;
+            }
             var l = _model.Layers[index];
             _model.CurrentLayer = l;
             _view.UpdateView();
@@ -87,7 +90,7 @@ namespace CodeGenerator
         {
             const ObjectType selectionType = ObjectType.AnyObject;
             GetObject go = new GetObject();
-            go.SetCommandPrompt("Select an object");
+            go.SetCommandPrompt("Select an object with your mouse");
             go.GeometryFilter = selectionType;
             go.GroupSelect = false;
             go.SubObjectSelect = false;
@@ -129,6 +132,18 @@ namespace CodeGenerator
             int index = selected.Attributes.LayerIndex;
             string name = doc.Layers[index].Name;
             return name;
+        }
+
+        public void OnLayerDelete()
+        {
+            if (_model.CurrentLayer == null)
+            {
+                Rhino.RhinoApp.WriteLine("No Layer selected to delete");
+                return;
+            }
+
+            _model.DeleteLayer(_model.CurrentLayer);
+            _view.UpdateView();
         }
     }
 }
