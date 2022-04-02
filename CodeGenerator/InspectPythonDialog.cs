@@ -46,16 +46,16 @@ namespace CodeGenerator
             };
         }
 
-        protected override void OnLoadComplete(EventArgs e)
-        {
-            base.OnLoadComplete(e);
-            this.RestorePosition();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            this.SavePosition();
-            base.OnClosing(e);
-        }
+        // protected override void OnLoadComplete(EventArgs e)
+        // {
+        //     base.OnLoadComplete(e);
+        //     this.RestorePosition();
+        // }
+        //
+        // protected override void OnClosing(CancelEventArgs e)
+        // {
+        //     this.SavePosition();
+        //     base.OnClosing(e);
+        // }
     }
 }

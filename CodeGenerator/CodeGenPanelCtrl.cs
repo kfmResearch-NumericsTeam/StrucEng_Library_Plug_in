@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Rhino;
 using Rhino.Commands;
 using Rhino.DocObjects;
@@ -40,13 +42,14 @@ namespace CodeGenerator
             {
                 sourceCode = dialog.Source;
             }
-
-            ExecutePython(sourceCode);
         }
 
         protected void ExecutePython(string s)
         {
-            Rhino.RhinoApp.WriteLine(s);
+            string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
+            File.WriteAllText(fileName, s);  
+            Rhino.RhinoApp.WriteLine(fileName);
+            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
 
         public void OnAddLayer(string layerName)

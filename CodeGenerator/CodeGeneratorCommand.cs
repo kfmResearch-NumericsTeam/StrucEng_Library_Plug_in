@@ -38,6 +38,8 @@ namespace CodeGenerator
                 CodeGenPanelView.Instance.RegisterModel(CodeGeneratorPlugin.Instance.CodeGenPanelModel);
                 CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
             }
+            
+            Rhino.RhinoApp.WriteLine("Done");
             return Result.Success;
         }
     }
