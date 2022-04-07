@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CodeGenerator.ui_model;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
@@ -59,11 +60,7 @@ namespace CodeGenerator
             };
 
             // XXX: We write here "enabled" logic in view to reduce boilerplate code
-            _tbLayerToAdd.TextBinding.Bind(() => _tbLayerToAdd.Text, val =>
-            {
-                _btnAddLayer.Enabled = val != "";
-
-            });
+            _tbLayerToAdd.TextBinding.Bind(() => _tbLayerToAdd.Text, val => { _btnAddLayer.Enabled = val != ""; });
         }
 
         public void UpdateView()
@@ -216,7 +213,7 @@ namespace CodeGenerator
                         Visible = false,
                     }
                 ));
-            
+
             // XXX: Last element gets scaled vertically
             layout.AddRow(new Label {Text = ""});
             Content = new Scrollable {Content = layout};
@@ -224,18 +221,13 @@ namespace CodeGenerator
 
         private void UpdatePropertyLayer(Layer l)
         {
-            var tb = new TextBox();
-            tb.TextBinding.Bind(() => l.Thickness, val => l.Thickness = val);
-            // tb.TextBinding.Bind(() => Model.Test, val => Rhino.RhinoApp.WriteLine("Set value to {0} directly", val));
-            _gbPropertiesForLayer.Content = new TableLayout
+            var layout = new TableLayout
             {
-                Padding = new Padding(5),
+                Padding = new Padding(0),
                 Spacing = new Size(5, 1),
-                Rows =
-                {
-                    TableLayout.HorizontalScaled(new Label {Text = "Thickness"}, tb)
-                }
             };
+
+            _gbPropertiesForLayer.Content = layout;
         }
 
         public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
