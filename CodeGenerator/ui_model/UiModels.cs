@@ -6,6 +6,10 @@ namespace CodeGenerator.ui_model
 {
     public class Section
     {
+        public string Label { get; set; }
+        public string Id { get; set; }
+        public List<TextField> Components { get; set; } = new List<TextField>();
+        
         public static Section Create(string label, string id)
         {
             Section s = new Section();
@@ -25,10 +29,6 @@ namespace CodeGenerator.ui_model
             Components.Add(t);
             return this;
         }
-
-        public string Label { get; set; }
-        public string Id { get; set; }
-        public List<TextField> Components { get; set; } = new List<TextField>();
     }
 
     public class TextField

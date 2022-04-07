@@ -56,6 +56,7 @@ namespace CodeGenerator
             _btnDeleteLayer.Click += (sender, e) => ctrl.OnLayerDelete();
             _dropdownLayers.SelectedIndexChanged += (sender, e) =>
             {
+                Rhino.RhinoApp.WriteLine("ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);");
                 ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);
             };
 
@@ -96,7 +97,8 @@ namespace CodeGenerator
             {
                 _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
                 _gbPropertiesForLayer.Visible = true;
-                UpdatePropertyLayer(Model.CurrentLayer);
+                PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer);
+                _gbPropertiesForLayer.Content = PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer);
             }
         }
 
@@ -217,17 +219,6 @@ namespace CodeGenerator
             // XXX: Last element gets scaled vertically
             layout.AddRow(new Label {Text = ""});
             Content = new Scrollable {Content = layout};
-        }
-
-        private void UpdatePropertyLayer(Layer l)
-        {
-            var layout = new TableLayout
-            {
-                Padding = new Padding(0),
-                Spacing = new Size(5, 1),
-            };
-
-            _gbPropertiesForLayer.Content = layout;
         }
 
         public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)

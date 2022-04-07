@@ -10,7 +10,7 @@ namespace CodeGenerator
     {
         public SimplePropertyModel Model;
         public PropertyCtrl Ctrl;
-        
+
         private bool _ctrlGlued = false;
 
         public PropertyView(SimplePropertyModel model, PropertyCtrl ctrl)
@@ -22,19 +22,15 @@ namespace CodeGenerator
         private DropDown _dbSectionSelection;
         private DynamicLayout _propertyLayout;
 
-        // public void RegisterController(PropertyCtrl ctrl)
-        // {
-        //     this.Ctrl = ctrl;
-        // }
-
         private void _glueController()
         {
             if (_ctrlGlued)
             {
                 return;
             }
+
             _ctrlGlued = true;
-            
+
             _dbSectionSelection.SelectedIndexChanged += (sender, e) =>
             {
                 Ctrl.OnSelectLayerInDropdown((Section) _dbSectionSelection.SelectedValue);
@@ -44,7 +40,6 @@ namespace CodeGenerator
 
         public void UpdateView()
         {
-            
             GeneratePropertyLayout();
         }
 
@@ -76,30 +71,35 @@ namespace CodeGenerator
                 Spacing = new Size(5, 5),
             };
             layout.Add(_propertyLayout);
-            
+
             _glueController();
+            GeneratePropertyLayout();
             return layout;
         }
 
+        // XXX: What about unbindings?
         private void GeneratePropertyLayout()
         {
-            var fieldLayout = new TableLayout
-            {
-                Padding = new Padding{Top = 0, Left = 10, Bottom = 0, Right = 0},
-                Spacing = new Size(5, 1),
-            };
-
+            Rhino.RhinoApp.WriteLine("GeneratePropertyLayout");
             // The text properties
             if (Model.Selected != null)
             {
+                Rhino.RhinoApp.WriteLine("GeneratePropertyLayout != null");
+                var fieldLayout = new TableLayout
+                {
+                    Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0},
+                    Spacing = new Size(5, 1),
+                };
                 foreach (var component in Model.Selected.Components)
                 {
                     var tb = new TextBox();
-                    tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default, val => component.Value = val);
+                    tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default,
+                        val => component.Value = val);
                     fieldLayout.Rows.Add(TableLayout.HorizontalScaled(new Label {Text = component.Label}, tb));
                 }
+
+                _propertyLayout.Content = fieldLayout;
             }
-            _propertyLayout.Content = fieldLayout;
         }
     }
 }

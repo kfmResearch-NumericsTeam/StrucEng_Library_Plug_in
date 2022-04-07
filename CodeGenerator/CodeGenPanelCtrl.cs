@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using CodeGenerator.ui_model;
+using Eto.Forms;
 using Rhino;
 using Rhino.Commands;
 using Rhino.DocObjects;
@@ -62,7 +64,7 @@ namespace CodeGenerator
             }
 
             // TODO: Validate name?
-            _model.AddNewLayer(layerName);
+            _model.AddNewLayer(layerName, LayerType.ELEMENT);
             _model.LayerToAdd = "";
             _view.UpdateView();
         }
@@ -149,30 +151,6 @@ namespace CodeGenerator
 
             _model.DeleteLayer(_model.CurrentLayer);
             _view.UpdateView();
-        }
-
-        private void GeneratePropertyViews()
-        {
-            var sectionModel = SimplePropertyModel.Create("Sections")
-                .AddSection(Section.Create("Shell Section", "shell_section")
-                    .AddComponent(new TextField("shell_section_thickness", "Thickness", "0")));
-            var materialModel = SimplePropertyModel.Create("Materials")
-                .AddSection(Section.Create("Elastic", "materials_elastic")
-                    .AddComponent(new TextField("materials_elastic_E", "E", "33700"))
-                    .AddComponent(new TextField("materials_elastic_v", "v", "0.0"))
-                    .AddComponent(new TextField("materials_elastic_p", "p", "2500/10**9")));
-            var displacementModel = SimplePropertyModel.Create("Displacements")
-                .AddSection(Section.Create("Displacement", "displacements_displacement")
-                    .AddComponent(new TextField("set_displacement_ux", "ux", "0"))
-                    .AddComponent(new TextField("set_displacement_uy", "uy", "0"))
-                    .AddComponent(new TextField("set_displacement_uz", "uz", "0"))
-                    .AddComponent(new TextField("set_displacement_rotx", "rotx", "0"))
-                    .AddComponent(new TextField("set_displacement_roty", "roty", "0"))
-                    .AddComponent(new TextField("set_displacement_rotz", "rotz", "0"))
-                );
-            var sectionCtrl = new PropertyCtrl(sectionModel);
-            var materialCtrl = new PropertyCtrl(materialModel);
-            var displacementCtrl = new PropertyCtrl(displacementModel);
         }
     }
 }
