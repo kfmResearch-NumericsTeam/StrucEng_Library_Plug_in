@@ -17,7 +17,7 @@ namespace CodeGenerator
             var b = new StringBuilder();
             foreach (var l in _model.Layers)
             {
-                b.Append(String.Format("{0}: val: {1}, ", l.Name, l.KeyVal1));
+                b.Append(String.Format("{0}: val: {1}, ", l.Name, l.Thickness));
             }
             var gen = String.Format(PythonCodeSnippets.CODEGEN_HEADER, b.ToString());
             return gen;

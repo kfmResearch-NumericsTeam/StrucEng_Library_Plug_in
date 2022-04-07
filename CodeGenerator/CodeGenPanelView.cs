@@ -29,7 +29,6 @@ namespace CodeGenerator
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
         private DropDown _dropdownLayers;
-        private TableLayout _keyValueProperties;
         private TextBox _tbLayerToAdd;
         private GroupBox _gbPropertiesForLayer;
 
@@ -214,11 +213,11 @@ namespace CodeGenerator
                     {
                         Text = "Properties for Layer",
                         Padding = new Padding(5),
-                        Visible = false, // Hidden if no layer selected
-                        // Content = 
+                        Visible = false,
                     }
                 ));
-
+            
+            // XXX: Last element gets scaled vertically
             layout.AddRow(new Label {Text = ""});
             Content = new Scrollable {Content = layout};
         }
@@ -226,18 +225,15 @@ namespace CodeGenerator
         private void UpdatePropertyLayer(Layer l)
         {
             var tb = new TextBox();
-            tb.TextBinding.Bind(() => l.KeyVal1, val => l.KeyVal1 = val);
+            tb.TextBinding.Bind(() => l.Thickness, val => l.Thickness = val);
             // tb.TextBinding.Bind(() => Model.Test, val => Rhino.RhinoApp.WriteLine("Set value to {0} directly", val));
-            var res = new Collection<TableRow>()
-            {
-            };
             _gbPropertiesForLayer.Content = new TableLayout
             {
                 Padding = new Padding(5),
                 Spacing = new Size(5, 1),
                 Rows =
                 {
-                    TableLayout.HorizontalScaled(new Label {Text = "Key 1"}, tb)
+                    TableLayout.HorizontalScaled(new Label {Text = "Thickness"}, tb)
                 }
             };
         }

@@ -64,7 +64,7 @@ namespace CodeGenerator
     {
         public string Name { get; set; }
         
-        public string KeyVal1 { get; set; }
+        public string Thickness { get; set; }
     }
 
     public class LayerProperty
