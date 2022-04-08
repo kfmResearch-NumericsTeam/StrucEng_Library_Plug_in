@@ -19,7 +19,7 @@ namespace CodeGenerator
         public CodeGeneratorCommand()
         {
             Instance = this;
-            Panels.RegisterPanel(PlugIn, typeof(CodeGenPanelView), "Compas Code Generator", null);
+            Panels.RegisterPanel(PlugIn, typeof(MainViewPanel), "Compas Code Generator", null);
         }
 
         public static CodeGeneratorCommand Instance { get; private set; }
@@ -28,17 +28,17 @@ namespace CodeGenerator
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            var panelId = CodeGenPanelView.PanelId;
+            var panelId = MainViewPanel.PanelId;
             Panels.OpenPanel(panelId);
             
-            if (!CodeGenPanelView.Instance.Initialized)
-            {
-                Rhino.RhinoApp.WriteLine("Gluing view");
-                CodeGenPanelView.Instance.RegisterController(CodeGeneratorPlugin.Instance.CodeGenPanelCtrl);
-                CodeGenPanelView.Instance.RegisterModel(CodeGeneratorPlugin.Instance.CodeGenPanelModel);
-                CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
-            }
-            
+            // if (!CodeGenPanelView.Instance.Initialized)
+            // {
+            //     Rhino.RhinoApp.WriteLine("Gluing view");
+            //     CodeGenPanelView.Instance.RegisterController(CodeGeneratorPlugin.Instance.CodeGenPanelCtrl);
+            //     CodeGenPanelView.Instance.RegisterModel(CodeGeneratorPlugin.Instance.CodeGenPanelModel);
+            //     CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
+            // }
+            //
             Rhino.RhinoApp.WriteLine("Done");
             return Result.Success;
         }

@@ -14,13 +14,13 @@ namespace CodeGenerator
     public class CodeGeneratorPlugin : Rhino.PlugIns.PlugIn
     {
 
-        public CodeGenPanelModel CodeGenPanelModel;
-        public CodeGenPanelCtrl CodeGenPanelCtrl;
+        // public CodeGenPanelModel CodeGenPanelModel;
+        // public CodeGenPanelCtrl CodeGenPanelCtrl;
         
         public CodeGeneratorPlugin()
         {
             Instance = this;
-            InitializeMvc();
+            // InitializeMvc();
         }
 
         ///<summary>Gets the only instance of the CodeGeneratorPlugin plug-in.</summary>
@@ -33,8 +33,8 @@ namespace CodeGenerator
 
         public void InitializeMvc()
         {
-            CodeGenPanelModel = new CodeGenPanelModel();
-            CodeGenPanelCtrl = new CodeGenPanelCtrl(CodeGenPanelModel);
+            // CodeGenPanelModel = new CodeGenPanelModel();
+            // CodeGenPanelCtrl = new CodeGenPanelCtrl(CodeGenPanelModel);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CodeGenerator.mvvc;
 using CodeGenerator.ui_model;
 using Eto.Drawing;
 using Eto.Forms;
@@ -103,6 +104,9 @@ namespace CodeGenerator
 
         private void BuildGui()
         {
+
+
+            
             DataContext = Model;
 
             var layout = new DynamicLayout();
@@ -217,7 +221,16 @@ namespace CodeGenerator
 
             // XXX: Last element gets scaled vertically
             layout.AddRow(new Label {Text = ""});
-            Content = new Scrollable {Content = layout};
+            
+            
+            
+            // // Content = new Scrollable {Content = layout};
+            // {
+            //     // Content =
+            //     var viewModel = new MyViewModel();
+            //     MyView view = new MyView(viewModel);
+            //     Content = view;
+            // }
         }
 
         public void PanelClosing(uint documentSerialNumber, bool onCloseDocument)
