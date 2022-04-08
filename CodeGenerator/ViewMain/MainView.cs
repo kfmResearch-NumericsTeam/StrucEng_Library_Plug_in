@@ -28,8 +28,8 @@ namespace CodeGenerator
         protected void BindGui()
         {
             _btnAddLayer.Command = _vm.CommandOnAddLayer;
-            _btnInspectPython.Command = _vm.CommandInspectCode;
-            _btnMouseSelect.Command = _vm.CommandMouseSelect;
+            _btnInspectPython.Command = _vm.CommandOnInspectCode;
+            _btnMouseSelect.Command = _vm.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vm.CommandOnDeleteLayer;
             _tbLayerToAdd.Bind<string>("Text", _vm, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());

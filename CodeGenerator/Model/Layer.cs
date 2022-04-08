@@ -17,6 +17,7 @@ namespace CodeGenerator.Model
     public class Element : Layer
     {
         public MaterialElastic MaterialElastic { get; set; }
+        public ShellSection ShellSection { get; set; } 
 
         public string Name { get; set; }
 

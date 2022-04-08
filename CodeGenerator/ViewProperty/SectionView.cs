@@ -40,12 +40,11 @@ namespace CodeGenerator
 
             _propertyLayout = new DynamicLayout
             {
-                Padding = new Padding(5),
+                Padding = new Padding(5) { },
                 Spacing = new Size(5, 5),
             };
             _propertyLayout.Bind<Control>("Content", _vm, "PropertyView",
                 DualBindingMode.TwoWay);
-            
             sectionLayout.Rows.Add(_propertyLayout);
         }
     }

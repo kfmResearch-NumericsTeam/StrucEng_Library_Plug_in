@@ -17,33 +17,32 @@ namespace CodeGenerator
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
 
-        public RelayCommand CommandInspectCode { get; }
-        public RelayCommand CommandMouseSelect { get; }
+        // Commands
+        public RelayCommand CommandOnInspectCode { get; }
+        public RelayCommand CommandOnMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
 
         public Workbench Model { get; }
 
+        // MVVC 
         private Layer _selectedLayer;
         private ObservableCollection<Layer> _layers;
+        private int _layerToAddType = 0; /* 0: Element, 1: set */
+        private string _layerToAdd;
+        private bool _propertiesVisible = false;
+        private Control _propertyContent;
+        private Dictionary<Layer, LayerContext> _layerContext = new Dictionary<Layer, LayerContext>();
 
-        public Layer SelectedLayer
+        public MainViewModel()
         {
-            get => _selectedLayer;
-            set
-            {
-                StoreData(_selectedLayer);
-                _selectedLayer = value;
-                OnPropertyChanged();
-                CommandOnDeleteLayer.UpdateCanExecute();
-                PropertiesVisible = _selectedLayer != null;
+            Model = new Workbench();
+            _layers = new ObservableCollection<Layer>(Model.Layers);
 
-                // Update UI for layer properties if new layer is selected
-                if (_selectedLayer != null)
-                {
-                    PropertyContent = GetPropertyContentForElement(_selectedLayer);
-                }
-            }
+            CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
+            CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
+            CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
+            CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
         }
 
         public void StoreData(Layer layer)
@@ -60,18 +59,9 @@ namespace CodeGenerator
             }
         }
 
-        public ObservableCollection<CodeGenerator.Model.Layer> Layers => _layers;
-
-        public MainViewModel()
-        {
-            Model = new Workbench();
-            _layers = new ObservableCollection<Layer>(Model.Layers);
-
-            CommandInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
-            CommandMouseSelect = new RelayCommand(OnMouseSelect);
-            CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
-            CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-        }
+        private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
+        private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
+        private bool CanExecuteOnInspectCode() => _layers != null && _layers.Count > 0;
 
         private void OnDeleteLayer()
         {
@@ -105,22 +95,14 @@ namespace CodeGenerator
             _layers.Add(l);
             Rhino.RhinoApp.WriteLine("Added: {0}", l);
 
-            CommandInspectCode.UpdateCanExecute();
+            CommandOnInspectCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
         }
-
-        private bool CanExecuteOnAddLayer()
-        {
-            var val = !string.IsNullOrEmpty(LayerToAdd);
-            return val;
-        }
-
-        private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
 
         private void OnInspectCode()
         {
             StoreData(_selectedLayer);
-            
+
             PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
             var sourceCode = codeGen.Generate();
 
@@ -155,14 +137,30 @@ namespace CodeGenerator
             Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
 
-        private bool CanExecuteOnInspectCode()
+        /*
+         * MVVC Getter/Setters
+         */
+        public Layer SelectedLayer
         {
-            return _layers != null && _layers.Count > 0;
+            get => _selectedLayer;
+            set
+            {
+                StoreData(_selectedLayer);
+                _selectedLayer = value;
+                OnPropertyChanged();
+                CommandOnDeleteLayer.UpdateCanExecute();
+                PropertiesVisible = _selectedLayer != null;
+
+                // Update UI for layer properties if new layer is selected
+                if (_selectedLayer != null)
+                {
+                    PropertyContent = GetPropertyContentForLayer(_selectedLayer);
+                }
+            }
         }
 
-        private int _layerToAddType = 0;
+        public ObservableCollection<CodeGenerator.Model.Layer> Layers => _layers;
 
-        /* 0: Element, 1: set */
         public int LayerToAddType
         {
             get => _layerToAddType;
@@ -173,8 +171,6 @@ namespace CodeGenerator
                 OnPropertyChanged();
             }
         }
-
-        private string _layerToAdd;
 
         public string LayerToAdd
         {
@@ -188,8 +184,6 @@ namespace CodeGenerator
             }
         }
 
-        private bool _propertiesVisible = false;
-
         public bool PropertiesVisible
         {
             get => _propertiesVisible;
@@ -201,8 +195,6 @@ namespace CodeGenerator
             }
         }
 
-        private Control _propertyContent;
-
         public Control PropertyContent
         {
             get => _propertyContent;
@@ -213,13 +205,11 @@ namespace CodeGenerator
             }
         }
 
-        private Dictionary<Layer, LayerContext> _layerContext = new Dictionary<Layer, LayerContext>();
-
-        private Control GetPropertyContentForElement(Layer l)
+        private Control GetPropertyContentForLayer(Layer l)
         {
             if (_layerContext.ContainsKey(l))
             {
-                return _layerContext[l].Control;
+                return _layerContext[l].View;
             }
 
             LayerContext d = new LayerContext();
@@ -228,12 +218,16 @@ namespace CodeGenerator
             return control;
         }
 
+        /**
+         * Maps Model to Property List and stores UI, and ViewModels of Property lists
+         */
         private class LayerContext
         {
             private SectionViewModel _elementSectionVm;
             private SectionViewModel _elementMaterialVm;
+            private SectionViewModel _setDisplacementVm;
 
-            public Control Control;
+            public Control View;
 
             private Control _GetPropertyContentForElement(Element e)
             {
@@ -247,8 +241,21 @@ namespace CodeGenerator
 
                 _elementMaterialVm = new SectionViewModel(Builder.BuildMaterials());
                 layout.Rows.Add(new SectionView(_elementMaterialVm));
-                Control = layout;
+                View = layout;
 
+                return layout;
+            }
+
+            private Control _GetPropertyContentForSet(Set s)
+            {
+                var layout = new TableLayout()
+                {
+                    Padding = new Padding(5),
+                    Spacing = new Size(5, 5),
+                };
+                _setDisplacementVm = new SectionViewModel(Builder.BuildDisplacement());
+                layout.Rows.Add(new SectionView(_setDisplacementVm));
+                View = layout;
                 return layout;
             }
 
@@ -258,10 +265,13 @@ namespace CodeGenerator
                 {
                     return _GetPropertyContentForElement((Element) e);
                 }
+                else if (e.GetType() == LayerType.SET)
+                {
+                    return _GetPropertyContentForSet((Set) e);
+                }
                 else
                 {
-                    // TODO;
-                    return new TableLayout();
+                    throw new SystemException("Unknown layer type");
                 }
             }
 
@@ -269,7 +279,12 @@ namespace CodeGenerator
             {
                 if (l.GetType() == LayerType.ELEMENT)
                 {
-                    Builder.MapGroupToSection(_elementMaterialVm.SelectedPropertyGroup, (Element) l);
+                    Builder.MapGroupToMaterial(_elementMaterialVm.SelectedPropertyGroup, (Element) l);
+                    Builder.MapGroupToSection(_elementSectionVm.SelectedPropertyGroup, (Element) l);
+                }
+                else if (l.GetType() == LayerType.SET)
+                {
+                    Builder.MapGroupToDisplacement(_setDisplacementVm.SelectedPropertyGroup, (Set) l);
                 }
             }
         }

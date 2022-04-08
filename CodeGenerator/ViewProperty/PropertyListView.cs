@@ -10,7 +10,7 @@ namespace CodeGenerator
         public PropertyListView(PropertyListViewModel vm)
         {
             _vm = vm;
-            Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0};
+            Padding = new Padding {Top = 5, Left = 10, Bottom = 0, Right = 0};
             Spacing = new Size(5, 1);
 
             foreach (var property in _vm.Group.Properties)

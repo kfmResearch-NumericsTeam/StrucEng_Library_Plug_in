@@ -50,7 +50,7 @@ namespace CodeGenerator
                     {
                         Properties =
                         {
-                            new Property {Key = "uz", Label = "ux", Default = ""},
+                            new Property {Key = "ux", Label = "ux", Default = ""},
                             new Property {Key = "uy", Label = "uy", Default = ""},
                             new Property {Key = "uz", Label = "uz", Default = ""},
                             new Property {Key = "rotx", Label = "rotx", Default = ""},
@@ -61,10 +61,10 @@ namespace CodeGenerator
                 }
             };
         }
-
-        // XXX: Map other way round to restore
+        
         public static void MapGroupToDisplacement(PropertyGroup selection, Set set)
         {
+            if (selection == null) return;
             if (selection.Key == "general")
             {
                 if (set.Displacement == null)
@@ -81,11 +81,9 @@ namespace CodeGenerator
             }
         }
         
-        // XXX: Map other way round to restore
-        public static void MapGroupToSection(PropertyGroup selection, Element el)
+        public static void MapGroupToMaterial(PropertyGroup selection, Element el)
         {
             if (selection == null) return;
-            
             if (selection.Key == "elast")
             {
                 if (el.MaterialElastic == null)
@@ -96,6 +94,21 @@ namespace CodeGenerator
                 el.MaterialElastic.E = selection.GetByKey("e").Value;
                 el.MaterialElastic.V = selection.GetByKey("v").Value;
                 el.MaterialElastic.P = selection.GetByKey("p").Value;
+            }
+        }
+
+
+        public static void MapGroupToSection(PropertyGroup selection, Element el)
+        {
+            if (selection == null) return;
+            if (selection.Key == "shell_section")
+            {
+                if (el.ShellSection == null)
+                {
+                    el.ShellSection = new ShellSection();
+                }
+
+                el.ShellSection.Thickness = selection.GetByKey("thick").Value;
             }
         }
     }

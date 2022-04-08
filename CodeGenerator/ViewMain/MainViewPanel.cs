@@ -15,7 +15,7 @@ namespace CodeGenerator
             MainView view = new MainView(viewModel);
             Content = new Scrollable {Content = view};
         }
-        
+
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
         {
         }
@@ -28,5 +28,4 @@ namespace CodeGenerator
         {
         }
     }
-
 }

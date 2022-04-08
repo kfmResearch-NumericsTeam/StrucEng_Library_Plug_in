@@ -33,7 +33,7 @@ namespace CodeGenerator.Model
 
     public class ShellSection
     {
-        public int Thickness { get; set; }
+        public string Thickness { get; set; }
         
         public override string ToString()
         {
