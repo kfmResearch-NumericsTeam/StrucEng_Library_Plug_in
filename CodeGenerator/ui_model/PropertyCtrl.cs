@@ -21,6 +21,7 @@ namespace CodeGenerator
 
         public void OnSelectLayerInDropdown(Section selectedSection)
         {
+            Rhino.RhinoApp.WriteLine("public void OnSelectLayerInDropdown(Section selectedSection)");
             if (selectedSection == null)
             {
                 return;
@@ -32,7 +33,7 @@ namespace CodeGenerator
                 return;
             }
 
-            Model.Selected = selectedSection;
+            Model.Selected.Type = selectedSection;
             View.UpdateView();
         }
     }

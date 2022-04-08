@@ -9,7 +9,7 @@ namespace CodeGenerator.ui_model
         public string Label { get; set; }
         public string Id { get; set; }
         public List<TextField> Components { get; set; } = new List<TextField>();
-        
+
         public static Section Create(string label, string id)
         {
             Section s = new Section();
@@ -51,11 +51,17 @@ namespace CodeGenerator.ui_model
         public object Value { get; set; }
     }
 
+    public class Wrapper<T>
+    {
+        public T Type { get; set; }
+    }
+
     public class SimplePropertyModel
     {
         public string Label { get; set; }
+
         public List<Section> Sections { get; set; } = new List<Section>();
-        public Section Selected { get; set; }
+        public Wrapper<Section> Selected { get; set; }
 
         public SimplePropertyModel SetLabel(string l)
         {

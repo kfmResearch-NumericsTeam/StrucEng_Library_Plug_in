@@ -85,12 +85,12 @@ namespace CodeGenerator
 
     public class ElementProperty
     {
-        public Section Section { get; set; }
-        public Section Material { get; set; }
+        public Wrapper<Section> Section { get; set; }
+        public Wrapper<Section> Material { get; set; }
     }
 
     public class SetProperty
     {
-        public Section Displacement;
+        public Wrapper<Section> Displacement;
     }
 }

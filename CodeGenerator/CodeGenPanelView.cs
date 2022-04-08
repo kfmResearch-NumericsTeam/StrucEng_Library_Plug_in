@@ -56,7 +56,7 @@ namespace CodeGenerator
             _btnDeleteLayer.Click += (sender, e) => ctrl.OnLayerDelete();
             _dropdownLayers.SelectedIndexChanged += (sender, e) =>
             {
-                Rhino.RhinoApp.WriteLine("ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);");
+                // Rhino.RhinoApp.WriteLine("ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);");
                 ctrl.OnSelectLayerInDropdown(_dropdownLayers.SelectedIndex);
             };
 
@@ -97,7 +97,6 @@ namespace CodeGenerator
             {
                 _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
                 _gbPropertiesForLayer.Visible = true;
-                PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer);
                 _gbPropertiesForLayer.Content = PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer);
             }
         }

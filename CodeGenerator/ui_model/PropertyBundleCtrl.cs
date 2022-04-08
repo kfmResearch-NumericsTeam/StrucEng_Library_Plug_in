@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
@@ -26,7 +27,10 @@ namespace CodeGenerator.ui_model
                     .AddComponent(new TextField("set_displacement_rotz", "rotz", "0"))
                 );
 
+            
+            
             sectionModel.Selected = currentLayer?.ElementProperty?.Section ?? null;
+            Rhino.RhinoApp.WriteLine("sectionModel.Selected {0}", sectionModel.Selected);
             materialModel.Selected = currentLayer?.ElementProperty?.Material ?? null;
             displacementModel.Selected = currentLayer?.SetProperty?.Displacement ?? null;
 
@@ -36,31 +40,34 @@ namespace CodeGenerator.ui_model
 
             sectionCtrl.CallbackOnModelSelected = (selection) =>
             {
+                Rhino.RhinoApp.WriteLine("sectionCtrl.CallbackOnModelSelected = (selection) =>");
                 if (currentLayer?.ElementProperty != null)
                 {
-                    currentLayer.ElementProperty.Section = selection;
+                    currentLayer.ElementProperty.Section.Type = selection;
                 }
 
                 return true;
             };
-            materialCtrl.CallbackOnModelSelected = (selection) =>
-            {
-                if (currentLayer?.ElementProperty != null)
-                {
-                    currentLayer.ElementProperty.Material = selection;
-                }
-
-                return true;
-            };
-            displacementCtrl.CallbackOnModelSelected = (selection) =>
-            {
-                if (currentLayer?.SetProperty != null)
-                {
-                    currentLayer.SetProperty.Displacement = selection;
-                }
-
-                return true;
-            };
+            // materialCtrl.CallbackOnModelSelected = (selection) =>
+            // {
+            //     Rhino.RhinoApp.WriteLine("materialCtrl.CallbackOnModelSelected = (selection) =>");
+            //     if (currentLayer?.ElementProperty != null)
+            //     {
+            //         currentLayer.ElementProperty.Material = selection;
+            //     }
+            //
+            //     return true;
+            // };
+            // displacementCtrl.CallbackOnModelSelected = (selection) =>
+            // {
+            //     Rhino.RhinoApp.WriteLine("displacementCtrl.CallbackOnModelSelected = (selection) => = (selection) =>");
+            //     if (currentLayer?.SetProperty != null)
+            //     {
+            //         currentLayer.SetProperty.Displacement = selection;
+            //     }
+            //
+            //     return true;
+            // };
 
             List<Control> views = new List<Control>();
             views.Add(sectionCtrl.View.getUi());

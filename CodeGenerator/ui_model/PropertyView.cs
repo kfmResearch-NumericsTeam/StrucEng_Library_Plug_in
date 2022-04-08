@@ -34,13 +34,12 @@ namespace CodeGenerator
             _dbSectionSelection.SelectedIndexChanged += (sender, e) =>
             {
                 Ctrl.OnSelectLayerInDropdown((Section) _dbSectionSelection.SelectedValue);
-                Rhino.RhinoApp.WriteLine("update dropdown");
             };
         }
 
         public void UpdateView()
         {
-            GeneratePropertyLayout();
+            Rhino.RhinoApp.WriteLine("Updating view");
         }
 
         public Control getUi()
@@ -61,45 +60,104 @@ namespace CodeGenerator
             sectionLayout.Rows.Add(new ViewSeparator() {Text = Model.Label});
             sectionLayout.Rows.Add(TableLayout.HorizontalScaled((_dbSectionSelection = new DropDown { })));
 
-
-            _dbSectionSelection.ItemTextBinding = Binding.Property((Section t) => t.Label);
-            _dbSectionSelection.DataStore = Model.Sections;
-
             _propertyLayout = new DynamicLayout
             {
                 Padding = new Padding(5),
                 Spacing = new Size(5, 5),
             };
-            layout.Add(_propertyLayout);
+            sectionLayout.Rows.Add(_propertyLayout);
 
-            _glueController();
-            GeneratePropertyLayout();
+            _dbSectionSelection.ItemTextBinding = Binding.Property((Section t) => t.Label);
+            _dbSectionSelection.DataStore = Model.Sections;
+            
+            _dbSectionSelection.SelectedValueChanged += (sender, e) =>
+            {
+                Rhino.RhinoApp.WriteLine("Selected Value Chagned: {0}, {1}, {2}", e, sender,
+                    _dbSectionSelection.SelectedValue);
+                _propertyLayout.Content = new PropertyLayout((Section) _dbSectionSelection.SelectedValue);
+            };
+
+            // _dbSectionSelection.SelectedIndex = 0;
+            // Model.Selected = Model.Sections[0];
+
+            // _propertyLayout = new DynamicLayout
+            // {
+            //     Padding = new Padding(5),
+            //     Spacing = new Size(5, 5),
+            // };
+            //
+            // // The text properties
+            // if (Model.Selected != null)
+            // {
+            //     Rhino.RhinoApp.WriteLine("Model.Selected != null");
+            //     var fieldLayout = new TableLayout
+            //     {
+            //         Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0},
+            //         Spacing = new Size(5, 1),
+            //     };
+            //
+            //     foreach (var component in Model.Selected.Type.Components)
+            //     {
+            //         var tb = new TextBox();
+            //         tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default,
+            //             val => component.Value = val);
+            //         fieldLayout.Rows.Add(TableLayout.HorizontalScaled(new Label {Text = component.Label}, tb));
+            //         Rhino.RhinoApp.WriteLine("{0} -> {1}", component.Label, (string) component.Value);
+            //     }
+            //
+            //     _propertyLayout.Content = fieldLayout;
+            //     layout.Add(fieldLayout);
+
+
+            // _glueController();
+            // GeneratePropertyLayout();
+
             return layout;
+        }
+
+        class PropertyLayout : TableLayout
+        {
+            public PropertyLayout(Section section)
+            {
+                Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0};
+                Spacing = new Size(5, 1);
+
+                foreach (var component in section.Components)
+                {
+                    var tb = new TextBox();
+                    tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default,
+                        val => component.Value = val);
+
+                    Rows.Add(TableLayout.HorizontalScaled(new Label {Text = component.Label}, tb));
+                    Rhino.RhinoApp.WriteLine("{0} -> {1}", component.Label, (string) component.Value);
+                }
+            }
         }
 
         // XXX: What about unbindings?
         private void GeneratePropertyLayout()
         {
-            Rhino.RhinoApp.WriteLine("GeneratePropertyLayout");
-            // The text properties
-            if (Model.Selected != null)
-            {
-                Rhino.RhinoApp.WriteLine("GeneratePropertyLayout != null");
-                var fieldLayout = new TableLayout
-                {
-                    Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0},
-                    Spacing = new Size(5, 1),
-                };
-                foreach (var component in Model.Selected.Components)
-                {
-                    var tb = new TextBox();
-                    tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default,
-                        val => component.Value = val);
-                    fieldLayout.Rows.Add(TableLayout.HorizontalScaled(new Label {Text = component.Label}, tb));
-                }
-
-                _propertyLayout.Content = fieldLayout;
-            }
+            // // The text properties
+            // if (Model.Selected != null)
+            // {
+            //     Rhino.RhinoApp.WriteLine("GeneratePropertyLayout != null");
+            //     var fieldLayout = new TableLayout
+            //     {
+            //         Padding = new Padding {Top = 0, Left = 10, Bottom = 0, Right = 0},
+            //         Spacing = new Size(5, 1),
+            //     };
+            //     
+            //     foreach (var component in Model.Selected.Components)
+            //     {
+            //         var tb = new TextBox();
+            //         tb.TextBinding.Bind(() => (string) component.Value ?? (string) component.Default,
+            //             val => component.Value = val);
+            //         fieldLayout.Rows.Add(TableLayout.HorizontalScaled(new Label {Text = component.Label}, tb));
+            //         Rhino.RhinoApp.WriteLine("{0} -> {1}", component.Label, (string) component.Value);
+            //     }
+            //
+            //     _propertyLayout.Content = fieldLayout;
+            // }
         }
     }
 }
