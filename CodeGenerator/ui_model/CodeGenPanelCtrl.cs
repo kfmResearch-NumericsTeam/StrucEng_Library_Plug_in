@@ -77,7 +77,7 @@ namespace CodeGenerator
             }
 
             var l = _model.Layers[index];
-            _model.CurrentLayer = l;
+            _model.CurrentLayer2 = l;
             _view.UpdateView();
         }
 
@@ -143,13 +143,13 @@ namespace CodeGenerator
 
         public void OnLayerDelete()
         {
-            if (_model.CurrentLayer == null)
+            if (_model.CurrentLayer2 == null)
             {
                 Rhino.RhinoApp.WriteLine("No Layer selected to delete");
                 return;
             }
 
-            _model.DeleteLayer(_model.CurrentLayer);
+            _model.DeleteLayer(_model.CurrentLayer2);
             _view.UpdateView();
         }
     }

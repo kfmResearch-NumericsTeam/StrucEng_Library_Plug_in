@@ -7,7 +7,7 @@ namespace CodeGenerator.ui_model
 {
     public class PropertyBundleCtrl
     {
-        public static List<Control> GeneratePropertyViews(Layer currentLayer)
+        public static List<Control> GeneratePropertyViews(Layer2 currentLayer2)
         {
             var sectionModel = SimplePropertyModel.Create("Sections")
                 .AddSection(Section.Create("Shell Section", "shell_section")
@@ -29,10 +29,10 @@ namespace CodeGenerator.ui_model
 
             
             
-            sectionModel.Selected = currentLayer?.ElementProperty?.Section ?? null;
+            sectionModel.Selected = currentLayer2?.ElementProperty?.Section ?? null;
             Rhino.RhinoApp.WriteLine("sectionModel.Selected {0}", sectionModel.Selected);
-            materialModel.Selected = currentLayer?.ElementProperty?.Material ?? null;
-            displacementModel.Selected = currentLayer?.SetProperty?.Displacement ?? null;
+            materialModel.Selected = currentLayer2?.ElementProperty?.Material ?? null;
+            displacementModel.Selected = currentLayer2?.SetProperty?.Displacement ?? null;
 
             var sectionCtrl = new PropertyCtrl(sectionModel);
             var materialCtrl = new PropertyCtrl(materialModel);
@@ -41,9 +41,9 @@ namespace CodeGenerator.ui_model
             sectionCtrl.CallbackOnModelSelected = (selection) =>
             {
                 Rhino.RhinoApp.WriteLine("sectionCtrl.CallbackOnModelSelected = (selection) =>");
-                if (currentLayer?.ElementProperty != null)
+                if (currentLayer2?.ElementProperty != null)
                 {
-                    currentLayer.ElementProperty.Section.Type = selection;
+                    currentLayer2.ElementProperty.Section.Type = selection;
                 }
 
                 return true;
@@ -76,7 +76,7 @@ namespace CodeGenerator.ui_model
             return views;
         }
 
-        public static Layout GeneratePropertyViewsControl(Layer currentLayer)
+        public static Layout GeneratePropertyViewsControl(Layer2 currentLayer2)
         {
             var layout = new TableLayout
             {
@@ -84,7 +84,7 @@ namespace CodeGenerator.ui_model
                 Spacing = new Size(5, 1),
             };
 
-            foreach (var ui in GeneratePropertyViews(currentLayer))
+            foreach (var ui in GeneratePropertyViews(currentLayer2))
             {
                 layout.Rows.Add(ui);
             }

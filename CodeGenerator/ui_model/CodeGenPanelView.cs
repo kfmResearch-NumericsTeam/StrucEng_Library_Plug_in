@@ -75,7 +75,7 @@ namespace CodeGenerator
                 int selection = 0;
                 foreach (var l in Model.Layers)
                 {
-                    if (l == Model.CurrentLayer)
+                    if (l == Model.CurrentLayer2)
                     {
                         selection = i;
                     }
@@ -88,17 +88,17 @@ namespace CodeGenerator
                 _dropdownLayers.DataStore = dbLayers;
             }
 
-            _gbPropertiesForLayer.Visible = Model.CurrentLayer != null;
+            _gbPropertiesForLayer.Visible = Model.CurrentLayer2 != null;
 
             _btnInspectPython.Enabled = Model.Layers.Count > 0;
             _btnGenerateModel.Enabled = Model.Layers.Count > 0;
             _btnDeleteLayer.Enabled = Model.Layers.Count > 0;
 
-            if (Model.CurrentLayer != null)
+            if (Model.CurrentLayer2 != null)
             {
-                _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer.Name;
+                _gbPropertiesForLayer.Text = "Properties for Layer " + Model.CurrentLayer2.Name;
                 _gbPropertiesForLayer.Visible = true;
-                _gbPropertiesForLayer.Content = PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer);
+                _gbPropertiesForLayer.Content = PropertyBundleCtrl.GeneratePropertyViewsControl(Model.CurrentLayer2);
             }
         }
 

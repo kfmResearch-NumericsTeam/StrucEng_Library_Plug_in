@@ -10,9 +10,15 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
-    class InspectPythonDialog : Dialog<DialogResult>
+    public class InspectPythonDialog : Dialog<DialogResult>
     {
+        public static int STATE_CLOSE = 0;
+        public static int STATE_EXEC = 1;
         public string Source { get; set; }
+
+        public int State = STATE_CLOSE;
+
+        private Button _execButton;
 
         public InspectPythonDialog(string source)
         {
@@ -23,17 +29,31 @@ namespace CodeGenerator
             WindowStyle = WindowStyle.Default;
             Title = "Inspect and Modify Generated Python Code";
 
+            _execButton = new Button()
+            {
+                Text = "Execute Code"
+            };
+
             TextArea textArea = new TextArea()
             {
                 Text = source
             };
 
-            DefaultButton = new Button {Text = "OK"};
+            DefaultButton = new Button {Text = "Close"};
             DefaultButton.Click += (sender, e) =>
             {
+                State = STATE_CLOSE;
                 Source = textArea.Text;
                 Close(DialogResult.Ok);
             };
+
+            _execButton.Click += (sender, e) =>
+            {
+                State = STATE_EXEC;
+                Source = textArea.Text;
+                Close(DialogResult.Ok);
+            };
+
             Content = new TableLayout
             {
                 Padding = new Padding(5),
@@ -41,21 +61,16 @@ namespace CodeGenerator
                 Rows =
                 {
                     new TableRow {ScaleHeight = true, Cells = {new TableCell(textArea, true)}},
-                    new TableRow(TableLayout.AutoSized(DefaultButton))
+                    new TableRow(TableLayout.AutoSized(new TableLayout()
+                    {
+                        Spacing = new Size(10, 10),
+                        Rows =
+                        {
+                            new TableRow(DefaultButton, _execButton),
+                        }
+                    }))
                 }
             };
         }
-
-        // protected override void OnLoadComplete(EventArgs e)
-        // {
-        //     base.OnLoadComplete(e);
-        //     this.RestorePosition();
-        // }
-        //
-        // protected override void OnClosing(CancelEventArgs e)
-        // {
-        //     this.SavePosition();
-        //     base.OnClosing(e);
-        // }
     }
 }

@@ -1,9 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Security.Permissions;
 using System.Windows.Input;
-using CodeGenerator.model;
+using CodeGenerator.Model;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino;
+using Rhino.UI;
 
 namespace CodeGenerator
 {
@@ -11,42 +16,61 @@ namespace CodeGenerator
     {
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
+
         public RelayCommand CommandInspectCode { get; }
-        public RelayCommand CommandGenerateModel { get; }
         public RelayCommand CommandMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
 
         public Workbench Model { get; }
 
-        private CodeGenerator.model.Layer _selectedLayer;
-        private ObservableCollection<CodeGenerator.model.Layer> _layers;
+        private Layer _selectedLayer;
+        private ObservableCollection<Layer> _layers;
 
-        public CodeGenerator.model.Layer SelectedLayer
+        public Layer SelectedLayer
         {
             get => _selectedLayer;
             set
             {
+                StoreData(_selectedLayer);
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
                 PropertiesVisible = _selectedLayer != null;
+
+                // Update UI for layer properties if new layer is selected
+                if (_selectedLayer != null)
+                {
+                    PropertyContent = GetPropertyContentForElement(_selectedLayer);
+                }
             }
         }
 
-        public ObservableCollection<CodeGenerator.model.Layer> Layers => _layers;
+        public void StoreData(Layer layer)
+        {
+            if (layer == null)
+            {
+                return;
+            }
+
+            if (_layerContext.ContainsKey(layer))
+            {
+                var ctx = _layerContext[layer];
+                ctx.StoreLayerData(layer);
+            }
+        }
+
+        public ObservableCollection<CodeGenerator.Model.Layer> Layers => _layers;
 
         public MainViewModel()
         {
             Model = new Workbench();
-            _layers = new ObservableCollection<model.Layer>(Model.Layers);
+            _layers = new ObservableCollection<Layer>(Model.Layers);
 
             CommandInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
-            CommandGenerateModel = new RelayCommand(OnGenerateModel, CanExecuteOnGenerateModel);
             CommandMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-            PropertyContent = CreatePropertyContent();
         }
 
         private void OnDeleteLayer()
@@ -67,7 +91,7 @@ namespace CodeGenerator
                 return;
             }
 
-            model.Layer l;
+            Layer l;
             if (LayerToAddType == LAYER_TYPE_ELEMENT)
             {
                 l = Model.AddElement(LayerToAdd);
@@ -81,6 +105,7 @@ namespace CodeGenerator
             _layers.Add(l);
             Rhino.RhinoApp.WriteLine("Added: {0}", l);
 
+            CommandInspectCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
         }
 
@@ -94,6 +119,22 @@ namespace CodeGenerator
 
         private void OnInspectCode()
         {
+            StoreData(_selectedLayer);
+            
+            PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
+            var sourceCode = codeGen.Generate();
+
+            var dialog = new InspectPythonDialog(sourceCode);
+            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (dialogRc == Eto.Forms.DialogResult.Ok)
+            {
+                sourceCode = dialog.Source;
+
+                if (dialog.State == InspectPythonDialog.STATE_EXEC)
+                {
+                    OnGenerateModel(sourceCode);
+                }
+            }
         }
 
         private void OnMouseSelect()
@@ -106,18 +147,17 @@ namespace CodeGenerator
             }
         }
 
-        private void OnGenerateModel()
+        protected void OnGenerateModel(string source)
         {
-        }
-
-        private bool CanExecuteOnGenerateModel()
-        {
-            return false;
+            string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
+            File.WriteAllText(fileName, source);
+            Rhino.RhinoApp.WriteLine(fileName);
+            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
 
         private bool CanExecuteOnInspectCode()
         {
-            return false;
+            return _layers != null && _layers.Count > 0;
         }
 
         private int _layerToAddType = 0;
@@ -173,22 +213,65 @@ namespace CodeGenerator
             }
         }
 
-        public Control CreatePropertyContent()
+        private Dictionary<Layer, LayerContext> _layerContext = new Dictionary<Layer, LayerContext>();
+
+        private Control GetPropertyContentForElement(Layer l)
         {
-            var layout = new TableLayout()
+            if (_layerContext.ContainsKey(l))
             {
-                Padding = new Padding(5),
-                Spacing = new Size(5, 5),
-            };
-            SectionViewModel sectVm = new SectionViewModel(Builder.BuildSections());
-            SectionView sectView = new SectionView(sectVm);
-            layout.Rows.Add(sectView);
+                return _layerContext[l].Control;
+            }
 
-            SectionViewModel matVm = new SectionViewModel(Builder.BuildMaterials());
-            SectionView matView = new SectionView(matVm);
-            layout.Rows.Add(matView);
+            LayerContext d = new LayerContext();
+            var control = d.GetPropertyContentForLayer(l);
+            _layerContext[l] = d;
+            return control;
+        }
 
-            return layout;
+        private class LayerContext
+        {
+            private SectionViewModel _elementSectionVm;
+            private SectionViewModel _elementMaterialVm;
+
+            public Control Control;
+
+            private Control _GetPropertyContentForElement(Element e)
+            {
+                var layout = new TableLayout()
+                {
+                    Padding = new Padding(5),
+                    Spacing = new Size(5, 5),
+                };
+                _elementSectionVm = new SectionViewModel(Builder.BuildSections());
+                layout.Rows.Add(new SectionView(_elementSectionVm));
+
+                _elementMaterialVm = new SectionViewModel(Builder.BuildMaterials());
+                layout.Rows.Add(new SectionView(_elementMaterialVm));
+                Control = layout;
+
+                return layout;
+            }
+
+            public Control GetPropertyContentForLayer(Layer e)
+            {
+                if (e.GetType() == LayerType.ELEMENT)
+                {
+                    return _GetPropertyContentForElement((Element) e);
+                }
+                else
+                {
+                    // TODO;
+                    return new TableLayout();
+                }
+            }
+
+            public void StoreLayerData(Layer l)
+            {
+                if (l.GetType() == LayerType.ELEMENT)
+                {
+                    Builder.MapGroupToSection(_elementMaterialVm.SelectedPropertyGroup, (Element) l);
+                }
+            }
         }
     }
 }

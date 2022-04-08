@@ -30,16 +30,7 @@ namespace CodeGenerator
         {
             var panelId = MainViewPanel.PanelId;
             Panels.OpenPanel(panelId);
-            
-            // if (!CodeGenPanelView.Instance.Initialized)
-            // {
-            //     Rhino.RhinoApp.WriteLine("Gluing view");
-            //     CodeGenPanelView.Instance.RegisterController(CodeGeneratorPlugin.Instance.CodeGenPanelCtrl);
-            //     CodeGenPanelView.Instance.RegisterModel(CodeGeneratorPlugin.Instance.CodeGenPanelModel);
-            //     CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
-            // }
-            //
-            Rhino.RhinoApp.WriteLine("Done2");
+            Rhino.RhinoApp.WriteLine("Plugin loaded");
             return Result.Success;
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CodeGenerator.Model;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -6,7 +7,6 @@ namespace CodeGenerator
 {
     public class MainView : DynamicLayout
     {
-        private Button _btnGenerateModel;
         private Button _btnInspectPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
@@ -27,26 +27,17 @@ namespace CodeGenerator
 
         protected void BindGui()
         {
-            _btnGenerateModel.Command = _vm.CommandGenerateModel;
             _btnAddLayer.Command = _vm.CommandOnAddLayer;
             _btnInspectPython.Command = _vm.CommandInspectCode;
             _btnMouseSelect.Command = _vm.CommandMouseSelect;
             _btnDeleteLayer.Command = _vm.CommandOnDeleteLayer;
             _tbLayerToAdd.Bind<string>("Text", _vm, "LayerToAdd", DualBindingMode.TwoWay);
-
-            // _dropdownLayers.Bind<model.Layer>("Items", _vm, "_layers", DualBindingMode.TwoWay);
-            // var funFormat (model.Layer l) => l.GetType() == ;
-
-            _dropdownLayers.ItemTextBinding = Binding.Property((model.Layer t) => t.ToString());
-            
-            // t.GetType() == model.LayerType.ELEMENT ? "Element - " : "Set - " + t);
-            // _dropdownLayers.ItemTextBinding = Binding.Property((model.Layer t) => 
-            //     t.GetType() == model.LayerType.ELEMENT ? "Element - " : "Set - " + t);
+            _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vm.Layers;
-            _dropdownLayers.Bind<model.Layer>("SelectedValue", _vm, "SelectedLayer", DualBindingMode.TwoWay);
+            _dropdownLayers.Bind<Layer>("SelectedValue", _vm, "SelectedLayer", DualBindingMode.TwoWay);
             _rdlElementSetSelection.Bind<int>("SelectedIndex", _vm, "LayerToAddType", DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<bool>("Visible", _vm, "PropertiesVisible", DualBindingMode.TwoWay);
-            _gbPropertiesForLayer.Bind<Control>("Content", _vm, "PropertyContent", DualBindingMode.TwoWay);            
+            _gbPropertiesForLayer.Bind<Control>("Content", _vm, "PropertyContent", DualBindingMode.TwoWay);
         }
 
         protected void BuildGui()
@@ -65,11 +56,7 @@ namespace CodeGenerator
                         {
                             new TableRow(
                                 new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Code"}),
-                                    true
-                                ),
-                                new TableCell(
-                                    (_btnGenerateModel = new Button {Text = "Generate Model"}),
+                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
                                     true
                                 )
                             )
@@ -173,17 +160,10 @@ namespace CodeGenerator
                         Text = "Properties for Layer",
                         Padding = new Padding(5),
                         Visible = false,
-                        Content = _vm.PropertyContent 
+                        Content = _vm.PropertyContent
                     }
                 ));
-
-            // var m = new SectionViewModel(s);
-            // var v = new SectionView(m);
             
-            // _gbPropertiesForLayer.Content = v;
-            
-            Rhino.RhinoApp.WriteLine("Panel");
-
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});
         }

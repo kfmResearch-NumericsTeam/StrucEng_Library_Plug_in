@@ -11,15 +11,15 @@ namespace CodeGenerator
     {
         public string LayerToAdd { get; set; }
 
-        public List<Layer> Layers { get; set; } = new List<Layer>();
+        public List<Layer2> Layers { get; set; } = new List<Layer2>();
 
-        public Layer CurrentLayer { get; set; }
+        public Layer2 CurrentLayer2 { get; set; }
 
         public void AddNewLayer(string name, LayerType type)
         {
-            Layer l = new Layer();
+            Layer2 l = new Layer2();
             l.Name = name;
-            CurrentLayer = l;
+            CurrentLayer2 = l;
             l.Type = type;
             if (type == LayerType.ELEMENT)
             {
@@ -36,11 +36,11 @@ namespace CodeGenerator
             Layers.Add(l);
         }
 
-        public void DeleteLayer(Layer l)
+        public void DeleteLayer(Layer2 l)
         {
-            if (CurrentLayer == l)
+            if (CurrentLayer2 == l)
             {
-                CurrentLayer = null;
+                CurrentLayer2 = null;
             }
 
             int i = 0;
@@ -64,7 +64,7 @@ namespace CodeGenerator
         }
     }
 
-    public class Layer
+    public class Layer2
     {
         public string Name { get; set; }
 

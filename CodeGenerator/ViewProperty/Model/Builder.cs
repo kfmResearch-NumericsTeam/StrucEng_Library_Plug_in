@@ -1,4 +1,4 @@
-using CodeGenerator.model;
+using CodeGenerator.Model;
 
 namespace CodeGenerator
 {
@@ -84,6 +84,8 @@ namespace CodeGenerator
         // XXX: Map other way round to restore
         public static void MapGroupToSection(PropertyGroup selection, Element el)
         {
+            if (selection == null) return;
+            
             if (selection.Key == "elast")
             {
                 if (el.MaterialElastic == null)
