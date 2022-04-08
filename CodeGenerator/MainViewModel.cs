@@ -2,20 +2,19 @@ using System.Collections.ObjectModel;
 using System.Security.Permissions;
 using System.Windows.Input;
 using CodeGenerator.model;
+using Eto.Drawing;
 using Eto.Forms;
 
 namespace CodeGenerator
 {
     public class MainViewModel : ViewModelBase
     {
-
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
         public RelayCommand CommandInspectCode { get; }
         public RelayCommand CommandGenerateModel { get; }
         public RelayCommand CommandMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
-
         public RelayCommand CommandOnDeleteLayer { get; }
 
         public Workbench Model { get; }
@@ -31,6 +30,7 @@ namespace CodeGenerator
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
+                PropertiesVisible = _selectedLayer != null;
             }
         }
 
@@ -40,12 +40,13 @@ namespace CodeGenerator
         {
             Model = new Workbench();
             _layers = new ObservableCollection<model.Layer>(Model.Layers);
-            
+
             CommandInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
             CommandGenerateModel = new RelayCommand(OnGenerateModel, CanExecuteOnGenerateModel);
             CommandMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
+            PropertyContent = CreatePropertyContent();
         }
 
         private void OnDeleteLayer()
@@ -75,10 +76,11 @@ namespace CodeGenerator
             {
                 l = Model.AddSet(LayerToAdd);
             }
+
             LayerToAdd = "";
             _layers.Add(l);
             Rhino.RhinoApp.WriteLine("Added: {0}", l);
-            
+
             OnPropertyChanged(nameof(Layers));
         }
 
@@ -144,6 +146,49 @@ namespace CodeGenerator
                 OnPropertyChanged();
                 CommandOnAddLayer.UpdateCanExecute();
             }
+        }
+
+        private bool _propertiesVisible = false;
+
+        public bool PropertiesVisible
+        {
+            get => _propertiesVisible;
+            set
+            {
+                if (_propertiesVisible == value) return;
+                _propertiesVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Control _propertyContent;
+
+        public Control PropertyContent
+        {
+            get => _propertyContent;
+            set
+            {
+                _propertyContent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Control CreatePropertyContent()
+        {
+            var layout = new TableLayout()
+            {
+                Padding = new Padding(5),
+                Spacing = new Size(5, 5),
+            };
+            SectionViewModel sectVm = new SectionViewModel(Builder.BuildSections());
+            SectionView sectView = new SectionView(sectVm);
+            layout.Rows.Add(sectView);
+
+            SectionViewModel matVm = new SectionViewModel(Builder.BuildMaterials());
+            SectionView matView = new SectionView(matVm);
+            layout.Rows.Add(matView);
+
+            return layout;
         }
     }
 }

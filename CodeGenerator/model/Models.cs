@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Rhino.Input.Custom;
 
 namespace CodeGenerator.model
@@ -49,6 +50,9 @@ namespace CodeGenerator.model
 
     public class Element : Layer
     {
+        
+        public MaterialElastic MaterialElastic { get; set; } 
+        
         public string Name { get; set; }
 
         public override string ToString()
@@ -69,6 +73,7 @@ namespace CodeGenerator.model
 
     public class Set : Layer
     {
+        public Displacement Displacement { get; set; }
         public string Name { get; set; }
 
         public override string ToString()
@@ -85,5 +90,40 @@ namespace CodeGenerator.model
         {
             return Name;
         }
+    }
+
+    public class Displacement
+    {
+        public string Ux { get; set; }
+        public string Uy { get; set; }
+        public string Uz { get; set; }
+        public string Rotx { get; set; }
+        public string Roty { get; set; }
+        public string Rotz { get; set; }
+    }
+
+    public class MaterialElastic
+    {
+        public string E { get; set; }
+        public string V { get; set; }
+        public string P { get; set; }
+    }
+
+    public class ShellSection
+    {
+        public int Thickness { get; set; }
+    }
+
+    public class AreaLoad
+    {
+        public string Z { get; set; }
+        public string Axes { get; set; }
+
+        public List<Layer> Elements { get; set; }
+    }
+
+    public class GravityLoad
+    {
+        public List<Layer> Elements { get; set; }
     }
 }

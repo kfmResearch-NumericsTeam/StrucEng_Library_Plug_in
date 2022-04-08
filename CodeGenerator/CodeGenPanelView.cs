@@ -224,7 +224,7 @@ namespace CodeGenerator
             
             
             
-            // // Content = new Scrollable {Content = layout};
+            // Content = new Scrollable {Content = layout};
             // {
             //     // Content =
             //     var viewModel = new MyViewModel();

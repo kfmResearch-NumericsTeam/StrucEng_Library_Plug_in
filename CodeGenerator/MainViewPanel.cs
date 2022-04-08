@@ -10,9 +10,9 @@ namespace CodeGenerator
 
         public MainViewPanel()
         {
+            Rhino.RhinoApp.WriteLine("Panel");
             var viewModel = new MainViewModel();
             MainView view = new MainView(viewModel);
-            
             Content = new Scrollable {Content = view};
         }
         

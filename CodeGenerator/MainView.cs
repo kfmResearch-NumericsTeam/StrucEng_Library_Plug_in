@@ -38,12 +38,15 @@ namespace CodeGenerator
             // var funFormat (model.Layer l) => l.GetType() == ;
 
             _dropdownLayers.ItemTextBinding = Binding.Property((model.Layer t) => t.ToString());
+            
             // t.GetType() == model.LayerType.ELEMENT ? "Element - " : "Set - " + t);
             // _dropdownLayers.ItemTextBinding = Binding.Property((model.Layer t) => 
             //     t.GetType() == model.LayerType.ELEMENT ? "Element - " : "Set - " + t);
             _dropdownLayers.DataStore = _vm.Layers;
             _dropdownLayers.Bind<model.Layer>("SelectedValue", _vm, "SelectedLayer", DualBindingMode.TwoWay);
             _rdlElementSetSelection.Bind<int>("SelectedIndex", _vm, "LayerToAddType", DualBindingMode.TwoWay);
+            _gbPropertiesForLayer.Bind<bool>("Visible", _vm, "PropertiesVisible", DualBindingMode.TwoWay);
+            _gbPropertiesForLayer.Bind<Control>("Content", _vm, "PropertyContent", DualBindingMode.TwoWay);            
         }
 
         protected void BuildGui()
@@ -120,13 +123,6 @@ namespace CodeGenerator
                                     })
                                 }
                             },
-
-
-                            // self.m_radiobuttonlist = forms.RadioButtonList()
-                            // self.m_radiobuttonlist.DataStore = ['first pick', 'second pick', 'third pick']
-                            // self.m_radiobuttonlist.Orientation = forms.Orientation.Vertical
-                            // self.m_radiobuttonlist.SelectedIndex = 1
-                            //
                             new TableLayout
                             {
                                 Spacing = new Size(10, 10),
@@ -177,8 +173,16 @@ namespace CodeGenerator
                         Text = "Properties for Layer",
                         Padding = new Padding(5),
                         Visible = false,
+                        Content = _vm.PropertyContent 
                     }
                 ));
+
+            // var m = new SectionViewModel(s);
+            // var v = new SectionView(m);
+            
+            // _gbPropertiesForLayer.Content = v;
+            
+            Rhino.RhinoApp.WriteLine("Panel");
 
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});

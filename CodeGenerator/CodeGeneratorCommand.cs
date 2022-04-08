@@ -39,7 +39,7 @@ namespace CodeGenerator
             //     CodeGeneratorPlugin.Instance.CodeGenPanelCtrl.setView(CodeGenPanelView.Instance);
             // }
             //
-            Rhino.RhinoApp.WriteLine("Done");
+            Rhino.RhinoApp.WriteLine("Done2");
             return Result.Success;
         }
     }
