@@ -11,30 +11,21 @@ namespace CodeGenerator
     /// attributes in AssemblyInfo.cs (you might need to click "Project" ->
     /// "Show All Files" to see it in the "Solution Explorer" window).</para>
     ///</summary>
-    public class CodeGeneratorPlugin : Rhino.PlugIns.PlugIn
+    public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
-
         // public CodeGenPanelModel CodeGenPanelModel;
         // public CodeGenPanelCtrl CodeGenPanelCtrl;
-        
-        public CodeGeneratorPlugin()
+
+        public StrucEngLibPlugin()
         {
             Instance = this;
-            // InitializeMvc();
         }
 
         ///<summary>Gets the only instance of the CodeGeneratorPlugin plug-in.</summary>
-        public static CodeGeneratorPlugin Instance { get; private set; }
+        public static StrucEngLibPlugin Instance { get; private set; }
 
         // You can override methods here to change the plug-in behavior on
         // loading and shut down, add options pages to the Rhino _Option command
         // and maintain plug-in wide options in a document.
-
-
-        public void InitializeMvc()
-        {
-            // CodeGenPanelModel = new CodeGenPanelModel();
-            // CodeGenPanelCtrl = new CodeGenPanelCtrl(CodeGenPanelModel);
-        }
     }
 }

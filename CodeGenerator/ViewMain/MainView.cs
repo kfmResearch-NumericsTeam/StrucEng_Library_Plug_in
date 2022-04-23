@@ -31,6 +31,7 @@ namespace CodeGenerator
             _btnInspectPython.Command = _vm.CommandOnInspectCode;
             _btnMouseSelect.Command = _vm.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vm.CommandOnDeleteLayer;
+            
             _tbLayerToAdd.Bind<string>("Text", _vm, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vm.Layers;
@@ -163,6 +164,10 @@ namespace CodeGenerator
                         Content = _vm.PropertyContent
                     }
                 ));
+
+            // var alvm = new AddLoadViewModel();
+            // var alv = new AddLoadView(alvm);
+            // AddRow(alv);
             
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});

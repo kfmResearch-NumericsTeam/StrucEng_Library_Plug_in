@@ -13,8 +13,6 @@ namespace CodeGenerator.Model
             Layers = new List<Layer>();
         }
 
-        
-
         public Element AddElement(string name)
         {
             // TODO: Exception Handling?

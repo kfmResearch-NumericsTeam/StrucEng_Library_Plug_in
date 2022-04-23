@@ -14,17 +14,17 @@ using Rhino.Input.Custom;
 
 namespace CodeGenerator
 {
-    public class CodeGeneratorCommand : Command
+    public class CommandShowWindow : Command
     {
-        public CodeGeneratorCommand()
+        public CommandShowWindow()
         {
             Instance = this;
-            Panels.RegisterPanel(PlugIn, typeof(MainViewPanel), "Compas Code Generator", null);
+            Panels.RegisterPanel(PlugIn, typeof(MainViewPanel), "StrucEngLib", null);
         }
 
-        public static CodeGeneratorCommand Instance { get; private set; }
+        public static CommandShowWindow Instance { get; private set; }
 
-        public override string EnglishName => "CodeGeneratorCommand";
+        public override string EnglishName => "StrucEngLibShowWindow";
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {

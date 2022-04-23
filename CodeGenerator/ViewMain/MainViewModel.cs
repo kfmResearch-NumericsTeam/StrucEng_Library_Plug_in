@@ -25,7 +25,7 @@ namespace CodeGenerator
 
         public Workbench Model { get; }
 
-        // MVVC 
+        // MVVC
         private Layer _selectedLayer;
         private ObservableCollection<Layer> _layers;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
@@ -140,6 +140,7 @@ namespace CodeGenerator
         /*
          * MVVC Getter/Setters
          */
+
         public Layer SelectedLayer
         {
             get => _selectedLayer;
