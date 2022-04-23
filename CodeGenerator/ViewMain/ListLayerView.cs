@@ -5,7 +5,7 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
-    public class MainView : DynamicLayout
+    public class ListLayerView : DynamicLayout
     {
         private Button _btnInspectPython;
         private Button _btnMouseSelect;
@@ -16,29 +16,32 @@ namespace CodeGenerator
         private GroupBox _gbPropertiesForLayer;
         private RadioButtonList _rdlElementSetSelection;
 
-        private MainViewModel _vm;
+        private readonly ListLayerViewModel _vmListLayer;
+        private readonly LayerDetailsViewModel _vmDetailView;
 
-        public MainView(MainViewModel vm)
+        public ListLayerView(ListLayerViewModel vmListLayer, LayerDetailsViewModel vmDetailView)
         {
-            _vm = vm;
+            _vmListLayer = vmListLayer;
+            _vmDetailView = vmDetailView;
             BuildGui();
             BindGui();
         }
 
         protected void BindGui()
         {
-            _btnAddLayer.Command = _vm.CommandOnAddLayer;
-            _btnInspectPython.Command = _vm.CommandOnInspectCode;
-            _btnMouseSelect.Command = _vm.CommandOnMouseSelect;
-            _btnDeleteLayer.Command = _vm.CommandOnDeleteLayer;
+            _btnAddLayer.Command = _vmListLayer.CommandOnAddLayer;
+            _btnInspectPython.Command = _vmListLayer.CommandOnInspectCode;
+            _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
+            _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
             
-            _tbLayerToAdd.Bind<string>("Text", _vm, "LayerToAdd", DualBindingMode.TwoWay);
+            _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
-            _dropdownLayers.DataStore = _vm.Layers;
-            _dropdownLayers.Bind<Layer>("SelectedValue", _vm, "SelectedLayer", DualBindingMode.TwoWay);
-            _rdlElementSetSelection.Bind<int>("SelectedIndex", _vm, "LayerToAddType", DualBindingMode.TwoWay);
-            _gbPropertiesForLayer.Bind<bool>("Visible", _vm, "PropertiesVisible", DualBindingMode.TwoWay);
-            _gbPropertiesForLayer.Bind<Control>("Content", _vm, "PropertyContent", DualBindingMode.TwoWay);
+            _dropdownLayers.DataStore = _vmListLayer.Layers;
+            _dropdownLayers.Bind<Layer>("SelectedValue", _vmListLayer, "SelectedLayer", DualBindingMode.TwoWay);
+            _rdlElementSetSelection.Bind<int>("SelectedIndex", _vmListLayer, "LayerToAddType", DualBindingMode.TwoWay);
+            
+            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible", DualBindingMode.TwoWay);
+            _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
         }
 
         protected void BuildGui()
@@ -161,13 +164,9 @@ namespace CodeGenerator
                         Text = "Properties for Layer",
                         Padding = new Padding(5),
                         Visible = false,
-                        Content = _vm.PropertyContent
+                        Content = _vmDetailView.LayerDetailView
                     }
                 ));
-
-            // var alvm = new AddLoadViewModel();
-            // var alv = new AddLoadView(alvm);
-            // AddRow(alv);
             
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});

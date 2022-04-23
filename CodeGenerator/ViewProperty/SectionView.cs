@@ -17,6 +17,8 @@ namespace CodeGenerator
             BuildGui();
         }
 
+        public SectionViewModel getVm() => _vm;
+
         protected void BuildGui()
         {
             Padding = new Padding(5);

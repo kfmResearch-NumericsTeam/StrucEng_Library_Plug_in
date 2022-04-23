@@ -61,7 +61,7 @@ namespace CodeGenerator
                 }
             };
         }
-        
+
         public static void MapGroupToDisplacement(PropertyGroup selection, Set set)
         {
             if (selection == null) return;
@@ -80,7 +80,7 @@ namespace CodeGenerator
                 set.Displacement.Roty = selection.GetByKey("roty").Value;
             }
         }
-        
+
         public static void MapGroupToMaterial(PropertyGroup selection, Element el)
         {
             if (selection == null) return;
@@ -97,7 +97,6 @@ namespace CodeGenerator
             }
         }
 
-
         public static void MapGroupToSection(PropertyGroup selection, Element el)
         {
             if (selection == null) return;
@@ -110,6 +109,47 @@ namespace CodeGenerator
 
                 el.ShellSection.Thickness = selection.GetByKey("thick").Value;
             }
+        }
+
+        public static SectionViewModel BuildMaterials(Element el)
+        {
+            var s = BuildMaterials();
+            var vm = new SectionViewModel(s);
+            if (el.MaterialElastic == null) return vm;
+
+            PropertyGroup g = s.GetByKey("elast");
+            g.GetByKey("e").Value = el.MaterialElastic.E;
+            g.GetByKey("v").Value = el.MaterialElastic.V;
+            g.GetByKey("p").Value = el.MaterialElastic.P;
+            vm.SelectedPropertyGroup = g;
+            return vm;
+        }
+
+        public static SectionViewModel BuildSections(Element el)
+        {
+            var s = BuildSections();
+            var vm = new SectionViewModel(s);
+            if (el.ShellSection == null) return vm;
+            PropertyGroup g = s.GetByKey("shell_section");
+            g.GetByKey("thick").Value = el.ShellSection.Thickness;
+            vm.SelectedPropertyGroup = g;
+            return vm;
+        }
+
+        public static SectionViewModel BuildDisplacement(Set set)
+        {
+            var s = BuildDisplacement();
+            var vm = new SectionViewModel(s);
+            if (set.Displacement == null) return vm;
+            PropertyGroup g = s.GetByKey("general");
+            g.GetByKey("uz").Value = set.Displacement.Uz;
+            g.GetByKey("ux").Value = set.Displacement.Ux;
+            g.GetByKey("uz").Value = set.Displacement.Uz;
+            g.GetByKey("rotx").Value = set.Displacement.Rotx;
+            g.GetByKey("rotz").Value = set.Displacement.Rotz;
+            g.GetByKey("roty").Value = set.Displacement.Roty;
+            vm.SelectedPropertyGroup = g;
+            return vm;
         }
     }
 }

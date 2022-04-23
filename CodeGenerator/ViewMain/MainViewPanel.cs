@@ -11,8 +11,9 @@ namespace CodeGenerator
         public MainViewPanel()
         {
             Rhino.RhinoApp.WriteLine("Panel");
-            var viewModel = new MainViewModel();
-            MainView view = new MainView(viewModel);
+            var listLayerVm = new ListLayerViewModel();
+            var detailLayerVm = new LayerDetailsViewModel(listLayerVm);
+            ListLayerView view = new ListLayerView(listLayerVm, detailLayerVm);
             Content = new Scrollable {Content = view};
         }
 

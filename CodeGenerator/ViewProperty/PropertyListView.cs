@@ -16,7 +16,11 @@ namespace CodeGenerator
             foreach (var property in _vm.Group.Properties)
             {
                 var tb = new TextBox();
-                tb.TextBinding.Bind(() => (string) property.Value, val => property.Value = val);
+                tb.TextBinding.Bind(() => (string) property.Value, val =>
+                {
+                    vm.SectionVm.OnInputChanged();
+                    property.Value = val;
+                });
                 Rows.Add(TableLayout.HorizontalScaled(new Label {Text = property.Label}, tb));
                 Rhino.RhinoApp.WriteLine("{0} -> {1}", property.Label, (string) property.Value);
             }

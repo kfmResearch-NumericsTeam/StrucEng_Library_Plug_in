@@ -26,8 +26,6 @@ namespace CodeGenerator
 
         private PropertyGroup _selectedPropertyGroup;
 
-        public Func<bool, PropertyGroup> GlueData;
-
         public PropertyGroup SelectedPropertyGroup
         {
             get => _selectedPropertyGroup;
@@ -36,7 +34,7 @@ namespace CodeGenerator
                 _selectedPropertyGroup = value;
                 OnPropertyChanged();
 
-                var m = new PropertyListViewModel(value);
+                var m = new PropertyListViewModel(value, this);
                 var v = new PropertyListView(m);
                 PropertyView = v;
             }
@@ -46,6 +44,13 @@ namespace CodeGenerator
         {
             _model = model;
             Groupings = new ObservableCollection<PropertyGroup>(model.Groups);;
+        }
+
+        public event EventHandler InputChanged;
+        
+        public void OnInputChanged()
+        {
+            InputChanged?.Invoke(this, new EventArgs());
         }
     }
 }

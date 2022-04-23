@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CodeGenerator
@@ -16,5 +17,18 @@ namespace CodeGenerator
         public string Key { get; set; }
 
         public List<PropertyGroup> Groups { get; set; } = new List<PropertyGroup>();
+        
+        public PropertyGroup GetByKey(string k)
+        {
+            foreach (var p in Groups)
+            {
+                if (p.Key.Equals(k))
+                {
+                    return p;
+                }
+            }
+
+            throw new Exception("unknown Group for key: " + k);
+        }
     }
 }

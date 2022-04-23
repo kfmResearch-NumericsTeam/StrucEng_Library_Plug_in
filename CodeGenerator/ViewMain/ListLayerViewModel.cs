@@ -12,7 +12,7 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
-    public class MainViewModel : ViewModelBase
+    public class ListLayerViewModel : ViewModelBase
     {
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
@@ -34,7 +34,7 @@ namespace CodeGenerator
         private Control _propertyContent;
         private Dictionary<Layer, LayerContext> _layerContext = new Dictionary<Layer, LayerContext>();
 
-        public MainViewModel()
+        public ListLayerViewModel()
         {
             Model = new Workbench();
             _layers = new ObservableCollection<Layer>(Model.Layers);
@@ -155,7 +155,7 @@ namespace CodeGenerator
                 // Update UI for layer properties if new layer is selected
                 if (_selectedLayer != null)
                 {
-                    PropertyContent = GetPropertyContentForLayer(_selectedLayer);
+                    // PropertyContent = GetPropertyContentForLayer(_selectedLayer);
                 }
             }
         }
