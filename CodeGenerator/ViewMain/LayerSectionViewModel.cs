@@ -49,6 +49,7 @@ namespace CodeGenerator
             {
                 Thickness = el.ShellSection.Thickness;
             }
+
             _ignoreStoreVmToModel = false;
         }
 

@@ -30,9 +30,6 @@ namespace CodeGenerator
         private ObservableCollection<Layer> _layers;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
-        private bool _propertiesVisible = false;
-        private Control _propertyContent;
-        private Dictionary<Layer, LayerContext> _layerContext = new Dictionary<Layer, LayerContext>();
 
         public ListLayerViewModel()
         {
@@ -43,20 +40,6 @@ namespace CodeGenerator
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-        }
-
-        public void StoreData(Layer layer)
-        {
-            if (layer == null)
-            {
-                return;
-            }
-
-            if (_layerContext.ContainsKey(layer))
-            {
-                var ctx = _layerContext[layer];
-                ctx.StoreLayerData(layer);
-            }
         }
 
         private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
@@ -101,8 +84,6 @@ namespace CodeGenerator
 
         private void OnInspectCode()
         {
-            StoreData(_selectedLayer);
-
             PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
             var sourceCode = codeGen.Generate();
 
@@ -146,17 +127,9 @@ namespace CodeGenerator
             get => _selectedLayer;
             set
             {
-                StoreData(_selectedLayer);
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
-                PropertiesVisible = _selectedLayer != null;
-
-                // Update UI for layer properties if new layer is selected
-                if (_selectedLayer != null)
-                {
-                    // PropertyContent = GetPropertyContentForLayer(_selectedLayer);
-                }
             }
         }
 
@@ -182,111 +155,6 @@ namespace CodeGenerator
                 _layerToAdd = value;
                 OnPropertyChanged();
                 CommandOnAddLayer.UpdateCanExecute();
-            }
-        }
-
-        public bool PropertiesVisible
-        {
-            get => _propertiesVisible;
-            set
-            {
-                if (_propertiesVisible == value) return;
-                _propertiesVisible = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Control PropertyContent
-        {
-            get => _propertyContent;
-            set
-            {
-                _propertyContent = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private Control GetPropertyContentForLayer(Layer l)
-        {
-            if (_layerContext.ContainsKey(l))
-            {
-                return _layerContext[l].View;
-            }
-
-            LayerContext d = new LayerContext();
-            var control = d.GetPropertyContentForLayer(l);
-            _layerContext[l] = d;
-            return control;
-        }
-
-        /**
-         * Maps Model to Property List and stores UI, and ViewModels of Property lists
-         */
-        private class LayerContext
-        {
-            private SectionViewModel _elementSectionVm;
-            private SectionViewModel _elementMaterialVm;
-            private SectionViewModel _setDisplacementVm;
-
-            public Control View;
-
-            private Control _GetPropertyContentForElement(Element e)
-            {
-                var layout = new TableLayout()
-                {
-                    Padding = new Padding(5),
-                    Spacing = new Size(5, 5),
-                };
-                _elementSectionVm = new SectionViewModel(Builder.BuildSections());
-                layout.Rows.Add(new SectionView(_elementSectionVm));
-
-                _elementMaterialVm = new SectionViewModel(Builder.BuildMaterials());
-                layout.Rows.Add(new SectionView(_elementMaterialVm));
-                View = layout;
-
-                return layout;
-            }
-
-            private Control _GetPropertyContentForSet(Set s)
-            {
-                var layout = new TableLayout()
-                {
-                    Padding = new Padding(5),
-                    Spacing = new Size(5, 5),
-                };
-                _setDisplacementVm = new SectionViewModel(Builder.BuildDisplacement());
-                layout.Rows.Add(new SectionView(_setDisplacementVm));
-                View = layout;
-                return layout;
-            }
-
-            public Control GetPropertyContentForLayer(Layer e)
-            {
-                if (e.GetType() == LayerType.ELEMENT)
-                {
-                    return _GetPropertyContentForElement((Element) e);
-                }
-                else if (e.GetType() == LayerType.SET)
-                {
-                    return _GetPropertyContentForSet((Set) e);
-                }
-                else
-                {
-                    throw new SystemException("Unknown layer type");
-                }
-            }
-
-            public void StoreLayerData(Layer l)
-            {
-                if (l.GetType() == LayerType.ELEMENT)
-                {
-                    Builder.MapGroupToMaterial(_elementMaterialVm.SelectedPropertyGroup, (Element) l);
-                    Builder.MapGroupToSection(_elementSectionVm.SelectedPropertyGroup, (Element) l);
-                }
-                else if (l.GetType() == LayerType.SET)
-                {
-                    Builder.MapGroupToDisplacement(_setDisplacementVm.SelectedPropertyGroup, (Set) l);
-                }
             }
         }
     }
