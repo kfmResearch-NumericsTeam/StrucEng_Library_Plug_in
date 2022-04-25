@@ -23,7 +23,6 @@ namespace CodeGenerator
                 _selectedIndex = value;
                 OnPropertyChanged();
                 View = (Control) _views[_selectedIndex];
-                // ((IControl) _views[_selectedIndex]).Enable(true);
             }
         }
 

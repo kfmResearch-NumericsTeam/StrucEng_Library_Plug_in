@@ -40,17 +40,4 @@ namespace CodeGenerator.Model
             return $"ShellSection: {Thickness}";
         }
     }
-
-    public class AreaLoad
-    {
-        public string Z { get; set; }
-        public string Axes { get; set; }
-
-        public List<Layer> Elements { get; set; }
-    }
-
-    public class GravityLoad
-    {
-        public List<Layer> Elements { get; set; }
-    }
 }

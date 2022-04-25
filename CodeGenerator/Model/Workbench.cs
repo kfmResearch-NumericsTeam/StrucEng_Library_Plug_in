@@ -7,6 +7,7 @@ namespace CodeGenerator.Model
     public class Workbench
     {
         public List<Layer> Layers;
+        public List<Load> Loads { get; set; } = new List<Load>();
 
         public Workbench()
         {

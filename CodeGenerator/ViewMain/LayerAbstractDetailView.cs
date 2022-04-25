@@ -10,6 +10,7 @@ namespace CodeGenerator
         public void addProperty(DynamicLayout dynamicLayout, object _vm, string label, string propName, string defaultVal = "")
         {
             var tb = new TextBox();
+            tb.AutoSelectMode = AutoSelectMode.OnFocus;
             tb.Bind<string>("Text", _vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
             

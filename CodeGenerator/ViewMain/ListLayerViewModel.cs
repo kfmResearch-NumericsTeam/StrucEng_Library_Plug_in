@@ -76,7 +76,6 @@ namespace CodeGenerator
 
             LayerToAdd = "";
             _layers.Add(l);
-            Rhino.RhinoApp.WriteLine("Added: {0}", l);
 
             CommandOnInspectCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
@@ -85,6 +84,10 @@ namespace CodeGenerator
         private void OnInspectCode()
         {
             PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
+            if (!codeGen.ValidateModel())
+            {
+                return;
+            }
             var sourceCode = codeGen.Generate();
 
             var dialog = new InspectPythonDialog(sourceCode);

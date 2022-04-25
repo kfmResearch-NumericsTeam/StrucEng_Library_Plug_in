@@ -8,7 +8,9 @@ namespace CodeGenerator.Views
 {
     public class ViewSeparator : Panel
     {
-        readonly Label m_label;
+        public Label Label => m_label;
+
+        private readonly Label m_label;
         readonly Divider m_divider;
 
         public string Text
@@ -22,6 +24,8 @@ namespace CodeGenerator.Views
             get { return m_divider.Color; }
             set { m_divider.Color = value; }
         }
+        
+        
 
         public ViewSeparator()
         {

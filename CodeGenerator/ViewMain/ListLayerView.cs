@@ -1,7 +1,14 @@
 using System.Collections.Generic;
+using System.Drawing;
 using CodeGenerator.Model;
+using CodeGenerator.Step;
+using CodeGenerator.Step;
+using CodeGenerator.Views;
 using Eto.Drawing;
 using Eto.Forms;
+using Font = Eto.Drawing.Font;
+using FontStyle = Eto.Drawing.FontStyle;
+using Size = Eto.Drawing.Size;
 
 namespace CodeGenerator
 {
@@ -44,10 +51,25 @@ namespace CodeGenerator
             _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
         }
 
+        protected Control GenerateTitle(string text)
+        {
+            var s = new Label().Font.Size;
+            return new ViewSeparator()
+            {
+                Text = text,
+                Label =
+                {
+                    Font = new Font(FontFamilies.Sans, s, FontStyle.Bold)  
+                }
+            };
+        }
+
         protected void BuildGui()
         {
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
+
+            AddRow(GenerateTitle("Settings"));
             AddRow(
                 new GroupBox
                 {
@@ -67,6 +89,8 @@ namespace CodeGenerator
                         }
                     }
                 });
+            
+            AddRow(GenerateTitle("Layers"));
             AddRow(
                 new GroupBox
                 {
@@ -90,7 +114,10 @@ namespace CodeGenerator
                                         {
                                             new TableCell(
                                                 (_tbLayerToAdd = new TextBox
-                                                    {PlaceholderText = "Type or Select Layer to add",}
+                                                    {
+                                                        PlaceholderText = "Type or Select Layer to add",
+                                                        AutoSelectMode = AutoSelectMode.OnFocus
+                                                    }
                                                 ),
                                                 true),
                                             new TableCell((_btnMouseSelect = new Button {Text = "Select..."}))
@@ -157,7 +184,6 @@ namespace CodeGenerator
                         }
                     }
                 });
-
             AddRow(
                 (_gbPropertiesForLayer = new GroupBox
                     {
@@ -167,6 +193,16 @@ namespace CodeGenerator
                         Content = _vmDetailView.LayerDetailView
                     }
                 ));
+
+            AddRow(GenerateTitle("Loads"));
+            var vm = new ListLoadViewModel(_vmListLayer);
+            var v = new ListLoadView(vm);
+            AddRow(v);
+            
+            AddRow(GenerateTitle("Steps"));
+            var stepVm = new StepViewModel(_vmListLayer, vm);
+            var stepV = new StepView(stepVm);
+            AddRow(stepV);
             
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});
