@@ -13,6 +13,8 @@ namespace CodeGenerator
         private Button _btAddLoad;
         private DynamicLayout _container;
         private Button _btDeleteLoad;
+        private GroupBox _gbPropsForLoad;
+        private GroupBox _gbSelectLoad;
 
         public ListLoadView(ListLoadViewModel vm)
         {
@@ -34,6 +36,9 @@ namespace CodeGenerator
             _dbSelectLoad.DataStore = _vm.Loads;
             
             _container.Bind<Control>("Content", _vm, "LoadView", DualBindingMode.TwoWay);
+            _gbPropsForLoad.Bind<bool>("Visible", _vm, "LoadViewVisible", DualBindingMode.TwoWay);
+            _gbSelectLoad.Bind<bool>("Visible", _vm, "SelectLoadViewVisible", DualBindingMode.TwoWay);
+            
             DataContext = _vm;
         }
 
@@ -75,7 +80,7 @@ namespace CodeGenerator
 
                 });
             AddRow(         
-                    new GroupBox
+                _gbSelectLoad = new GroupBox
                     {
                     Text = "Select Load",
                     Padding = new Padding(5),
@@ -106,11 +111,13 @@ namespace CodeGenerator
                 });
 
             AddRow(
-                new GroupBox
+                _gbPropsForLoad = new GroupBox
                 {
                     Text = "Properties for Load",
                     Padding = new Padding(5),
+                    Visible = false,
                     Content = new DynamicLayout
+                        
                     {
                         Padding = new Padding(5),
                         // Padding = new Padding() {Top = 5, Left = 5, Bottom = 0, Right = 0},

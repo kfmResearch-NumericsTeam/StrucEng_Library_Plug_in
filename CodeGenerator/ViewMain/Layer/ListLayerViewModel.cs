@@ -30,6 +30,17 @@ namespace CodeGenerator
         private ObservableCollection<Layer> _layers;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
+        private bool _selectLayerViewVisible;
+        
+        public bool SelectLayerViewVisible
+        {
+            get => _selectLayerViewVisible;
+            set
+            {
+                _selectLayerViewVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ListLayerViewModel()
         {
@@ -40,6 +51,11 @@ namespace CodeGenerator
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
+
+            Layers.CollectionChanged += (sender, args) =>
+            {
+                SelectLayerViewVisible = Layers.Count != 0;
+            };
         }
 
         private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);

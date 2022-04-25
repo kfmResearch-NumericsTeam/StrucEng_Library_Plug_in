@@ -21,6 +21,7 @@ namespace CodeGenerator
         private DropDown _dropdownLayers;
         private TextBox _tbLayerToAdd;
         private GroupBox _gbPropertiesForLayer;
+        private GroupBox _gbSelectLayer;
         private RadioButtonList _rdlElementSetSelection;
 
         private readonly ListLayerViewModel _vmListLayer;
@@ -46,6 +47,7 @@ namespace CodeGenerator
             _dropdownLayers.DataStore = _vmListLayer.Layers;
             _dropdownLayers.Bind<Layer>("SelectedValue", _vmListLayer, "SelectedLayer", DualBindingMode.TwoWay);
             _rdlElementSetSelection.Bind<int>("SelectedIndex", _vmListLayer, "LayerToAddType", DualBindingMode.TwoWay);
+            _gbSelectLayer.Bind<bool>("Visible", _vmListLayer, "SelectLayerViewVisible", DualBindingMode.TwoWay);
             
             _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible", DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
@@ -156,7 +158,7 @@ namespace CodeGenerator
                     }
                 });
             AddRow(
-                new GroupBox
+                _gbSelectLayer = new GroupBox
                 {
                     Text = "Select Layer",
                     Padding = new Padding(5),

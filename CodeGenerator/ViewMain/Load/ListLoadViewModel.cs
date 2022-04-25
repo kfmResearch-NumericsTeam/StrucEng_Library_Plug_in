@@ -51,6 +51,29 @@ namespace CodeGenerator
             {
                 _loadView = value;
                 OnPropertyChanged();
+                LoadViewVisible = _loadView != null;
+            }
+        }
+
+        private bool _loadViewVisible = false;
+        public bool LoadViewVisible
+        {
+            get => _loadViewVisible;
+            set
+            {
+                _loadViewVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        private bool _selectLoadViewVisible = false;
+        public bool SelectLoadViewVisible
+        {
+            get => _selectLoadViewVisible;
+            set
+            {
+                _selectLoadViewVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -70,6 +93,10 @@ namespace CodeGenerator
                 // new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
             };
             Loads = new ObservableCollection<Load>(Model.Loads);
+            Loads.CollectionChanged += (sender, args) =>
+            {
+                SelectLoadViewVisible = Loads.Count != 0;
+            };
         }
 
         private void OnAddLoad()

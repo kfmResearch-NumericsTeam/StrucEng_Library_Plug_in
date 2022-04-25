@@ -199,35 +199,42 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         public bool ValidateModel()
         {
             bool success = true;
-            foreach (var layer in _model.Layers)
+            if (_model.Layers == null || _model.Layers.Count == 0)
             {
-                if (layer.GetType() == LayerType.ELEMENT)
+                Msg("No Layers added");
+                success = false;
+            }
+            else
+            {
+                foreach (var layer in _model.Layers)
                 {
-                    var element = (Element) layer;
-                    if (element.MaterialElastic == null)
+                    if (layer.GetType() == LayerType.ELEMENT)
                     {
-                        Msg("No Material Elastic for Layer " + element.GetName());
-                        success = false;
+                        var element = (Element) layer;
+                        if (element.MaterialElastic == null)
+                        {
+                            Msg("No Material Elastic for Layer " + element.GetName());
+                            success = false;
+                        }
+
+                        if (element.ShellSection == null)
+                        {
+                            Msg("No Shell Section for Layer " + element.GetName());
+                            success = false;
+                        }
                     }
 
-                    if (element.ShellSection == null)
+                    if (layer.GetType() == LayerType.SET)
                     {
-                        Msg("No Shell Section for Layer " + element.GetName());
-                        success = false;
-                    }
-                }
-
-                if (layer.GetType() == LayerType.SET)
-                {
-                    var set = (Set) layer;
-                    if (set.Displacement == null)
-                    {
-                        Msg("No Displacement for Layer " + set.GetName());
-                        success = false;
+                        var set = (Set) layer;
+                        if (set.Displacement == null)
+                        {
+                            Msg("No Displacement for Layer " + set.GetName());
+                            success = false;
+                        }
                     }
                 }
             }
-
             foreach (var load in _model.Loads)
             {
                 if (load.Layers == null || load.Layers.Count == 0)
