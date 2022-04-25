@@ -6,10 +6,6 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
-    public interface IControl
-    {
-        void Enable(bool state);
-    }
     public class SelectionViewModel: ViewModelBase
     {
 
