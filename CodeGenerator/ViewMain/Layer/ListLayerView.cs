@@ -101,7 +101,7 @@ namespace CodeGenerator
                     Content = new DynamicLayout
                     {
                         Padding = new Padding(5),
-                        Spacing = new Size(5, 10),
+                        Spacing = new Size(5, 1),
                         Rows =
                         {
                             new TableLayout()

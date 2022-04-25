@@ -1,22 +1,50 @@
 using System;
+using System.Text;
 
 namespace CodeGenerator.Model
 {
     public enum StepType
     {
         Load,
-        Displacement
+        Set
     };
 
 
     public class Step
     {
-        public int Order { get; set; }
+        public string Order { get; set; }
 
         public StepType StepType { get; set; }
 
         public Load Load { get; set; }
-        public Displacement Displacement { get; set; }
+        public Set Set { get; set; }
+
+        public string getSummary()
+        {
+            string res = "";
+            if (StepType == StepType.Load)
+            {
+                StringBuilder b = new StringBuilder();
+                if (Load != null)
+                {
+                    b.Append(Load.GetType().GetName());
+                    b.Append(" (");
+                    foreach (var l in Load.Layers)
+                    {
+                        b.Append(l.GetName() + ";");
+                    }
+
+                    b.Append(")");
+                    res = b.ToString();
+                }
+            }
+            else
+            {
+                res = Set?.GetName();
+            }
+
+            return res;
+        }
 
         public Step(StepType type)
         {

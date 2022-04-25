@@ -56,6 +56,7 @@ namespace CodeGenerator
         }
 
         private bool _loadViewVisible = false;
+
         public bool LoadViewVisible
         {
             get => _loadViewVisible;
@@ -65,8 +66,9 @@ namespace CodeGenerator
                 OnPropertyChanged();
             }
         }
-        
+
         private bool _selectLoadViewVisible = false;
+
         public bool SelectLoadViewVisible
         {
             get => _selectLoadViewVisible;
@@ -80,7 +82,10 @@ namespace CodeGenerator
         public RelayCommand CommandAddLoad { get; }
         public RelayCommand CommandDeleteLoad { get; }
 
-        public Workbench Model => _listLayerVm.Model;
+        public Workbench Model
+        {
+            get => _listLayerVm.Model;
+        }
 
         public ListLoadViewModel(ListLayerViewModel listLayerVm)
         {
@@ -93,10 +98,7 @@ namespace CodeGenerator
                 // new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
             };
             Loads = new ObservableCollection<Load>(Model.Loads);
-            Loads.CollectionChanged += (sender, args) =>
-            {
-                SelectLoadViewVisible = Loads.Count != 0;
-            };
+            Loads.CollectionChanged += (sender, args) => { SelectLoadViewVisible = Loads.Count != 0; };
         }
 
         private void OnAddLoad()
@@ -117,13 +119,37 @@ namespace CodeGenerator
 
             Loads.Add(newLoad);
             Model.Loads.Add(newLoad);
+            OnPropertyChanged(nameof(Loads));
+
+            foreach (var modelLoad in Loads)
+            {
+                Rhino.RhinoApp.WriteLine("loads: {0}", modelLoad.GetType());
+            }
+
+            foreach (var modelLoad in Model.Loads)
+            {
+                Rhino.RhinoApp.WriteLine("Model.loads: {0}", modelLoad.GetType());
+            }
         }
 
         private void OnLoadDelete()
         {
             if (SelectedLoad == null) return;
+            Model.Loads.Remove(SelectedLoad);
             Loads.Remove(SelectedLoad);
-            Model.Loads.Add(SelectedLoad);
+            OnPropertyChanged(nameof(Loads));
+
+            foreach (var modelLoad in Loads)
+            {
+                Rhino.RhinoApp.WriteLine("after del: loads: {0}", modelLoad.GetType());
+            }
+
+            foreach (var modelLoad in Model.Loads)
+            {
+                Rhino.RhinoApp.WriteLine("after del: Model.loads: {0}", modelLoad.GetType());
+            }
+
+
             SelectedLoad = null;
         }
 
