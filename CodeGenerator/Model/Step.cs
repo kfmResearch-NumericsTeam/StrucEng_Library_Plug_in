@@ -12,21 +12,14 @@ namespace CodeGenerator.Model
 
     public class Step
     {
-        public string Order { get; set; } = null; // null is uninitialized
+        public string Order { get; set; }
 
         public StepType StepType { get; set; }
 
         public Load Load { get; set; }
         public Set Set { get; set; }
 
-        public object getOrderObject()
-        {
-            if (StepType == StepType.Load) return Load;
-            if (StepType == StepType.Set) return Set;
-            return null;
-        }
-
-        public string getSummary()
+        public string GetSummary()
         {
             string res = "";
             if (StepType == StepType.Load)
@@ -34,7 +27,7 @@ namespace CodeGenerator.Model
                 StringBuilder b = new StringBuilder();
                 if (Load != null)
                 {
-                    b.Append(Load.GetType().GetName());
+                    b.Append(Load.LoadType.GetName());
                     b.Append(" (");
                     foreach (var l in Load.Layers)
                     {

@@ -88,7 +88,7 @@ namespace CodeGenerator
         private void StoreVmToModel()
         {
             if (_ignoreStoreVmToModel) return;
-            if (_listLoadVm.SelectedLoad.GetType() == LoadType.Area)
+            if (_listLoadVm.SelectedLoad.LoadType == LoadType.Area)
             {
                 var l = (LoadArea) _listLoadVm.SelectedLoad;
                 l.Axes = Axes;
@@ -102,7 +102,7 @@ namespace CodeGenerator
         private void StoreModelToVm()
         {
             _ignoreStoreVmToModel = true;
-            if (_listLoadVm.SelectedLoad.GetType() == LoadType.Area)
+            if (_listLoadVm.SelectedLoad.LoadType == LoadType.Area)
             {
                 var l = (LoadArea) _listLoadVm.SelectedLoad;
                 Z = l.Z;

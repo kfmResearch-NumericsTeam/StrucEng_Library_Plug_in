@@ -8,7 +8,7 @@ namespace CodeGenerator.Model
 
     public interface Layer
     {
-        LayerType GetType();
+        LayerType LayerType { get; }
         string GetName();
         string PrettyPrint();
     }

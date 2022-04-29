@@ -85,7 +85,7 @@ mdl = Structure(name=name, path=path)
             b.Append(header);
             foreach (var layer in _model.Layers)
             {
-                if (layer.GetType() == LayerType.ELEMENT)
+                if (layer.LayerType == LayerType.ELEMENT)
                 {
                     var element = (Element) layer;
                     var layerId = LayerId(element.GetName());
@@ -111,7 +111,7 @@ mdl = Structure(name=name, path=path)
 ");
                 }
 
-                if (layer.GetType() == LayerType.SET)
+                if (layer.LayerType == LayerType.SET)
                 {
                     var set = (Set) layer;
                     var setName = set.GetName();
@@ -129,7 +129,7 @@ mdl = Structure(name=name, path=path)
 
             foreach (var load in _model.Loads)
             {
-                if (load.GetType() == LoadType.Area)
+                if (load.LoadType == LoadType.Area)
                 {
                     var area = (LoadArea) load;
                     string layersList = LayersToStringList(load.Layers);
@@ -141,7 +141,7 @@ mdl = Structure(name=name, path=path)
                         $@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, z={area.Z}, axes='{area.Axes}'))
 ");
                 }
-                else if (load.GetType() == LoadType.Gravity)
+                else if (load.LoadType == LoadType.Gravity)
                 {
                     string layersList = LayersToStringList(load.Layers);
                     b.Append($@"#
@@ -211,7 +211,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             {
                 foreach (var layer in _model.Layers)
                 {
-                    if (layer.GetType() == LayerType.ELEMENT)
+                    if (layer.LayerType == LayerType.ELEMENT)
                     {
                         var element = (Element) layer;
                         if (element.ElementMaterialElastic == null)
@@ -227,7 +227,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                         }
                     }
 
-                    if (layer.GetType() == LayerType.SET)
+                    if (layer.LayerType == LayerType.SET)
                     {
                         var set = (Set) layer;
                         if (set.SetDisplacement == null)
@@ -243,7 +243,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             {
                 if (load.Layers == null || load.Layers.Count == 0)
                 {
-                    Msg("No Layers in load " + load.GetType());
+                    Msg("No Layers in load " + load.LoadType);
                     success = false;
                 }
             }

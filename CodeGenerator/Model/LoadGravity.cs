@@ -5,6 +5,7 @@ namespace CodeGenerator.Model
     public class LoadGravity : Load
     {
         public List<Layer> Layers { get; set; } = new List<Layer>();
-        public LoadType GetType() => LoadType.Gravity;
+        
+        public LoadType LoadType => LoadType.Gravity;
     }
 }

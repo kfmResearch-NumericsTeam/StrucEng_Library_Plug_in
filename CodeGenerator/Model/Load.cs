@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CodeGenerator.Model
 {
@@ -29,7 +28,7 @@ namespace CodeGenerator.Model
     public interface Load
     {
         List<Layer> Layers { get; set; }
-        LoadType GetType();
+        LoadType LoadType { get; }
     }
 
     // public enum StrucEngType

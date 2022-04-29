@@ -3,7 +3,7 @@ namespace CodeGenerator.Model
     public class Set : Layer
     {
         public SetDisplacement SetDisplacement { get; set; }
-        
+
         public string Name { get; set; }
 
         public override string ToString()
@@ -11,10 +11,7 @@ namespace CodeGenerator.Model
             return "Set: " + Name;
         }
 
-        public LayerType GetType()
-        {
-            return LayerType.SET;
-        }
+        public LayerType LayerType => LayerType.SET;
 
         public string GetName()
         {

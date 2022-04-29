@@ -87,12 +87,12 @@ namespace CodeGenerator
 
         public Control GetPropertyContentForLayer(Layer e)
         {
-            if (e.GetType() == LayerType.ELEMENT)
+            if (e.LayerType == LayerType.ELEMENT)
             {
                 return _GetPropertyContentForElement((Element) e);
             }
 
-            if (e.GetType() == LayerType.SET)
+            if (e.LayerType == LayerType.SET)
             {
                 return _GetPropertyContentForSet((Set) e);
             }

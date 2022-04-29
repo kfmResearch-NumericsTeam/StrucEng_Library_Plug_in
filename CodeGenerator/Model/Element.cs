@@ -5,18 +5,10 @@ namespace CodeGenerator.Model
         public ElementMaterialElastic ElementMaterialElastic { get; set; }
 
         public ElementShellSection ElementShellSection { get; set; }
+        
+        public LayerType LayerType => LayerType.ELEMENT;
 
         public string Name { get; set; }
-
-        public override string ToString()
-        {
-            return "Element: " + Name;
-        }
-
-        public LayerType GetType()
-        {
-            return LayerType.ELEMENT;
-        }
 
         public string GetName()
         {
@@ -26,6 +18,11 @@ namespace CodeGenerator.Model
         public string PrettyPrint()
         {
             return "Element: " + Name + ", " + ElementMaterialElastic;
+        }
+
+        public override string ToString()
+        {
+            return "Element: " + Name;
         }
     }
 }

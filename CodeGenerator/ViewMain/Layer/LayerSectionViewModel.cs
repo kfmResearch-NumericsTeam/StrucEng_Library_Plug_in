@@ -63,7 +63,7 @@ namespace CodeGenerator
         {
             if (e.PropertyName == nameof(_listLayerVm.SelectedLayer))
             {
-                if (_listLayerVm.SelectedLayer != null && _listLayerVm.SelectedLayer.GetType() == LayerType.ELEMENT)
+                if (_listLayerVm.SelectedLayer != null && _listLayerVm.SelectedLayer.LayerType == LayerType.ELEMENT)
                 {
                     StoreModelToVm();
                 }
