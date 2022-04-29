@@ -125,9 +125,7 @@ mdl = Structure(name=name, path=path)
             }
 
             foreach (var load in _model.Loads)
-            {
-                if (load == null) continue; // XXX: Bugfixing
-                
+            {   
                 if (load.GetType() == LoadType.Area)
                 {
                     var area = (AreaLoad) load;
@@ -239,11 +237,6 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             }
             foreach (var load in _model.Loads)
             {
-                if (load == null)
-                {
-                    continue;
-                    // XXX: ONLY DEBUGGING
-                }
                 if (load.Layers == null || load.Layers.Count == 0)
                 {
                     Msg("No Layers in load " + load.GetType());

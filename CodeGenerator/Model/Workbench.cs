@@ -6,12 +6,12 @@ namespace CodeGenerator.Model
 {
     public class Workbench
     {
-        public List<Layer> Layers;
+        public List<Layer> Layers { get; set; } = new List<Layer>();
         public List<Load> Loads { get; set; } = new List<Load>();
-
+        public List<Step> Steps { get; set; } = new List<Step>();
+        
         public Workbench()
         {
-            Layers = new List<Layer>();
         }
 
         public Element AddElement(string name)
@@ -45,6 +45,7 @@ namespace CodeGenerator.Model
                 b.Append(l.PrettyPrint());
                 b.Append(", ");
             }
+
             return b.ToString();
         }
     }

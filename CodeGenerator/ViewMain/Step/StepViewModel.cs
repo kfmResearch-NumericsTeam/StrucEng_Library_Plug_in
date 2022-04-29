@@ -7,42 +7,22 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using CodeGenerator.Model;
+using CodeGenerator.ViewMain.Step;
 
 namespace CodeGenerator.Step
 {
-    public class SingleStepViewModel : ViewModelBase
-    {
-        private readonly Model.Step _step;
-
-        private string _order;
-
-        public string Order
-        {
-            get => _order;
-            set
-            {
-                _order = value;
-                OnPropertyChanged();
-                _step.Order = _order;
-            }
-        }
-
-        public string Label => _step.getSummary();
-
-        public SingleStepViewModel(Model.Step step)
-        {
-            _step = step;
-        }
-    }
-
-    /**
-     * View Model to select ordering of steps for Load processing.
-     */
+    /// <summary>View Model to select ordering of steps for Load processing.</summary>
     public class StepViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
         private readonly ListLoadViewModel _listLoadVm;
 
+        private Workbench Model
+        {
+            get => _listLayerVm.Model;
+        }
+
+        private Dictionary<object, SingleStepViewModel> StepMap; // Key: (Set/Load), Val: ViewModel for single step
         private ObservableCollection<SingleStepViewModel> _steps;
 
         public ObservableCollection<SingleStepViewModel> Steps
@@ -60,29 +40,88 @@ namespace CodeGenerator.Step
             _listLayerVm = listLayerVm;
             _listLoadVm = listLoadVm;
             Steps = new ObservableCollection<SingleStepViewModel>();
+            StepMap = new Dictionary<object, SingleStepViewModel>();
+            BuildStepData();
 
-            _listLoadVm.Loads.CollectionChanged += LoadsChanged;
+            _listLoadVm.Loads.CollectionChanged += StepDataChanged;
+            _listLayerVm.Layers.CollectionChanged += StepDataChanged;
         }
 
-        private void LoadsChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        private void StepDataChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            Rhino.RhinoApp.WriteLine("loads changed");
-            Steps.Clear();
+            BuildStepData();
+        }
+
+        private void BuildStepData()
+        {
+            // XXX: Since we use an event based approach and always update the steps in the view on a change,
+            // we have to find out what changed and update the step view accordingly.
+            // This makes the below logic tedious, we have to find what's new and what was deleted.
+            var stepsToDelete = new Dictionary<object, SingleStepViewModel>(StepMap);
+            int order = HighestOrder() + 1;
+
             foreach (var load in _listLoadVm.Loads)
             {
+                if (StepMap.ContainsKey(load))
+                {
+                    stepsToDelete.Remove(load);
+                    continue;
+                }
+
                 Model.Step s = new Model.Step(StepType.Load);
                 s.Load = load;
-                Steps.Add(new SingleStepViewModel(s));
+                s.Order = order.ToString();
+                order++;
+                var vm = new SingleStepViewModel(s);
+                Steps.Add(vm);
+                StepMap.Add(load, vm);
             }
 
             foreach (var layer in _listLayerVm.Layers)
             {
                 if (layer.GetType() == LayerType.SET)
                 {
+                    if (StepMap.ContainsKey(layer))
+                    {
+                        stepsToDelete.Remove(layer);
+                        continue;
+                    }
+
                     Model.Step s = new Model.Step(StepType.Set);
-                    Steps.Add(new SingleStepViewModel(s));
+                    s.Set = (Set) layer;
+                    s.Order = order.ToString();
+                    order++;
+                    var vm = new SingleStepViewModel(s);
+                    Steps.Add(vm);
+                    StepMap.Add(layer, vm);
+                    Model.Steps.Add(s);
                 }
             }
+
+            foreach (var stepToDelete in stepsToDelete)
+            {
+                StepMap.Remove(stepToDelete.Key);
+                Steps.Remove(stepToDelete.Value);
+                Model.Steps.Remove(stepToDelete.Value.StepModel);
+            }
+        }
+
+        public int HighestOrder()
+        {
+            var maxNum = 0;
+            foreach (var s in Steps)
+            {
+                try
+                {
+                    maxNum = Math.Max(int.Parse(s.Order), maxNum);
+                }
+                catch (Exception)
+                {
+                    // Ignore non numeric numbers
+                }
+            }
+
+            return maxNum;
         }
     }
 }
