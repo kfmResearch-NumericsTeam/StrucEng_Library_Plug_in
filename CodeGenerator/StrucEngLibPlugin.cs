@@ -11,6 +11,9 @@ namespace CodeGenerator
     /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
+        public static string Version = "0.0.1";
+        public static string Website = "https://github.com/abertschi/TODO";
+        
         public StrucEngLibPlugin()
         {
             Instance = this;

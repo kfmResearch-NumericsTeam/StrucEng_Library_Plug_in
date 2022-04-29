@@ -68,6 +68,23 @@ namespace CodeGenerator
                 }
             }
 
+            foreach (var step in model.Steps)
+            {
+                if (String.IsNullOrEmpty(step.Order))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    float.Parse(step.Order);
+                }
+                catch (Exception e)
+                {
+                    msgs.Add($"Order '{step.Order}' of {step.GetSummary()} is not numeric");
+                }
+            }
+
             // XXX: We currently don't return success flag
             return msgs;
         }
