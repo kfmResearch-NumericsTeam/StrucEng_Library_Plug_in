@@ -15,6 +15,7 @@ namespace CodeGenerator
         {
             MainViewModel vm = new MainViewModel();
             Content = new Scrollable {Content = new ListLayerView(vm)};
+            // Content = new Scrollable {Content = };
         }
 
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)

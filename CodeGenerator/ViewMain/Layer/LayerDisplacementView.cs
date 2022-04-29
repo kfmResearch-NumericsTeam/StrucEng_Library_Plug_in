@@ -7,7 +7,7 @@ namespace CodeGenerator
     /// <summary>
     /// View to show information about displacements
     /// </summary>
-    public class LayerDisplacementView : LayerAbstractDetailView
+    public class LayerDisplacementView : DynamicLayout
     {
         private readonly LayerDisplacementViewModel _vm;
 
@@ -21,12 +21,12 @@ namespace CodeGenerator
                 Spacing = new Size(5, 1)
             };
 
-            addProperty(layout, _vm, "Ux", "Ux", "0");
-            addProperty(layout, _vm, "Uy", "Uy", "0");
-            addProperty(layout, _vm, "Uz", "Uz", "0");
-            addProperty(layout, _vm, "Rotx", "Rotx", "0");
-            addProperty(layout, _vm, "Roty", "Roty", "0");
-            addProperty(layout, _vm, "Rotz", "Rotz", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Ux", "Ux", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Uy", "Uy", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Uz", "Uz", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Rotx", "Rotx", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Roty", "Roty", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Rotz", "Rotz", "0");
 
             Add(new SelectionView("Displacements",
                 new List<string>() {"General Displacement"},

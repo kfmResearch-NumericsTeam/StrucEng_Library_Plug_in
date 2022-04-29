@@ -1,25 +1,25 @@
 using System;
-using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Reflection;
 using Eto.Forms;
 
 namespace CodeGenerator
 {
     /// <summary>
-    /// Abstract class with utility code to renders a single row for a property.
-    /// The property contains a Label and text field.
+    /// Utility code for views
     /// </summary>
-    public abstract class LayerAbstractDetailView : DynamicLayout
+    public class UiUtils
     {
-        public void addProperty(
+        public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
             object vm,
             string label,
             string propName,
             string defaultVal = "")
         {
-            var tb = new TextBox();
-            tb.AutoSelectMode = AutoSelectMode.OnFocus;
+            var tb = new ComboBoxWithMemory(propName);
             tb.Bind<string>("Text", vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
 

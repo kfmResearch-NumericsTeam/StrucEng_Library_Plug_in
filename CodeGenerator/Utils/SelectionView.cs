@@ -91,7 +91,7 @@ namespace CodeGenerator
 
             _propertyLayout = new DynamicLayout
             {
-                Padding = new Padding(5) { },
+                Padding = new Padding {Top = 5, Left = 10, Bottom = 0, Right = 0},
                 Spacing = new Size(5, 5),
                 Visible = true
             };

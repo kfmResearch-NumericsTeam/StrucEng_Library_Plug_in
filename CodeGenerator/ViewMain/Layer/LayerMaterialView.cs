@@ -7,7 +7,7 @@ namespace CodeGenerator
     /// <summary>
     /// View for Materials
     /// </summary>
-    public class LayerMaterialView : LayerAbstractDetailView
+    public class LayerMaterialView : DynamicLayout
     {
         private readonly LayerMaterialViewModel _vm;
 
@@ -21,10 +21,9 @@ namespace CodeGenerator
                 Spacing = new Size(5, 1)
             };
 
-            addProperty(layout, _vm, "E", "E", "33700");
-            addProperty(layout, _vm, "V", "V", "0.0");
-            addProperty(layout, _vm, "P", "P", "2500/10**9");
-
+            UiUtils.AddLabelTextRow(layout, _vm, "E", "E", "33700");
+            UiUtils.AddLabelTextRow(layout, _vm, "V", "V", "0.0");
+            UiUtils.AddLabelTextRow(layout, _vm, "P", "P", "2500/10**9");
             Add(new SelectionView("Materials", new List<string>() {"Elastic"}, new List<Control>() {layout}));
         }
     }

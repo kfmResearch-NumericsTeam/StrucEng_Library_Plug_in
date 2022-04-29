@@ -4,8 +4,8 @@ namespace CodeGenerator.Model
 {
     public class LoadArea : Load
     {
-        public string Z { get; set; } = "0.03";
-        public string Axes { get; set; } = "local";
+        public string Z { get; set; }
+        public string Axes { get; set; }
         public List<Layer> Layers { get; set; } = new List<Layer>();
         public LoadType LoadType => LoadType.Area;
     }

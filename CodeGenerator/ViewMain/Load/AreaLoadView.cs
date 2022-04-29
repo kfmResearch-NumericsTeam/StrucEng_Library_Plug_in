@@ -17,31 +17,16 @@ namespace CodeGenerator
     {
         private readonly AreaLoadViewModel _vm;
 
-        private TextBox _tbZ;
-        private TextBox _tbAxes;
-
         public AreaLoadView(AreaLoadViewModel vm) : base(vm)
         {
             _vm = vm;
+            BuildGui();
         }
 
-        protected override void BindGui()
+        private void BuildGui()
         {
-            base.BindGui();
-            _tbZ.Bind<String>("Text", _vm, "Z", DualBindingMode.TwoWay);
-            _tbAxes.Bind<String>("Text", _vm, "Axes", DualBindingMode.TwoWay);
-        }
-
-        protected override void BuildGui()
-        {
-            base.BuildGui();
-            _tbZ = new TextBox();
-            _tbAxes = new TextBox();
-
-            Padding = new Padding(5) { };
-            Spacing = new Size(5, 5);
-            AddRow(TableLayout.HorizontalScaled(new Label {Text = "z"}, _tbZ));
-            AddRow(TableLayout.HorizontalScaled(new Label {Text = "Axes"}, _tbAxes));
+            UiUtils.AddLabelTextRow(this, _vm, "z", "Z", "0.03");
+            UiUtils.AddLabelTextRow(this, _vm, "Axes", "Axes", "local");
         }
     }
 }

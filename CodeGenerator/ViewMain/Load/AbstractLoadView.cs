@@ -27,7 +27,7 @@ namespace CodeGenerator
         protected virtual void BuildGui()
         {
             Padding = new Padding(5) { };
-            Spacing = new Size(5, 5);
+            Spacing = new Size(5, 1);
             AddRow(SelectLayerDialog.CreateUiElement(ref _btConnectLayers, ref _tbConnectLayers));
         }
     }
