@@ -15,6 +15,7 @@ namespace CodeGenerator
         {
             var listLayerVm = new ListLayerViewModel();
             var detailLayerVm = new LayerDetailsViewModel(listLayerVm);
+            
             ListLayerView view = new ListLayerView(listLayerVm, detailLayerVm);
             Content = new Scrollable {Content = view};
         }
