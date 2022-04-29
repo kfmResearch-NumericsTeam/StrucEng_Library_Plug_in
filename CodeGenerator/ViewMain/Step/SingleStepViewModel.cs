@@ -18,7 +18,7 @@ namespace CodeGenerator.ViewMain.Step
             }
         }
 
-        public string Label => StepModel.getSummary();
+        public string Label => StepModel.GetSummary();
 
         public SingleStepViewModel(Model.Step step)
         {

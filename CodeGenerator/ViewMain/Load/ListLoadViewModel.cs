@@ -140,13 +140,13 @@ namespace CodeGenerator
             {
                 LoadView = null;
             }
-            else if (SelectedLoad.GetType() == LoadType.Area)
+            else if (SelectedLoad.LoadType == LoadType.Area)
             {
                 var vm = new AreaLoadViewModel(_listLayerVm, this);
                 var v = new AreaLoadView(vm);
                 LoadView = v;
             }
-            else if (SelectedLoad.GetType() == LoadType.Gravity)
+            else if (SelectedLoad.LoadType == LoadType.Gravity)
             {
                 LoadView = null;
             }

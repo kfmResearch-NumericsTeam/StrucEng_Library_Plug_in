@@ -37,7 +37,7 @@ namespace CodeGenerator
                 defaultContextValue: string.Empty);
 
             _dbSelectLoad.Bind<Load>("SelectedValue", _vm, "SelectedLoad", DualBindingMode.TwoWay);
-            _dbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.GetType().GetName());
+            _dbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.LoadType.GetName());
             _dbSelectLoad.DataStore = _vm.Loads;
 
             _container.Bind<Control>("Content", _vm, "LoadView", DualBindingMode.TwoWay);

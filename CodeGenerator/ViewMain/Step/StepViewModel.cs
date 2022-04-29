@@ -90,7 +90,7 @@ namespace CodeGenerator.Step
 
             foreach (var layer in _listLayerVm.Layers)
             {
-                if (layer.GetType() == LayerType.SET)
+                if (layer.LayerType == LayerType.SET)
                 {
                     if (_stepMap.ContainsKey(layer))
                     {
