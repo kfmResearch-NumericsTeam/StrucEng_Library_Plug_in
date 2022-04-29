@@ -6,26 +6,25 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
-    public class SelectionViewModel: ViewModelBase
+    class SelectionViewModel : ViewModelBase
     {
-
         private int _selectedIndex;
+
         public int SelectedIndex
         {
             get => _selectedIndex;
             set
             {
-                Rhino.RhinoApp.WriteLine("selectidnex changed, {0}", value);
                 _selectedIndex = value;
                 OnPropertyChanged();
-                View = (Control) _views[_selectedIndex];
+                View = _views[_selectedIndex];
             }
         }
 
         private Control _view;
         private List<Control> _views;
-        
-        public  SelectionViewModel(List<Control> views)
+
+        public SelectionViewModel(List<Control> views)
         {
             _views = views;
         }
@@ -37,12 +36,14 @@ namespace CodeGenerator
             {
                 _view = value;
                 OnPropertyChanged();
-                Rhino.RhinoApp.WriteLine("view changed");
             }
         }
     }
-    
-    public class SelectionView: DynamicLayout
+
+    /// <summary>
+    /// View to show a dropdown menu to switch to different views according to selection in dropdown menu
+    /// </summary>
+    public class SelectionView : DynamicLayout
     {
         private readonly string _sectionLabel;
         private readonly List<string> _items;
@@ -51,6 +52,10 @@ namespace CodeGenerator
         private DropDown _dbSectionSelection;
         private DynamicLayout _propertyLayout;
 
+        /// <param name="sectionLabel"></param> Titel to show
+        /// <param name="items"></param> List of labels to show in dropdown
+        /// <param name="views"></param> List of views to show when selected in dropdown
+        /// <exception cref="Exception"></exception>
         public SelectionView(string sectionLabel, List<string> items, List<Control> views)
         {
             _sectionLabel = sectionLabel;
@@ -59,6 +64,7 @@ namespace CodeGenerator
             {
                 throw new Exception("items and views must have same count");
             }
+
             _vm = new SelectionViewModel(views);
             BuildGui(views);
         }
@@ -78,11 +84,11 @@ namespace CodeGenerator
 
             sectionLayout.Rows.Add(new ViewSeparator() {Text = _sectionLabel});
             sectionLayout.Rows.Add(TableLayout.HorizontalScaled((_dbSectionSelection = new DropDown { })));
-            
+
             _dbSectionSelection.DataStore = _items;
             _dbSectionSelection.Bind<int>("SelectedIndex", _vm, "SelectedIndex",
                 DualBindingMode.TwoWay);
-            
+
             _propertyLayout = new DynamicLayout
             {
                 Padding = new Padding(5) { },
@@ -92,10 +98,10 @@ namespace CodeGenerator
             _propertyLayout.Add(views[0]);
             _vm.View = views[0];
             _vm.SelectedIndex = 0;
-            
+
             _propertyLayout.Bind<Control>("Content", _vm, "View",
                 DualBindingMode.TwoWay);
-            
+
             sectionLayout.Rows.Add(_propertyLayout);
         }
     }

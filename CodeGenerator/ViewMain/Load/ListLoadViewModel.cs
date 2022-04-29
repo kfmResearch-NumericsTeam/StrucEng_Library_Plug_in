@@ -127,6 +127,8 @@ namespace CodeGenerator
             Loads.Add(newLoad);
             Model.Loads.Add(newLoad);
             OnPropertyChanged(nameof(Loads));
+
+            SelectedLoad = newLoad;
         }
 
         private void OnLoadDelete()

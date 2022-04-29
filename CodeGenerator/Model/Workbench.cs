@@ -16,7 +16,6 @@ namespace CodeGenerator.Model
 
         public Element AddElement(string name)
         {
-            // TODO: Exception Handling?
             if (name == null) return null;
             if (name == "") return null;
 
@@ -27,7 +26,6 @@ namespace CodeGenerator.Model
 
         public Set AddSet(string name)
         {
-            // TODO: Exception Handling?
             if (name == null) return null;
             if (name == "") return null;
 

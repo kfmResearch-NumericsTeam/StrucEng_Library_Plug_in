@@ -62,6 +62,11 @@ namespace CodeGenerator
             Layers.CollectionChanged += (sender, args) => { SelectLayerViewVisible = Layers.Count != 0; };
         }
 
+        private void OnInspectCode()
+        {
+            new ExecuteGenerateCode(_mainVm).ExecuteAsync(Model);
+        }
+
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
         private bool CanExecuteOnInspectCode() => _layers != null && _layers.Count > 0;
@@ -99,31 +104,7 @@ namespace CodeGenerator
 
             CommandOnInspectCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
-        }
-
-        private void OnInspectCode()
-        {
-            PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
-            var valMsgs = codeGen.ValidateModel();
-            if (valMsgs.Count != 0)
-            {
-                _mainVm.ErrorVm.ShowMessages(valMsgs);
-                return;
-            }
-
-            var sourceCode = codeGen.Generate();
-
-            var dialog = new InspectPythonDialog(sourceCode);
-            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
-            if (dialogRc == Eto.Forms.DialogResult.Ok)
-            {
-                sourceCode = dialog.Source;
-
-                if (dialog.State == InspectPythonDialog.STATE_EXEC)
-                {
-                    OnGenerateModel(sourceCode);
-                }
-            }
+            SelectedLayer = l;
         }
 
         private void OnMouseSelect()
@@ -134,13 +115,6 @@ namespace CodeGenerator
             {
                 LayerToAdd = str;
             }
-        }
-
-        protected void OnGenerateModel(string source)
-        {
-            string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
-            File.WriteAllText(fileName, source);
-            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
 
         /*
@@ -158,7 +132,7 @@ namespace CodeGenerator
             }
         }
 
-        public ObservableCollection<CodeGenerator.Model.Layer> Layers => _layers;
+        public ObservableCollection<Layer> Layers => _layers;
 
         public int LayerToAddType
         {

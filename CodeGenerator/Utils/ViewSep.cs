@@ -6,6 +6,9 @@ using Rhino.Commands;
 
 namespace CodeGenerator.Views
 {
+    /// <summary>
+    /// Class to draw a text and a separation line next to it
+    /// </summary>
     public class ViewSeparator : Panel
     {
         public Label Label => m_label;
