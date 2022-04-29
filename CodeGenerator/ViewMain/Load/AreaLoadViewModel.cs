@@ -13,6 +13,9 @@ using Layer = CodeGenerator.Model.Layer;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Vm for Area load
+    /// </summary>
     public class AreaLoadViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
@@ -68,6 +71,7 @@ namespace CodeGenerator
                 {
                     b.Append(layer.GetName() + "; ");
                 }
+
                 ConnectLayersLabels = b.ToString();
             }
         }
@@ -117,11 +121,6 @@ namespace CodeGenerator
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
             {
-                foreach (var dialogSelectedLayer in dialog.SelectedLayers)
-                {
-                    Rhino.RhinoApp.WriteLine("{0}", dialogSelectedLayer.GetName());
-                }
-
                 Layers = new ObservableCollection<Layer>(dialog.SelectedLayers);
             }
         }

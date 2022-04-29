@@ -4,6 +4,9 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// View for Section information
+    /// </summary>
     public class LayerSectionView : LayerAbstractDetailView
     {
         private readonly LayerSectionViewModel _vm;
@@ -18,7 +21,9 @@ namespace CodeGenerator
                 Spacing = new Size(5, 1)
             };
             addProperty(layout, _vm, "Thickness", "Thickness");
-            Add(new SelectionView("Sections", new List<string>() {"Shell Section"}, new List<Control>() {layout}));
+            Add(new SelectionView("Sections",
+                new List<string>() {"Shell Section"},
+                new List<Control>() {layout}));
         }
     }
 }

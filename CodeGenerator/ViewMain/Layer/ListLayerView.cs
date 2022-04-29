@@ -12,6 +12,9 @@ using Size = Eto.Drawing.Size;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Main view to show layer information
+    /// </summary>
     public class ListLayerView : DynamicLayout
     {
         private Button _btnInspectPython;

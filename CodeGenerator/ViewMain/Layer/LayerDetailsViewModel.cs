@@ -7,16 +7,11 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// LayerDetailsViewModel builds subviews which show detail information for a layer.
+    /// </summary>
     public class LayerDetailsViewModel : ViewModelBase
     {
-        // private SectionViewModel _elementSectionVm;
-        // private SectionViewModel _elementMaterialVm;
-        // private SectionViewModel _setDisplacementVm;
-
-        // private LayerDisplacementViewModel _setDisplacementVm;
-        // private LayerMaterialViewModel _materialVm;
-        // private LayerSectionViewModel _sectionVm;
-
         private bool _layerDetailViewVisible;
 
         public bool LayerDetailViewVisible
@@ -39,7 +34,6 @@ namespace CodeGenerator
             {
                 _layerDetailView = value;
                 OnPropertyChanged();
-                Rhino.RhinoApp.WriteLine("_layerDetailView changed");
             }
         }
 
@@ -53,17 +47,12 @@ namespace CodeGenerator
 
         private void ListLayerVmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_listLayerVm.SelectedLayer))
+            if (e.PropertyName != nameof(_listLayerVm.SelectedLayer)) return;
+            LayerDetailViewVisible = _listLayerVm.SelectedLayer != null;
+            if (_listLayerVm.SelectedLayer != null)
             {
-                LayerDetailViewVisible = _listLayerVm.SelectedLayer != null;
-                if (_listLayerVm.SelectedLayer == null)
-                {
-                }
-                else
-                {
-                    Control c = GetPropertyContentForLayer(_listLayerVm.SelectedLayer);
-                    LayerDetailView = c;
-                }
+                Control c = GetPropertyContentForLayer(_listLayerVm.SelectedLayer);
+                LayerDetailView = c;
             }
         }
 
@@ -74,12 +63,12 @@ namespace CodeGenerator
                 Padding = new Padding(5),
                 Spacing = new Size(5, 5),
             };
-            
-            var _sectionViewModel = new LayerSectionViewModel(_listLayerVm);
-            layout.Rows.Add(new LayerSectionView(_sectionViewModel));
-            
-            var _elementMaterialVm = new LayerMaterialViewModel(_listLayerVm);
-            layout.Rows.Add(new LayerMaterialView(_elementMaterialVm));
+
+            var sectionViewModel = new LayerSectionViewModel(_listLayerVm);
+            layout.Rows.Add(new LayerSectionView(sectionViewModel));
+
+            var elementMaterialVm = new LayerMaterialViewModel(_listLayerVm);
+            layout.Rows.Add(new LayerMaterialView(elementMaterialVm));
 
             return layout;
         }
@@ -91,8 +80,8 @@ namespace CodeGenerator
                 Padding = new Padding(5),
                 Spacing = new Size(5, 5),
             };
-            var _setDisplacementVm = new LayerDisplacementViewModel(_listLayerVm);
-            layout.Rows.Add(new LayerDisplacementView(_setDisplacementVm));
+            var setDisplacementVm = new LayerDisplacementViewModel(_listLayerVm);
+            layout.Rows.Add(new LayerDisplacementView(setDisplacementVm));
             return layout;
         }
 
@@ -102,14 +91,13 @@ namespace CodeGenerator
             {
                 return _GetPropertyContentForElement((Element) e);
             }
-            else if (e.GetType() == LayerType.SET)
+
+            if (e.GetType() == LayerType.SET)
             {
                 return _GetPropertyContentForSet((Set) e);
             }
-            else
-            {
-                throw new SystemException("Unknown layer type");
-            }
+
+            throw new SystemException("Unknown layer type");
         }
     }
 }

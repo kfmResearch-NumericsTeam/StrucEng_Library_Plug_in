@@ -10,6 +10,9 @@ using Rhino.Runtime;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Code generator to generate python code based on UI input.
+    /// </summary>
     public class PythonCodeGenerator
     {
         private readonly Workbench _model;
@@ -125,7 +128,7 @@ mdl = Structure(name=name, path=path)
             }
 
             foreach (var load in _model.Loads)
-            {   
+            {
                 if (load.GetType() == LoadType.Area)
                 {
                     var area = (AreaLoad) load;
@@ -235,6 +238,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     }
                 }
             }
+
             foreach (var load in _model.Loads)
             {
                 if (load.Layers == null || load.Layers.Count == 0)

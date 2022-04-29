@@ -5,6 +5,9 @@ using CodeGenerator.Model;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Vm for Displacement
+    /// </summary>
     public class LayerDisplacementViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
@@ -88,7 +91,7 @@ namespace CodeGenerator
         }
 
         private Layer GetLayer() => _listLayerVm.SelectedLayer;
-        
+
         private void StoreVmToModel()
         {
             if (_ignoreStoreVmToModel) return;

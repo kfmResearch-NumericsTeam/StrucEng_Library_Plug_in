@@ -5,12 +5,12 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
-    /**
-     * A simple dialog which presents a list of layers to select.
-     * Selected layers are in SelectedLayers.
-     * 
-     * @abertschi
-     */
+    ///
+    ///<summary>
+    /// A simple dialog which presents a list of layers to select.
+    /// Selected layers are in SelectedLayers.
+    ///</summary>
+    ///  
     public class SelectLayerDialog : Dialog<DialogResult>
     {
         public List<Layer> SelectedLayers { get; } = new List<Layer>();
@@ -54,9 +54,10 @@ namespace CodeGenerator
             Content = layout;
         }
 
-        /*
-         * Create UI component to integrate into load view
-         */
+
+        /// <summary>
+        /// Create UI component to integrate into load view 
+        /// </summary>
         public static Control CreateUiElement(ref Button button, ref TextBox label)
         {
             label = new TextBox();

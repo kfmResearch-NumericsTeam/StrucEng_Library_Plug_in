@@ -3,6 +3,9 @@ using System;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// StrucEngLibPlugin Plugin class
+    /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
         public StrucEngLibPlugin()

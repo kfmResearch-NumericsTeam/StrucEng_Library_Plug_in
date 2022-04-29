@@ -12,6 +12,9 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Main vm for layer information
+    /// </summary>
     public class ListLayerViewModel : ViewModelBase
     {
         private static readonly int LAYER_TYPE_ELEMENT = 0;
@@ -31,7 +34,7 @@ namespace CodeGenerator
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
         private bool _selectLayerViewVisible;
-        
+
         public bool SelectLayerViewVisible
         {
             get => _selectLayerViewVisible;
@@ -52,10 +55,7 @@ namespace CodeGenerator
             CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
 
-            Layers.CollectionChanged += (sender, args) =>
-            {
-                SelectLayerViewVisible = Layers.Count != 0;
-            };
+            Layers.CollectionChanged += (sender, args) => { SelectLayerViewVisible = Layers.Count != 0; };
         }
 
         private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
@@ -104,6 +104,7 @@ namespace CodeGenerator
             {
                 return;
             }
+
             var sourceCode = codeGen.Generate();
 
             var dialog = new InspectPythonDialog(sourceCode);

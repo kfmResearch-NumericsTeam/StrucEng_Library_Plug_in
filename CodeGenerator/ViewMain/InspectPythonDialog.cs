@@ -10,6 +10,9 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Dialog to inspect generated python code
+    /// </summary>
     public class InspectPythonDialog : Dialog<DialogResult>
     {
         public static int STATE_CLOSE = 0;

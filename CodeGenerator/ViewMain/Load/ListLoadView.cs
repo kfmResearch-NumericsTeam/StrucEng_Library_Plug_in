@@ -5,6 +5,9 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Main view model to add/ remove loads
+    /// </summary>
     public class ListLoadView : DynamicLayout
     {
         private readonly ListLoadViewModel _vm;
@@ -27,18 +30,20 @@ namespace CodeGenerator
         {
             _btAddLoad.Command = _vm.CommandAddLoad;
             _btDeleteLoad.Command = _vm.CommandDeleteLoad;
-            
-            _dbAddLoad.BindDataContext (c => c.DataStore, (ListLoadViewModel m) => m.LoadNames);
-            _dbAddLoad.SelectedKeyBinding.BindDataContext (Binding.Property((ListLoadViewModel m) => m.LoadName).EnumToString(), defaultContextValue: string.Empty);
-            
+
+            _dbAddLoad.BindDataContext(c => c.DataStore, (ListLoadViewModel m) => m.LoadNames);
+            _dbAddLoad.SelectedKeyBinding.BindDataContext(
+                Binding.Property((ListLoadViewModel m) => m.LoadName).EnumToString(),
+                defaultContextValue: string.Empty);
+
             _dbSelectLoad.Bind<Load>("SelectedValue", _vm, "SelectedLoad", DualBindingMode.TwoWay);
             _dbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.GetType().GetName());
             _dbSelectLoad.DataStore = _vm.Loads;
-            
+
             _container.Bind<Control>("Content", _vm, "LoadView", DualBindingMode.TwoWay);
             _gbPropsForLoad.Bind<bool>("Visible", _vm, "LoadViewVisible", DualBindingMode.TwoWay);
             _gbSelectLoad.Bind<bool>("Visible", _vm, "SelectLoadViewVisible", DualBindingMode.TwoWay);
-            
+
             DataContext = _vm;
         }
 
@@ -71,17 +76,14 @@ namespace CodeGenerator
                                         TableLayout.AutoSized(
                                             _btAddLoad = new Button {Text = "Add", Enabled = true})
                                     )
-                                    
-                                    
                                 }
                             }
                         }
                     }
-
                 });
-            AddRow(         
+            AddRow(
                 _gbSelectLoad = new GroupBox
-                    {
+                {
                     Text = "Select Load",
                     Padding = new Padding(5),
                     Content = new DynamicLayout
@@ -90,7 +92,6 @@ namespace CodeGenerator
                         Spacing = new Size(5, 1),
                         Rows =
                         {
-                            
                             new TableLayout
                             {
                                 Spacing = new Size(5, 5),
@@ -109,7 +110,6 @@ namespace CodeGenerator
                         }
                     }
                 });
-
             AddRow(
                 _gbPropsForLoad = new GroupBox
                 {
@@ -117,10 +117,9 @@ namespace CodeGenerator
                     Padding = new Padding(5),
                     Visible = false,
                     Content = new DynamicLayout
-                        
+
                     {
                         Padding = new Padding(5),
-                        // Padding = new Padding() {Top = 5, Left = 5, Bottom = 0, Right = 0},
                         Spacing = new Size(5, 1),
                         Rows =
                         {

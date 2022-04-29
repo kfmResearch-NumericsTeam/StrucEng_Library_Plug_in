@@ -4,6 +4,9 @@ using CodeGenerator.Model;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// View model for materials
+    /// </summary>
     public class LayerMaterialViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;

@@ -14,6 +14,9 @@ using Rhino.Input.Custom;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Command to show plugin view
+    /// </summary>
     public class CommandShowWindow : Command
     {
         public CommandShowWindow()
@@ -30,7 +33,6 @@ namespace CodeGenerator
         {
             var panelId = MainViewPanel.PanelId;
             Panels.OpenPanel(panelId);
-            Rhino.RhinoApp.WriteLine("Plugin loaded");
             return Result.Success;
         }
     }

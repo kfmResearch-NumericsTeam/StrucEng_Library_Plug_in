@@ -10,6 +10,9 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// View for area load
+    /// </summary>
     public class AreaLoadView : DynamicLayout
     {
         private readonly AreaLoadViewModel _vm;

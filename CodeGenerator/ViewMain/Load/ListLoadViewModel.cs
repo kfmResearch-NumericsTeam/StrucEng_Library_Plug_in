@@ -9,6 +9,9 @@ using Rhino.UI;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// Main Vm for load information
+    /// </summary>
     public class ListLoadViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
@@ -120,16 +123,6 @@ namespace CodeGenerator
             Loads.Add(newLoad);
             Model.Loads.Add(newLoad);
             OnPropertyChanged(nameof(Loads));
-
-            foreach (var modelLoad in Loads)
-            {
-                Rhino.RhinoApp.WriteLine("loads: {0}", modelLoad.GetType());
-            }
-
-            foreach (var modelLoad in Model.Loads)
-            {
-                Rhino.RhinoApp.WriteLine("Model.loads: {0}", modelLoad.GetType());
-            }
         }
 
         private void OnLoadDelete()
@@ -138,18 +131,6 @@ namespace CodeGenerator
             Model.Loads.Remove(SelectedLoad);
             Loads.Remove(SelectedLoad);
             OnPropertyChanged(nameof(Loads));
-
-            foreach (var modelLoad in Loads)
-            {
-                Rhino.RhinoApp.WriteLine("after del: loads: {0}", modelLoad.GetType());
-            }
-
-            foreach (var modelLoad in Model.Loads)
-            {
-                Rhino.RhinoApp.WriteLine("after del: Model.loads: {0}", modelLoad.GetType());
-            }
-
-
             SelectedLoad = null;
         }
 

@@ -22,9 +22,8 @@ namespace CodeGenerator.Step
             get => _listLayerVm.Model;
         }
 
-        private Dictionary<object, SingleStepViewModel> StepMap; // Key: (Set/Load), Val: ViewModel for single step
+        private Dictionary<object, SingleStepViewModel> _stepMap; // Key: (Set/Load), Val: ViewModel for single step
         private ObservableCollection<SingleStepViewModel> _steps;
-
         public ObservableCollection<SingleStepViewModel> Steps
         {
             get => _steps;
@@ -35,16 +34,28 @@ namespace CodeGenerator.Step
             }
         }
 
+        private bool _hasSteps = false;
+        public bool HasSteps
+        {
+            get => _hasSteps;
+            set
+            {
+                _hasSteps = value;
+                OnPropertyChanged();
+            }
+        }
+
         public StepViewModel(ListLayerViewModel listLayerVm, ListLoadViewModel listLoadVm)
         {
             _listLayerVm = listLayerVm;
             _listLoadVm = listLoadVm;
             Steps = new ObservableCollection<SingleStepViewModel>();
-            StepMap = new Dictionary<object, SingleStepViewModel>();
+            _stepMap = new Dictionary<object, SingleStepViewModel>();
             BuildStepData();
 
             _listLoadVm.Loads.CollectionChanged += StepDataChanged;
             _listLayerVm.Layers.CollectionChanged += StepDataChanged;
+            Steps.CollectionChanged += (sender, args) => HasSteps = Steps.Count != 0;
         }
 
         private void StepDataChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
@@ -57,12 +68,12 @@ namespace CodeGenerator.Step
             // XXX: Since we use an event based approach and always update the steps in the view on a change,
             // we have to find out what changed and update the step view accordingly.
             // This makes the below logic tedious, we have to find what's new and what was deleted.
-            var stepsToDelete = new Dictionary<object, SingleStepViewModel>(StepMap);
+            var stepsToDelete = new Dictionary<object, SingleStepViewModel>(_stepMap);
             int order = HighestOrder() + 1;
 
             foreach (var load in _listLoadVm.Loads)
             {
-                if (StepMap.ContainsKey(load))
+                if (_stepMap.ContainsKey(load))
                 {
                     stepsToDelete.Remove(load);
                     continue;
@@ -74,14 +85,14 @@ namespace CodeGenerator.Step
                 order++;
                 var vm = new SingleStepViewModel(s);
                 Steps.Add(vm);
-                StepMap.Add(load, vm);
+                _stepMap.Add(load, vm);
             }
 
             foreach (var layer in _listLayerVm.Layers)
             {
                 if (layer.GetType() == LayerType.SET)
                 {
-                    if (StepMap.ContainsKey(layer))
+                    if (_stepMap.ContainsKey(layer))
                     {
                         stepsToDelete.Remove(layer);
                         continue;
@@ -93,14 +104,14 @@ namespace CodeGenerator.Step
                     order++;
                     var vm = new SingleStepViewModel(s);
                     Steps.Add(vm);
-                    StepMap.Add(layer, vm);
+                    _stepMap.Add(layer, vm);
                     Model.Steps.Add(s);
                 }
             }
 
             foreach (var stepToDelete in stepsToDelete)
             {
-                StepMap.Remove(stepToDelete.Key);
+                _stepMap.Remove(stepToDelete.Key);
                 Steps.Remove(stepToDelete.Value);
                 Model.Steps.Remove(stepToDelete.Value.StepModel);
             }

@@ -4,6 +4,9 @@ using Eto.Forms;
 
 namespace CodeGenerator
 {
+    /// <summary>
+    /// View to show information about displacements
+    /// </summary>
     public class LayerDisplacementView : LayerAbstractDetailView
     {
         private readonly LayerDisplacementViewModel _vm;
@@ -17,7 +20,7 @@ namespace CodeGenerator
                 Padding = new Padding {Top = 5, Left = 10, Bottom = 0, Right = 0},
                 Spacing = new Size(5, 1)
             };
-            
+
             addProperty(layout, _vm, "Ux", "Ux", "0");
             addProperty(layout, _vm, "Uy", "Uy", "0");
             addProperty(layout, _vm, "Uz", "Uz", "0");
@@ -25,7 +28,8 @@ namespace CodeGenerator
             addProperty(layout, _vm, "Roty", "Roty", "0");
             addProperty(layout, _vm, "Rotz", "Rotz", "0");
 
-            Add(new SelectionView("Displacements", new List<string>() {"General Displacement"},
+            Add(new SelectionView("Displacements",
+                new List<string>() {"General Displacement"},
                 new List<Control>() {layout}));
         }
     }
