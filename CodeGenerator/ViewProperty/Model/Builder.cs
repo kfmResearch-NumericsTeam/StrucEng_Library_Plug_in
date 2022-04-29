@@ -67,17 +67,17 @@ namespace CodeGenerator
             if (selection == null) return;
             if (selection.Key == "general")
             {
-                if (set.Displacement == null)
+                if (set.SetDisplacement == null)
                 {
-                    set.Displacement = new Displacement();
+                    set.SetDisplacement = new SetDisplacement();
                 }
 
-                set.Displacement.Uz = selection.GetByKey("uz").Value;
-                set.Displacement.Ux = selection.GetByKey("ux").Value;
-                set.Displacement.Uz = selection.GetByKey("uz").Value;
-                set.Displacement.Rotx = selection.GetByKey("rotx").Value;
-                set.Displacement.Rotz = selection.GetByKey("rotz").Value;
-                set.Displacement.Roty = selection.GetByKey("roty").Value;
+                set.SetDisplacement.Uz = selection.GetByKey("uz").Value;
+                set.SetDisplacement.Ux = selection.GetByKey("ux").Value;
+                set.SetDisplacement.Uz = selection.GetByKey("uz").Value;
+                set.SetDisplacement.Rotx = selection.GetByKey("rotx").Value;
+                set.SetDisplacement.Rotz = selection.GetByKey("rotz").Value;
+                set.SetDisplacement.Roty = selection.GetByKey("roty").Value;
             }
         }
 
@@ -86,14 +86,14 @@ namespace CodeGenerator
             if (selection == null) return;
             if (selection.Key == "elast")
             {
-                if (el.MaterialElastic == null)
+                if (el.ElementMaterialElastic == null)
                 {
-                    el.MaterialElastic = new MaterialElastic();
+                    el.ElementMaterialElastic = new ElementMaterialElastic();
                 }
 
-                el.MaterialElastic.E = selection.GetByKey("e").Value;
-                el.MaterialElastic.V = selection.GetByKey("v").Value;
-                el.MaterialElastic.P = selection.GetByKey("p").Value;
+                el.ElementMaterialElastic.E = selection.GetByKey("e").Value;
+                el.ElementMaterialElastic.V = selection.GetByKey("v").Value;
+                el.ElementMaterialElastic.P = selection.GetByKey("p").Value;
             }
         }
 
@@ -102,12 +102,12 @@ namespace CodeGenerator
             if (selection == null) return;
             if (selection.Key == "shell_section")
             {
-                if (el.ShellSection == null)
+                if (el.ElementShellSection == null)
                 {
-                    el.ShellSection = new ShellSection();
+                    el.ElementShellSection = new ElementShellSection();
                 }
 
-                el.ShellSection.Thickness = selection.GetByKey("thick").Value;
+                el.ElementShellSection.Thickness = selection.GetByKey("thick").Value;
             }
         }
 
@@ -115,12 +115,12 @@ namespace CodeGenerator
         {
             var s = BuildMaterials();
             var vm = new SectionViewModel(s);
-            if (el.MaterialElastic == null) return vm;
+            if (el.ElementMaterialElastic == null) return vm;
 
             PropertyGroup g = s.GetByKey("elast");
-            g.GetByKey("e").Value = el.MaterialElastic.E;
-            g.GetByKey("v").Value = el.MaterialElastic.V;
-            g.GetByKey("p").Value = el.MaterialElastic.P;
+            g.GetByKey("e").Value = el.ElementMaterialElastic.E;
+            g.GetByKey("v").Value = el.ElementMaterialElastic.V;
+            g.GetByKey("p").Value = el.ElementMaterialElastic.P;
             vm.SelectedPropertyGroup = g;
             return vm;
         }
@@ -129,9 +129,9 @@ namespace CodeGenerator
         {
             var s = BuildSections();
             var vm = new SectionViewModel(s);
-            if (el.ShellSection == null) return vm;
+            if (el.ElementShellSection == null) return vm;
             PropertyGroup g = s.GetByKey("shell_section");
-            g.GetByKey("thick").Value = el.ShellSection.Thickness;
+            g.GetByKey("thick").Value = el.ElementShellSection.Thickness;
             vm.SelectedPropertyGroup = g;
             return vm;
         }
@@ -140,14 +140,14 @@ namespace CodeGenerator
         {
             var s = BuildDisplacement();
             var vm = new SectionViewModel(s);
-            if (set.Displacement == null) return vm;
+            if (set.SetDisplacement == null) return vm;
             PropertyGroup g = s.GetByKey("general");
-            g.GetByKey("uz").Value = set.Displacement.Uz;
-            g.GetByKey("ux").Value = set.Displacement.Ux;
-            g.GetByKey("uz").Value = set.Displacement.Uz;
-            g.GetByKey("rotx").Value = set.Displacement.Rotx;
-            g.GetByKey("rotz").Value = set.Displacement.Rotz;
-            g.GetByKey("roty").Value = set.Displacement.Roty;
+            g.GetByKey("uz").Value = set.SetDisplacement.Uz;
+            g.GetByKey("ux").Value = set.SetDisplacement.Ux;
+            g.GetByKey("uz").Value = set.SetDisplacement.Uz;
+            g.GetByKey("rotx").Value = set.SetDisplacement.Rotx;
+            g.GetByKey("rotz").Value = set.SetDisplacement.Rotz;
+            g.GetByKey("roty").Value = set.SetDisplacement.Roty;
             vm.SelectedPropertyGroup = g;
             return vm;
         }

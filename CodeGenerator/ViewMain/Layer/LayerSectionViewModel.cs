@@ -32,21 +32,21 @@ namespace CodeGenerator
         {
             if (_ignoreStoreVmToModel) return;
             var e = (Element) GetLayer();
-            if (e.ShellSection == null)
+            if (e.ElementShellSection == null)
             {
-                e.ShellSection = new ShellSection();
+                e.ElementShellSection = new ElementShellSection();
             }
 
-            e.ShellSection.Thickness = Thickness;
+            e.ElementShellSection.Thickness = Thickness;
         }
 
         private void StoreModelToVm()
         {
             _ignoreStoreVmToModel = true;
             var el = (Element) GetLayer();
-            if (el.ShellSection != null)
+            if (el.ElementShellSection != null)
             {
-                Thickness = el.ShellSection.Thickness;
+                Thickness = el.ElementShellSection.Thickness;
             }
 
             _ignoreStoreVmToModel = false;

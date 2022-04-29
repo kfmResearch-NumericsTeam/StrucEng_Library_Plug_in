@@ -96,14 +96,14 @@ mdl = Structure(name=name, path=path)
                     b.Append(
                         $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])
 ");
-                    var mat = element.MaterialElastic;
+                    var mat = element.ElementMaterialElastic;
                     var matId = MatElasticId(layerId);
                     b.Append(
                         $@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))
 ");
                     var sectionId = SectionId(layerId);
                     b.Append(
-                        $@"mdl.add(ShellSection(name='{sectionId}', t={element.ShellSection.Thickness})) #[mm]
+                        $@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm]
 ");
                     var propId = PropId(layerId);
                     b.Append(
@@ -131,7 +131,7 @@ mdl = Structure(name=name, path=path)
             {
                 if (load.GetType() == LoadType.Area)
                 {
-                    var area = (AreaLoad) load;
+                    var area = (LoadArea) load;
                     string layersList = LayersToStringList(load.Layers);
                     b.Append($@"
 # == Load Area {layersList}
@@ -214,13 +214,13 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     if (layer.GetType() == LayerType.ELEMENT)
                     {
                         var element = (Element) layer;
-                        if (element.MaterialElastic == null)
+                        if (element.ElementMaterialElastic == null)
                         {
                             Msg("No Material Elastic for Layer " + element.GetName());
                             success = false;
                         }
 
-                        if (element.ShellSection == null)
+                        if (element.ElementShellSection == null)
                         {
                             Msg("No Shell Section for Layer " + element.GetName());
                             success = false;
@@ -230,7 +230,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     if (layer.GetType() == LayerType.SET)
                     {
                         var set = (Set) layer;
-                        if (set.Displacement == null)
+                        if (set.SetDisplacement == null)
                         {
                             Msg("No Displacement for Layer " + set.GetName());
                             success = false;

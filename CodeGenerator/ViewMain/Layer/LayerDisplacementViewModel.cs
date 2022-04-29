@@ -96,17 +96,17 @@ namespace CodeGenerator
         {
             if (_ignoreStoreVmToModel) return;
             var e = (Set) GetLayer();
-            if (e.Displacement == null)
+            if (e.SetDisplacement == null)
             {
-                e.Displacement = new Displacement();
+                e.SetDisplacement = new SetDisplacement();
             }
 
-            e.Displacement.Rotx = Rotx;
-            e.Displacement.Rotz = Rotz;
-            e.Displacement.Roty = Roty;
-            e.Displacement.Ux = Ux;
-            e.Displacement.Uy = Uy;
-            e.Displacement.Uz = Uz;
+            e.SetDisplacement.Rotx = Rotx;
+            e.SetDisplacement.Rotz = Rotz;
+            e.SetDisplacement.Roty = Roty;
+            e.SetDisplacement.Ux = Ux;
+            e.SetDisplacement.Uy = Uy;
+            e.SetDisplacement.Uz = Uz;
         }
 
         private bool _ignoreStoreVmToModel = false;
@@ -115,14 +115,14 @@ namespace CodeGenerator
         {
             _ignoreStoreVmToModel = true;
             var el = (Set) GetLayer();
-            if (el.Displacement != null)
+            if (el.SetDisplacement != null)
             {
-                Rotx = el.Displacement.Rotx;
-                Rotz = el.Displacement.Rotz;
-                Roty = el.Displacement.Roty;
-                Ux = el.Displacement.Ux;
-                Uy = el.Displacement.Uy;
-                Uz = el.Displacement.Uz;
+                Rotx = el.SetDisplacement.Rotx;
+                Rotz = el.SetDisplacement.Rotz;
+                Roty = el.SetDisplacement.Roty;
+                Ux = el.SetDisplacement.Ux;
+                Uy = el.SetDisplacement.Uy;
+                Uz = el.SetDisplacement.Uz;
             }
 
             _ignoreStoreVmToModel = false;

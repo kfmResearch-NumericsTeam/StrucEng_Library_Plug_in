@@ -90,7 +90,7 @@ namespace CodeGenerator
             if (_ignoreStoreVmToModel) return;
             if (_listLoadVm.SelectedLoad.GetType() == LoadType.Area)
             {
-                var l = (AreaLoad) _listLoadVm.SelectedLoad;
+                var l = (LoadArea) _listLoadVm.SelectedLoad;
                 l.Axes = Axes;
                 l.Z = Z;
                 l.Layers = Layers.ToList();
@@ -104,7 +104,7 @@ namespace CodeGenerator
             _ignoreStoreVmToModel = true;
             if (_listLoadVm.SelectedLoad.GetType() == LoadType.Area)
             {
-                var l = (AreaLoad) _listLoadVm.SelectedLoad;
+                var l = (LoadArea) _listLoadVm.SelectedLoad;
                 Z = l.Z;
                 Axes = l.Axes;
                 Layers = new ObservableCollection<Layer>(l.Layers);

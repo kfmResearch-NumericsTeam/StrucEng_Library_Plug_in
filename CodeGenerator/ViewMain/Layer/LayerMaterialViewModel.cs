@@ -66,25 +66,25 @@ namespace CodeGenerator
         {
             if (_ignoreStoreVmToModel) return;
             var e = (Element) GetLayer();
-            if (e.MaterialElastic == null)
+            if (e.ElementMaterialElastic == null)
             {
-                e.MaterialElastic = new MaterialElastic();
+                e.ElementMaterialElastic = new ElementMaterialElastic();
             }
 
-            e.MaterialElastic.E = E;
-            e.MaterialElastic.V = V;
-            e.MaterialElastic.P = P;
+            e.ElementMaterialElastic.E = E;
+            e.ElementMaterialElastic.V = V;
+            e.ElementMaterialElastic.P = P;
         }
 
         private void StoreModelToVm()
         {
             _ignoreStoreVmToModel = true;
             Element el = (Element) GetLayer();
-            if (el.MaterialElastic != null)
+            if (el.ElementMaterialElastic != null)
             {
-                E = el.MaterialElastic.E;
-                V = el.MaterialElastic.V;
-                P = el.MaterialElastic.P;
+                E = el.ElementMaterialElastic.E;
+                V = el.ElementMaterialElastic.V;
+                P = el.ElementMaterialElastic.P;
             }
 
             _ignoreStoreVmToModel = false;

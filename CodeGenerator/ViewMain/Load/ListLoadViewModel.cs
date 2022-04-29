@@ -109,11 +109,11 @@ namespace CodeGenerator
             Load newLoad;
             if (LoadName == LoadType.Gravity)
             {
-                newLoad = new GravityLoad();
+                newLoad = new LoadGravity();
             }
             else if (LoadName == LoadType.Area)
             {
-                newLoad = new AreaLoad();
+                newLoad = new LoadArea();
             }
             else
             {
