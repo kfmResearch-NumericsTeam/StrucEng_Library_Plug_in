@@ -22,7 +22,6 @@ namespace CodeGenerator
                     property.Value = val;
                 });
                 Rows.Add(TableLayout.HorizontalScaled(new Label {Text = property.Label}, tb));
-                Rhino.RhinoApp.WriteLine("{0} -> {1}", property.Label, (string) property.Value);
             }
         }
     }

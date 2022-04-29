@@ -22,7 +22,7 @@ namespace CodeGenerator
         public CommandShowWindow()
         {
             Instance = this;
-            Panels.RegisterPanel(PlugIn, typeof(MainViewPanel), "StrucEngLib", null);
+            Panels.RegisterPanel(PlugIn, typeof(MainView), "StrucEngLib", null);
         }
 
         public static CommandShowWindow Instance { get; private set; }
@@ -31,7 +31,7 @@ namespace CodeGenerator
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            var panelId = MainViewPanel.PanelId;
+            var panelId = MainView.PanelId;
             Panels.OpenPanel(panelId);
             return Result.Success;
         }

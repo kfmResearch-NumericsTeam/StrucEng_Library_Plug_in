@@ -17,6 +17,8 @@ namespace CodeGenerator
     /// </summary>
     public class ListLayerViewModel : ViewModelBase
     {
+        private readonly MainViewModel _mainVm;
+        
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
 
@@ -45,20 +47,22 @@ namespace CodeGenerator
             }
         }
 
-        public ListLayerViewModel()
+        public ListLayerViewModel(MainViewModel mainVm)
         {
+            _mainVm = mainVm;
             Model = new Workbench();
+            
             _layers = new ObservableCollection<Layer>(Model.Layers);
 
             CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
-            CommandOnAddLayer = new RelayCommand(OnAddLayer, CanExecuteOnAddLayer);
+            CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
 
             Layers.CollectionChanged += (sender, args) => { SelectLayerViewVisible = Layers.Count != 0; };
         }
 
-        private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
+        // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
         private bool CanExecuteOnInspectCode() => _layers != null && _layers.Count > 0;
 
@@ -76,7 +80,7 @@ namespace CodeGenerator
         {
             if (string.IsNullOrEmpty(LayerToAdd))
             {
-                Rhino.RhinoApp.WriteLine("Layer cant be empty");
+                _mainVm.ErrorVm.ShowMessage("Layer can't be empty");
                 return;
             }
 
@@ -100,8 +104,10 @@ namespace CodeGenerator
         private void OnInspectCode()
         {
             PythonCodeGenerator codeGen = new PythonCodeGenerator(Model);
-            if (!codeGen.ValidateModel())
+            var valMsgs = codeGen.ValidateModel();
+            if (valMsgs.Count != 0)
             {
+                _mainVm.ErrorVm.ShowMessages(valMsgs);
                 return;
             }
 
@@ -134,7 +140,6 @@ namespace CodeGenerator
         {
             string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
             File.WriteAllText(fileName, source);
-            Rhino.RhinoApp.WriteLine(fileName);
             Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
 
@@ -174,7 +179,7 @@ namespace CodeGenerator
                 if (_layerToAdd == value) return;
                 _layerToAdd = value;
                 OnPropertyChanged();
-                CommandOnAddLayer.UpdateCanExecute();
+                //CommandOnAddLayer.UpdateCanExecute();
             }
         }
     }

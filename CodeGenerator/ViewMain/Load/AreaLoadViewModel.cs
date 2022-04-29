@@ -16,22 +16,8 @@ namespace CodeGenerator
     /// <summary>
     /// Vm for Area load
     /// </summary>
-    public class AreaLoadViewModel : ViewModelBase
+    public class AreaLoadViewModel : AbstractLoadViewModel
     {
-        private readonly ListLayerViewModel _listLayerVm;
-        private readonly ListLoadViewModel _listLoadVm;
-
-        private string _connectLayersLabels;
-
-        public String ConnectLayersLabels
-        {
-            get => _connectLayersLabels;
-            set
-            {
-                _connectLayersLabels = value;
-                OnPropertyChanged();
-            }
-        }
 
         private String _z;
 
@@ -57,71 +43,27 @@ namespace CodeGenerator
             }
         }
 
-        private ObservableCollection<Layer> _layers;
-
-        public ObservableCollection<Layer> Layers
+        public AreaLoadViewModel(MainViewModel mainVm) : base(mainVm)
         {
-            get => _layers;
-            set
-            {
-                _layers = value;
-                OnPropertyChanged();
-                StringBuilder b = new StringBuilder();
-                foreach (var layer in Layers)
-                {
-                    b.Append(layer.GetName() + "; ");
-                }
-
-                ConnectLayersLabels = b.ToString();
-            }
         }
 
-        public AreaLoadViewModel(ListLayerViewModel listLayerVm, ListLoadViewModel listLoadVm)
+        protected override void StoreVmToModel()
         {
-            CommandConnectLayer = new RelayCommand(OnConnectLayer);
-            _listLayerVm = listLayerVm;
-            _listLoadVm = listLoadVm;
-            StoreModelToVm();
-            this.PropertyChanged += ((sender, args) => StoreVmToModel());
-        }
-
-        private void StoreVmToModel()
-        {
-            if (_ignoreStoreVmToModel) return;
-            if (_listLoadVm.SelectedLoad.LoadType == LoadType.Area)
+            if (ListLoadVm.SelectedLoad.LoadType == LoadType.Area)
             {
-                var l = (LoadArea) _listLoadVm.SelectedLoad;
+                var l = (LoadArea) ListLoadVm.SelectedLoad;
                 l.Axes = Axes;
                 l.Z = Z;
-                l.Layers = Layers.ToList();
             }
         }
 
-        private bool _ignoreStoreVmToModel = false;
-
-        private void StoreModelToVm()
+        protected override void StoreModelToVm()
         {
-            _ignoreStoreVmToModel = true;
-            if (_listLoadVm.SelectedLoad.LoadType == LoadType.Area)
+            if (ListLoadVm.SelectedLoad.LoadType == LoadType.Area)
             {
-                var l = (LoadArea) _listLoadVm.SelectedLoad;
+                var l = (LoadArea) ListLoadVm.SelectedLoad;
                 Z = l.Z;
                 Axes = l.Axes;
-                Layers = new ObservableCollection<Layer>(l.Layers);
-            }
-
-            _ignoreStoreVmToModel = false;
-        }
-
-        public RelayCommand CommandConnectLayer;
-
-        private void OnConnectLayer()
-        {
-            var dialog = new SelectLayerDialog(_listLayerVm.Layers.ToList());
-            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
-            if (dialogRc == Eto.Forms.DialogResult.Ok)
-            {
-                Layers = new ObservableCollection<Layer>(dialog.SelectedLayers);
             }
         }
     }

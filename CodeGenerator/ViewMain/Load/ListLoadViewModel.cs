@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Security.AccessControl;
 using CodeGenerator.Model;
 using Eto.Forms;
 using Rhino;
@@ -14,6 +15,7 @@ namespace CodeGenerator
     /// </summary>
     public class ListLoadViewModel : ViewModelBase
     {
+        private readonly MainViewModel _mainVm;
         private readonly ListLayerViewModel _listLayerVm;
 
         public ObservableCollection<ListItem> LoadNames { get; }
@@ -67,6 +69,7 @@ namespace CodeGenerator
             {
                 _loadViewVisible = value;
                 OnPropertyChanged();
+                CommandDeleteLoad.UpdateCanExecute();
             }
         }
 
@@ -90,15 +93,16 @@ namespace CodeGenerator
             get => _listLayerVm.Model;
         }
 
-        public ListLoadViewModel(ListLayerViewModel listLayerVm)
+        public ListLoadViewModel(MainViewModel mainVm)
         {
-            _listLayerVm = listLayerVm;
+            _mainVm = mainVm;
+            _listLayerVm = mainVm.ListLayerVm;
             CommandAddLoad = new RelayCommand(OnAddLoad);
-            CommandDeleteLoad = new RelayCommand(OnLoadDelete);
+            CommandDeleteLoad = new RelayCommand(OnLoadDelete, CanLoadDelete);
             LoadNames = new ObservableCollection<ListItem>
             {
                 new ListItem {Key = LoadType.Area.ToString(), Text = "Area"},
-                // new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
+                new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
             };
             Loads = new ObservableCollection<Load>(Model.Loads);
             Loads.CollectionChanged += (sender, args) => { SelectLoadViewVisible = Loads.Count != 0; };
@@ -134,6 +138,8 @@ namespace CodeGenerator
             SelectedLoad = null;
         }
 
+        private bool CanLoadDelete() => Loads.Count != 0;
+
         private void UpdateContentView()
         {
             if (SelectedLoad == null)
@@ -142,13 +148,11 @@ namespace CodeGenerator
             }
             else if (SelectedLoad.LoadType == LoadType.Area)
             {
-                var vm = new AreaLoadViewModel(_listLayerVm, this);
-                var v = new AreaLoadView(vm);
-                LoadView = v;
+                LoadView = new AreaLoadView(new AreaLoadViewModel(_mainVm));
             }
             else if (SelectedLoad.LoadType == LoadType.Gravity)
             {
-                LoadView = null;
+                LoadView = new GravityLoadView(new GravityLoadViewModel(_mainVm));
             }
             else
             {

@@ -30,6 +30,7 @@ namespace CodeGenerator
             Resizable = true;
             Result = DialogResult.Cancel;
             WindowStyle = WindowStyle.Default;
+            
             Title = "Inspect and Modify Generated Python Code";
 
             _execButton = new Button()

@@ -199,12 +199,17 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             Rhino.RhinoApp.WriteLine(msg);
         }
 
-        public bool ValidateModel()
+        /// <summary>
+        /// Returns a list of validation messages. If list has count = 0, no errors occured
+        /// </summary>
+        public List<string> ValidateModel()
         {
+            var msgs = new List<string>();
             bool success = true;
+
             if (_model.Layers == null || _model.Layers.Count == 0)
             {
-                Msg("No Layers added");
+                msgs.Add("No Layers added");
                 success = false;
             }
             else
@@ -216,13 +221,13 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                         var element = (Element) layer;
                         if (element.ElementMaterialElastic == null)
                         {
-                            Msg("No Material Elastic for Layer " + element.GetName());
+                            msgs.Add("No Material Elastic for Layer " + element.GetName());
                             success = false;
                         }
 
                         if (element.ElementShellSection == null)
                         {
-                            Msg("No Shell Section for Layer " + element.GetName());
+                            msgs.Add("No Shell Section for Layer " + element.GetName());
                             success = false;
                         }
                     }
@@ -232,7 +237,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                         var set = (Set) layer;
                         if (set.SetDisplacement == null)
                         {
-                            Msg("No Displacement for Layer " + set.GetName());
+                            msgs.Add("No Displacement for Layer " + set.GetName());
                             success = false;
                         }
                     }
@@ -243,12 +248,13 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             {
                 if (load.Layers == null || load.Layers.Count == 0)
                 {
-                    Msg("No Layers in load " + load.LoadType);
+                    msgs.Add("No Layers in load " + load.LoadType);
                     success = false;
                 }
             }
 
-            return success;
+            // XXX: We currently don't return success flag
+            return msgs;
         }
     }
 }

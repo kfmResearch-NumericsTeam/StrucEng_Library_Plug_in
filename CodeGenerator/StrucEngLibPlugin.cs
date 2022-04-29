@@ -1,6 +1,8 @@
 ﻿using Rhino;
 using System;
+using System.Security.Permissions;
 using CodeGenerator.Model;
+using Rhino.PlugIns;
 
 namespace CodeGenerator
 {
@@ -15,11 +17,7 @@ namespace CodeGenerator
         }
 
         public static StrucEngLibPlugin Instance { get; private set; }
-
-        // You can override methods here to change the plug-in behavior on
-        // loading and shut down, add options pages to the Rhino _Option command
-        // and maintain plug-in wide options in a document.
-
+        
 
         private Workbench _model;
         public Workbench GetModel()

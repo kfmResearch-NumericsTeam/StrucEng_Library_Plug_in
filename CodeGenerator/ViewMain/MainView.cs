@@ -7,17 +7,14 @@ namespace CodeGenerator
     /// Main Panel of the rhino plugin
     /// </summary>
     [System.Runtime.InteropServices.Guid("0E7780CA-F004-4AE7-B918-19E68BF7C7C8")]
-    public class MainViewPanel : Panel, IPanel
+    public class MainView : Panel, IPanel
     {
-        public static System.Guid PanelId => typeof(MainViewPanel).GUID;
+        public static System.Guid PanelId => typeof(MainView).GUID;
 
-        public MainViewPanel()
+        public MainView()
         {
-            var listLayerVm = new ListLayerViewModel();
-            var detailLayerVm = new LayerDetailsViewModel(listLayerVm);
-            
-            ListLayerView view = new ListLayerView(listLayerVm, detailLayerVm);
-            Content = new Scrollable {Content = view};
+            MainViewModel vm = new MainViewModel();
+            Content = new Scrollable {Content = new ListLayerView(vm)};
         }
 
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)

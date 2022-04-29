@@ -13,38 +13,33 @@ namespace CodeGenerator
     /// <summary>
     /// View for area load
     /// </summary>
-    public class AreaLoadView : DynamicLayout
+    public class AreaLoadView : AbstractLoadView
     {
         private readonly AreaLoadViewModel _vm;
 
         private TextBox _tbZ;
         private TextBox _tbAxes;
-        private TextBox _tbConnectLayers;
-        private Button _btConnectLayers;
 
-        public AreaLoadView(AreaLoadViewModel vm)
+        public AreaLoadView(AreaLoadViewModel vm) : base(vm)
         {
             _vm = vm;
-            BuildGui();
-            BindGui();
         }
 
-        private void BindGui()
+        protected override void BindGui()
         {
+            base.BindGui();
             _tbZ.Bind<String>("Text", _vm, "Z", DualBindingMode.TwoWay);
             _tbAxes.Bind<String>("Text", _vm, "Axes", DualBindingMode.TwoWay);
-            _tbConnectLayers.Bind<String>("Text", _vm, "ConnectLayersLabels", DualBindingMode.TwoWay);
-            _btConnectLayers.Command = _vm.CommandConnectLayer;
         }
 
-        protected void BuildGui()
+        protected override void BuildGui()
         {
+            base.BuildGui();
             _tbZ = new TextBox();
             _tbAxes = new TextBox();
 
             Padding = new Padding(5) { };
             Spacing = new Size(5, 5);
-            AddRow(SelectLayerDialog.CreateUiElement(ref _btConnectLayers, ref _tbConnectLayers));
             AddRow(TableLayout.HorizontalScaled(new Label {Text = "z"}, _tbZ));
             AddRow(TableLayout.HorizontalScaled(new Label {Text = "Axes"}, _tbAxes));
         }

@@ -17,11 +17,11 @@ namespace CodeGenerator
 
         public SelectLayerDialog(List<Layer> layers)
         {
-            Padding = new Padding(5) { };
+            Padding = new Padding(15) { };
             Title = "Select layers";
             DynamicLayout layout = new DynamicLayout();
-            layout.Padding = new Padding(30) { };
             layout.Spacing = new Size(5, 5);
+            layout.Padding = new Padding() {Top = 10, Bottom = 10};
 
             layout.AddRow(new Label() {Text = "Select layers for Load:"});
             Dictionary<CheckBox, Layer> cbMap = new Dictionary<CheckBox, Layer>();
@@ -48,9 +48,7 @@ namespace CodeGenerator
                 Close(DialogResult.Ok);
             };
 
-            layout.AddRow(TableLayout.AutoSized(
-                button));
-
+            layout.AddRow(TableLayout.AutoSized(button));
             Content = layout;
         }
 

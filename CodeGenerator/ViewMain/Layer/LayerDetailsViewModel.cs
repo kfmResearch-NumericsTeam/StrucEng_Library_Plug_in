@@ -39,9 +39,9 @@ namespace CodeGenerator
 
         private readonly ListLayerViewModel _listLayerVm;
 
-        public LayerDetailsViewModel(ListLayerViewModel listLayerVm)
+        public LayerDetailsViewModel(MainViewModel mainVm)
         {
-            _listLayerVm = listLayerVm;
+            _listLayerVm = mainVm.ListLayerVm;
             _listLayerVm.PropertyChanged += ListLayerVmOnPropertyChanged;
         }
 

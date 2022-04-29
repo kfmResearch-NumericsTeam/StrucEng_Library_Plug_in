@@ -29,11 +29,16 @@ namespace CodeGenerator
 
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
+        private readonly ListLoadViewModel _vmListLoad;
+        private readonly ListStepViewModel _vmListStep;
 
-        public ListLayerView(ListLayerViewModel vmListLayer, LayerDetailsViewModel vmDetailView)
+        public ListLayerView(MainViewModel vm)
         {
-            _vmListLayer = vmListLayer;
-            _vmDetailView = vmDetailView;
+            _vmListLayer = vm.ListLayerVm;
+            _vmDetailView = vm.DetailLayerVm;
+            _vmListStep = vm.ListStepVm;
+            _vmListLoad = vm.ListLoadVm;
+            
             BuildGui();
             BindGui();
         }
@@ -153,7 +158,7 @@ namespace CodeGenerator
                                 {
                                     new TableRow(
                                         TableLayout.AutoSized(
-                                            _btnAddLayer = new Button {Text = "Add", Enabled = false})
+                                            _btnAddLayer = new Button {Text = "Add", Enabled = true})
                                     )
                                 }
                             }
@@ -200,14 +205,10 @@ namespace CodeGenerator
                 ));
 
             AddRow(GenerateTitle("Loads"));
-            var vm = new ListLoadViewModel(_vmListLayer);
-            var v = new ListLoadView(vm);
-            AddRow(v);
+            AddRow(new ListLoadView(_vmListLoad));
             
             AddRow(GenerateTitle("Steps"));
-            var stepVm = new StepViewModel(_vmListLayer, vm);
-            var stepV = new StepView(stepVm);
-            AddRow(stepV);
+            AddRow(new StepView(_vmListStep));
             
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});

@@ -12,8 +12,9 @@ using CodeGenerator.ViewMain.Step;
 namespace CodeGenerator.Step
 {
     /// <summary>View Model to select ordering of steps for Load processing.</summary>
-    public class StepViewModel : ViewModelBase
+    public class ListStepViewModel : ViewModelBase
     {
+        private readonly MainViewModel _mainVm;
         private readonly ListLayerViewModel _listLayerVm;
         private readonly ListLoadViewModel _listLoadVm;
 
@@ -45,10 +46,11 @@ namespace CodeGenerator.Step
             }
         }
 
-        public StepViewModel(ListLayerViewModel listLayerVm, ListLoadViewModel listLoadVm)
+        public ListStepViewModel(MainViewModel mainVm)
         {
-            _listLayerVm = listLayerVm;
-            _listLoadVm = listLoadVm;
+            _mainVm = mainVm;
+            _listLayerVm = mainVm.ListLayerVm;
+            _listLoadVm = mainVm.ListLoadVm;
             Steps = new ObservableCollection<SingleStepViewModel>();
             _stepMap = new Dictionary<object, SingleStepViewModel>();
             BuildStepData();

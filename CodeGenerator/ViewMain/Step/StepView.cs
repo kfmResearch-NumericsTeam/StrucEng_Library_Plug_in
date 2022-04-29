@@ -11,20 +11,20 @@ namespace CodeGenerator
     /// <summary>View to show Step ordering</summary>
     public class StepView : DynamicLayout
     {
-        private readonly StepViewModel _stepVm;
+        private readonly ListStepViewModel _listStepVm;
         private DynamicLayout _stepListLayout;
         private GroupBox _gbSelectSteps;
 
-        public StepView(StepViewModel stepVm)
+        public StepView(ListStepViewModel listStepVm)
         {
-            _stepVm = stepVm;
+            _listStepVm = listStepVm;
             Build();
             Bind();
         }
 
         private void Bind()
         {
-            _stepVm.Steps.CollectionChanged += (sender, args) => { DrawLayout(); };
+            _listStepVm.Steps.CollectionChanged += (sender, args) => { DrawLayout(); };
         }
 
         private Control NoEntry()
@@ -39,13 +39,13 @@ namespace CodeGenerator
                 Spacing = new Size(5, 5)
             };
 
-            if (_stepVm.Steps.Count == 0)
+            if (_listStepVm.Steps.Count == 0)
             {
                 l.Rows.Add(NoEntry());
             }
             else
             {
-                foreach (var step in _stepVm.Steps)
+                foreach (var step in _listStepVm.Steps)
                 {
                     var tbStep = new TextBox() {Text = step.Order};
                     tbStep.Bind<string>("Text", step, "Order", DualBindingMode.TwoWay);
