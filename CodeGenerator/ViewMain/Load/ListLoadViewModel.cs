@@ -44,6 +44,7 @@ namespace CodeGenerator
                 _selectedLoad = value;
                 OnPropertyChanged();
                 UpdateContentView();
+                SelectLayerByName();
             }
         }
 
@@ -172,6 +173,29 @@ namespace CodeGenerator
         public void OnLoadSettingChanged()
         {
             LoadSettingsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SelectLayerByName()
+        {
+            if (_selectedLoad != null)
+            {
+                List<string> layerNames = new List<string>();
+                foreach (var l in _selectedLoad.Layers)
+                {
+                    Rhino.RhinoApp.WriteLine("{0}", l.GetName());
+                    layerNames.Add(l.GetName());
+                }
+
+                if (layerNames.Count == 0)
+                {
+                    Rhino.RhinoApp.WriteLine("No");
+                    RhinoUtils.UnSelectAll(RhinoDoc.ActiveDoc);
+                }
+                else
+                {
+                    RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, layerNames);
+                }
+            }
         }
     }
 }

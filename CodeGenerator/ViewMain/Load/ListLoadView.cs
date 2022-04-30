@@ -12,7 +12,7 @@ namespace CodeGenerator
     {
         private readonly ListLoadViewModel _vm;
         private DropDown _dbAddLoad;
-        private DropDown _dbSelectLoad;
+        private ListBox _dbSelectLoad;
         private Button _btAddLoad;
         private DynamicLayout _container;
         private Button _btDeleteLoad;
@@ -101,8 +101,10 @@ namespace CodeGenerator
                                     {
                                         ScaleHeight = false, Cells =
                                         {
-                                            new TableCell((_dbSelectLoad = new DropDown { }), true),
-                                            new TableCell((_btDeleteLoad = new Button {Text = "Delete"}))
+                                            new TableCell((_dbSelectLoad = new ListBox()
+                                            {
+                                            }), true),
+                                            new TableCell(TableLayout.AutoSized((_btDeleteLoad = new Button {Text = "Delete"})))
                                         }
                                     },
                                 }

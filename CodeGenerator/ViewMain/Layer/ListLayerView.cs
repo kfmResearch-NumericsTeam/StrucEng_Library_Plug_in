@@ -21,7 +21,7 @@ namespace CodeGenerator
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
-        private DropDown _dropdownLayers;
+        private ListBox _dropdownLayers;
         private TextBox _tbLayerToAdd;
         private GroupBox _gbPropertiesForLayer;
         private GroupBox _gbSelectLayer;
@@ -185,8 +185,8 @@ namespace CodeGenerator
                                     {
                                         ScaleHeight = false, Cells =
                                         {
-                                            new TableCell((_dropdownLayers = new DropDown { }), true),
-                                            new TableCell((_btnDeleteLayer = new Button {Text = "Delete"}))
+                                            new TableCell((_dropdownLayers = new ListBox() { }), true),
+                                            new TableCell((TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
                                         }
                                     },
                                 }

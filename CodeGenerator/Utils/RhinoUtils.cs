@@ -8,17 +8,20 @@ namespace CodeGenerator
 {
     public class RhinoUtils
     {
-        // true, if successful
-        public static bool SelectLayerByName(RhinoDoc doc, string name, bool unSelectAll = true)
+        // true, if successful, selectType = true => select, false => unselect
+        public static bool SelectLayerByName(RhinoDoc doc, string name, bool unSelectAll = true, bool selectType = true)
         {
             Rhino.DocObjects.RhinoObject[] rhobjs = doc.Objects.FindByLayer(name);
             if (rhobjs == null || rhobjs.Length < 1)
                 return false;
 
-            doc.Objects.UnselectAll();
+            if (unSelectAll)
+            {
+                doc.Objects.UnselectAll();    
+            }
             
             for (int i = 0; i < rhobjs.Length; i++)
-                rhobjs[i].Select(true);
+                rhobjs[i].Select(selectType);
             doc.Views.Redraw();
             return true;
         }
@@ -32,6 +35,12 @@ namespace CodeGenerator
 
             }
             return true;
+        }
+
+        public static void UnSelectAll(RhinoDoc doc)
+        {
+            doc.Objects.UnselectAll();
+            doc.Views.Redraw();
         }
 
 

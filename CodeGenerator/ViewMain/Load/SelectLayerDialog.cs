@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using CodeGenerator.Model;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino;
 
 namespace CodeGenerator
 {
@@ -20,8 +22,8 @@ namespace CodeGenerator
             Padding = new Padding(15) { };
             Title = "Select layers";
             DynamicLayout layout = new DynamicLayout();
-            layout.Spacing = new Size(5, 5);
-            layout.Padding = new Padding() {Top = 10, Bottom = 10};
+            layout.Spacing = new Size(10, 10);
+            layout.Padding = new Padding() {Top = 10, Bottom = 10, Left = 10, Right = 40};
 
             layout.AddRow(new Label() {Text = "Select layers for Load:"});
             Dictionary<CheckBox, Layer> cbMap = new Dictionary<CheckBox, Layer>();
@@ -31,6 +33,20 @@ namespace CodeGenerator
                 cbMap[c] = l;
                 c.Text = l.GetName();
                 layout.AddRow(c);
+                c.CheckedChanged += (sender, args) =>
+                {
+                    try
+                    {
+                        var cb = (CheckBox) sender;
+                        bool check = cb.Checked != null && (bool) cb.Checked; 
+                        RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, cb.Text, true, check);
+                        
+                    }
+                    catch (Exception e)
+                    {
+                        // Best effort
+                    }
+                };
             }
 
             var button = new Button();
