@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,10 @@ namespace CodeGenerator
     public abstract class AbstractLoadViewModel : ViewModelBase
     {
         protected readonly ListLayerViewModel ListLayerVm;
-        protected readonly ListLoadViewModel ListLoadVm;
+        protected readonly ListLoadViewModel ListLoadVm; 
 
         protected string _connectLayersLabels;
+
         public string ConnectLayersLabels
         {
             get => _connectLayersLabels;
@@ -24,22 +26,22 @@ namespace CodeGenerator
                 OnPropertyChanged();
             }
         }
-        
+
         protected ObservableCollection<Layer> _layers;
+
         public ObservableCollection<Layer> Layers
         {
             get => _layers;
             set
             {
                 _layers = value;
-                OnPropertyChanged();
                 StringBuilder b = new StringBuilder();
                 foreach (var layer in Layers)
                 {
                     b.Append(layer.GetName() + "; ");
                 }
-
                 ConnectLayersLabels = b.ToString();
+                OnPropertyChanged();
             }
         }
 
@@ -55,25 +57,28 @@ namespace CodeGenerator
         /// <summary>
         /// Overwrite this method to store vm data to model 
         /// </summary>
-        protected virtual void StoreVmToModel() {}
-        
+        protected virtual void StoreVmToModel()
+        {
+        }
+
         /// <summary>
         /// Overwrite this method to store model data to vm
         /// </summary>
-        protected virtual void StoreModelToVm() {}
-        
+        protected virtual void StoreModelToVm()
+        {
+        }
+
         private void DoStoreVmToModel()
         {
             if (_ignoreStoreVmToModel) return;
-            if (ListLoadVm.SelectedLoad.LoadType == LoadType.Area)
-            {
-                var l = ListLoadVm.SelectedLoad;
-                l.Layers = Layers.ToList();
-                StoreVmToModel();
-            }
+            var l = ListLoadVm.SelectedLoad;
+            l.Layers = Layers.ToList();
+            StoreVmToModel();
+            ListLoadVm.OnLoadSettingChanged();
         }
 
         private bool _ignoreStoreVmToModel = false;
+
         private void DoStoreModelToVm()
         {
             _ignoreStoreVmToModel = true;

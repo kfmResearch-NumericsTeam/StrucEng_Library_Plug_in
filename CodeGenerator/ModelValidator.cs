@@ -81,7 +81,7 @@ namespace CodeGenerator
                 }
                 catch (Exception e)
                 {
-                    msgs.Add($"Order '{step.Order}' of {step.GetSummary()} is not numeric");
+                    msgs.Add($"Order '{step.Order}' of '{step.GetSummary()}' is not numeric");
                 }
             }
 

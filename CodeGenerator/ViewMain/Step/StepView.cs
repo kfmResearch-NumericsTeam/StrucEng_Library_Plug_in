@@ -24,7 +24,7 @@ namespace CodeGenerator
 
         private void Bind()
         {
-            _listStepVm.Steps.CollectionChanged += (sender, args) => { DrawLayout(); };
+            _listStepVm.RedrawEventHandler += (sender, args) => { DrawLayout(); };
         }
 
         private Control NoEntry()

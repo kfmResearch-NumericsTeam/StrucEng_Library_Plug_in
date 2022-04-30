@@ -27,20 +27,29 @@ namespace CodeGenerator.Model
                 StringBuilder b = new StringBuilder();
                 if (Load != null)
                 {
+                    b.Append("Load: ");
                     b.Append(Load.LoadType.GetName());
-                    b.Append(" (");
-                    foreach (var l in Load.Layers)
+                    if (Load.Layers.Count > 0)
                     {
-                        b.Append(l.GetName() + ";");
+                        b.Append(" (");
+                        foreach (var l in Load.Layers)
+                        {
+                            b.Append(l.GetName() + ";");
+                        }
+
+                        b.Append(")");
+                    }
+                    else
+                    {
+                        b.Append(" (No layers connected)");
                     }
 
-                    b.Append(")");
                     res = b.ToString();
                 }
             }
             else
             {
-                res = Set?.GetName();
+                res = "Set: " + Set?.GetName();
             }
 
             return res;

@@ -105,7 +105,11 @@ namespace CodeGenerator
                 new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
             };
             Loads = new ObservableCollection<Load>(Model.Loads);
-            Loads.CollectionChanged += (sender, args) => { SelectLoadViewVisible = Loads.Count != 0; };
+            Loads.CollectionChanged += (sender, args) =>
+            {
+                SelectLoadViewVisible = Loads.Count != 0;
+                OnLoadSettingChanged();
+            };
         }
 
         private void OnAddLoad()
@@ -160,6 +164,14 @@ namespace CodeGenerator
             {
                 throw new Exception("unsupported load");
             }
+        }
+
+        /// <summary> Raised if a setting within a load is changed </summary> 
+        public event EventHandler LoadSettingsChanged;
+
+        public void OnLoadSettingChanged()
+        {
+            LoadSettingsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

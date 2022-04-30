@@ -18,7 +18,7 @@ namespace CodeGenerator
     public class ListLayerViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
-        
+
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
 
@@ -51,7 +51,7 @@ namespace CodeGenerator
         {
             _mainVm = mainVm;
             Model = new Workbench();
-            
+
             _layers = new ObservableCollection<Layer>(Model.Layers);
 
             CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
@@ -110,7 +110,7 @@ namespace CodeGenerator
         private void OnMouseSelect()
         {
             var doc = Rhino.RhinoDoc.ActiveDoc;
-            var str = RhinoUtils.SelectLayer(doc);
+            var str = RhinoUtils.SelectLayerByMouse(doc);
             if (!string.IsNullOrEmpty(str))
             {
                 LayerToAdd = str;
@@ -129,6 +129,12 @@ namespace CodeGenerator
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
+                
+                // Select Layer in doc
+                if (_selectedLayer != null)
+                {
+                    RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, _selectedLayer.GetName());
+                }
             }
         }
 

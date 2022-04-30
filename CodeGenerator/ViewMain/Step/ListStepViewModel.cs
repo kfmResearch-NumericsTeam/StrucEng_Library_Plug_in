@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using CodeGenerator.Model;
 using CodeGenerator.ViewMain.Step;
+using Rhino.Render.ChangeQueue;
 
 namespace CodeGenerator.Step
 {
@@ -23,8 +24,12 @@ namespace CodeGenerator.Step
             get => _listLayerVm.Model;
         }
 
+        // Force Ui to redraw steps
+        public event EventHandler RedrawEventHandler;
+
         private Dictionary<object, SingleStepViewModel> _stepMap; // Key: (Set/Load), Val: ViewModel for single step
         private ObservableCollection<SingleStepViewModel> _steps;
+
         public ObservableCollection<SingleStepViewModel> Steps
         {
             get => _steps;
@@ -36,6 +41,7 @@ namespace CodeGenerator.Step
         }
 
         private bool _hasSteps = false;
+
         public bool HasSteps
         {
             get => _hasSteps;
@@ -51,13 +57,15 @@ namespace CodeGenerator.Step
             _mainVm = mainVm;
             _listLayerVm = mainVm.ListLayerVm;
             _listLoadVm = mainVm.ListLoadVm;
+
             Steps = new ObservableCollection<SingleStepViewModel>();
             _stepMap = new Dictionary<object, SingleStepViewModel>();
-            BuildStepData();
 
-            _listLoadVm.Loads.CollectionChanged += StepDataChanged;
+            _listLoadVm.LoadSettingsChanged += (sender, args) => BuildStepData();
             _listLayerVm.Layers.CollectionChanged += StepDataChanged;
             Steps.CollectionChanged += (sender, args) => HasSteps = Steps.Count != 0;
+
+            BuildStepData();
         }
 
         private void StepDataChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
@@ -67,16 +75,19 @@ namespace CodeGenerator.Step
 
         private void BuildStepData()
         {
-            // XXX: Since we use an event based approach and always update the steps in the view on a change,
+            // XXX: Since we use an event based approach and always update the steps on a change,
             // we have to find out what changed and update the step view accordingly.
-            // This makes the below logic tedious, we have to find what's new and what was deleted.
+            // This makes the below logic tedious, we have to find what's new and what was deleted,
+            // while keeping the steps which are backed by an existing layer/ set.
+            // In order to keep UI simple, we always redraw view if something changes: RedrawEventHandler
             var stepsToDelete = new Dictionary<object, SingleStepViewModel>(_stepMap);
             int order = HighestOrder() + 1;
-
+            
             foreach (var load in _listLoadVm.Loads)
             {
                 if (_stepMap.ContainsKey(load))
                 {
+                    // Load already backed by a step
                     stepsToDelete.Remove(load);
                     continue;
                 }
@@ -96,6 +107,7 @@ namespace CodeGenerator.Step
                 {
                     if (_stepMap.ContainsKey(layer))
                     {
+                        // Set already backed by a step
                         stepsToDelete.Remove(layer);
                         continue;
                     }
@@ -111,12 +123,15 @@ namespace CodeGenerator.Step
                 }
             }
 
+            // Remove old steps not backed by data
             foreach (var stepToDelete in stepsToDelete)
             {
                 _stepMap.Remove(stepToDelete.Key);
                 Steps.Remove(stepToDelete.Value);
                 Model.Steps.Remove(stepToDelete.Value.StepModel);
             }
+
+            RedrawEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         public int HighestOrder()
