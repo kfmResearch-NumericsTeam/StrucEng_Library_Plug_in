@@ -25,7 +25,7 @@ namespace StrucEngLib
 
         private void BuildGui()
         {
-            UiUtils.AddLabelTextRow(this, _vm, "z", "Z", "0.03");
+            UiUtils.AddLabelTextRow(this, _vm, "Pressure [N/mm^2]", "Z", "0.03");
             UiUtils.AddLabelTextRow(this, _vm, "Axes", "Axes", "local");
         }
     }

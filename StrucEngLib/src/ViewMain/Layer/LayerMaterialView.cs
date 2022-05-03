@@ -21,9 +21,9 @@ namespace StrucEngLib
                 Spacing = new Size(5, 1)
             };
 
-            UiUtils.AddLabelTextRow(layout, _vm, "E", "E", "33700");
-            UiUtils.AddLabelTextRow(layout, _vm, "V", "V", "0.0");
-            UiUtils.AddLabelTextRow(layout, _vm, "P", "P", "2500/10**9");
+            UiUtils.AddLabelTextRow(layout, _vm, "Elastic modulus [N/mm^2]", "E", "33700");
+            UiUtils.AddLabelTextRow(layout, _vm, "Poisson’s ratio [-]", "V", "0.0");
+            UiUtils.AddLabelTextRow(layout, _vm, "Specific weight [kg/m^3] ", "P", "2500/10**9");
             Add(new SelectionView("Materials", new List<string>() {"Elastic"}, new List<Control>() {layout}));
         }
     }
