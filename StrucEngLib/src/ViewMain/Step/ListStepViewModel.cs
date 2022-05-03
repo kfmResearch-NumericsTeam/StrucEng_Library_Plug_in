@@ -99,6 +99,7 @@ namespace StrucEngLib.Step
                 var vm = new SingleStepViewModel(s);
                 Steps.Add(vm);
                 _stepMap.Add(load, vm);
+                Model.Steps.Add(s);
             }
 
             foreach (var layer in _listLayerVm.Layers)

@@ -182,13 +182,11 @@ namespace StrucEngLib
                 List<string> layerNames = new List<string>();
                 foreach (var l in _selectedLoad.Layers)
                 {
-                    Rhino.RhinoApp.WriteLine("{0}", l.GetName());
                     layerNames.Add(l.GetName());
                 }
 
                 if (layerNames.Count == 0)
                 {
-                    Rhino.RhinoApp.WriteLine("No");
                     RhinoUtils.UnSelectAll(RhinoDoc.ActiveDoc);
                 }
                 else

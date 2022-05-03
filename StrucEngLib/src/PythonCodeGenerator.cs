@@ -70,26 +70,27 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         }
 
         private int _loadIdCounter = 0;
+        private string RemoveSpaces(string id) => id.Replace(" ", "_");
         private string LoadId() => "load_" + _loadIdCounter++;
-        private string LayerId(string id) => id + "_element";
-        private string SetId(string id) => id + "_set";
-        private string SectionId(string id) => id + "_sec";
-        private string PropId(string id) => id + "_prop";
-        private string MatElasticId(string id) => id + "_mat_elastic";
-        private string DispId(string id) => id + "_disp";
+        private string LayerId(string id) => RemoveSpaces(id) + "_element";
+        private string SetId(string id) => RemoveSpaces(id) + "_set";
+        private string SectionId(string id) => RemoveSpaces(id) + "_sec";
+        private string PropId(string id) => RemoveSpaces(id) + "_prop";
+        private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
+        private string DispId(string id) => RemoveSpaces(id) + "_disp";
 
-        private string LayersToStringList(List<Layer> layers)
+        private string ListToStr<T> (List<T> data, Func<T, string> toStr)
         {
             StringBuilder b = new StringBuilder();
             b.Append("[ ");
             int n = 0;
-            foreach (var l in layers)
+            foreach (var l in data)
             {
                 if (n > 0)
                 {
                     b.Append(", ");
                 }
-                b.Append($"'{l.GetName()}'");
+                b.Append($"'{toStr(l)}'");
                 n++;
             }
 
@@ -137,61 +138,90 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     b.Append($@"mdl.add([PinnedDisplacement(name='{dispId}', nodes='{setName}')]) " + _nl);
                 }
             }
-
+            
+            Dictionary<Load, string> loadNameMap = new Dictionary<Load, string>();
             foreach (var load in _model.Loads)
             {
+                var loadId = "";
                 if (load.LoadType == LoadType.Area)
                 {
                     var area = (LoadArea) load;
-                    string layersList = LayersToStringList(load.Layers);
+                    string layersList = ListToStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"# == Load Area {layersList}" + _nl);
-                    string loadId = LoadId() + "_area";
+                    loadId = LoadId() + "_area";
                     b.Append($@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, z={area.Z}, axes='{area.Axes}')) " + _nl);
                 }
                 else if (load.LoadType == LoadType.Gravity)
                 {
-                    string layersList = LayersToStringList(load.Layers);
+                    string layersList = ListToStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"#== Load Gravity {layersList}" + _nl);
-                    string loadId = LoadId() + "_gravity";
+                    loadId = LoadId() + "_gravity";
                     b.Append($@"mdl.add(GravityLoad(name='{loadId}', elements={layersList}))" + _nl);
                 }
+                loadNameMap.Add(load, loadId);
             }
             
             b.Append(_nl + $@"# == Steps" + _nl);
-            
-            // TODO:
-            // var stepCounter = 0;
-            // foreach (var step in _model.Steps)
-            // {
-            //     var stepName = "step_" + stepCounter++;
-            //     if (step.StepType == StepType.Load)
-            //     {
-            //         var loads = "\'\'";
-            //         b.Append($@"mdl.add(GeneralStep(name='{stepName}', loads={loads}, nlgeom=False))" + _nl);
-            //     }
-            //     else if (step.StepType == StepType.Set)
-            //     {
-            //         b.Append($@"mdl.add(GeneralStep(name='{stepName}', displacements=['{step.Set.Name}'], nlgeom=False))" + _nl);
-            //     }
-            // }
-            //
-            // b.Append($@"mdl.steps_order = ['step_bc','step_load']" + _nl);
+            var stepCounter = 0;
+            /*
+             * stepPair: <float order as key, List<Steps> which belong to same order
+             * Order is already by key (asc)
+             */   
+            var stepOrderList = new Dictionary<string, List<Model.Step>>();
+            foreach (var stepPair in GroupSteps(_model))
+            {
+                var stepName = "step_" + stepCounter++;
+                stepOrderList.Add(stepName, stepPair.Value);
+                List<string> loadsNames = new List<string>();
+                List<string> dispNames = new List<string>();
+                foreach (var stepEntry in stepPair.Value)
+                {
+                    if (stepEntry.StepType == StepType.Load) {
+                        loadsNames.Add(loadNameMap[stepEntry.Load]);
+                    }
+                    else if (stepEntry.StepType == StepType.Set)
+                    {
+                        dispNames.Add(stepEntry.Set.Name);
+                    }
+                }
+                var loadStr = "";
+                var dispStr = "";
+                if (loadsNames.Count > 0) {
+                    loadStr = $" loads={ListToStr(loadsNames, name => name)}, ";
+                }
+                if (dispNames.Count > 0) {
+                    dispStr = $" displacements={ListToStr(dispNames, name => name)}, ";
+                }
+                b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
+            }
+            b.Append($@"mdl.steps_order = {ListToStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
             
             b.Append(footer);
             return b.ToString();
         }
         
-        private string GroupSteps(Workbench model) {
-            var steps = new Dictionary<float, List<Model.Step>>();
+        /*
+         * Given A workbench, group steps according to their order (float).
+         * Result is a List of steps belonging to the same order-id, ordered by order-id
+         */
+        private SortedDictionary<float, List<Model.Step>> GroupSteps(Workbench model) {
+            var steps = new SortedDictionary<float, List<Model.Step>>();
             foreach (var step in model.Steps)
             {
-                var order = float.Parse(step.Order);
-                if (String.IsNullOrEmpty(step.Order)) continue;
-                if (steps.ContainsKey(order)) {
-                    steps[order].Add(step);
+                try{
+                    var order = float.Parse(step.Order);
+                    if (String.IsNullOrEmpty(step.Order)) continue;
+                    if (steps.ContainsKey(order)) {
+                        steps[order].Add(step);
+                    } else {
+                        steps.Add(order, new List<Model.Step>(){step});
+                    }
+                } catch(Exception e) {
+                    // XXX: We ignore invalid step numbers
                 }
             }
-            return "";
+            
+            return steps;
         }
     }
 }
