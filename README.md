@@ -3,6 +3,7 @@
 ### Installation
 
 ### Build
-- Windows, Rhino 7
+- Windows
+- RhinoCommon Version="7.13.21348.13001"
 
 ### Documentation

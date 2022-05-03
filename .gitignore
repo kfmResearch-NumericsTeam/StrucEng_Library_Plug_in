@@ -1,7 +1,9 @@
 /.idea/
 /.vs/
-CodeGenerator/bin
-CodeGenerator/obj
+bin
+obj
+
+
 
 #ignore thumbnails created by windows
 Thumbs.db
