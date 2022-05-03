@@ -64,7 +64,7 @@ namespace StrucEngLib
 
         private void OnInspectCode()
         {
-            new ExecuteGenerateCode(_mainVm).ExecuteAsync(Model);
+            new ExecGenerateCode(_mainVm).ExecuteAsync(Model);
         }
 
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);

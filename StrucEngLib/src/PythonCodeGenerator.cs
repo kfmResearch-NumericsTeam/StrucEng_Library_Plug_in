@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
 // ReSharper disable All
 // @formatter:off
@@ -80,25 +81,6 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
         private string DispId(string id) => RemoveSpaces(id) + "_disp";
 
-        private string ListToStr<T> (List<T> data, Func<T, string> toStr)
-        {
-            StringBuilder b = new StringBuilder();
-            b.Append("[ ");
-            int n = 0;
-            foreach (var l in data)
-            {
-                if (n > 0)
-                {
-                    b.Append(", ");
-                }
-                b.Append($"'{toStr(l)}'");
-                n++;
-            }
-
-            b.Append(" ] ");
-            return b.ToString();
-        }
-
         private string _nl = Environment.NewLine;
 
         public string Generate()
@@ -147,14 +129,14 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                 if (load.LoadType == LoadType.Area)
                 {
                     var area = (LoadArea) load;
-                    string layersList = ListToStr(load.Layers, layer => layer.GetName());
+                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"# == Load Area {layersList}" + _nl);
                     loadId = LoadId() + "_area";
                     b.Append($@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, z={area.Z}, axes='{area.Axes}')) " + _nl);
                 }
                 else if (load.LoadType == LoadType.Gravity)
                 {
-                    string layersList = ListToStr(load.Layers, layer => layer.GetName());
+                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"#== Load Gravity {layersList}" + _nl);
                     loadId = LoadId() + "_gravity";
                     b.Append($@"mdl.add(GravityLoad(name='{loadId}', elements={layersList}))" + _nl);
@@ -188,14 +170,14 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                 var loadStr = "";
                 var dispStr = "";
                 if (loadsNames.Count > 0) {
-                    loadStr = $" loads={ListToStr(loadsNames, name => name)}, ";
+                    loadStr = $" loads={StringUtils.ListToPyStr(loadsNames, name => name)}, ";
                 }
                 if (dispNames.Count > 0) {
-                    dispStr = $" displacements={ListToStr(dispNames, name => name)}, ";
+                    dispStr = $" displacements={StringUtils.ListToPyStr(dispNames, name => name)}, ";
                 }
                 b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
             }
-            b.Append($@"mdl.steps_order = {ListToStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
+            b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
             
             b.Append(footer);
             return b.ToString();

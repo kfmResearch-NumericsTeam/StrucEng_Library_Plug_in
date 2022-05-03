@@ -10,11 +10,11 @@ using StrucEngLib.Utils;
 namespace StrucEngLib
 {
     /// <summary>Generate and Execute Code</summary>
-    public class ExecuteGenerateCode: AsyncCommandBase
+    public class ExecGenerateCode: AsyncCommandBase
     {
         private readonly MainViewModel _vm;
 
-        public ExecuteGenerateCode(MainViewModel vm)
+        public ExecGenerateCode(MainViewModel vm)
         {
             _vm = vm;
         }
