@@ -19,6 +19,7 @@ namespace StrucEngLib
             BuildGui();
         }
 
+        // XXX: Can be extension of root class
         protected IndirectBinding<string> FloatBinding(
             Expression<Func<LoadConstraintEntryViewModel, float>> f, float defVal = 0)
         {
@@ -77,15 +78,15 @@ namespace StrucEngLib
                                         HeaderText = "Layer",
                                     },
                                     ColItem("Element Number", IntBinding(r => r.ElementNumber)),
-                                    ColItem("Ex [0]", FloatBinding(r => r.Ex0)),
-                                    ColItem("Ex [1]", FloatBinding(r => r.Ex1)),
-                                    ColItem("Ex [2]", FloatBinding(r => r.Ex2)),
-                                    ColItem("Ey [0]", FloatBinding(r => r.Ey0)),
-                                    ColItem("Ey [1]", FloatBinding(r => r.Ey1)),
-                                    ColItem("Ey [2]", FloatBinding(r => r.Ey2)),
-                                    ColItem("Ez [0]", FloatBinding(r => r.Ez0)),
-                                    ColItem("Ez [1]", FloatBinding(r => r.Ez1)),
-                                    ColItem("Ez [2]", FloatBinding(r => r.Ez2)),
+                                    ColItem("Ex [0]", IntBinding(r => r.Ex0)),
+                                    ColItem("Ex [1]", IntBinding(r => r.Ex1)),
+                                    ColItem("Ex [2]", IntBinding(r => r.Ex2)),
+                                    ColItem("Ey [0]", IntBinding(r => r.Ey0)),
+                                    ColItem("Ey [1]", IntBinding(r => r.Ey1)),
+                                    ColItem("Ey [2]", IntBinding(r => r.Ey2)),
+                                    ColItem("Ez [0]", IntBinding(r => r.Ez0)),
+                                    ColItem("Ez [1]", IntBinding(r => r.Ez1)),
+                                    ColItem("Ez [2]", IntBinding(r => r.Ez2)),
                                 }
                             },
                             new TableLayout
@@ -93,7 +94,8 @@ namespace StrucEngLib
                                 Spacing = new Size(5, 10),
                                 Padding = new Padding()
                                 {
-                                    Top = 20,
+                                    Top = 10,
+                                    Bottom = 5,
                                 },
                                 Rows =
                                 {
@@ -101,7 +103,8 @@ namespace StrucEngLib
                                         TableLayout.AutoSized(
                                             new Button
                                             {
-                                                Text = "Show Numbers",
+                                                Size = new Size(110, -1),
+                                                Text = "Show Numbers...",
                                                 Enabled = true,
                                                 Command = _vm.ExecElementNumbers
                                             })

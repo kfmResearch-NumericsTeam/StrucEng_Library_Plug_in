@@ -8,15 +8,15 @@ namespace StrucEngLib
     public class LoadConstraintEntryViewModel : ViewModelBase
     {
         private int _elementNumber;
-        private float _ex0 = 0;
-        private float _ex1 = 0;
-        private float _ex2 = 0;
-        private float _ey0 = 0;
-        private float _ey1 = 0;
-        private float _ey2 = 0;
-        private float _ez0 = 0;
-        private float _ez1 = 0;
-        private float _ez2 = 0;
+        private int _ex0 = 0;
+        private int _ex1 = 0;
+        private int _ex2 = 0;
+        private int _ey0 = 0;
+        private int _ey1 = 0;
+        private int _ey2 = 0;
+        private int _ez0 = 0;
+        private int _ez1 = 0;
+        private int _ez2 = 0;
         public string LayerName { get; set; }
         public Layer Origin { get; }
 
@@ -38,7 +38,7 @@ namespace StrucEngLib
         }
         
 
-        public float Ex0
+        public int Ex0
         {
             get => _ex0;
             set
@@ -49,7 +49,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ex1
+        public int Ex1
         {
             get => _ex1;
             set
@@ -60,7 +60,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ex2
+        public int Ex2
         {
             get => _ex2;
             set
@@ -71,7 +71,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ey0
+        public int Ey0
         {
             get => _ey0;
             set
@@ -82,7 +82,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ey1
+        public int Ey1
         {
             get => _ey1;
             set
@@ -93,7 +93,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ey2
+        public int Ey2
         {
             get => _ey2;
             set
@@ -104,7 +104,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ez0
+        public int Ez0
         {
             get => _ez0;
             set
@@ -115,7 +115,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ez1
+        public int Ez1
         {
             get => _ez1;
             set
@@ -126,7 +126,7 @@ namespace StrucEngLib
             }
         }
 
-        public float Ez2
+        public int Ez2
         {
             get => _ez2;
             set
@@ -139,7 +139,12 @@ namespace StrucEngLib
 
         protected void VmToModel()
         {
-            var e = (Element) Origin;
+            var el = (Element) Origin;
+            if (el.LoadConstraint == null)
+            {
+                el.LoadConstraint = new ElementLoadConstraint();
+            }
+            var e = el.LoadConstraint;
             e.Ex0 = _ex0;
             e.Ex1 = _ex1;
             e.Ex2 = _ex2;
@@ -156,7 +161,10 @@ namespace StrucEngLib
 
         protected void ModelToVm()
         {
-            var e = (Element) Origin;
+            var el = (Element) Origin;
+            el.LoadConstraint = new ElementLoadConstraint();
+            var e = el.LoadConstraint;
+            
             _ex0 = e.Ex0;
             _ex1 = e.Ex1;
             _ex2 = e.Ex2;

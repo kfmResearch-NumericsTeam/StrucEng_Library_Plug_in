@@ -108,6 +108,11 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     b.Append($@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " + _nl);
                     var propId = PropId(layerId);
                     b.Append($@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" + _nl);
+                    
+                    if (element.LoadConstraint != null) {
+                        var c = element.LoadConstraint;
+                        b.Append($@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " + _nl);
+                    }
                 }
 
                 if (layer.LayerType == LayerType.SET)
