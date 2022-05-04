@@ -28,9 +28,12 @@ namespace StrucEngLib
             this.Source = source;
             Padding = new Padding(5);
             Resizable = true;
+            AutoSize = true;
+            Maximize();
+
             Result = DialogResult.Cancel;
             WindowStyle = WindowStyle.Default;
-            
+
             Title = "Inspect and Modify Generated Python Code";
 
             _execButton = new Button()
@@ -42,7 +45,6 @@ namespace StrucEngLib
             {
                 Text = source
             };
-
             DefaultButton = new Button {Text = "Close"};
             DefaultButton.Click += (sender, e) =>
             {
@@ -68,6 +70,11 @@ namespace StrucEngLib
                     new TableRow(TableLayout.AutoSized(new TableLayout()
                     {
                         Spacing = new Size(10, 10),
+                        Padding = new Padding()
+                        {
+                            Top = 10,
+                            Bottom = 10,
+                        },
                         Rows =
                         {
                             new TableRow(DefaultButton, _execButton),
@@ -75,6 +82,15 @@ namespace StrucEngLib
                     }))
                 }
             };
+            KeyDown += (sender, args) => KeyDownHandel(sender, args);
+        }
+
+        private void KeyDownHandel(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Escape)
+            {
+                this.Close();
+            }
         }
     }
 }
