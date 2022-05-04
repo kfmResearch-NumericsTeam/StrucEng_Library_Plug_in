@@ -166,7 +166,10 @@ namespace StrucEngLib
                                     {
                                         ScaleHeight = false, Cells =
                                         {
-                                            new TableCell((_dropdownLayers = new ListBox() { }), true),
+                                            new TableCell((_dropdownLayers = new ListBox()
+                                            {
+                                                
+                                            }), true),
                                             new TableCell((TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
                                         }
                                     },
