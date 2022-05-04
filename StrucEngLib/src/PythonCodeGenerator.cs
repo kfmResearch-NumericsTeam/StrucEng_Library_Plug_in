@@ -150,6 +150,19 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     loadId = LoadId() + "_gravity";
                     b.Append($@"mdl.add(GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList}))" + _nl);
                 }
+                else if (load.LoadType == LoadType.Point) {
+                    var p = (LoadPoint) load;
+                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
+                    b.Append(_nl + $@"#== Load Point {layersList}" + _nl);
+                    loadId = LoadId() + "_point";
+                    var z = String.IsNullOrWhiteSpace(p.Z)   ? "": $" z={p.Z},";
+                    var x = String.IsNullOrWhiteSpace(p.X)   ? "": $" x={p.X},";
+                    var y = String.IsNullOrWhiteSpace(p.Y)   ? "": $" y={p.Y},";
+                    var zz = String.IsNullOrWhiteSpace(p.ZZ) ? "": $" zz={p.ZZ},";
+                    var xx = String.IsNullOrWhiteSpace(p.XX) ? "": $" xx={p.XX},";
+                    var yy = String.IsNullOrWhiteSpace(p.YY) ? "": $" yy={p.YY},";
+                    b.Append($@"mdl.add(PointLoad(name='{loadId}' {x} {y} {z} {xx} {yy} {zz} ,elements={layersList}))" + _nl);
+                }
                 loadNameMap.Add(load, loadId);
             }
             

@@ -20,7 +20,9 @@ namespace StrucEngLib
             string propName,
             string defaultVal = "")
         {
+            
             var tb = new ComboBoxWithMemory(propName);
+            
             tb.Bind<string>("Text", vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
 
