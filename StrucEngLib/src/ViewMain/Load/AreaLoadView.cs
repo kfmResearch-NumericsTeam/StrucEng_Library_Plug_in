@@ -26,6 +26,8 @@ namespace StrucEngLib
         private void BuildGui()
         {
             UiUtils.AddLabelTextRow(this, _vm, "Pressure [N/mm^2]", "Z", "0.03");
+            UiUtils.AddLabelTextRow(this, _vm, "Surface Shear x [N/mm^2]", "X", "");
+            UiUtils.AddLabelTextRow(this, _vm, "Surface Shear y [N/mm^2]", "Y", "");
             UiUtils.AddLabelTextRow(this, _vm, "Axes", "Axes", "local");
         }
     }

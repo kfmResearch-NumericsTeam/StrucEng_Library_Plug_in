@@ -137,7 +137,10 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"# == Load Area {layersList}" + _nl);
                     loadId = LoadId() + "_area";
-                    b.Append($@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, z={area.Z}, axes='{area.Axes}')) " + _nl);
+                    var z = String.IsNullOrWhiteSpace(area.Z) ? "": $" z={area.Z},";
+                    var x = String.IsNullOrWhiteSpace(area.X) ? "": $" x={area.X},";
+                    var y = String.IsNullOrWhiteSpace(area.Y) ? "": $" y={area.Y},";
+                    b.Append($@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, {z} {x} {y} axes='{area.Axes}')) " + _nl);
                 }
                 else if (load.LoadType == LoadType.Gravity)
                 {
