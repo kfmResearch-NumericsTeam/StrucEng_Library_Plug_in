@@ -104,6 +104,7 @@ namespace StrucEngLib
             {
                 new ListItem {Key = LoadType.Area.ToString(), Text = "Area"},
                 new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
+                new ListItem {Key = LoadType.Point.ToString(), Text = "Point"},
             };
             Loads = new ObservableCollection<Load>(Model.Loads);
             Loads.CollectionChanged += (sender, args) =>
@@ -123,6 +124,10 @@ namespace StrucEngLib
             else if (LoadName == LoadType.Area)
             {
                 newLoad = new LoadArea();
+            }
+            else if (LoadName == LoadType.Point)
+            {
+                newLoad = new LoadPoint();
             }
             else
             {
@@ -160,6 +165,10 @@ namespace StrucEngLib
             else if (SelectedLoad.LoadType == LoadType.Gravity)
             {
                 LoadView = new GravityLoadView(new GravityLoadViewModel(_mainVm));
+            }
+            else if (SelectedLoad.LoadType == LoadType.Point)
+            {
+                LoadView = new PointLoadView(new PointLoadViewModel(_mainVm));
             }
             else
             {

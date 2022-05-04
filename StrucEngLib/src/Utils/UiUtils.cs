@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using Eto.Forms;
 
@@ -28,7 +29,7 @@ namespace StrucEngLib
             if (propertyInfo != null)
             {
                 var v = propertyInfo.GetValue(vm);
-                if (v == null || (string) v == "")
+                if (v == null || v.ToString() == "")
                 {
                     tb.Text = defaultVal;
                 }

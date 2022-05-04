@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rhino.Runtime.InteropWrappers;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -66,6 +67,20 @@ namespace StrucEngLib
                 {
                     msgs.Add("No Layers in load " + load.LoadType);
                 }
+
+                if (load.LoadType == LoadType.Area)
+                {
+                    var a = (LoadArea) load;
+                    // XXX: No validation for now
+                }
+
+                if (load.LoadType == LoadType.Gravity)
+                {
+                    var a = (LoadGravity) load;
+                    if (!isDouble(a.X)) msgs.Add($"X: {a.X} not numeric for gravity load");
+                    if (!isDouble(a.Y)) msgs.Add($"Y: {a.Y} not numeric for gravity load");
+                    if (!isDouble(a.Z)) msgs.Add($"Z: {a.Z} not numeric for gravity load");
+                }
             }
 
             foreach (var step in model.Steps)
@@ -87,6 +102,12 @@ namespace StrucEngLib
 
             // XXX: We currently don't return success flag
             return msgs;
+        }
+
+        protected bool isDouble(string v)
+        {
+            double _;
+            return double.TryParse(v, out _);
         }
     }
 }

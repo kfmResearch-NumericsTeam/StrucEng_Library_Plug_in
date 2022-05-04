@@ -144,10 +144,11 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                 }
                 else if (load.LoadType == LoadType.Gravity)
                 {
+                    var g = (LoadGravity) load;
                     string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"#== Load Gravity {layersList}" + _nl);
                     loadId = LoadId() + "_gravity";
-                    b.Append($@"mdl.add(GravityLoad(name='{loadId}', elements={layersList}))" + _nl);
+                    b.Append($@"mdl.add(GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList}))" + _nl);
                 }
                 loadNameMap.Add(load, loadId);
             }
