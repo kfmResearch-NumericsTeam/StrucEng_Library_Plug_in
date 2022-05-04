@@ -24,7 +24,7 @@ namespace StrucEngLib
         {
             var c = BuildScript();
             RunCode(c);
-            return null;
+            return Task.FromResult<object>(null);
         }
 
         protected string BuildScript()
@@ -67,14 +67,14 @@ if __name__=='__main__':
     AddLayer()
     rs.CurrentLayer('Element_numbers')
     
-# show Element numbers
+    # show Element numbers
     for element_num, element in mdl.elements.items():
-# xyz = (mdl.nodes[element.nodes[0]].x, mdl.nodes[element.nodes[0]].y, mdl.nodes[element.nodes[0]].z)
-    x = (mdl.nodes[element.nodes[0]].x + mdl.nodes[element.nodes[1]].x + mdl.nodes[element.nodes[2]].x)/3
-    y = (mdl.nodes[element.nodes[0]].y + mdl.nodes[element.nodes[1]].y + mdl.nodes[element.nodes[2]].y)/3
-    z= (mdl.nodes[element.nodes[0]].z + mdl.nodes[element.nodes[1]].z + mdl.nodes[element.nodes[2]].z)/3
-    xyz = (x,y,z)
-    rs.AddTextDot(str(element_num), xyz)
+        # xyz = (mdl.nodes[element.nodes[0]].x, mdl.nodes[element.nodes[0]].y, mdl.nodes[element.nodes[0]].z)
+        x = (mdl.nodes[element.nodes[0]].x + mdl.nodes[element.nodes[1]].x + mdl.nodes[element.nodes[2]].x)/3
+        y = (mdl.nodes[element.nodes[0]].y + mdl.nodes[element.nodes[1]].y + mdl.nodes[element.nodes[2]].y)/3
+        z = (mdl.nodes[element.nodes[0]].z + mdl.nodes[element.nodes[1]].z + mdl.nodes[element.nodes[2]].z)/3
+        xyz = (x,y,z)
+        rs.AddTextDot(str(element_num), xyz)
 ";
             return code;
         }
@@ -83,7 +83,14 @@ if __name__=='__main__':
         {
             string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
             File.WriteAllText(fileName, code);
-            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
+            try
+            {
+                Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
+            }
+            catch (Exception e)
+            {
+                // XXX Ignore
+            }
         }
     }
 }

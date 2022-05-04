@@ -16,6 +16,7 @@ namespace StrucEngLib
     /// </summary>
     public class ListLayerView : DynamicLayout
     {
+        
         private Button _btnInspectPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
@@ -26,6 +27,7 @@ namespace StrucEngLib
         private GroupBox _gbSelectLayer;
         private RadioButtonList _rdlElementSetSelection;
 
+        private readonly MainViewModel _vm;
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
@@ -33,6 +35,7 @@ namespace StrucEngLib
 
         public ListLayerView(MainViewModel vm)
         {
+            _vm = vm;
             _vmListLayer = vm.ListLayerVm;
             _vmDetailView = vm.DetailLayerVm;
             _vmListStep = vm.ListStepVm;
@@ -77,29 +80,8 @@ namespace StrucEngLib
         {
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
-
-            AddRow(GenerateTitle("Settings"));
-            AddRow(
-                new GroupBox
-                {
-                    Text = "Generate Code",
-                    Padding = new Padding(5),
-                    Content = new TableLayout
-                    {
-                        Spacing = new Size(10, 10),
-                        Rows =
-                        {
-                            new TableRow(
-                                new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
-                                    true
-                                )
-                            )
-                        }
-                    }
-                });
             
-            AddRow(GenerateTitle("Layers"));
+            AddRow(GenerateTitle("Properties and Constraints"));
             AddRow(
                 new GroupBox
                 {
@@ -203,11 +185,39 @@ namespace StrucEngLib
                     }
                 ));
 
+            AddRow(GenerateTitle("Load Constraints"));
+            AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
+            
             AddRow(GenerateTitle("Loads"));
             AddRow(new ListLoadView(_vmListLoad));
             
             AddRow(GenerateTitle("Steps"));
             AddRow(new StepView(_vmListStep));
+            
+            AddRow(GenerateTitle("Output"));
+            AddRow(new Label {Text = "TODO"});
+            
+            AddRow(GenerateTitle("Analyse"));
+            AddRow(
+                new GroupBox
+                {
+                    Text = "Generate Code",
+                    Padding = new Padding(5),
+                    Content = new TableLayout
+                    {
+                        Spacing = new Size(10, 10),
+                        Rows =
+                        {
+                            new TableRow(
+                                new TableCell(
+                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
+                                    true
+                                )
+                            )
+                        }
+                    }
+                });
+
             
             // XXX: Last element gets scaled vertically
             AddRow(new Label {Text = ""});
