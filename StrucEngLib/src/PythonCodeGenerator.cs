@@ -80,6 +80,8 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         private string PropId(string id) => RemoveSpaces(id) + "_prop";
         private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
         private string DispId(string id) => RemoveSpaces(id) + "_disp";
+        private string EmitIfNotEmpty(string key, string value, string comma = ",") 
+            => String.IsNullOrWhiteSpace(value) ? "": $" {key}={value}{comma}";
 
         private string _nl = Environment.NewLine;
 
