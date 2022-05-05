@@ -161,7 +161,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                     var zz = String.IsNullOrWhiteSpace(p.ZZ) ? "": $" zz={p.ZZ},";
                     var xx = String.IsNullOrWhiteSpace(p.XX) ? "": $" xx={p.XX},";
                     var yy = String.IsNullOrWhiteSpace(p.YY) ? "": $" yy={p.YY},";
-                    b.Append($@"mdl.add(PointLoad(name='{loadId}' {x} {y} {z} {xx} {yy} {zz} ,elements={layersList}))" + _nl);
+                    b.Append($@"mdl.add(PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList}))" + _nl);
                 }
                 loadNameMap.Add(load, loadId);
             }
