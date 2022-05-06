@@ -1,12 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Rhino.DocObjects;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
+using Layer = StrucEngLib.Model.Layer;
 
-// ReSharper disable All
-// @formatter:off
 
 namespace StrucEngLib
 {
@@ -80,154 +81,211 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         private string PropId(string id) => RemoveSpaces(id) + "_prop";
         private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
         private string DispId(string id) => RemoveSpaces(id) + "_disp";
-        private string EmitIfNotEmpty(string key, string value, string comma = ",") 
-            => String.IsNullOrWhiteSpace(value) ? "": $" {key}={value}{comma}";
+
+        private string EmitIfNotEmpty(string key, string value, string comma = ",")
+            => string.IsNullOrWhiteSpace(value) ? "" : $" {key}={value}{comma}";
 
         private string _nl = Environment.NewLine;
 
         public string Generate()
         {
             _loadIdCounter = 0;
-
-            StringBuilder b = new StringBuilder();
-
+            var b = new StringBuilder();
             b.Append(header);
 
-            foreach (var layer in _model.Layers)
+            foreach (var layer in _model.Layers ?? Enumerable.Empty<Layer>())
             {
-                if (layer.LayerType == LayerType.ELEMENT)
-                {
-                    var element = (Element) layer;
-                    var layerId = LayerId(element.GetName());
-                    var layerName = element.GetName();
-                    b.Append(_nl + $@"# == Element {layerName}" + _nl);
-                    b.Append($@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])" + _nl);
+                EmitLayer(layer, b);
+            }
 
-                    var mat = element.ElementMaterialElastic;
-                    var matId = MatElasticId(layerId);
-                    b.Append($@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))" + _nl);
-                    var sectionId = SectionId(layerId);
-                    b.Append($@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " + _nl);
-                    var propId = PropId(layerId);
-                    b.Append($@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" + _nl);
-                    
-                    if (element.LoadConstraint != null) {
-                        var c = element.LoadConstraint;
-                        b.Append($@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " + _nl);
-                    }
-                }
+            var loadNameMap = new Dictionary<Load, string>();
+            foreach (var load in _model.Loads ?? Enumerable.Empty<Load>())
+            {
+                EmitLoad(load, b, loadNameMap);
+            }
 
-                if (layer.LayerType == LayerType.SET)
+            EmitSteps(b, loadNameMap);
+            b.Append(footer);
+            return b.ToString();
+        }
+
+        private void EmitLayer(Layer layer, StringBuilder b)
+        {
+            if (layer.LayerType == LayerType.ELEMENT)
+            {
+                var element = (Element) layer;
+                var layerId = LayerId(element.GetName());
+                var layerName = element.GetName();
+                b.Append(_nl + $@"# == Element {layerName}" + _nl);
+                b.Append(
+                    $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])" +
+                    _nl);
+
+                var mat = element.ElementMaterialElastic;
+                var matId = MatElasticId(layerId);
+                b.Append($@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))" + _nl);
+                var sectionId = SectionId(layerId);
+                b.Append(
+                    $@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " +
+                    _nl);
+                var propId = PropId(layerId);
+                b.Append(
+                    $@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" +
+                    _nl);
+
+                if (element.LoadConstraint != null)
                 {
-                    var set = (Set) layer;
-                    var setName = set.GetName();
-                    var setId = SetId(setName);
-                    b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
-                    b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
-                    var dispId = DispId(setId);
-                    b.Append($@"mdl.add([PinnedDisplacement(name='{dispId}', nodes='{setName}')]) " + _nl);
+                    var c = element.LoadConstraint;
+                    b.Append(
+                        $@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " +
+                        _nl);
                 }
             }
-            
-            Dictionary<Load, string> loadNameMap = new Dictionary<Load, string>();
-            foreach (var load in _model.Loads)
+
+            if (layer.LayerType == LayerType.SET)
             {
-                var loadId = "";
-                if (load.LoadType == LoadType.Area)
+                var set = (Set) layer;
+                var setName = set.GetName();
+                var setId = SetId(setName);
+                b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
+                b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
+                var dispId = DispId(setId);
+                b.Append($@"mdl.add([PinnedDisplacement(name='{dispId}', nodes='{setName}')]) " + _nl);
+            }
+        }
+
+        private void EmitLoad(Load load, StringBuilder b, Dictionary<Load, string> loadNameMap)
+        {
+            var loadId = "";
+            switch (load.LoadType)
+            {
+                case LoadType.Area:
                 {
                     var area = (LoadArea) load;
-                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
+                    var layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"# == Load Area {layersList}" + _nl);
                     loadId = LoadId() + "_area";
-                    var z = String.IsNullOrWhiteSpace(area.Z) ? "": $" z={area.Z},";
-                    var x = String.IsNullOrWhiteSpace(area.X) ? "": $" x={area.X},";
-                    var y = String.IsNullOrWhiteSpace(area.Y) ? "": $" y={area.Y},";
-                    b.Append($@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, {z} {x} {y} axes='{area.Axes}')) " + _nl);
+                    var z = EmitIfNotEmpty("z", area.Z);
+                    var x = EmitIfNotEmpty("x", area.X);
+                    var y = EmitIfNotEmpty("y", area.Y);
+                    b.Append(
+                        $@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, {z} {x} {y} axes='{area.Axes}')) " +
+                        _nl);
+                    break;
                 }
-                else if (load.LoadType == LoadType.Gravity)
+                case LoadType.Gravity:
                 {
                     var g = (LoadGravity) load;
                     string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"#== Load Gravity {layersList}" + _nl);
                     loadId = LoadId() + "_gravity";
-                    b.Append($@"mdl.add(GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList}))" + _nl);
+                    b.Append(
+                        $@"mdl.add(GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList}))" +
+                        _nl);
+                    break;
                 }
-                else if (load.LoadType == LoadType.Point) {
+                case LoadType.Point:
+                {
                     var p = (LoadPoint) load;
                     string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
                     b.Append(_nl + $@"#== Load Point {layersList}" + _nl);
                     loadId = LoadId() + "_point";
-                    var z = String.IsNullOrWhiteSpace(p.Z)   ? "": $" z={p.Z},";
-                    var x = String.IsNullOrWhiteSpace(p.X)   ? "": $" x={p.X},";
-                    var y = String.IsNullOrWhiteSpace(p.Y)   ? "": $" y={p.Y},";
-                    var zz = String.IsNullOrWhiteSpace(p.ZZ) ? "": $" zz={p.ZZ},";
-                    var xx = String.IsNullOrWhiteSpace(p.XX) ? "": $" xx={p.XX},";
-                    var yy = String.IsNullOrWhiteSpace(p.YY) ? "": $" yy={p.YY},";
-                    b.Append($@"mdl.add(PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList}))" + _nl);
+                    var z = EmitIfNotEmpty("z", p.Z);
+                    var x = EmitIfNotEmpty("x", p.X);
+                    var y = EmitIfNotEmpty("y", p.Y);
+                    var zz = EmitIfNotEmpty("zz", p.ZZ);
+                    var xx = EmitIfNotEmpty("xx", p.XX);
+                    var yy = EmitIfNotEmpty("yy", p.YY);
+                    b.Append(
+                        $@"mdl.add(PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList}))" +
+                        _nl);
+                    break;
                 }
-                loadNameMap.Add(load, loadId);
+                default:
+                    // XXX: Ignore rest
+                    break;
             }
-            
+
+            loadNameMap.Add(load, loadId);
+        }
+
+        private void EmitSteps(StringBuilder b, Dictionary<Load, string> loadNameMap)
+        {
             b.Append(_nl + $@"# == Steps" + _nl);
             var stepCounter = 0;
             /*
              * stepPair: <float order as key, List<Steps> which belong to same order
              * Order is already by key (asc)
-             */   
+             */
             var stepOrderList = new Dictionary<string, List<Model.Step>>();
             foreach (var stepPair in GroupSteps(_model))
             {
                 var stepName = "step_" + stepCounter++;
                 stepOrderList.Add(stepName, stepPair.Value);
-                List<string> loadsNames = new List<string>();
-                List<string> dispNames = new List<string>();
+                var loadsNames = new List<string>();
+                var dispNames = new List<string>();
                 foreach (var stepEntry in stepPair.Value)
                 {
-                    if (stepEntry.StepType == StepType.Load) {
-                        loadsNames.Add(loadNameMap[stepEntry.Load]);
-                    }
-                    else if (stepEntry.StepType == StepType.Set)
+                    switch (stepEntry.StepType)
                     {
-                        dispNames.Add(stepEntry.Set.Name);
+                        case StepType.Load:
+                            loadsNames.Add(loadNameMap[stepEntry.Load]);
+                            break;
+                        case StepType.Set:
+                            dispNames.Add(stepEntry.Set.Name);
+                            break;
+                        default:
+                            // XXX: Ignore rest
+                            break;
                     }
                 }
                 var loadStr = "";
                 var dispStr = "";
-                if (loadsNames.Count > 0) {
+                if (loadsNames.Count > 0)
+                {
                     loadStr = $" loads={StringUtils.ListToPyStr(loadsNames, name => name)}, ";
                 }
-                if (dispNames.Count > 0) {
+
+                if (dispNames.Count > 0)
+                {
                     dispStr = $" displacements={StringUtils.ListToPyStr(dispNames, name => name)}, ";
                 }
+
                 b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
             }
+
             b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
-            
-            b.Append(footer);
-            return b.ToString();
         }
-        
+
+
         /*
          * Given A workbench, group steps according to their order (float).
          * Result is a List of steps belonging to the same order-id, ordered by order-id
          */
-        private SortedDictionary<float, List<Model.Step>> GroupSteps(Workbench model) {
+        private SortedDictionary<float, List<Model.Step>> GroupSteps(Workbench model)
+        {
             var steps = new SortedDictionary<float, List<Model.Step>>();
             foreach (var step in model.Steps)
             {
-                try{
+                try
+                {
                     var order = float.Parse(step.Order);
                     if (String.IsNullOrEmpty(step.Order)) continue;
-                    if (steps.ContainsKey(order)) {
+                    if (steps.ContainsKey(order))
+                    {
                         steps[order].Add(step);
-                    } else {
-                        steps.Add(order, new List<Model.Step>(){step});
                     }
-                } catch(Exception e) {
+                    else
+                    {
+                        steps.Add(order, new List<Model.Step>() {step});
+                    }
+                }
+                catch (Exception)
+                {
                     // XXX: We ignore invalid step numbers
                 }
             }
-            
+
             return steps;
         }
     }
