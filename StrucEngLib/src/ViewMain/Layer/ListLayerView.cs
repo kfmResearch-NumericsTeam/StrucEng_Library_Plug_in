@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Eto.Drawing;
 using Eto.Forms;
+using StrucEngLib.Analysis;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 using StrucEngLib.Views;
@@ -62,26 +63,13 @@ namespace StrucEngLib
             _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible", DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
         }
-
-        protected Control GenerateTitle(string text)
-        {
-            var s = new Label().Font.Size;
-            return new ViewSeparator()
-            {
-                Text = text,
-                Label =
-                {
-                    Font = new Font(FontFamilies.Sans, s, FontStyle.Bold)  
-                }
-            };
-        }
-
+        
         protected void BuildGui()
         {
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
             
-            AddRow(GenerateTitle("Properties and Constraints"));
+            AddRow(UiUtils.GenerateTitle("Step 1: Define Parts and Material"));
             AddRow(
                 new GroupBox
                 {
@@ -188,19 +176,21 @@ namespace StrucEngLib
                     }
                 ));
 
-            AddRow(GenerateTitle("Load Constraints"));
+            AddRow(UiUtils.GenerateTitle("Step 2: Define Material"));
+            
+            AddRow(UiUtils.GenerateTitle("Step 3: Define Constraints"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
             
-            AddRow(GenerateTitle("Loads"));
+            AddRow(UiUtils.GenerateTitle("Step 4: Define Loads"));
             AddRow(new ListLoadView(_vmListLoad));
             
-            AddRow(GenerateTitle("Steps"));
+            AddRow(UiUtils.GenerateTitle("Step 5: Define Analysis Steps"));
             AddRow(new StepView(_vmListStep));
+
+            AddRow(new AnalysisView(new AnalysisViewModel(_vm)));
             
-            AddRow(GenerateTitle("Output"));
-            AddRow(new Label {Text = "TODO"});
+            AddRow(UiUtils.GenerateTitle("Step 6: Run Analysis"));
             
-            AddRow(GenerateTitle("Analyse"));
             AddRow(
                 new GroupBox
                 {

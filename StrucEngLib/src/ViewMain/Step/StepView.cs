@@ -74,7 +74,7 @@ namespace StrucEngLib
             AddRow(
                 (_gbSelectSteps = new GroupBox
                 {
-                    Text = "Select Steps",
+                    Text = "Set Ordering",
                     Padding = new Padding(5),
                     Content = (_stepListLayout = new DynamicLayout()
                     {
