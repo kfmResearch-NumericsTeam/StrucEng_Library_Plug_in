@@ -1,6 +1,6 @@
 namespace StrucEngLib.Model
 {
-    public class SetDisplacement
+    public class SetGeneralDisplacement
     {
         public string Ux { get; set; }
         public string Uy { get; set; }
@@ -11,7 +11,7 @@ namespace StrucEngLib.Model
 
         public override string ToString()
         {
-            return $"Displacement: {Ux}, {Uy}, {Uz}, {Rotx}, {Rotz}, {Rotx}";
+            return $"General Displacement: {Ux}, {Uy}, {Uz}, {Rotx}, {Rotz}, {Rotx}";
         }
     }
 }

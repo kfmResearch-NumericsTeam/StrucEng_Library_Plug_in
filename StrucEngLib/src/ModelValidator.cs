@@ -53,7 +53,7 @@ namespace StrucEngLib
                     if (layer.LayerType == LayerType.SET)
                     {
                         var set = (Set) layer;
-                        if (set.SetDisplacement == null)
+                        if (set.SetGeneralDisplacement == null)
                         {
                             msgs.Add("No Displacement for Layer " + set.GetName());
                         }

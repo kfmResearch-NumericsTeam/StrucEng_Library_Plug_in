@@ -2,7 +2,7 @@ namespace StrucEngLib.Model
 {
     public class Set : Layer
     {
-        public SetDisplacement SetDisplacement { get; set; }
+        public SetGeneralDisplacement SetGeneralDisplacement { get; set; }
 
         public string Name { get; set; }
 
@@ -20,7 +20,7 @@ namespace StrucEngLib.Model
 
         public string PrettyPrint()
         {
-            return "Set: " + Name + ", " + SetDisplacement;
+            return "Set: " + Name + ", " + SetGeneralDisplacement;
         }
     }
 }

@@ -150,7 +150,19 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                 b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
                 b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
                 var dispId = DispId(setId);
-                b.Append($@"mdl.add([PinnedDisplacement(name='{dispId}', nodes='{setName}')]) " + _nl);
+
+                if (set.SetGeneralDisplacement != null)
+                {
+                    var general = set.SetGeneralDisplacement;
+                    var args = new StringBuilder();
+                    args.Append(EmitIfNotEmpty("x", set.SetGeneralDisplacement.Ux))
+                        .Append(EmitIfNotEmpty("y", set.SetGeneralDisplacement.Uy))
+                        .Append(EmitIfNotEmpty("z", set.SetGeneralDisplacement.Uz))
+                        .Append(EmitIfNotEmpty("xx", set.SetGeneralDisplacement.Rotx))
+                        .Append(EmitIfNotEmpty("yy", set.SetGeneralDisplacement.Roty))
+                        .Append(EmitIfNotEmpty("zz", set.SetGeneralDisplacement.Rotz));
+                    b.Append($@"mdl.add([GeneralDisplacement(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
+                }
             }
         }
 
@@ -239,6 +251,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                             break;
                     }
                 }
+
                 var loadStr = "";
                 var dispStr = "";
                 if (loadsNames.Count > 0)
