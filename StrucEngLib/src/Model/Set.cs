@@ -2,6 +2,8 @@ namespace StrucEngLib.Model
 {
     public class Set : Layer
     {
+        public SetDisplacementType SetDisplacementType { get; set; } = SetDisplacementType.NONE;
+
         public SetGeneralDisplacement SetGeneralDisplacement { get; set; }
 
         public string Name { get; set; }

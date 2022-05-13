@@ -1,16 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Rhino.DocObjects;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
-using Layer = StrucEngLib.Model.Layer;
 
 
 namespace StrucEngLib
 {
+    
+    
     /// <summary>
     /// Code generator to generate python code based on UI input.
     /// </summary>
@@ -20,15 +19,27 @@ namespace StrucEngLib
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
 from compas_fea.structure import ElementProperties as Properties
-from compas_fea.structure import GeneralDisplacement
+
 from compas_fea.structure import GeneralStep
+
 from compas_fea.structure import GravityLoad
 from compas_fea.structure import AreaLoad
 from compas_fea.structure import PointLoad
+
+
+from compas_fea.structure import GeneralDisplacement
+from compas_fea.structure import FixedDisplacement
+from compas_fea.structure import FixedDisplacementXX
+from compas_fea.structure import FixedDisplacementYY
+from compas_fea.structure import FixedDisplacementZZ
 from compas_fea.structure import PinnedDisplacement
 from compas_fea.structure import RollerDisplacementX
 from compas_fea.structure import RollerDisplacementY
+from compas_fea.structure import RollerDisplacementZ
 from compas_fea.structure import RollerDisplacementXY
+from compas_fea.structure import RollerDisplacementYZ
+from compas_fea.structure import RollerDisplacementXZ
+
 from compas_fea.structure import ShellSection
 from compas_fea.structure import Structure
 
@@ -113,57 +124,107 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
         {
             if (layer.LayerType == LayerType.ELEMENT)
             {
-                var element = (Element) layer;
-                var layerId = LayerId(element.GetName());
-                var layerName = element.GetName();
-                b.Append(_nl + $@"# == Element {layerName}" + _nl);
-                b.Append(
-                    $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])" +
-                    _nl);
-
-                var mat = element.ElementMaterialElastic;
-                var matId = MatElasticId(layerId);
-                b.Append($@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))" + _nl);
-                var sectionId = SectionId(layerId);
-                b.Append(
-                    $@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " +
-                    _nl);
-                var propId = PropId(layerId);
-                b.Append(
-                    $@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" +
-                    _nl);
-
-                if (element.LoadConstraint != null)
-                {
-                    var c = element.LoadConstraint;
-                    b.Append(
-                        $@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " +
-                        _nl);
-                }
+                EmitElement(layer, b);
             }
 
             if (layer.LayerType == LayerType.SET)
             {
-                var set = (Set) layer;
-                var setName = set.GetName();
-                var setId = SetId(setName);
-                b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
-                b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
-                var dispId = DispId(setId);
+                EmitDisplacement(layer, b);
+            }
+        }
 
-                if (set.SetGeneralDisplacement != null)
-                {
-                    var general = set.SetGeneralDisplacement;
-                    var args = new StringBuilder();
+        private void EmitElement(Layer layer, StringBuilder b)
+        {
+            var element = (Element) layer;
+            var layerId = LayerId(element.GetName());
+            var layerName = element.GetName();
+            b.Append(_nl + $@"# == Element {layerName}" + _nl);
+            b.Append(
+                $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])" +
+                _nl);
+
+            var mat = element.ElementMaterialElastic;
+            var matId = MatElasticId(layerId);
+            b.Append($@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))" + _nl);
+            var sectionId = SectionId(layerId);
+            b.Append(
+                $@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " +
+                _nl);
+            var propId = PropId(layerId);
+            b.Append(
+                $@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" +
+                _nl);
+
+            if (element.LoadConstraint != null)
+            {
+                var c = element.LoadConstraint;
+                b.Append(
+                    $@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " +
+                    _nl);
+            }
+        }
+
+        private void EmitDisplacement(Layer layer, StringBuilder b)
+        {
+            var set = (Set) layer;
+            var setName = set.GetName();
+            var setId = SetId(setName);
+            b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
+            b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
+            var dispId = DispId(setId);
+
+            var args = new StringBuilder();
+            var name = "";
+            switch (set.SetDisplacementType)
+            {
+                case SetDisplacementType.GENERAL:
+                    name = "GeneralDisplacement";
                     args.Append(EmitIfNotEmpty("x", set.SetGeneralDisplacement.Ux))
                         .Append(EmitIfNotEmpty("y", set.SetGeneralDisplacement.Uy))
                         .Append(EmitIfNotEmpty("z", set.SetGeneralDisplacement.Uz))
                         .Append(EmitIfNotEmpty("xx", set.SetGeneralDisplacement.Rotx))
                         .Append(EmitIfNotEmpty("yy", set.SetGeneralDisplacement.Roty))
                         .Append(EmitIfNotEmpty("zz", set.SetGeneralDisplacement.Rotz));
-                    b.Append($@"mdl.add([GeneralDisplacement(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
-                }
+                    break;
+                case SetDisplacementType.FIXED:
+                    name = "FixedDisplacement";
+                    break;
+                case SetDisplacementType.PINNED:
+                    name = "PinnedDisplacement";
+                    break;
+                case SetDisplacementType.FIXED_XX:
+                    name = "FixedDisplacementXX";
+                    break;
+                case SetDisplacementType.FIXED_YY:
+                    name = "FixedDisplacementYY";
+                    break;
+                case SetDisplacementType.FIXED_ZZ:
+                    name = "FixedDisplacementZZ";
+                    break;
+                case SetDisplacementType.ROLLER_X:
+                    name = "RollerDisplacementX";
+                    break;
+                case SetDisplacementType.ROLLER_Y:
+                    name = "RollerDisplacementY";
+                    break;
+                case SetDisplacementType.ROLLER_Z:
+                    name = "RollerDisplacementZ";
+                    break;
+                case SetDisplacementType.ROLLER_XY:
+                    name = "RollerDisplacementXY";
+                    break;
+                case SetDisplacementType.ROLLER_YZ:
+                    name = "RollerDisplacementYZ";
+                    break;
+                case SetDisplacementType.ROLLER_XZ:
+                    name = "RollerDisplacementXZ";
+                    break;
+                case SetDisplacementType.NONE:
+                // XXX: Must have a displacement
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+            b.Append($@"mdl.add([{name}(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
         }
 
         private void EmitLoad(Load load, StringBuilder b, Dictionary<Load, string> loadNameMap)

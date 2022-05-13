@@ -5,13 +5,13 @@ using Eto.Forms;
 namespace StrucEngLib
 {
     /// <summary>
-    /// View to show information about displacements
+    /// View to show information about general displacements
     /// </summary>
     public class SetGeneralDisplacementView : DynamicLayout
     {
-        private readonly LayerSetGeneralDisplacementViewModel _vm;
+        private readonly SetGeneralDisplacementViewModel _vm;
 
-        public SetGeneralDisplacementView(LayerSetGeneralDisplacementViewModel vm)
+        public SetGeneralDisplacementView(SetGeneralDisplacementViewModel vm)
         {
             _vm = vm;
             Padding = new Padding {Top = 5, Left = 10, Bottom = 0, Right = 0};

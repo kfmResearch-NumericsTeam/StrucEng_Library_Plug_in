@@ -74,9 +74,13 @@ namespace StrucEngLib
         private void OnDeleteLayer()
         {
             if (SelectedLayer == null) return;
-
-            _layers.Remove(SelectedLayer);
+            /*
+             * XXX: Observable collection sets SelectedLayer = null on Remove,
+             * So it is important to first remove it from Model before we remove it from viewmodel.
+             */
             Model.Layers.Remove(SelectedLayer);
+            Layers.Remove(SelectedLayer);
+         
             SelectedLayer = null;
             OnPropertyChanged(nameof(Layers));
         }
@@ -129,7 +133,7 @@ namespace StrucEngLib
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
-                
+
                 // Select Layer in doc
                 if (_selectedLayer != null)
                 {
@@ -138,7 +142,10 @@ namespace StrucEngLib
             }
         }
 
-        public ObservableCollection<Layer> Layers => _layers;
+        public ObservableCollection<Layer> Layers
+        {
+            get { return _layers; }
+        }
 
         public int LayerToAddType
         {
@@ -159,7 +166,6 @@ namespace StrucEngLib
                 if (_layerToAdd == value) return;
                 _layerToAdd = value;
                 OnPropertyChanged();
-                //CommandOnAddLayer.UpdateCanExecute();
             }
         }
     }

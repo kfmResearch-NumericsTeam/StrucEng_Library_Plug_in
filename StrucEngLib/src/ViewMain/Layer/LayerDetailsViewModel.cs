@@ -12,6 +12,7 @@ namespace StrucEngLib
     /// </summary>
     public class LayerDetailsViewModel : ViewModelBase
     {
+        private readonly MainViewModel _mainVm;
         private bool _layerDetailViewVisible;
 
         public bool LayerDetailViewVisible
@@ -41,6 +42,7 @@ namespace StrucEngLib
 
         public LayerDetailsViewModel(MainViewModel mainVm)
         {
+            _mainVm = mainVm;
             _listLayerVm = mainVm.ListLayerVm;
             _listLayerVm.PropertyChanged += ListLayerVmOnPropertyChanged;
         }
@@ -80,8 +82,8 @@ namespace StrucEngLib
                 Padding = new Padding(5),
                 Spacing = new Size(5, 5),
             };
-            var setDisplacementVm = new LayerDisplacementViewModel(_listLayerVm);
-            layout.Rows.Add(new LayerDisplacementView(setDisplacementVm));
+            var setVm = new SetViewModel(_mainVm);
+            layout.Rows.Add(new SetView(setVm));
             return layout;
         }
 

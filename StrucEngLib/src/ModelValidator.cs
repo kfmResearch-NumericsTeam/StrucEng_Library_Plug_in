@@ -14,7 +14,6 @@ namespace StrucEngLib
         public List<string> ValidateModel(Workbench model)
         {
             var msgs = new List<string>();
-
             if (model.Layers == null || model.Layers.Count == 0)
             {
                 msgs.Add("No Layers added");
@@ -53,9 +52,20 @@ namespace StrucEngLib
                     if (layer.LayerType == LayerType.SET)
                     {
                         var set = (Set) layer;
-                        if (set.SetGeneralDisplacement == null)
+                        if (set.SetDisplacementType == SetDisplacementType.NONE)
                         {
                             msgs.Add("No Displacement for Layer " + set.GetName());
+                            if (set.SetGeneralDisplacement != null)
+                            {
+                                msgs.Add("Invalid state: general displacement set for displacement which has no data" +
+                                         set.GetName());
+                            }
+                        }
+
+                        if (set.SetDisplacementType == SetDisplacementType.GENERAL &&
+                            set.SetGeneralDisplacement == null)
+                        {
+                            msgs.Add("General displacement cannot have no data set: " + set.GetName());
                         }
                     }
                 }

@@ -6,12 +6,13 @@ namespace StrucEngLib.Model
 {
     public class Workbench
     {
-        public List<Layer> Layers { get; set; } = new List<Layer>();
+        public List<Layer> Layers { get; set; }
         public List<Load> Loads { get; set; } = new List<Load>();
         public List<Step> Steps { get; set; } = new List<Step>();
         
         public Workbench()
         {
+            Layers = new List<Layer>();
         }
 
         public Element AddElement(string name)
