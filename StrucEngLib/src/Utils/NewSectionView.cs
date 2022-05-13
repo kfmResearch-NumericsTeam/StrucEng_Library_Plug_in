@@ -26,7 +26,9 @@ namespace StrucEngLib
             _db.SelectedKeyBinding.BindDataContext(
             Binding.Property((NewSectionViewModel<ENUM> m) => m.EntryName).EnumToString(),
             defaultContextValue: string.Empty);
+            
             DataContext = _vm;
+            
         }
 
         protected void BuildGui()
@@ -51,6 +53,10 @@ namespace StrucEngLib
                 Visible = true
             };
 
+            if (_vm.EntryView != null)
+            {
+                _propertyLayout.Add(_vm.EntryView);
+            }
             _propertyLayout.Bind<Control>("Content", _vm, "EntryView",
                 DualBindingMode.TwoWay);
 

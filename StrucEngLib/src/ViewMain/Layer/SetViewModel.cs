@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Eto.Forms;
+using Rhino;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
