@@ -8,7 +8,7 @@ namespace StrucEngLib
     /// <summary>
     /// Vm for Displacement
     /// </summary>
-    public class LayerDisplacementViewModel : ViewModelBase
+    public class LayerSetGeneralDisplacementViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
 
@@ -128,7 +128,7 @@ namespace StrucEngLib
             _ignoreStoreVmToModel = false;
         }
 
-        public LayerDisplacementViewModel(ListLayerViewModel listLayerVm)
+        public LayerSetGeneralDisplacementViewModel(ListLayerViewModel listLayerVm)
         {
             _listLayerVm = listLayerVm;
             _listLayerVm.PropertyChanged += ListLayerVmOnPropertyChanged;
