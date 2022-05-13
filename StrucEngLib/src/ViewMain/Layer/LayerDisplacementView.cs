@@ -21,12 +21,12 @@ namespace StrucEngLib
                 Spacing = new Size(5, 1)
             };
 
-            UiUtils.AddLabelTextRow(layout, _vm, "x", "Ux", "");
-            UiUtils.AddLabelTextRow(layout, _vm, "y", "Uy", "");
-            UiUtils.AddLabelTextRow(layout, _vm, "z", "Uz", "");
-            UiUtils.AddLabelTextRow(layout, _vm, "xx", "Rotx", "");
-            UiUtils.AddLabelTextRow(layout, _vm, "yy", "Roty", "");
-            UiUtils.AddLabelTextRow(layout, _vm, "zz", "Rotz", "");
+            UiUtils.AddLabelTextRow(layout, _vm, "x", "Ux", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "y", "Uy", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "z", "Uz", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "xx", "Rotx", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "yy", "Roty", "0");
+            UiUtils.AddLabelTextRow(layout, _vm, "zz", "Rotz", "0");
 
             Add(new SelectionView("Displacements",
                 new List<string>() {"General Displacement"},
