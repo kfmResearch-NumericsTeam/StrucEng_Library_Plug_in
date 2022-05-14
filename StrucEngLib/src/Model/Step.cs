@@ -13,9 +13,7 @@ namespace StrucEngLib.Model
     public class Step
     {
         public string Order { get; set; }
-
         public StepType StepType { get; set; }
-
         public Load Load { get; set; }
         public Set Set { get; set; }
 

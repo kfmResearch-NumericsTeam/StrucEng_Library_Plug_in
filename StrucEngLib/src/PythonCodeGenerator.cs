@@ -8,8 +8,8 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-    
-    
+
+
     /// <summary>
     /// Code generator to generate python code based on UI input.
     /// </summary>
@@ -224,6 +224,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             b.Append($@"mdl.add([{name}(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
         }
 
@@ -291,7 +292,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
              * Order is already by key (asc)
              */
             var stepOrderList = new Dictionary<string, List<Model.Step>>();
-            foreach (var stepPair in GroupSteps(_model))
+            foreach (var stepPair in _model.GroupSteps(_model))
             {
                 var stepName = "step_" + stepCounter++;
                 stepOrderList.Add(stepName, stepPair.Value);
@@ -329,38 +330,6 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             }
 
             b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
-        }
-
-
-        /*
-         * Given A workbench, group steps according to their order (float).
-         * Result is a List of steps belonging to the same order-id, ordered by order-id
-         */
-        private SortedDictionary<float, List<Model.Step>> GroupSteps(Workbench model)
-        {
-            var steps = new SortedDictionary<float, List<Model.Step>>();
-            foreach (var step in model.Steps)
-            {
-                try
-                {
-                    var order = float.Parse(step.Order);
-                    if (String.IsNullOrEmpty(step.Order)) continue;
-                    if (steps.ContainsKey(order))
-                    {
-                        steps[order].Add(step);
-                    }
-                    else
-                    {
-                        steps.Add(order, new List<Model.Step>() {step});
-                    }
-                }
-                catch (Exception)
-                {
-                    // XXX: We ignore invalid step numbers
-                }
-            }
-
-            return steps;
         }
     }
 }

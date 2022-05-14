@@ -5,7 +5,7 @@ using Rhino;
 
 namespace StrucEngLib.Analysis
 {
-    /// <summary></summary>
+    /// <summary>View Model for Compas Analysis Settings </summary>
     public class AnalysisViewModel : ViewModelBase
     {
         private readonly MainViewModel _vm;
@@ -49,16 +49,6 @@ namespace StrucEngLib.Analysis
             AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 1"});
             AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 2"});
             AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 3"});
-        }
-
-        public void CellDoubleClick(object sender, GridCellMouseEventArgs e)
-        {
-            if (e != null && e.Row >= 0 && e.Row < AnalysisViewItems.Count)
-            {
-                var i = AnalysisViewItems[e.Row];
-                RhinoApp.WriteLine("Double clicked {0}", i.StepName);
-                i.Include = !i.Include;
-            }
         }
     }
 }
