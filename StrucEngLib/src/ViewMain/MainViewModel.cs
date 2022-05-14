@@ -1,5 +1,6 @@
 using Eto.Forms;
 using Rhino.UI;
+using StrucEngLib.Analysis;
 using StrucEngLib.Step;
 
 namespace StrucEngLib
@@ -14,6 +15,7 @@ namespace StrucEngLib
         public ListLoadViewModel ListLoadVm { get; set; }
         public ListStepViewModel ListStepVm { get; set; }
         public ErrorViewModel ErrorVm { get; set; }
+        public AnalysisViewModel AnalysisVm { get; set; }
         
         public MainViewModel()
         {
@@ -22,6 +24,7 @@ namespace StrucEngLib
             ListLoadVm = new ListLoadViewModel(this);
             ListStepVm = new ListStepViewModel(this);
             ErrorVm = new ErrorViewModel();
+            AnalysisVm = new AnalysisViewModel(this);
         }
     }
 }

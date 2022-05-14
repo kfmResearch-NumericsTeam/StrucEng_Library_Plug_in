@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using Eto.Drawing;
 using Eto.Forms;
@@ -17,7 +18,6 @@ namespace StrucEngLib
     /// </summary>
     public class ListLayerView : DynamicLayout
     {
-        
         private Button _btnInspectPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
@@ -41,7 +41,7 @@ namespace StrucEngLib
             _vmDetailView = vm.DetailLayerVm;
             _vmListStep = vm.ListStepVm;
             _vmListLoad = vm.ListLoadVm;
-            
+
             BuildGui();
             BindGui();
         }
@@ -52,23 +52,24 @@ namespace StrucEngLib
             _btnInspectPython.Command = _vmListLayer.CommandOnInspectCode;
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
-            
+
             _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
             _dropdownLayers.Bind<Layer>("SelectedValue", _vmListLayer, "SelectedLayer", DualBindingMode.TwoWay);
             _rdlElementSetSelection.Bind<int>("SelectedIndex", _vmListLayer, "LayerToAddType", DualBindingMode.TwoWay);
             _gbSelectLayer.Bind<bool>("Visible", _vmListLayer, "SelectLayerViewVisible", DualBindingMode.TwoWay);
-            
-            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible", DualBindingMode.TwoWay);
+
+            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible",
+                DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
         }
-        
+
         protected void BuildGui()
         {
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
-            
+
             AddRow(UiUtils.GenerateTitle("Step 1: Define Parts and Material"));
             AddRow(
                 new GroupBox
@@ -156,9 +157,9 @@ namespace StrucEngLib
                                         {
                                             new TableCell((_dropdownLayers = new ListBox()
                                             {
-                                                
                                             }), true),
-                                            new TableCell((TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
+                                            new TableCell(
+                                                (TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
                                         }
                                     },
                                 }
@@ -177,20 +178,20 @@ namespace StrucEngLib
                 ));
 
             AddRow(UiUtils.GenerateTitle("Step 2: Define Material"));
-            
+
             AddRow(UiUtils.GenerateTitle("Step 3: Define Constraints"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
-            
+
             AddRow(UiUtils.GenerateTitle("Step 4: Define Loads"));
             AddRow(new ListLoadView(_vmListLoad));
-            
+
             AddRow(UiUtils.GenerateTitle("Step 5: Define Analysis Steps"));
             AddRow(new StepView(_vmListStep));
 
             AddRow(new AnalysisView(new AnalysisViewModel(_vm)));
-            
+
             AddRow(UiUtils.GenerateTitle("Step 6: Run Analysis"));
-            
+
             AddRow(
                 new GroupBox
                 {
@@ -210,10 +211,6 @@ namespace StrucEngLib
                         }
                     }
                 });
-
-            
-            // XXX: Last element gets scaled vertically
-            AddRow(new Label {Text = ""});
         }
     }
 }
