@@ -7,13 +7,14 @@ namespace StrucEngLib.Model
 {
     public class Workbench
     {
-        public List<Layer> Layers { get; set; }
+        public List<Layer> Layers { get; set; } = new List<Layer>();
         public List<Load> Loads { get; set; } = new List<Load>();
         public List<Step> Steps { get; set; } = new List<Step>();
 
+        public List<AnalysisSetting> AnalysisSettings { get; set; } = new List<AnalysisSetting>();
+
         public Workbench()
         {
-            Layers = new List<Layer>();
         }
 
         public Element AddElement(string name)
@@ -80,5 +81,4 @@ namespace StrucEngLib.Model
             return steps;
         }
     }
-
 }

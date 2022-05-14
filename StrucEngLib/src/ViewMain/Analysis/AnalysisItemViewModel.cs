@@ -1,12 +1,17 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Eto.Forms;
+using StrucEngLib.Model;
 
 namespace StrucEngLib.Analysis
 {
     /// <summary></summary>
     public class AnalysisItemViewModel : ViewModelBase
     {
+        public AnalysisItemViewModel()
+        {
+        } 
+        
         private string _stepName;
 
         public string StepName

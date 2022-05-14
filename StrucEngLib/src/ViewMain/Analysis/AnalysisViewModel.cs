@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Eto.Forms;
 using Rhino;
+using StrucEngLib.ViewMain.Step;
 
 namespace StrucEngLib.Analysis
 {
@@ -11,6 +12,8 @@ namespace StrucEngLib.Analysis
         private readonly MainViewModel _vm;
 
         public ObservableCollection<AnalysisItemViewModel> AnalysisViewItems { get; }
+
+        private Dictionary<string, AnalysisItemViewModel> _analysisViewItemsMap;
 
         private AnalysisItemViewModel _selectedItem;
 
@@ -42,13 +45,51 @@ namespace StrucEngLib.Analysis
             }
         }
 
+        private HashSet<string> stepNames = new HashSet<string>();
+
         public AnalysisViewModel(MainViewModel vm)
         {
             _vm = vm;
+            _analysisViewItemsMap = new Dictionary<string, AnalysisItemViewModel>();
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
-            AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 1"});
-            AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 2"});
-            AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 3"});
+            if (vm.ListLayerVm.Model.AnalysisSettings != null)
+            {
+                foreach (var s in vm.ListLayerVm.Model.AnalysisSettings)
+                {
+                    stepNames.Add(s.StepId);
+                }
+            }
+
+            // vm.ListStepVm.Steps.CollectionChanged += (sender, args) =>
+            // {
+            //     if (args.NewItems != null)
+            //     {
+            //         foreach (var i in args.NewItems)
+            //         {
+            //             var step = (SingleStepViewModel) i;
+            //             AnalysisViewItems.Add(new AnalysisItemViewModel
+            //             {
+            //                 StepName = step.Order
+            //             });
+            //         }
+            //     }
+                
+                // if (args.OldItems != null)
+                // {
+                //     foreach (var i in args.OldItems)
+                //     {
+                //         var step = (SingleStepViewModel) i;
+                //         AnalysisViewItems.Add(new AnalysisItemViewModel
+                //         {
+                //             StepName = step.Order
+                //         });
+                //     }
+                // }
+            // };
+
+            // AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 1"});
+            // AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 2"});
+            // AnalysisViewItems.Add(new AnalysisItemViewModel() {StepName = "Step 3"});
         }
     }
 }
