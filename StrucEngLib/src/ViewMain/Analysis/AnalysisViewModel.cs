@@ -16,7 +16,7 @@ namespace StrucEngLib.Analysis
 
         public bool SelectedItemVisible
         {
-            get => SelectedItem != null;
+            get => SelectedItem != null && SelectedItem.Include == true;
         }
 
         public AnalysisItemViewModel SelectedItem
@@ -27,8 +27,16 @@ namespace StrucEngLib.Analysis
                 _selectedItem = value;
                 if (_selectedItem != null)
                 {
-                    RhinoApp.WriteLine("{0}", _selectedItem.StepName);
+                    // XXX: We update SelectedItemVisible if include flag is changed
+                    _selectedItem.PropertyChanged += (sender, args) =>
+                    {
+                        if (args.PropertyName == nameof(_selectedItem.Include))
+                        {
+                            OnPropertyChanged(nameof(SelectedItemVisible));
+                        }
+                    };
                 }
+
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
             }

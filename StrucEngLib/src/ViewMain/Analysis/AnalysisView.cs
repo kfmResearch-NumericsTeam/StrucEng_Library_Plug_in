@@ -69,7 +69,7 @@ namespace StrucEngLib.Analysis
             _grid.Columns.Add(new GridColumn()
             {
                 HeaderText = "Include\t",
-                Editable = false,
+                Editable = true,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new CheckBoxCell()
                 {
