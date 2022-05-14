@@ -5,7 +5,7 @@ using Eto.Forms;
 namespace StrucEngLib.Analysis
 {
     /// <summary></summary>
-    public class AnalysisTreeNodeItem : TreeGridItem, INotifyPropertyChanged
+    public class AnalysisItem : ViewModelBase
     {
         private string _stepName;
 
@@ -89,13 +89,6 @@ namespace StrucEngLib.Analysis
                 _flagRfm = value;
                 OnPropertyChanged();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

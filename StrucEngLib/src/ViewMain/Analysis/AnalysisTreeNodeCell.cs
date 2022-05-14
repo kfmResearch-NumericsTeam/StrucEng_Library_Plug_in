@@ -22,7 +22,7 @@ namespace StrucEngLib.Analysis
             return r;
         }
 
-        protected TableCell Cell(string text, Expression<Func<AnalysisTreeNodeItem, bool?>> propertyExpression,
+        protected TableCell Cell(string text, Expression<Func<AnalysisItem, bool?>> propertyExpression,
             string toolTip = "")
         {
             CheckBox _cb;
