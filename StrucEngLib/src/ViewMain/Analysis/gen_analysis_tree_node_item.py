@@ -1,12 +1,12 @@
 
 skeleton = """
-    bool? _flag%N%;
-    public bool? Flag%N%
+    private bool? _flag_%N% = false;
+    public bool? Flag_%N%
     {
-        get => _flag%N%;
+        get => _flag_%N%;
         set
         {
-            _flag%N% = value;
+            _flag_%N% = value;
             OnPropertyChanged();
         }
     }
@@ -43,7 +43,10 @@ l = [
 ,'cmy'
 ,'cmz'
 ,'cmm'
+
+    
 ]
+
 
 
 for _ in l:

@@ -188,10 +188,9 @@ namespace StrucEngLib
             AddRow(UiUtils.GenerateTitle("Step 5: Define Analysis Steps"));
             AddRow(new StepView(_vmListStep));
 
-            AddRow(new AnalysisView(new AnalysisViewModel(_vm)));
-
             AddRow(UiUtils.GenerateTitle("Step 6: Run Analysis"));
 
+            AddRow(new AnalysisView(new AnalysisViewModel(_vm)));
             AddRow(
                 new GroupBox
                 {
