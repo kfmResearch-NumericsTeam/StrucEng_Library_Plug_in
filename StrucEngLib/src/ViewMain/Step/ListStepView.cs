@@ -7,15 +7,14 @@ using StrucEngLib.Step;
 
 namespace StrucEngLib
 {
-    
     /// <summary>View to show Step ordering</summary>
-    public class StepView : DynamicLayout
+    public class ListStepView : DynamicLayout
     {
         private readonly ListStepViewModel _listStepVm;
         private DynamicLayout _stepListLayout;
         private GroupBox _gbSelectSteps;
 
-        public StepView(ListStepViewModel listStepVm)
+        public ListStepView(ListStepViewModel listStepVm)
         {
             _listStepVm = listStepVm;
             Build();
@@ -29,7 +28,7 @@ namespace StrucEngLib
 
         private Control NoEntry()
         {
-            return new Label() {Text = "No data for Steps"};
+            return new Label() {Text = "Add Load or Set to first."};
         }
 
         private void DrawLayout()
@@ -47,8 +46,15 @@ namespace StrucEngLib
             {
                 foreach (var step in _listStepVm.Steps)
                 {
-                    var tbStep = new TextBox() {Text = step.Order};
-                    tbStep.Bind<string>("Text", step, "Order", DualBindingMode.TwoWay);
+                    var dbStep = new DropDown()
+                    {
+                        DataStore = _listStepVm.StepNames,
+                    };
+                    dbStep.Bind<string>(
+                        nameof(dbStep.SelectedValue),
+                        step,
+                        nameof(step.Order),
+                        DualBindingMode.TwoWay);
 
                     var tb = new TextBox()
                     {
@@ -60,12 +66,13 @@ namespace StrucEngLib
                         ScaleHeight = false, Cells =
                         {
                             new TableCell((new Label() {Text = "Step: "}), false),
-                            new TableCell((tbStep), false),
+                            new TableCell((dbStep), false),
                             new TableCell(tb, true)
                         }
                     });
                 }
             }
+
             _stepListLayout.Content = l;
         }
 

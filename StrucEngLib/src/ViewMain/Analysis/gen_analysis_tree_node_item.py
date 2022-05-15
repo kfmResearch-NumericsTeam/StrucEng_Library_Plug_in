@@ -12,6 +12,8 @@ skeleton = """
     }
 """
 
+init = """Flag_%N% = false;"""
+
 l = [
  'rf'
 ,'rfx'
@@ -51,3 +53,7 @@ l = [
 
 for _ in l:
     print(skeleton.replace("%N%", _))
+
+
+for _ in l:
+    print(init.replace("%N%", _))

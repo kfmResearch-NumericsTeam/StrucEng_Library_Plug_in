@@ -1,9 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using StrucEngLib.Model;
+
 namespace StrucEngLib.ViewMain.Step
 {
     /// <summary> VM for a single Step in step view </summary>
     public class SingleStepViewModel : ViewModelBase
     {
-        public Model.Step StepModel { get; }
+        public KeyValuePair<StepType, object> Step { get; }
 
         private string _order;
 
@@ -14,16 +19,49 @@ namespace StrucEngLib.ViewMain.Step
             {
                 _order = value;
                 OnPropertyChanged();
-                StepModel.Order = _order;
             }
         }
 
-        public string Label => StepModel.GetSummary();
-
-        public SingleStepViewModel(Model.Step step)
+        public string Label
         {
-            StepModel = step;
-            Order = step.Order;
+            get
+            {
+                string res = "";
+                if (Step.Key == StepType.Load)
+                {
+                    StringBuilder b = new StringBuilder();
+                    var l = (Load) Step.Value;
+
+                    b.Append("Load: ");
+                    b.Append(l.LoadType.GetName());
+                    if (l.Layers.Count > 0)
+                    {
+                        b.Append(" (");
+                        l.Layers.Select(layer => layer.GetName())
+                            .Aggregate((s, sx) => s + "; " + sx);
+                        b.Append(")");
+                    }
+                    else
+                    {
+                        b.Append(" (No layers connected)");
+                    }
+
+                    res = b.ToString();
+                }
+                else if (Step.Key == StepType.Set)
+                {
+                    var s = (Set) Step.Value;
+                    res = "Set: " + s?.GetName();
+                }
+
+                return res;
+            }
+        }
+
+        public SingleStepViewModel(KeyValuePair<StepType, object> step, string order = "")
+        {
+            Step = step;
+            Order = order;
         }
     }
 }

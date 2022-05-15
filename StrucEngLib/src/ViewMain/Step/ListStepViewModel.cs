@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -6,28 +7,26 @@ using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Rhino;
 using Rhino.Render.ChangeQueue;
+using Rhino.Runtime.InteropWrappers;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 using StrucEngLib.ViewMain.Step;
 
 namespace StrucEngLib.Step
 {
-    /// <summary>View Model to select ordering of steps for Load processing.</summary>
+    /// <summary>View Model to select ordering of steps.</summary>
     public class ListStepViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
-        private readonly ListLayerViewModel _listLayerVm;
-        private readonly ListLoadViewModel _listLoadVm;
 
-        private Workbench Model
-        {
-            get => _listLayerVm.Model;
-        }
+        public static string StepNameExclude { get; } = "Excluded";
 
-        // Force Ui to redraw steps
+        public ObservableCollection<string> StepNames { get; }
+
         public event EventHandler RedrawEventHandler;
 
-        private Dictionary<object, SingleStepViewModel> _stepMap; // Key: (Set/Load), Val: ViewModel for single step
         private ObservableCollection<SingleStepViewModel> _steps;
 
         public ObservableCollection<SingleStepViewModel> Steps
@@ -39,6 +38,8 @@ namespace StrucEngLib.Step
                 OnPropertyChanged();
             }
         }
+
+        private Dictionary<object, SingleStepViewModel> _stepMap;
 
         private bool _hasSteps = false;
 
@@ -55,102 +56,105 @@ namespace StrucEngLib.Step
         public ListStepViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            _listLayerVm = mainVm.ListLayerVm;
-            _listLoadVm = mainVm.ListLoadVm;
-
+            StepNames = new ObservableCollection<string> {StepNameExclude};
             Steps = new ObservableCollection<SingleStepViewModel>();
             _stepMap = new Dictionary<object, SingleStepViewModel>();
 
-            _listLoadVm.LoadSettingsChanged += (sender, args) => BuildStepData();
-            _listLayerVm.Layers.CollectionChanged += StepDataChanged;
+            _mainVm.ListLoadVm.LoadSettingsChanged += (sender, args) => ForceRedraw();
             Steps.CollectionChanged += (sender, args) => HasSteps = Steps.Count != 0;
+            _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
+            {
+                AddLayers(args.NewItems);
+                RemoveLayers(args.OldItems);
 
-            BuildStepData();
-        }
-
-        private void StepDataChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
-        {
-            BuildStepData();
-        }
-
-        private void BuildStepData()
-        {
-            // XXX: Since we use an event based approach and always update the steps on a change,
-            // we have to find out what changed and update the step view accordingly.
-            // This makes the below logic tedious, we have to find what's new and what was deleted,
-            // while keeping the steps which are backed by an existing layer/ set.
-            // In order to keep UI simple, we always redraw view if something changes: RedrawEventHandler
-            var stepsToDelete = new Dictionary<object, SingleStepViewModel>(_stepMap);
-            int order = HighestOrder() + 1;
+                ForceRedraw();
+            };
+            _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
+            {
+                AddLoads(args.NewItems);
+                RemoveLoads(args.OldItems);
+                ForceRedraw();
+            };
             
-            foreach (var load in _listLoadVm.Loads)
+            AddLoads(_mainVm.ListLoadVm.Loads);
+            AddLayers(_mainVm.ListLayerVm.Layers);
+        }
+
+        private void RemoveLayers(IList layers)
+        {
+            foreach (var oldItem in layers ?? Enumerable.Empty<Load>().ToList())
             {
-                if (_stepMap.ContainsKey(load))
+                var l = (Layer) oldItem;
+                if (l.LayerType == LayerType.SET)
                 {
-                    // Load already backed by a step
-                    stepsToDelete.Remove(load);
-                    continue;
+                    var vm = _stepMap[l];
+                    Steps.Remove(vm);
+                    _stepMap.Remove(l);
                 }
-
-                Model.Step s = new Model.Step(StepType.Load);
-                s.Load = load;
-                s.Order = order.ToString();
-                order++;
-                var vm = new SingleStepViewModel(s);
-                Steps.Add(vm);
-                _stepMap.Add(load, vm);
-                Model.Steps.Add(s);
             }
+        }
 
-            foreach (var layer in _listLayerVm.Layers)
+        private void AddLayers(IList layers)
+        {
+            int order = HighestOrder() + 1;
+            foreach (Layer l in layers ?? Enumerable.Empty<Load>().ToList())
             {
-                if (layer.LayerType == LayerType.SET)
+                if (l.LayerType == LayerType.SET)
                 {
-                    if (_stepMap.ContainsKey(layer))
-                    {
-                        // Set already backed by a step
-                        stepsToDelete.Remove(layer);
-                        continue;
-                    }
-
-                    Model.Step s = new Model.Step(StepType.Set);
-                    s.Set = (Set) layer;
-                    s.Order = order.ToString();
+                    var vm = new SingleStepViewModel(
+                        new KeyValuePair<StepType, object>(StepType.Set, l),
+                        (order).ToString());
+                    AddIfNotContains(StepNames, order.ToString());
                     order++;
-                    var vm = new SingleStepViewModel(s);
+                    _stepMap[l] = vm;
                     Steps.Add(vm);
-                    _stepMap.Add(layer, vm);
-                    Model.Steps.Add(s);
                 }
             }
+        }
 
-            // Remove old steps not backed by data
-            foreach (var stepToDelete in stepsToDelete)
+        private void RemoveLoads(IList loads)
+        {
+            foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
             {
-                _stepMap.Remove(stepToDelete.Key);
-                Steps.Remove(stepToDelete.Value);
-                Model.Steps.Remove(stepToDelete.Value.StepModel);
+                var vm = _stepMap[l];
+                Steps.Remove(vm);
+                _stepMap.Remove(l);
             }
+        }
 
+        private void AddLoads(IEnumerable loads)
+        {
+            int order = HighestOrder() + 1;
+            foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
+            {
+                var vm = new SingleStepViewModel(
+                    new KeyValuePair<StepType, object>(StepType.Load, l),
+                    (order).ToString());
+                AddIfNotContains(StepNames, order.ToString());
+                order++;
+                _stepMap[l] = vm;
+                Steps.Add(vm);
+            }
+        }
+
+        private int HighestOrder() =>
+            Steps.Select(s => s.Order)
+                .DefaultIfEmpty("0")
+                .Where(order => int.TryParse(order, out _))
+                .Select(o => int.Parse(o))
+                .Max();
+
+        private void ForceRedraw()
+        {
             RedrawEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
-        public int HighestOrder()
+        private void AddIfNotContains<T>(ObservableCollection<T> c, T value)
         {
-            var maxNum = 0;
-            foreach (var s in Steps)
+            if (!c.Contains(value))
             {
-                try
-                {
-                    maxNum = Math.Max(int.Parse(s.Order), maxNum);
-                }
-                catch (Exception)
-                {
-                    // Ignore non numeric numbers
-                }
+                c.Add(value);
             }
-
-            return maxNum;
         }
     }
 }

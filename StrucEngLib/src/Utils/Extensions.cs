@@ -1,12 +1,21 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Eto.Forms;
 
 namespace StrucEngLib.Utils
 {
     /// <summary></summary>
-    public class Extensions
+    public static class Extensions
     {
+        
+        public static IList<T> OrEmptyIfNull<T>(this IList<T> source)
+        {
+            return source ?? Enumerable.Empty<T>().ToList();
+        }
+        
         public static IndirectBinding<string> PropertyWithIntConvert<MODEL>(
             Expression<Func<MODEL, int>> f, int defVal = 0)
         {

@@ -32,7 +32,6 @@ namespace StrucEngLib.Analysis
             _grid.SelectedItemBinding.BindDataContext((AnalysisViewModel m) => m.SelectedItem);
             _detailView.Bind<AnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
-            // _grid.CellDoubleClick += _vm.CellDoubleClick;
         }
 
         private void BuildGui()
@@ -54,13 +53,13 @@ namespace StrucEngLib.Analysis
             _grid.Columns.Add(new GridColumn()
             {
                 HeaderText = "Step\t\t",
-
                 Editable = false,
                 Expand = true,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new TextBoxCell()
                 {
-                    Binding = Binding.Property<AnalysisItemViewModel, string>(r => r.StepName),
+                    Binding = Binding.Property<AnalysisItemViewModel, string>(r => r.StepName)
+                        .Convert(step => "Step " + step)
                 },
 
                 Resizable = true,
