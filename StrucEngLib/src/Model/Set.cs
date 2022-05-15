@@ -6,6 +6,15 @@ namespace StrucEngLib.Model
 
         public SetGeneralDisplacement SetGeneralDisplacement { get; set; }
 
+        public static Set CreateSet(string name)
+        {
+            if (name == null) return null;
+            if (name == "") return null;
+
+            Set e = new Set() {Name = name};
+            return e;
+        }
+
         public string Name { get; set; }
 
         public override string ToString()

@@ -89,5 +89,10 @@ namespace StrucEngLib.Model
         {
             StepType = type;
         }
+
+        public Step()
+        {
+            
+        }
     }
 }

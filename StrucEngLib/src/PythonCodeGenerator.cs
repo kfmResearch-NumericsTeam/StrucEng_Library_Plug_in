@@ -8,8 +8,6 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-
-
     /// <summary>
     /// Code generator to generate python code based on UI input.
     /// </summary>
@@ -103,11 +101,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             _loadIdCounter = 0;
             var b = new StringBuilder();
             b.Append(header);
-
-            foreach (var layer in _model.Layers ?? Enumerable.Empty<Layer>())
-            {
-                EmitLayer(layer, b);
-            }
+            EmitLayers(_model.Layers, b);
 
             var loadNameMap = new Dictionary<Load, string>();
             foreach (var load in _model.Loads ?? Enumerable.Empty<Load>())
@@ -116,20 +110,25 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             }
 
             EmitSteps(b, loadNameMap);
+            EmitAnalysisSettings(b, _model.AnalysisSettings);
+
             b.Append(footer);
             return b.ToString();
         }
 
-        private void EmitLayer(Layer layer, StringBuilder b)
+        private void EmitLayers(List<Layer> layers, StringBuilder b)
         {
-            if (layer.LayerType == LayerType.ELEMENT)
+            foreach (var layer in _model.Layers ?? Enumerable.Empty<Layer>())
             {
-                EmitElement(layer, b);
-            }
+                if (layer.LayerType == LayerType.ELEMENT)
+                {
+                    EmitElement(layer, b);
+                }
 
-            if (layer.LayerType == LayerType.SET)
-            {
-                EmitDisplacement(layer, b);
+                if (layer.LayerType == LayerType.SET)
+                {
+                    EmitDisplacement(layer, b);
+                }
             }
         }
 
@@ -292,7 +291,7 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
              * Order is already by key (asc)
              */
             var stepOrderList = new Dictionary<string, List<Model.Step>>();
-            foreach (var stepPair in _model.GroupSteps(_model))
+            foreach (var stepPair in _model.GroupSteps())
             {
                 var stepName = "step_" + stepCounter++;
                 stepOrderList.Add(stepName, stepPair.Value);
@@ -330,6 +329,53 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
             }
 
             b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
+        }
+
+        private void EmitPlotData(StringBuilder b, string step, string field, bool skip = false)
+        {
+            if (skip)
+                return;
+            b.Append($@"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1) {_nl} ");
+        }
+
+        private void EmitAnalysisSettings(StringBuilder b, List<AnalysisSetting> sx)
+        {
+            var fields = "['u','sf','sm']";
+            b.Append($@"mdl.analyse_and_extract(software='abaqus', fields={fields}) {_nl}");
+            foreach (var s in sx ?? Enumerable.Empty<AnalysisSetting>())
+            {
+                var step = "step";
+                
+                EmitPlotData(b, step, "rfx", s.Rfx);
+                EmitPlotData(b, step, "rfy", s.Rfy);
+                EmitPlotData(b, step, "rfz", s.Rfz);
+                EmitPlotData(b, step, "rfm", s.Rfm);
+                
+                EmitPlotData(b, step, "rmx", s.Rmx);
+                EmitPlotData(b, step, "rmy", s.Rmy);
+                EmitPlotData(b, step, "rmz", s.Rmz);
+                EmitPlotData(b, step, "rmm", s.Rmm);
+                
+                EmitPlotData(b, step, "ux", s.Ux);
+                EmitPlotData(b, step, "uy", s.Uy);
+                EmitPlotData(b, step, "uz", s.Uz);
+                EmitPlotData(b, step, "um", s.Um);
+                
+                EmitPlotData(b, step, "urx", s.Urx);
+                EmitPlotData(b, step, "ury", s.Ury);
+                EmitPlotData(b, step, "urz", s.Urz);
+                EmitPlotData(b, step, "urm", s.Urm);
+                
+                EmitPlotData(b, step, "cfx", s.Cfx);
+                EmitPlotData(b, step, "cfy", s.Cfy);
+                EmitPlotData(b, step, "cfz", s.Cfz);
+                EmitPlotData(b, step, "cfm", s.Cfm);
+                
+                EmitPlotData(b, step, "cmx", s.Cmx);
+                EmitPlotData(b, step, "cmy", s.Cmy);
+                EmitPlotData(b, step, "cmz", s.Cmz);
+                EmitPlotData(b, step, "cmm", s.Cmm);
+            }
         }
     }
 }

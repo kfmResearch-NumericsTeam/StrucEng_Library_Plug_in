@@ -27,17 +27,7 @@ namespace StrucEngLib.Step
 
         public event EventHandler RedrawEventHandler;
 
-        private ObservableCollection<SingleStepViewModel> _steps;
-
-        public ObservableCollection<SingleStepViewModel> Steps
-        {
-            get => _steps;
-            set
-            {
-                _steps = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<SingleStepViewModel> Steps { get; }
 
         private Dictionary<object, SingleStepViewModel> _stepMap;
 
@@ -75,7 +65,7 @@ namespace StrucEngLib.Step
                 RemoveLoads(args.OldItems);
                 ForceRedraw();
             };
-            
+
             AddLoads(_mainVm.ListLoadVm.Loads);
             AddLayers(_mainVm.ListLayerVm.Layers);
         }
@@ -102,8 +92,12 @@ namespace StrucEngLib.Step
                 if (l.LayerType == LayerType.SET)
                 {
                     var vm = new SingleStepViewModel(
-                        new KeyValuePair<StepType, object>(StepType.Set, l),
-                        (order).ToString());
+                        new Model.Step
+                        {
+                            StepType = StepType.Set,
+                            Set = (Set) l,
+                            Order = order.ToString()
+                        });
                     AddIfNotContains(StepNames, order.ToString());
                     order++;
                     _stepMap[l] = vm;
@@ -128,8 +122,13 @@ namespace StrucEngLib.Step
             foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
             {
                 var vm = new SingleStepViewModel(
-                    new KeyValuePair<StepType, object>(StepType.Load, l),
-                    (order).ToString());
+                    new Model.Step
+                    {
+                        StepType = StepType.Load,
+                        Load = l,
+                        Order = order.ToString()
+                    });
+
                 AddIfNotContains(StepNames, order.ToString());
                 order++;
                 _stepMap[l] = vm;
@@ -154,6 +153,16 @@ namespace StrucEngLib.Step
             if (!c.Contains(value))
             {
                 c.Add(value);
+            }
+        }
+
+        public override void UpdateModel()
+        {
+            _mainVm.Workbench.Steps.Clear();
+            foreach (var s in Steps)
+            {
+                s.UpdateModel();
+                _mainVm.Workbench.Steps.Add(s.Model);
             }
         }
     }

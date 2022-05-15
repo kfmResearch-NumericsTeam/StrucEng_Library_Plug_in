@@ -20,7 +20,7 @@ namespace StrucEngLib
         }
         public override Task ExecuteAsync(object parameter)
         {
-            Workbench model = (Workbench) _vm.ListLayerVm.Model;
+            Workbench model =  _vm.BuildModel();
             ModelValidator validate = new ModelValidator();
             var valMsgs = validate.ValidateModel(model);
             if (valMsgs.Count != 0)

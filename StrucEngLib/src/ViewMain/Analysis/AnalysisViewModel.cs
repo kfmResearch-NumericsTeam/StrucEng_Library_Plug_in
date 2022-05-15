@@ -18,10 +18,7 @@ namespace StrucEngLib.Analysis
 
         private AnalysisItemViewModel _selectedItem;
 
-        public bool SelectedItemVisible
-        {
-            get => SelectedItem != null && SelectedItem.Include == true;
-        }
+        public bool SelectedItemVisible => SelectedItem != null && SelectedItem.Include == true;
 
         public AnalysisItemViewModel SelectedItem
         {
@@ -57,14 +54,14 @@ namespace StrucEngLib.Analysis
         {
             _vm = vm;
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
-            if (vm.ListLayerVm.Model.AnalysisSettings != null)
+            foreach (var s in vm.Workbench.AnalysisSettings)
             {
-                foreach (var s in vm.ListLayerVm.Model.AnalysisSettings)
+                var avm = new AnalysisItemViewModel(s)
                 {
-                    var avm = new AnalysisItemViewModel();
-                    AnalysisItemViewModel.ModelToVm(s, avm);
-                    avm.Include = true;
-                }
+                    Include = true
+                };
+                _stepNames.Add(s.StepId);
+                AnalysisViewItems.Add(avm);
             }
 
             vm.ListStepVm.StepNames.CollectionChanged += (sender, args) =>
@@ -78,7 +75,7 @@ namespace StrucEngLib.Analysis
 
                     if (!_stepNames.Contains(name))
                     {
-                        AnalysisViewItems.Add(new AnalysisItemViewModel()
+                        AnalysisViewItems.Add(new AnalysisItemViewModel(new AnalysisSetting())
                         {
                             StepName = name
                         });
@@ -86,6 +83,19 @@ namespace StrucEngLib.Analysis
                     }
                 }
             };
+        }
+
+        public override void UpdateModel()
+        {
+            _vm.Workbench.AnalysisSettings.Clear();
+            foreach (var avm in AnalysisViewItems)
+            {
+                avm.UpdateModel();
+                if (avm.Include == true)
+                {
+                    _vm.Workbench.AnalysisSettings.Add(avm.Model);
+                }
+            }
         }
     }
 }

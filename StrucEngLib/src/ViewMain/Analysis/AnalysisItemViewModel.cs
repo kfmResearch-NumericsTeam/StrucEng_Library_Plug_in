@@ -8,7 +8,20 @@ namespace StrucEngLib.Analysis
     /// <summary></summary>
     public class AnalysisItemViewModel : ViewModelBase
     {
-        
+        public AnalysisSetting Model { get; }
+
+        public AnalysisItemViewModel(AnalysisSetting model)
+        {
+            Model = model;
+            init();
+            ModelToVm(model, this);
+        }
+
+        public override void UpdateModel()
+        {
+            VmToModel(this, Model);
+        }
+
         public static void ModelToVm(AnalysisSetting model, AnalysisItemViewModel v)
         {
             v.StepName = model.StepId;
@@ -96,31 +109,31 @@ namespace StrucEngLib.Analysis
             Flag_rfy = false;
             Flag_rfz = false;
             Flag_rfm = false;
-            
+
             Flag_rm = false;
             Flag_rmx = false;
             Flag_rmy = false;
             Flag_rmz = false;
             Flag_rmm = false;
-            
+
             Flag_u = false;
             Flag_ux = false;
             Flag_uy = false;
             Flag_uz = false;
             Flag_um = false;
-            
+
             Flag_ur = false;
             Flag_urx = false;
             Flag_ury = false;
             Flag_urz = false;
             Flag_urm = false;
-            
+
             Flag_cf = false;
             Flag_cfx = false;
             Flag_cfy = false;
             Flag_cfz = false;
             Flag_cfm = false;
-            
+
             Flag_cm = false;
             Flag_cmx = false;
             Flag_cmy = false;

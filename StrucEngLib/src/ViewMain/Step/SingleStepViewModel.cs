@@ -8,7 +8,9 @@ namespace StrucEngLib.ViewMain.Step
     /// <summary> VM for a single Step in step view </summary>
     public class SingleStepViewModel : ViewModelBase
     {
-        public KeyValuePair<StepType, object> Step { get; }
+        // public KeyValuePair<StepType, object> Step { get; }
+
+        public Model.Step Model { get; }
 
         private string _order;
 
@@ -27,10 +29,10 @@ namespace StrucEngLib.ViewMain.Step
             get
             {
                 string res = "";
-                if (Step.Key == StepType.Load)
+                if (Model.StepType == StepType.Load)
                 {
                     StringBuilder b = new StringBuilder();
-                    var l = (Load) Step.Value;
+                    var l = (Load) Model.Load;
 
                     b.Append("Load: ");
                     b.Append(l.LoadType.GetName());
@@ -48,9 +50,9 @@ namespace StrucEngLib.ViewMain.Step
 
                     res = b.ToString();
                 }
-                else if (Step.Key == StepType.Set)
+                else if (Model.StepType == StepType.Set)
                 {
-                    var s = (Set) Step.Value;
+                    var s = (Set) Model.Set;
                     res = "Set: " + s?.GetName();
                 }
 
@@ -58,10 +60,15 @@ namespace StrucEngLib.ViewMain.Step
             }
         }
 
-        public SingleStepViewModel(KeyValuePair<StepType, object> step, string order = "")
+        public SingleStepViewModel(Model.Step step)
         {
-            Step = step;
-            Order = order;
+            Model = step;
+            Order = step.Order;
+        }
+
+        public override void UpdateModel()
+        {
+            Model.Order = Order;
         }
     }
 }

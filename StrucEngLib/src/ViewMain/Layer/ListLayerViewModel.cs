@@ -28,11 +28,8 @@ namespace StrucEngLib
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
 
-        public Workbench Model { get; }
-
         // MVVC
         private Layer _selectedLayer;
-        private ObservableCollection<Layer> _layers;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
         private bool _selectLayerViewVisible;
@@ -50,9 +47,7 @@ namespace StrucEngLib
         public ListLayerViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            Model = new Workbench();
-
-            _layers = new ObservableCollection<Layer>(Model.Layers);
+            Layers = new ObservableCollection<Layer>(_mainVm.Workbench.Layers);
 
             CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
@@ -64,12 +59,12 @@ namespace StrucEngLib
 
         private void OnInspectCode()
         {
-            new ExecGenerateCode(_mainVm).ExecuteAsync(Model);
+            new ExecGenerateCode(_mainVm).ExecuteAsync(null);
         }
 
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
-        private bool CanExecuteOnInspectCode() => _layers != null && _layers.Count > 0;
+        private bool CanExecuteOnInspectCode() => Layers != null && Layers.Count > 0;
 
         private void OnDeleteLayer()
         {
@@ -78,9 +73,8 @@ namespace StrucEngLib
              * XXX: Observable collection sets SelectedLayer = null on Remove,
              * So it is important to first remove it from Model before we remove it from viewmodel.
              */
-            Model.Layers.Remove(SelectedLayer);
             Layers.Remove(SelectedLayer);
-         
+
             SelectedLayer = null;
             OnPropertyChanged(nameof(Layers));
         }
@@ -92,19 +86,12 @@ namespace StrucEngLib
                 _mainVm.ErrorVm.ShowMessage("Layer can't be empty");
                 return;
             }
-
-            Layer l;
-            if (LayerToAddType == LAYER_TYPE_ELEMENT)
-            {
-                l = Model.AddElement(LayerToAdd);
-            }
-            else
-            {
-                l = Model.AddSet(LayerToAdd);
-            }
+            var l = LayerToAddType == LAYER_TYPE_ELEMENT
+                ? Element.CreateElement(LayerToAdd)
+                : Set.CreateSet(LayerToAdd);
 
             LayerToAdd = "";
-            _layers.Add(l);
+            Layers.Add(l);
 
             CommandOnInspectCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
@@ -142,10 +129,7 @@ namespace StrucEngLib
             }
         }
 
-        public ObservableCollection<Layer> Layers
-        {
-            get { return _layers; }
-        }
+        public ObservableCollection<Layer> Layers { get; }
 
         public int LayerToAddType
         {
@@ -166,6 +150,15 @@ namespace StrucEngLib
                 if (_layerToAdd == value) return;
                 _layerToAdd = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public override void UpdateModel()
+        {
+            _mainVm.Workbench.Layers.Clear();
+            foreach (var layer in Layers)
+            {
+                _mainVm.Workbench.Layers.Add(layer);
             }
         }
     }

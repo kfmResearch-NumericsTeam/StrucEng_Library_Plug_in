@@ -18,5 +18,9 @@ namespace StrucEngLib
         public virtual void Dispose()
         {
         }
+        
+        public virtual void UpdateModel()
+        {
+        }
     }
 }

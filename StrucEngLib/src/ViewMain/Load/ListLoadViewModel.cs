@@ -16,7 +16,6 @@ namespace StrucEngLib
     public class ListLoadViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
-        private readonly ListLayerViewModel _listLayerVm;
 
         public ObservableCollection<ListItem> LoadNames { get; }
 
@@ -89,15 +88,9 @@ namespace StrucEngLib
         public RelayCommand CommandAddLoad { get; }
         public RelayCommand CommandDeleteLoad { get; }
 
-        public Workbench Model
-        {
-            get => _listLayerVm.Model;
-        }
-
         public ListLoadViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            _listLayerVm = mainVm.ListLayerVm;
             CommandAddLoad = new RelayCommand(OnAddLoad);
             CommandDeleteLoad = new RelayCommand(OnLoadDelete, CanLoadDelete);
             LoadNames = new ObservableCollection<ListItem>
@@ -106,7 +99,7 @@ namespace StrucEngLib
                 new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
                 new ListItem {Key = LoadType.Point.ToString(), Text = "Point"},
             };
-            Loads = new ObservableCollection<Load>(Model.Loads);
+            Loads = new ObservableCollection<Load>(mainVm.Workbench.Loads);
             Loads.CollectionChanged += (sender, args) =>
             {
                 SelectLoadViewVisible = Loads.Count != 0;
@@ -135,7 +128,6 @@ namespace StrucEngLib
             }
 
             Loads.Add(newLoad);
-            Model.Loads.Add(newLoad);
             OnPropertyChanged(nameof(Loads));
 
             SelectedLoad = newLoad;
@@ -144,7 +136,6 @@ namespace StrucEngLib
         private void OnLoadDelete()
         {
             if (SelectedLoad == null) return;
-            Model.Loads.Remove(SelectedLoad);
             Loads.Remove(SelectedLoad);
             OnPropertyChanged(nameof(Loads));
             SelectedLoad = null;
@@ -202,6 +193,15 @@ namespace StrucEngLib
                 {
                     RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, layerNames);
                 }
+            }
+        }
+
+        public override void UpdateModel()
+        {
+            _mainVm.Workbench.Loads.Clear();
+            foreach (var load in Loads)
+            {
+                _mainVm.Workbench.Loads.Add(load);
             }
         }
     }
