@@ -31,51 +31,27 @@ namespace StrucEngLib.Analysis
                     {
                         Row(
                             TextCell("Reaction forces"),
-                            CellWithRoot(Cell("rf", i => i.Flag_rf),
-                                Cell("rfx", i => i.Flag_rfx),
-                                Cell("rfy", i => i.Flag_rfy),
-                                Cell("rfz", i => i.Flag_rfz),
-                                Cell("rfm", i => i.Flag_rfm))
+                            Cell("rf", i => i.Rf)
                         ),
                         Row(
                             TextCell("Reaction moments"),
-                            CellWithRoot(Cell("rm", i => i.Flag_rm),
-                                Cell("rmx", i => i.Flag_rmx),
-                                Cell("rmy", i => i.Flag_rmy),
-                                Cell("rmz", i => i.Flag_rmz),
-                                Cell("rmm", i => i.Flag_rmm))
+                            Cell("rm", i => i.Rm)
                         ),
                         Row(
                             TextCell("Displacements"),
-                            CellWithRoot(Cell("u", i => i.Flag_u),
-                                Cell("ux", i => i.Flag_ux),
-                                Cell("uy", i => i.Flag_uy),
-                                Cell("uz", i => i.Flag_uz),
-                                Cell("um", i => i.Flag_um))
+                            Cell("u", i => i.U)
                         ),
                         Row(
                             TextCell("Rotations"),
-                            CellWithRoot(Cell("ur", i => i.Flag_ur),
-                                Cell("urx", i => i.Flag_urx),
-                                Cell("ury", i => i.Flag_ury),
-                                Cell("urz", i => i.Flag_urz),
-                                Cell("urm", i => i.Flag_urm))
+                            Cell("ur", i => i.Ur)
                         ),
                         Row(
                             TextCell("Concentrated forces"),
-                            CellWithRoot(Cell("cf", i => i.Flag_cf),
-                                Cell("cfx", i => i.Flag_cfx),
-                                Cell("cfy", i => i.Flag_cfy),
-                                Cell("cfz", i => i.Flag_cfz),
-                                Cell("cfm", i => i.Flag_cfm))
+                            Cell("cf", i => i.Cf)
                         ),
                         Row(
                             TextCell("Concentrated moments"),
-                            CellWithRoot(Cell("cm", i => i.Flag_cm),
-                                Cell("cmx", i => i.Flag_cmx),
-                                Cell("cmy", i => i.Flag_cmy),
-                                Cell("cmz", i => i.Flag_cmz),
-                                Cell("cmm", i => i.Flag_cmm))
+                            Cell("cm", i => i.Cm)
                         ),
                     }
                 }

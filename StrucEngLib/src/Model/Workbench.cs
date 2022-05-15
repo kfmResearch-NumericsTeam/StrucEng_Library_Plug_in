@@ -12,21 +12,10 @@ namespace StrucEngLib.Model
         public List<Step> Steps { get; } = new List<Step>();
         public List<AnalysisSetting> AnalysisSettings { get; } = new List<AnalysisSetting>();
 
-        public Workbench()
-        {
-        }
-
         public override string ToString()
         {
-            StringBuilder b = new StringBuilder();
-            b.Append("Workbench: ");
-            foreach (var l in Layers)
-            {
-                b.Append(l.PrettyPrint());
-                b.Append(", ");
-            }
-
-            return b.ToString();
+            return $"{nameof(Layers)}: {Layers}, {nameof(Loads)}: {Loads}," +
+                   $" {nameof(Steps)}: {Steps}, {nameof(AnalysisSettings)}: {AnalysisSettings}";
         }
 
         /*

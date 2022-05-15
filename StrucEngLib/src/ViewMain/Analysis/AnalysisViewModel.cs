@@ -33,7 +33,7 @@ namespace StrucEngLib.Analysis
                     {
                         if (args.PropertyName == nameof(_selectedItem.Include))
                         {
-                            if (!_selectedItem.Include == false)
+                            if (_selectedItem.Include == false)
                             {
                                 _selectedItem.init();
                             }
@@ -90,7 +90,9 @@ namespace StrucEngLib.Analysis
             _vm.Workbench.AnalysisSettings.Clear();
             foreach (var avm in AnalysisViewItems)
             {
+                RhinoApp.WriteLine("before: {0}", avm);
                 avm.UpdateModel();
+                RhinoApp.WriteLine("after: {0}", avm);
                 if (avm.Include == true)
                 {
                     _vm.Workbench.AnalysisSettings.Add(avm.Model);

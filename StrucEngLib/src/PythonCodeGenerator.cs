@@ -58,8 +58,8 @@ mdl.summary()
 
 # Run
 
-mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
 
+# mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
 # rhino.plot_data(mdl, step='step_load', field='sm1',cbar_size=1)
 # rhino.plot_data(mdl, step='step_load', field='sm2',cbar_size=1)
 # rhino.plot_data(mdl, step='step_load', field='sm3',cbar_size=1)
@@ -340,41 +340,52 @@ mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
 
         private void EmitAnalysisSettings(StringBuilder b, List<AnalysisSetting> sx)
         {
-            var fields = "['u','sf','sm']";
+            var fields = StringUtils.ListToPyStr<string>(new List<string>()
+                {
+                    sx.Select(s => s.Rf).Contains(true) ? "rf" : "",
+                    sx.Select(s => s.Rm).Contains(true) ? "rm" : "",
+                    sx.Select(s => s.U).Contains(true) ? "u" : "",
+                    sx.Select(s => s.Ur).Contains(true) ? "ur" : "",
+                    sx.Select(s => s.Cf).Contains(true) ? "cf" : "",
+                    sx.Select(s => s.Cm).Contains(true) ? "cm" : "",
+                }.Where(s => s != "").ToList(), (id => id)
+            );
+
             b.Append($@"mdl.analyse_and_extract(software='abaqus', fields={fields}) {_nl}");
             foreach (var s in sx ?? Enumerable.Empty<AnalysisSetting>())
             {
+                b.Append(s + _nl);
                 var step = "step";
-                
-                EmitPlotData(b, step, "rfx", s.Rfx);
-                EmitPlotData(b, step, "rfy", s.Rfy);
-                EmitPlotData(b, step, "rfz", s.Rfz);
-                EmitPlotData(b, step, "rfm", s.Rfm);
-                
-                EmitPlotData(b, step, "rmx", s.Rmx);
-                EmitPlotData(b, step, "rmy", s.Rmy);
-                EmitPlotData(b, step, "rmz", s.Rmz);
-                EmitPlotData(b, step, "rmm", s.Rmm);
-                
-                EmitPlotData(b, step, "ux", s.Ux);
-                EmitPlotData(b, step, "uy", s.Uy);
-                EmitPlotData(b, step, "uz", s.Uz);
-                EmitPlotData(b, step, "um", s.Um);
-                
-                EmitPlotData(b, step, "urx", s.Urx);
-                EmitPlotData(b, step, "ury", s.Ury);
-                EmitPlotData(b, step, "urz", s.Urz);
-                EmitPlotData(b, step, "urm", s.Urm);
-                
-                EmitPlotData(b, step, "cfx", s.Cfx);
-                EmitPlotData(b, step, "cfy", s.Cfy);
-                EmitPlotData(b, step, "cfz", s.Cfz);
-                EmitPlotData(b, step, "cfm", s.Cfm);
-                
-                EmitPlotData(b, step, "cmx", s.Cmx);
-                EmitPlotData(b, step, "cmy", s.Cmy);
-                EmitPlotData(b, step, "cmz", s.Cmz);
-                EmitPlotData(b, step, "cmm", s.Cmm);
+
+                EmitPlotData(b, step, "rfx", s.Rf);
+                EmitPlotData(b, step, "rfy", s.Rf);
+                EmitPlotData(b, step, "rfz", s.Rf);
+                EmitPlotData(b, step, "rfm", s.Rf);
+
+                EmitPlotData(b, step, "rmx", s.Rm);
+                EmitPlotData(b, step, "rmy", s.Rm);
+                EmitPlotData(b, step, "rmz", s.Rm);
+                EmitPlotData(b, step, "rmm", s.Rm);
+
+                EmitPlotData(b, step, "ux", s.U);
+                EmitPlotData(b, step, "uy", s.U);
+                EmitPlotData(b, step, "uz", s.U);
+                EmitPlotData(b, step, "um", s.U);
+
+                EmitPlotData(b, step, "urx", s.Ur);
+                EmitPlotData(b, step, "ury", s.Ur);
+                EmitPlotData(b, step, "urz", s.Ur);
+                EmitPlotData(b, step, "urm", s.Ur);
+
+                EmitPlotData(b, step, "cfx", s.Cf);
+                EmitPlotData(b, step, "cfy", s.Cf);
+                EmitPlotData(b, step, "cfz", s.Cf);
+                EmitPlotData(b, step, "cfm", s.Cf);
+
+                EmitPlotData(b, step, "cmx", s.Cm);
+                EmitPlotData(b, step, "cmy", s.Cm);
+                EmitPlotData(b, step, "cmz", s.Cm);
+                EmitPlotData(b, step, "cmm", s.Cm);
             }
         }
     }

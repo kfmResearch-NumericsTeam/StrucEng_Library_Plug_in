@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Eto.Forms;
+using Rhino;
 using StrucEngLib.Model;
 
 namespace StrucEngLib.Analysis
@@ -25,120 +26,34 @@ namespace StrucEngLib.Analysis
         public static void ModelToVm(AnalysisSetting model, AnalysisItemViewModel v)
         {
             v.StepName = model.StepId;
-            v.Flag_rf = model.Rf;
-            v.Flag_rfx = model.Rfx;
-            v.Flag_rfy = model.Rfy;
-            v.Flag_rfz = model.Rfz;
-            v.Flag_rfm = model.Rfm;
-
-            v.Flag_rm = model.Rm;
-            v.Flag_rmx = model.Rmx;
-            v.Flag_rmy = model.Rmy;
-            v.Flag_rmz = model.Rmz;
-            v.Flag_rmm = model.Rmm;
-
-            v.Flag_u = model.U;
-            v.Flag_ux = model.Ux;
-            v.Flag_uy = model.Uy;
-            v.Flag_uz = model.Uz;
-            v.Flag_um = model.Um;
-
-            v.Flag_ur = model.Ur;
-            v.Flag_urx = model.Urx;
-            v.Flag_ury = model.Ury;
-            v.Flag_urz = model.Urz;
-            v.Flag_urm = model.Urm;
-
-            v.Flag_cf = model.Cf;
-            v.Flag_cfx = model.Cfx;
-            v.Flag_cfy = model.Cfy;
-            v.Flag_cfz = model.Cfz;
-            v.Flag_cfm = model.Cfm;
-
-            v.Flag_cm = model.Cm;
-            v.Flag_cmx = model.Cmx;
-            v.Flag_cmy = model.Cmy;
-            v.Flag_cmz = model.Cmz;
-            v.Flag_cmm = model.Cmm;
+            v.Rf = model.Rf;
+            v.Rm = model.Rm;
+            v.U = model.U;
+            v.Ur = model.Ur;
+            v.Cf = model.Cf;
+            v.Cm = model.Cm;
         }
 
         public static void VmToModel(AnalysisItemViewModel v, AnalysisSetting model)
         {
             model.StepId = v.StepName;
-            model.Rf = v.Flag_rf ?? false;
-            model.Rfx = v.Flag_rfx ?? false;
-            model.Rfy = v.Flag_rfy ?? false;
-            model.Rfz = v.Flag_rfz ?? false;
-            model.Rfm = v.Flag_rfm ?? false;
-
-            model.Rm = v.Flag_rm ?? false;
-            model.Rmx = v.Flag_rmx ?? false;
-            model.Rmy = v.Flag_rmy ?? false;
-            model.Rmz = v.Flag_rmz ?? false;
-            model.Rmm = v.Flag_rmm ?? false;
-
-            model.U = v.Flag_u ?? false;
-            model.Ux = v.Flag_ux ?? false;
-            model.Uy = v.Flag_uy ?? false;
-            model.Uz = v.Flag_uz ?? false;
-            model.Um = v.Flag_um ?? false;
-
-            model.Ur = v.Flag_ur ?? false;
-            model.Urx = v.Flag_urx ?? false;
-            model.Ury = v.Flag_ury ?? false;
-            model.Urz = v.Flag_urz ?? false;
-            model.Urm = v.Flag_urm ?? false;
-
-            model.Cf = v.Flag_cf ?? false;
-            model.Cfx = v.Flag_cfx ?? false;
-            model.Cfy = v.Flag_cfy ?? false;
-            model.Cfz = v.Flag_cfz ?? false;
-            model.Cfm = v.Flag_cfm ?? false;
-
-            model.Cm = v.Flag_cm ?? false;
-            model.Cmx = v.Flag_cmx ?? false;
-            model.Cmy = v.Flag_cmy ?? false;
-            model.Cmz = v.Flag_cmz ?? false;
-            model.Cmm = v.Flag_cmm ?? false;
+            model.Rf = v.Rf ?? false;
+            model.Rm = v.Rm ?? false;
+            model.U = v.U ?? false;
+            model.Ur = v.Ur ?? false;
+            model.Cf = v.Cf ?? false;
+            model.Cm = v.Cm ?? false;
         }
 
         public void init()
         {
-            Flag_rf = false;
-            Flag_rfx = false;
-            Flag_rfy = false;
-            Flag_rfz = false;
-            Flag_rfm = false;
-
-            Flag_rm = false;
-            Flag_rmx = false;
-            Flag_rmy = false;
-            Flag_rmz = false;
-            Flag_rmm = false;
-
-            Flag_u = false;
-            Flag_ux = false;
-            Flag_uy = false;
-            Flag_uz = false;
-            Flag_um = false;
-
-            Flag_ur = false;
-            Flag_urx = false;
-            Flag_ury = false;
-            Flag_urz = false;
-            Flag_urm = false;
-
-            Flag_cf = false;
-            Flag_cfx = false;
-            Flag_cfy = false;
-            Flag_cfz = false;
-            Flag_cfm = false;
-
-            Flag_cm = false;
-            Flag_cmx = false;
-            Flag_cmy = false;
-            Flag_cmz = false;
-            Flag_cmm = false;
+            _include = false;
+            _rf = false;
+            _rm = false;
+            _u = false;
+            _ur = false;
+            _cf = false;
+            _cm = false;
         }
 
         private string _stepName;
@@ -160,398 +75,95 @@ namespace StrucEngLib.Analysis
             get => _include;
             set
             {
+                RhinoApp.WriteLine("Include set: {0}", value);
                 _include = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool? _flag_rf = false;
+        private bool? _rf = false;
 
-        public bool? Flag_rf
+        public bool? Rf
         {
-            get => _flag_rf;
+            get => _rf;
             set
             {
-                _flag_rf = value;
+                RhinoApp.WriteLine("rf set: {0}", value);
+                _rf = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private bool? _flag_rfx = false;
+        private bool? _rm = false;
 
-        public bool? Flag_rfx
+        public bool? Rm
         {
-            get => _flag_rfx;
+            get => _rm;
             set
             {
-                _flag_rfx = value;
+                _rm = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private bool? _flag_rfy = false;
+        private bool? _u = false;
 
-        public bool? Flag_rfy
+        public bool? U
         {
-            get => _flag_rfy;
+            get => _u;
             set
             {
-                _flag_rfy = value;
+                _u = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private bool? _flag_rfz = false;
+        private bool? _ur = false;
 
-        public bool? Flag_rfz
+        public bool? Ur
         {
-            get => _flag_rfz;
+            get => _ur;
             set
             {
-                _flag_rfz = value;
+                _ur = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private bool? _flag_rfm = false;
+        private bool? _cf = false;
 
-        public bool? Flag_rfm
+        public bool? Cf
         {
-            get => _flag_rfm;
+            get => _cf;
             set
             {
-                _flag_rfm = value;
+                _cf = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private bool? _flag_rm = false;
+        private bool? _cm = false;
 
-        public bool? Flag_rm
+        public bool? Cm
         {
-            get => _flag_rm;
+            get => _cm;
             set
             {
-                _flag_rm = value;
+                _cm = value;
                 OnPropertyChanged();
             }
         }
 
-
-        private bool? _flag_rmx = false;
-
-        public bool? Flag_rmx
+        public override string ToString()
         {
-            get => _flag_rmx;
-            set
-            {
-                _flag_rmx = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_rmy = false;
-
-        public bool? Flag_rmy
-        {
-            get => _flag_rmy;
-            set
-            {
-                _flag_rmy = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_rmz = false;
-
-        public bool? Flag_rmz
-        {
-            get => _flag_rmz;
-            set
-            {
-                _flag_rmz = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_rmm = false;
-
-        public bool? Flag_rmm
-        {
-            get => _flag_rmm;
-            set
-            {
-                _flag_rmm = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_u = false;
-
-        public bool? Flag_u
-        {
-            get => _flag_u;
-            set
-            {
-                _flag_u = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_ux = false;
-
-        public bool? Flag_ux
-        {
-            get => _flag_ux;
-            set
-            {
-                _flag_ux = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_uy = false;
-
-        public bool? Flag_uy
-        {
-            get => _flag_uy;
-            set
-            {
-                _flag_uy = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_uz = false;
-
-        public bool? Flag_uz
-        {
-            get => _flag_uz;
-            set
-            {
-                _flag_uz = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_um = false;
-
-        public bool? Flag_um
-        {
-            get => _flag_um;
-            set
-            {
-                _flag_um = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_ur = false;
-
-        public bool? Flag_ur
-        {
-            get => _flag_ur;
-            set
-            {
-                _flag_ur = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_urx = false;
-
-        public bool? Flag_urx
-        {
-            get => _flag_urx;
-            set
-            {
-                _flag_urx = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_ury = false;
-
-        public bool? Flag_ury
-        {
-            get => _flag_ury;
-            set
-            {
-                _flag_ury = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_urz = false;
-
-        public bool? Flag_urz
-        {
-            get => _flag_urz;
-            set
-            {
-                _flag_urz = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_urm = false;
-
-        public bool? Flag_urm
-        {
-            get => _flag_urm;
-            set
-            {
-                _flag_urm = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cf = false;
-
-        public bool? Flag_cf
-        {
-            get => _flag_cf;
-            set
-            {
-                _flag_cf = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cfx = false;
-
-        public bool? Flag_cfx
-        {
-            get => _flag_cfx;
-            set
-            {
-                _flag_cfx = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cfy = false;
-
-        public bool? Flag_cfy
-        {
-            get => _flag_cfy;
-            set
-            {
-                _flag_cfy = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cfz = false;
-
-        public bool? Flag_cfz
-        {
-            get => _flag_cfz;
-            set
-            {
-                _flag_cfz = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cfm = false;
-
-        public bool? Flag_cfm
-        {
-            get => _flag_cfm;
-            set
-            {
-                _flag_cfm = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cm = false;
-
-        public bool? Flag_cm
-        {
-            get => _flag_cm;
-            set
-            {
-                _flag_cm = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cmx = false;
-
-        public bool? Flag_cmx
-        {
-            get => _flag_cmx;
-            set
-            {
-                _flag_cmx = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cmy = false;
-
-        public bool? Flag_cmy
-        {
-            get => _flag_cmy;
-            set
-            {
-                _flag_cmy = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cmz = false;
-
-        public bool? Flag_cmz
-        {
-            get => _flag_cmz;
-            set
-            {
-                _flag_cmz = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private bool? _flag_cmm = false;
-
-        public bool? Flag_cmm
-        {
-            get => _flag_cmm;
-            set
-            {
-                _flag_cmm = value;
-                OnPropertyChanged();
-            }
+            return $"{nameof(_stepName)}: {_stepName}, {nameof(_include)}: {_include}," +
+                   $" {nameof(_rf)}: {_rf}, {nameof(_rm)}: {_rm}, {nameof(_u)}: {_u}," +
+                   $" {nameof(_ur)}: {_ur}, {nameof(_cf)}: {_cf}, {nameof(_cm)}: {_cm}";
         }
     }
 }
