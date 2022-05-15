@@ -8,8 +8,85 @@ namespace StrucEngLib.Analysis
     /// <summary></summary>
     public class AnalysisItemViewModel : ViewModelBase
     {
-        public AnalysisItemViewModel()
+        
+        public static void ModelToVm(AnalysisSetting model, AnalysisItemViewModel v)
         {
+            v.StepName = model.StepId;
+            v.Flag_rf = model.Rf;
+            v.Flag_rfx = model.Rfx;
+            v.Flag_rfy = model.Rfy;
+            v.Flag_rfz = model.Rfz;
+            v.Flag_rfm = model.Rfm;
+
+            v.Flag_rm = model.Rm;
+            v.Flag_rmx = model.Rmx;
+            v.Flag_rmy = model.Rmy;
+            v.Flag_rmz = model.Rmz;
+            v.Flag_rmm = model.Rmm;
+
+            v.Flag_u = model.U;
+            v.Flag_ux = model.Ux;
+            v.Flag_uy = model.Uy;
+            v.Flag_uz = model.Uz;
+            v.Flag_um = model.Um;
+
+            v.Flag_ur = model.Ur;
+            v.Flag_urx = model.Urx;
+            v.Flag_ury = model.Ury;
+            v.Flag_urz = model.Urz;
+            v.Flag_urm = model.Urm;
+
+            v.Flag_cf = model.Cf;
+            v.Flag_cfx = model.Cfx;
+            v.Flag_cfy = model.Cfy;
+            v.Flag_cfz = model.Cfz;
+            v.Flag_cfm = model.Cfm;
+
+            v.Flag_cm = model.Cm;
+            v.Flag_cmx = model.Cmx;
+            v.Flag_cmy = model.Cmy;
+            v.Flag_cmz = model.Cmz;
+            v.Flag_cmm = model.Cmm;
+        }
+
+        public static void VmToModel(AnalysisItemViewModel v, AnalysisSetting model)
+        {
+            model.StepId = v.StepName;
+            model.Rf = v.Flag_rf ?? false;
+            model.Rfx = v.Flag_rfx ?? false;
+            model.Rfy = v.Flag_rfy ?? false;
+            model.Rfz = v.Flag_rfz ?? false;
+            model.Rfm = v.Flag_rfm ?? false;
+
+            model.Rm = v.Flag_rm ?? false;
+            model.Rmx = v.Flag_rmx ?? false;
+            model.Rmy = v.Flag_rmy ?? false;
+            model.Rmz = v.Flag_rmz ?? false;
+            model.Rmm = v.Flag_rmm ?? false;
+
+            model.U = v.Flag_u ?? false;
+            model.Ux = v.Flag_ux ?? false;
+            model.Uy = v.Flag_uy ?? false;
+            model.Uz = v.Flag_uz ?? false;
+            model.Um = v.Flag_um ?? false;
+
+            model.Ur = v.Flag_ur ?? false;
+            model.Urx = v.Flag_urx ?? false;
+            model.Ury = v.Flag_ury ?? false;
+            model.Urz = v.Flag_urz ?? false;
+            model.Urm = v.Flag_urm ?? false;
+
+            model.Cf = v.Flag_cf ?? false;
+            model.Cfx = v.Flag_cfx ?? false;
+            model.Cfy = v.Flag_cfy ?? false;
+            model.Cfz = v.Flag_cfz ?? false;
+            model.Cfm = v.Flag_cfm ?? false;
+
+            model.Cm = v.Flag_cm ?? false;
+            model.Cmx = v.Flag_cmx ?? false;
+            model.Cmy = v.Flag_cmy ?? false;
+            model.Cmz = v.Flag_cmz ?? false;
+            model.Cmm = v.Flag_cmm ?? false;
         }
 
         public void init()
@@ -19,26 +96,31 @@ namespace StrucEngLib.Analysis
             Flag_rfy = false;
             Flag_rfz = false;
             Flag_rfm = false;
+            
             Flag_rm = false;
             Flag_rmx = false;
             Flag_rmy = false;
             Flag_rmz = false;
             Flag_rmm = false;
+            
             Flag_u = false;
             Flag_ux = false;
             Flag_uy = false;
             Flag_uz = false;
             Flag_um = false;
+            
             Flag_ur = false;
             Flag_urx = false;
             Flag_ury = false;
             Flag_urz = false;
             Flag_urm = false;
+            
             Flag_cf = false;
             Flag_cfx = false;
             Flag_cfy = false;
             Flag_cfz = false;
             Flag_cfm = false;
+            
             Flag_cm = false;
             Flag_cmx = false;
             Flag_cmy = false;
@@ -69,8 +151,6 @@ namespace StrucEngLib.Analysis
                 OnPropertyChanged();
             }
         }
-
-        // Generated flags ---------------------------------------------------------------
 
         private bool? _flag_rf = false;
 

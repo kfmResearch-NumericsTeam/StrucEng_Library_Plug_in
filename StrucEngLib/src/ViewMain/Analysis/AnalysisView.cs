@@ -32,6 +32,7 @@ namespace StrucEngLib.Analysis
             _grid.SelectedItemBinding.BindDataContext((AnalysisViewModel m) => m.SelectedItem);
             _detailView.Bind<AnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
+            _detailView.Bind<bool>(nameof(this.Enabled), _vm, nameof(_vm.SelectedItemVisible));
         }
 
         private void BuildGui()

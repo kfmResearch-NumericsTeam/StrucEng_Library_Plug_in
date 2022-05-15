@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Eto.Forms;
 using Rhino;
+using StrucEngLib.Model;
 using StrucEngLib.Step;
 using StrucEngLib.ViewMain.Step;
 
@@ -12,7 +13,7 @@ namespace StrucEngLib.Analysis
     public class AnalysisViewModel : ViewModelBase
     {
         private readonly MainViewModel _vm;
-        
+
         public ObservableCollection<AnalysisItemViewModel> AnalysisViewItems { get; }
 
         private AnalysisItemViewModel _selectedItem;
@@ -60,7 +61,9 @@ namespace StrucEngLib.Analysis
             {
                 foreach (var s in vm.ListLayerVm.Model.AnalysisSettings)
                 {
-                    _stepNames.Add(s.StepId);
+                    var avm = new AnalysisItemViewModel();
+                    AnalysisItemViewModel.ModelToVm(s, avm);
+                    avm.Include = true;
                 }
             }
 
