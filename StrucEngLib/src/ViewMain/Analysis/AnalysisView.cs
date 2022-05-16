@@ -47,7 +47,6 @@ namespace StrucEngLib.Analysis
             _grid.CellFormatting += (sender, args) =>
             {
                 args.BackgroundColor = Colors.White;
-                args.BackgroundColor = Colors.White;
                 args.ForegroundColor = Colors.Black;
                 args.Font = new TextBox().Font;
             };

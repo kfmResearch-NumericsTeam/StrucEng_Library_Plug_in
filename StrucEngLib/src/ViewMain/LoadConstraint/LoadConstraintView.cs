@@ -11,7 +11,7 @@ namespace StrucEngLib
     public class LoadConstraintView : DynamicLayout
     {
         private readonly LoadConstraintViewModel _vm;
-
+        private GridView _gridView;
 
         public LoadConstraintView(LoadConstraintViewModel vm)
         {
@@ -58,7 +58,7 @@ namespace StrucEngLib
                     {
                         Rows =
                         {
-                            new GridView()
+                            (_gridView = new GridView()
                             {
                                 ShowHeader = true,
                                 DataStore = _vm.LoadConstraints,
@@ -77,7 +77,7 @@ namespace StrucEngLib
                                         },
                                         HeaderText = "Layer",
                                     },
-                                    ColItem("Element Number", IntBinding(r => r.ElementNumber)),
+                                    ColItem("Element Number", IntBinding(r => r.ElementNumber), TextAlignment.Center),
                                     ColItem("Ex [0]", IntBinding(r => r.Ex0)),
                                     ColItem("Ex [1]", IntBinding(r => r.Ex1)),
                                     ColItem("Ex [2]", IntBinding(r => r.Ex2)),
@@ -88,7 +88,7 @@ namespace StrucEngLib
                                     ColItem("Ez [1]", IntBinding(r => r.Ez1)),
                                     ColItem("Ez [2]", IntBinding(r => r.Ez2)),
                                 }
-                            },
+                            }),
                             new TableLayout
                             {
                                 Spacing = new Size(5, 10),
@@ -115,15 +115,23 @@ namespace StrucEngLib
                     }
                 }
             );
+
+            _gridView.CellFormatting += (sender, args) =>
+            {
+                args.BackgroundColor = Colors.White;
+                args.ForegroundColor = Colors.Black;
+                args.Font = new TextBox().Font;
+            };
         }
 
-        private GridColumn ColItem(string header, IndirectBinding<string> b)
+        private GridColumn ColItem(string header, IndirectBinding<string> b, TextAlignment align = TextAlignment.Left)
         {
             return new GridColumn()
             {
                 Editable = true,
                 DataCell = new TextBoxCell()
                 {
+                    TextAlignment = align,
                     Binding = b
                 },
                 HeaderText = header,

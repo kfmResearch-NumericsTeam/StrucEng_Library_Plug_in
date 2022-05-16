@@ -50,8 +50,8 @@ namespace StrucEngLib
             _mainVm = mainVm;
             Layers = new ObservableCollection<Layer>(_mainVm.Workbench.Layers);
 
-            CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
-            CommandOnExecuteCode = new RelayCommand(OnExecCode, CanExecuteOnInspectCode);
+            CommandOnInspectCode = new RelayCommand(OnInspectCode);
+            CommandOnExecuteCode = new RelayCommand(OnExecCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
@@ -112,9 +112,6 @@ namespace StrucEngLib
 
             LayerToAdd = "";
             Layers.Add(l);
-
-            CommandOnInspectCode.UpdateCanExecute();
-            CommandOnExecuteCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
             SelectedLayer = l;
         }
