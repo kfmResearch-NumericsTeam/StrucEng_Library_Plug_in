@@ -24,6 +24,7 @@ namespace StrucEngLib
 
         // Commands
         public RelayCommand CommandOnInspectCode { get; }
+        public RelayCommand CommandOnExecuteCode { get; }
         public RelayCommand CommandOnMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
@@ -50,6 +51,7 @@ namespace StrucEngLib
             Layers = new ObservableCollection<Layer>(_mainVm.Workbench.Layers);
 
             CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
+            CommandOnExecuteCode = new RelayCommand(OnExecCode, CanExecuteOnInspectCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
@@ -112,6 +114,7 @@ namespace StrucEngLib
             Layers.Add(l);
 
             CommandOnInspectCode.UpdateCanExecute();
+            CommandOnExecuteCode.UpdateCanExecute();
             OnPropertyChanged(nameof(Layers));
             SelectedLayer = l;
         }

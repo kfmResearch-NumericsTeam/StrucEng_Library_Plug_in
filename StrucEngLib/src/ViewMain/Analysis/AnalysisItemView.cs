@@ -89,10 +89,11 @@ namespace StrucEngLib.Analysis
             var c = new TableCell()
             {
                 Control = (new Label()
-                {
-                    Text = text,
-                    // Width = 150
-                }),
+                        {
+                            Text = text,
+                            Width = 150
+                        }
+                    ),
             };
             return c;
         }

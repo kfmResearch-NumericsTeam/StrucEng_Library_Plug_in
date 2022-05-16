@@ -28,7 +28,7 @@ namespace StrucEngLib
 
         private Control NoEntry()
         {
-            return new Label() {Text = "Add Load or Set to first."};
+            return new Label() {Text = "Add Load or Set first."};
         }
 
         private void DrawLayout()

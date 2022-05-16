@@ -19,6 +19,7 @@ namespace StrucEngLib
     public class ListLayerView : DynamicLayout
     {
         private Button _btnInspectPython;
+        private Button _btnExecPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
@@ -52,6 +53,7 @@ namespace StrucEngLib
             _btnInspectPython.Command = _vmListLayer.CommandOnInspectCode;
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
+            _btnExecPython.Command = _vmListLayer.CommandOnExecuteCode;
 
             _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
@@ -204,6 +206,10 @@ namespace StrucEngLib
                             new TableRow(
                                 new TableCell(
                                     (_btnInspectPython = new Button {Text = "Inspect Model"}),
+                                    true
+                                ),
+                                new TableCell(
+                                    (_btnExecPython = new Button {Text = "Execute Model"}),
                                     true
                                 )
                             )

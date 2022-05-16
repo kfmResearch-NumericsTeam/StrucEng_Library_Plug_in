@@ -39,8 +39,8 @@ namespace StrucEngLib.ViewMain.Step
                     if (l.Layers.Count > 0)
                     {
                         b.Append(" (");
-                        l.Layers.Select(layer => layer.GetName())
-                            .Aggregate((s, sx) => s + "; " + sx);
+                        b.Append(l.Layers.Select(layer => layer.GetName())
+                            .Aggregate((s, sx) => s + "; " + sx).ToString());
                         b.Append(")");
                     }
                     else
