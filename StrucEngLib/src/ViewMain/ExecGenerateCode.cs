@@ -10,7 +10,7 @@ using StrucEngLib.Utils;
 namespace StrucEngLib
 {
     /// <summary>Generate and Execute Code</summary>
-    public class ExecGenerateCode: AsyncCommandBase
+    public class ExecGenerateCode : AsyncCommandBase
     {
         private readonly MainViewModel _vm;
 
@@ -18,19 +18,38 @@ namespace StrucEngLib
         {
             _vm = vm;
         }
+
         public override Task ExecuteAsync(object parameter)
         {
-            Workbench model =  _vm.BuildModel();
-            ModelValidator validate = new ModelValidator();
-            var valMsgs = validate.ValidateModel(model);
-            if (valMsgs.Count != 0)
+            Workbench model = _vm.BuildModel();
+            try
             {
-                _vm.ErrorVm.ShowMessages(valMsgs);
+                ModelValidator validate = new ModelValidator();
+                var valMsgs = validate.ValidateModel(model);
+                if (valMsgs.Count != 0)
+                {
+                    _vm.ErrorVm.ShowMessages(valMsgs);
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                _vm.ErrorVm.ShowException("Error during model validation", e);
                 return null;
             }
+
             PythonCodeGenerator codeGen = new PythonCodeGenerator(model);
-            var sourceCode = codeGen.Generate();
-            
+            var sourceCode = "";
+            try
+            {
+                sourceCode = codeGen.Generate();
+            }
+            catch (Exception e)
+            {
+                _vm.ErrorVm.ShowException("Error during code generation", e);
+                return null;
+            }
+
             var dialog = new InspectPythonDialog(sourceCode);
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
@@ -39,13 +58,21 @@ namespace StrucEngLib
 
                 if (dialog.State == InspectPythonDialog.STATE_EXEC)
                 {
-                    OnGenerateModel(sourceCode);
-                } 
+                    try
+                    {
+                        OnGenerateModel(sourceCode);
+                    }
+                    catch (Exception e)
+                    {
+                        _vm.ErrorVm.ShowException("Error during code execution", e);
+                        return null;
+                    }
+                }
             }
 
             return null;
         }
-        
+
         protected void OnGenerateModel(string source)
         {
             string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";

@@ -91,7 +91,7 @@ namespace StrucEngLib.Analysis
                 Control = (new Label()
                 {
                     Text = text,
-                    Width = 150
+                    // Width = 150
                 }),
             };
             return c;

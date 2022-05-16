@@ -190,7 +190,7 @@ namespace StrucEngLib
 
             AddRow(UiUtils.GenerateTitle("Step 6: Run Analysis"));
 
-            AddRow(new AnalysisView(new AnalysisViewModel(_vm)));
+            AddRow(new AnalysisView(_vm.AnalysisVm));
             AddRow(
                 new GroupBox
                 {

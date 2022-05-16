@@ -86,7 +86,7 @@ namespace StrucEngLib.Step
 
         private void AddLayers(IList layers)
         {
-            int order = HighestOrder() + 1;
+            var order = HighestOrder() + 1;
             foreach (Layer l in layers ?? Enumerable.Empty<Load>().ToList())
             {
                 if (l.LayerType == LayerType.SET)
@@ -105,6 +105,17 @@ namespace StrucEngLib.Step
                 }
             }
         }
+
+        // private void RegisterOrderUpdate(SingleStepViewModel vm)
+        // {
+        //     vm.PropertyChanged += (sender, args) =>
+        //     {
+        //         if (args.PropertyName == nameof(SingleStepViewModel.Order))
+        //         {
+        //             
+        //         }
+        //     };
+        // }
 
         private void RemoveLoads(IList loads)
         {

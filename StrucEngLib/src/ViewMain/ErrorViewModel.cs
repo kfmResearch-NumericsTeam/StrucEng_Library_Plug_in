@@ -19,6 +19,19 @@ namespace StrucEngLib
                 OnPropertyChanged();
             }
         }
+        
+        public void ShowException(string info, Exception e)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append($"An Exception occured. This is likely a bug, file an issue: {StrucEngLibPlugin.Website} \n\n");
+            b.Append($"Version: {StrucEngLibPlugin.Version} \n");
+            b.Append($"Info: {info} \n\n");
+            b.Append($"Exception: {e.GetType().ToString()} \n");
+            b.Append($"Message: {e.Message} \n");
+            b.Append($"Source: {e.Source} \n");
+            b.Append($"Stacktrace: {e.StackTrace} \n");
+            ShowMessage(b.ToString());
+        }
 
         public void ShowMessage(string m)
         {

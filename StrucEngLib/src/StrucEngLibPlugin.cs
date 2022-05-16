@@ -20,12 +20,5 @@ namespace StrucEngLib
         }
 
         public static StrucEngLibPlugin Instance { get; private set; }
-        
-
-        private Workbench _model;
-        public Workbench GetModel()
-        {
-            return _model;
-        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
@@ -17,14 +18,10 @@ namespace StrucEngLib
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
 from compas_fea.structure import ElementProperties as Properties
-
 from compas_fea.structure import GeneralStep
-
 from compas_fea.structure import GravityLoad
 from compas_fea.structure import AreaLoad
 from compas_fea.structure import PointLoad
-
-
 from compas_fea.structure import GeneralDisplacement
 from compas_fea.structure import FixedDisplacement
 from compas_fea.structure import FixedDisplacementXX
@@ -37,10 +34,8 @@ from compas_fea.structure import RollerDisplacementZ
 from compas_fea.structure import RollerDisplacementXY
 from compas_fea.structure import RollerDisplacementYZ
 from compas_fea.structure import RollerDisplacementXZ
-
 from compas_fea.structure import ShellSection
 from compas_fea.structure import Structure
-
 import sandwichmodel_main as SMM
 
 # Snippets based on code of Andrew Liew (github.com/andrewliew), Benjamin Berger (github.com/Beberger)
@@ -52,26 +47,6 @@ mdl = Structure(name=name, path=path)
 ";
 
         private const string footer = @"
-# Summary
-
-mdl.summary()
-
-# Run
-
-
-# mdl.analyse_and_extract(software='abaqus', fields=['u','sf','sm'])
-# rhino.plot_data(mdl, step='step_load', field='sm1',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sm2',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sm3',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sf4',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sf5',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sf1',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sf2',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='sf3',cbar_size=1)
-# rhino.plot_data(mdl, step='step_load', field='um',cbar_size=1)
-# #print(mdl.elements[251])
-# #print(mdl.elements[100])
-# #print(mdl.elements[222])
 ";
 
         private readonly Workbench _model;
@@ -110,6 +85,10 @@ mdl.summary()
             }
 
             EmitSteps(b, loadNameMap);
+
+            b.Append("# == Summary" + _nl);
+            b.Append("mdl.summary()" + _nl);
+
             EmitAnalysisSettings(b, _model.AnalysisSettings);
 
             b.Append(footer);
@@ -118,7 +97,7 @@ mdl.summary()
 
         private void EmitLayers(List<Layer> layers, StringBuilder b)
         {
-            foreach (var layer in _model.Layers ?? Enumerable.Empty<Layer>())
+            foreach (var layer in layers ?? Enumerable.Empty<Layer>())
             {
                 if (layer.LayerType == LayerType.ELEMENT)
                 {
@@ -139,8 +118,7 @@ mdl.summary()
             var layerName = element.GetName();
             b.Append(_nl + $@"# == Element {layerName}" + _nl);
             b.Append(
-                $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}'])" +
-                _nl);
+                $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}']) {_nl}");
 
             var mat = element.ElementMaterialElastic;
             var matId = MatElasticId(layerId);
@@ -312,7 +290,6 @@ mdl.summary()
                             break;
                     }
                 }
-
                 var loadStr = "";
                 var dispStr = "";
                 if (loadsNames.Count > 0)
@@ -331,15 +308,16 @@ mdl.summary()
             b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
         }
 
-        private void EmitPlotData(StringBuilder b, string step, string field, bool skip = false)
+        private void EmitPlotData(StringBuilder b, string step, string field, bool take = true)
         {
-            if (skip)
+            if (!take)
                 return;
-            b.Append($@"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1) {_nl} ");
+            b.Append($@"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1) {_nl}");
         }
 
         private void EmitAnalysisSettings(StringBuilder b, List<AnalysisSetting> sx)
         {
+            b.Append($@"# == Run {_nl}");
             var fields = StringUtils.ListToPyStr<string>(new List<string>()
                 {
                     sx.Select(s => s.Rf).Contains(true) ? "rf" : "",
@@ -352,11 +330,9 @@ mdl.summary()
             );
 
             b.Append($@"mdl.analyse_and_extract(software='abaqus', fields={fields}) {_nl}");
-            foreach (var s in sx ?? Enumerable.Empty<AnalysisSetting>())
+            foreach (var s in sx)
             {
-                b.Append(s + _nl);
                 var step = "step";
-
                 EmitPlotData(b, step, "rfx", s.Rf);
                 EmitPlotData(b, step, "rfy", s.Rf);
                 EmitPlotData(b, step, "rfz", s.Rf);
@@ -386,6 +362,7 @@ mdl.summary()
                 EmitPlotData(b, step, "cmy", s.Cm);
                 EmitPlotData(b, step, "cmz", s.Cm);
                 EmitPlotData(b, step, "cmm", s.Cm);
+
             }
         }
     }

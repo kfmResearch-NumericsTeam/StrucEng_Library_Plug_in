@@ -26,42 +26,45 @@ namespace StrucEngLib.Analysis
             set
             {
                 _selectedItem = value;
-                if (_selectedItem != null)
-                {
-                    // XXX: We update SelectedItemVisible if include flag is changed
-                    _selectedItem.PropertyChanged += (sender, args) =>
-                    {
-                        if (args.PropertyName == nameof(_selectedItem.Include))
-                        {
-                            if (_selectedItem.Include == false)
-                            {
-                                _selectedItem.init();
-                            }
-
-                            OnPropertyChanged(nameof(SelectedItemVisible));
-                        }
-                    };
-                }
-
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
             }
         }
 
-        private HashSet<string> _stepNames = new HashSet<string>();
+        // XXX: Keeps track of the step names in the step dialog as we provide an analysis setting for each step
+        private readonly HashSet<string> _stepNames = new HashSet<string>();
+
+        private void RegisterEvents(AnalysisItemViewModel vm)
+        {
+            // XXX: We update SelectedItemVisible if include flag is changed
+            vm.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(_selectedItem.Include))
+                {
+                    if (_selectedItem.Include == false)
+                    {
+                        _selectedItem.init();
+                    }
+
+                    OnPropertyChanged(nameof(SelectedItemVisible));
+                }
+            };
+        }
 
         public AnalysisViewModel(MainViewModel vm)
         {
             _vm = vm;
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
+
             foreach (var s in vm.Workbench.AnalysisSettings)
             {
                 var avm = new AnalysisItemViewModel(s)
                 {
                     Include = true
                 };
-                _stepNames.Add(s.StepId);
+                RegisterEvents(avm);
                 AnalysisViewItems.Add(avm);
+                _stepNames.Add(s.StepId);
             }
 
             vm.ListStepVm.StepNames.CollectionChanged += (sender, args) =>
@@ -75,11 +78,13 @@ namespace StrucEngLib.Analysis
 
                     if (!_stepNames.Contains(name))
                     {
-                        AnalysisViewItems.Add(new AnalysisItemViewModel(new AnalysisSetting())
+                        _stepNames.Add(name);
+                        var avm = new AnalysisItemViewModel(new AnalysisSetting())
                         {
                             StepName = name
-                        });
-                        _stepNames.Add(name);
+                        };
+                        RegisterEvents(avm);
+                        AnalysisViewItems.Add(avm);
                     }
                 }
             };
@@ -90,9 +95,7 @@ namespace StrucEngLib.Analysis
             _vm.Workbench.AnalysisSettings.Clear();
             foreach (var avm in AnalysisViewItems)
             {
-                RhinoApp.WriteLine("before: {0}", avm);
                 avm.UpdateModel();
-                RhinoApp.WriteLine("after: {0}", avm);
                 if (avm.Include == true)
                 {
                     _vm.Workbench.AnalysisSettings.Add(avm.Model);

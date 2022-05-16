@@ -33,15 +33,4 @@ namespace StrucEngLib.Model
         List<Layer> Layers { get; set; }
         LoadType LoadType { get; }
     }
-
-    // public enum StrucEngType
-    // {
-    //     Element, Set, Load, Step
-    // }
-    //
-    // public interface StrucEngObject
-    // {
-    //     StrucEngType Type { get; }
-    //     string Key { get; }
-    // }
 }

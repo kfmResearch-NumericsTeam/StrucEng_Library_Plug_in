@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 
 namespace StrucEngLib.Model
 {
@@ -15,7 +16,7 @@ namespace StrucEngLib.Model
         public bool Cm { get; set; }
 
         public override string ToString()
-        {
+        {       
             return $"{nameof(StepId)}: {StepId}, {nameof(Rf)}: {Rf}, {nameof(Rm)}: {Rm}, " +
                    $"{nameof(U)}: {U}, {nameof(Ur)}: {Ur}, {nameof(Cf)}: {Cf}, {nameof(Cm)}: {Cm}";
         }

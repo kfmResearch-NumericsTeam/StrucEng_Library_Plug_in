@@ -75,7 +75,6 @@ namespace StrucEngLib.Analysis
             get => _include;
             set
             {
-                RhinoApp.WriteLine("Include set: {0}", value);
                 _include = value;
                 OnPropertyChanged();
             }
@@ -88,7 +87,6 @@ namespace StrucEngLib.Analysis
             get => _rf;
             set
             {
-                RhinoApp.WriteLine("rf set: {0}", value);
                 _rf = value;
                 OnPropertyChanged();
             }
