@@ -11,7 +11,7 @@ using Size = Eto.Drawing.Size;
 
 namespace StrucEngLib.Analysis
 {
-    /// <summary></summary>
+    /// <summary>Renders a single analysis item</summary>
     public class AnalysisItemView : DynamicLayout
     {
         private readonly AnalysisItemViewModel _vm;

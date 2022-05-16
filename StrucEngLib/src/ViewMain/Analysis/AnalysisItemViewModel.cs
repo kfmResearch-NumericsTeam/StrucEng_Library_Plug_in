@@ -6,7 +6,7 @@ using StrucEngLib.Model;
 
 namespace StrucEngLib.Analysis
 {
-    /// <summary></summary>
+    /// <summary>Vm for a single analysis item</summary>
     public class AnalysisItemViewModel : ViewModelBase
     {
         public AnalysisSetting Model { get; }

@@ -10,7 +10,7 @@ using StrucEngLib.Utils;
 namespace StrucEngLib
 {
     /// <summary>
-    /// Code generator to generate python code based on UI input.
+    /// Code generator to generate python code
     /// </summary>
     public class PythonCodeGenerator
     {

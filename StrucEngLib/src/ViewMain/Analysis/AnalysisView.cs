@@ -9,7 +9,7 @@ using Rhino;
 
 namespace StrucEngLib.Analysis
 {
-    /// <summary></summary>
+    /// <summary>Main view for analysis</summary>
     public class AnalysisView : DynamicLayout
     {
         private readonly AnalysisViewModel _vm;

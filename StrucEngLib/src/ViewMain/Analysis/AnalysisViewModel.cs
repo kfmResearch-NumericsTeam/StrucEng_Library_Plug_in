@@ -9,7 +9,7 @@ using StrucEngLib.ViewMain.Step;
 
 namespace StrucEngLib.Analysis
 {
-    /// <summary>View Model for Compas Analysis Settings </summary>
+    /// <summary>Main vm for analysis </summary>
     public class AnalysisViewModel : ViewModelBase
     {
         private readonly MainViewModel _vm;

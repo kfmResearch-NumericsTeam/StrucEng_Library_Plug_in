@@ -5,7 +5,7 @@ using Rhino;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>Abstract view class with base functionality for loads</summary>
     public abstract class AbstractLoadView : DynamicLayout
     {
         private readonly AbstractLoadViewModel _vm;
