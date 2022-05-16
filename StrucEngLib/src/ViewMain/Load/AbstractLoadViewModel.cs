@@ -13,8 +13,9 @@ namespace StrucEngLib
     public abstract class AbstractLoadViewModel : ViewModelBase
     {
         protected readonly ListLayerViewModel ListLayerVm;
-        protected readonly ListLoadViewModel ListLoadVm; 
-
+        protected readonly ListLoadViewModel ListLoadVm;
+        public readonly RelayCommand CommandConnectLayer;
+        
         protected string _connectLayersLabels;
 
         public string ConnectLayersLabels
@@ -27,30 +28,26 @@ namespace StrucEngLib
             }
         }
 
-        protected ObservableCollection<Layer> _layers;
-
-        public ObservableCollection<Layer> Layers
-        {
-            get => _layers;
-            set
-            {
-                _layers = value;
-                StringBuilder b = new StringBuilder();
-                foreach (var layer in Layers)
-                {
-                    b.Append(layer.GetName() + "; ");
-                }
-                ConnectLayersLabels = b.ToString();
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<Layer> Layers { get; }
 
         public AbstractLoadViewModel(MainViewModel mainVm)
         {
             CommandConnectLayer = new RelayCommand(OnConnectLayer);
             ListLayerVm = mainVm.ListLayerVm;
             ListLoadVm = mainVm.ListLoadVm;
-            this.PropertyChanged += ((sender, args) => DoStoreVmToModel());
+            Layers = new ObservableCollection<Layer>();
+
+            PropertyChanged += ((sender, args) => DoStoreVmToModel());
+            Layers.CollectionChanged += (sender, args) =>
+            {
+                var b = new StringBuilder();
+                foreach (var layer in Layers)
+                {
+                    b.Append(layer.GetName() + "; ");
+                }
+
+                ConnectLayersLabels = b.ToString();
+            };
             DoStoreModelToVm();
         }
 
@@ -84,11 +81,14 @@ namespace StrucEngLib
             _ignoreStoreVmToModel = true;
             StoreModelToVm();
             var l = ListLoadVm.SelectedLoad;
-            Layers = new ObservableCollection<Layer>(l.Layers);
+            Layers.Clear();
+            foreach (var layer in l.Layers)
+            {
+                Layers.Add(layer);
+            }
+
             _ignoreStoreVmToModel = false;
         }
-
-        public RelayCommand CommandConnectLayer;
 
         protected void OnConnectLayer()
         {
@@ -96,7 +96,12 @@ namespace StrucEngLib
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
             {
-                Layers = new ObservableCollection<Layer>(dialog.SelectedLayers);
+                Layers.Clear();
+
+                foreach (var l in dialog.SelectedLayers)
+                {
+                    Layers.Add(l);
+                }
             }
         }
     }

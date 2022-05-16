@@ -72,7 +72,7 @@ namespace StrucEngLib
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
 
-            AddRow(UiUtils.GenerateTitle("Step 1: Define Parts and Material"));
+            AddRow(UiUtils.GenerateTitle("Step 1: Define Parts, Materials and Constraints"));
             AddRow(
                 new GroupBox
                 {
@@ -179,18 +179,16 @@ namespace StrucEngLib
                     }
                 ));
 
-            AddRow(UiUtils.GenerateTitle("Step 2: Define Material"));
-
-            AddRow(UiUtils.GenerateTitle("Step 3: Define Constraints"));
+            AddRow(UiUtils.GenerateTitle("Step 2: Define Load Coordinates"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
 
-            AddRow(UiUtils.GenerateTitle("Step 4: Define Loads"));
+            AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
             AddRow(new ListLoadView(_vmListLoad));
 
-            AddRow(UiUtils.GenerateTitle("Step 5: Define Analysis Steps"));
+            AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
             AddRow(new ListStepView(_vmListStep));
 
-            AddRow(UiUtils.GenerateTitle("Step 6: Run Analysis"));
+            AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
 
             AddRow(new AnalysisView(_vm.AnalysisVm));
             AddRow(

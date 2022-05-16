@@ -1,6 +1,7 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino;
 
 namespace StrucEngLib
 {
@@ -18,13 +19,25 @@ namespace StrucEngLib
             BindGui();
         }
 
-        protected virtual void BindGui()
+        protected void BindGui()
         {
-            _tbConnectLayers.Bind<String>("Text", _vm, "ConnectLayersLabels", DualBindingMode.TwoWay);
+            _tbConnectLayers.Bind<String>(nameof(_tbConnectLayers.Text),
+                _vm,
+                nameof(_vm.ConnectLayersLabels),
+                DualBindingMode.TwoWay);
             _btConnectLayers.Command = _vm.CommandConnectLayer;
+            _tbConnectLayers.KeyDown += (sender, args) =>
+            {
+                RhinoApp.WriteLine("Onkeydown");
+                if (args.Key == Keys.Backspace || args.Key == Keys.Delete)
+                {
+                    RhinoApp.WriteLine("backspace or delete");
+                    _vm.Layers.Clear();
+                }
+            };
         }
 
-        protected virtual void BuildGui()
+        protected void BuildGui()
         {
             Padding = new Padding(5) { };
             Spacing = new Size(5, 1);
