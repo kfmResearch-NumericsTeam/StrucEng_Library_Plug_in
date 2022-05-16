@@ -17,6 +17,12 @@ namespace StrucEngLib.Analysis
         private readonly AnalysisItemViewModel _vm;
         private readonly GroupBox _gbDetail;
 
+
+        private Control TextControlRow(Control text, Control value)
+        {
+            return TableLayout.HorizontalScaled(text, value);
+        }
+        
         public AnalysisItemView()
         {
             Add(_gbDetail = new GroupBox
@@ -29,27 +35,27 @@ namespace StrucEngLib.Analysis
                     Spacing = new Size(10, 10),
                     Rows =
                     {
-                        Row(
+                        BinaryRow(
                             TextCell("Reaction forces"),
                             Cell("rf", i => i.Rf)
                         ),
-                        Row(
+                        BinaryRow(
                             TextCell("Reaction moments"),
                             Cell("rm", i => i.Rm)
                         ),
-                        Row(
+                        BinaryRow(
                             TextCell("Displacements"),
                             Cell("u", i => i.U)
                         ),
-                        Row(
+                        BinaryRow(
                             TextCell("Rotations"),
                             Cell("ur", i => i.Ur)
                         ),
-                        Row(
+                        BinaryRow(
                             TextCell("Concentrated forces"),
                             Cell("cf", i => i.Cf)
                         ),
-                        Row(
+                        BinaryRow(
                             TextCell("Concentrated moments"),
                             Cell("cm", i => i.Cm)
                         ),
@@ -72,6 +78,11 @@ namespace StrucEngLib.Analysis
             return r;
         }
 
+        protected static Control BinaryRow(TableCell c1, TableCell c2)
+        {
+            return TableLayout.HorizontalScaled(c1, c2);
+        }
+
         protected static TableRow Row(TableCell label, params TableCell[] args)
         {
             var r = new TableRow();
@@ -91,7 +102,7 @@ namespace StrucEngLib.Analysis
                 Control = (new Label()
                         {
                             Text = text,
-                            Width = 150
+                            // Width = 150
                         }
                     ),
             };
