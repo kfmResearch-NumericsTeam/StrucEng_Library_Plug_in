@@ -81,6 +81,10 @@ namespace StrucEngLib
             return new TableLayout
             {
                 Spacing = new Size(5, 10),
+                Padding = new Padding()
+                {
+                    Bottom = 10,
+                },
                 Rows =
                 {
                     new TableRow

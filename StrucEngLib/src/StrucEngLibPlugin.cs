@@ -1,6 +1,7 @@
 ﻿using Rhino;
 using System;
 using System.Security.Permissions;
+using Eto.Forms;
 using Rhino.PlugIns;
 using StrucEngLib.Model;
 
@@ -16,16 +17,10 @@ namespace StrucEngLib
         
         public StrucEngLibPlugin()
         {
-            Instance = this;
+            Instance = this; 
+
         }
 
         public static StrucEngLibPlugin Instance { get; private set; }
-        
-
-        private Workbench _model;
-        public Workbench GetModel()
-        {
-            return _model;
-        }
     }
 }

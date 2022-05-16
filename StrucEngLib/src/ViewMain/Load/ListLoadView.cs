@@ -12,7 +12,7 @@ namespace StrucEngLib
     {
         private readonly ListLoadViewModel _vm;
         private DropDown _dbAddLoad;
-        private ListBox _dbSelectLoad;
+        private ListBox _lbSelectLoad;
         private Button _btAddLoad;
         private DynamicLayout _container;
         private Button _btDeleteLoad;
@@ -36,9 +36,9 @@ namespace StrucEngLib
                 Binding.Property((ListLoadViewModel m) => m.LoadName).EnumToString(),
                 defaultContextValue: string.Empty);
 
-            _dbSelectLoad.Bind<Load>("SelectedValue", _vm, "SelectedLoad", DualBindingMode.TwoWay);
-            _dbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.LoadType.GetName());
-            _dbSelectLoad.DataStore = _vm.Loads;
+            _lbSelectLoad.Bind<Load>("SelectedValue", _vm, "SelectedLoad", DualBindingMode.TwoWay);
+            _lbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.LoadType.GetName());
+            _lbSelectLoad.DataStore = _vm.Loads;
 
             _container.Bind<Control>("Content", _vm, "LoadView", DualBindingMode.TwoWay);
             _gbPropsForLoad.Bind<bool>("Visible", _vm, "LoadViewVisible", DualBindingMode.TwoWay);
@@ -101,7 +101,7 @@ namespace StrucEngLib
                                     {
                                         ScaleHeight = false, Cells =
                                         {
-                                            new TableCell((_dbSelectLoad = new ListBox()
+                                            new TableCell((_lbSelectLoad = new ListBox()
                                             {
                                             }), true),
                                             new TableCell(TableLayout.AutoSized((_btDeleteLoad = new Button {Text = "Delete"})))

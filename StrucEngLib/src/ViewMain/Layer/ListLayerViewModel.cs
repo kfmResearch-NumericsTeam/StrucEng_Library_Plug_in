@@ -24,15 +24,13 @@ namespace StrucEngLib
 
         // Commands
         public RelayCommand CommandOnInspectCode { get; }
+        public RelayCommand CommandOnExecuteCode { get; }
         public RelayCommand CommandOnMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
 
-        public Workbench Model { get; }
-
         // MVVC
         private Layer _selectedLayer;
-        private ObservableCollection<Layer> _layers;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
         private bool _selectLayerViewVisible;
@@ -50,11 +48,10 @@ namespace StrucEngLib
         public ListLayerViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            Model = new Workbench();
+            Layers = new ObservableCollection<Layer>(_mainVm.Workbench.Layers);
 
-            _layers = new ObservableCollection<Layer>(Model.Layers);
-
-            CommandOnInspectCode = new RelayCommand(OnInspectCode, CanExecuteOnInspectCode);
+            CommandOnInspectCode = new RelayCommand(OnInspectCode);
+            CommandOnExecuteCode = new RelayCommand(OnExecCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
@@ -64,19 +61,39 @@ namespace StrucEngLib
 
         private void OnInspectCode()
         {
-            new ExecuteGenerateCode(_mainVm).ExecuteAsync(Model);
+            var model = _mainVm.BuildModel();
+            var gen = new ExecGenerateCode(_mainVm, model);
+            gen.Execute(null);
+            if (gen.Success)
+            {
+                new ExecShowCode(_mainVm, gen.GeneratedCode).Execute(null);
+            }
+        }
+
+        private void OnExecCode()
+        {
+            var model = _mainVm.BuildModel();
+            var gen = new ExecGenerateCode(_mainVm, model);
+            gen.Execute(null);
+            if (gen.Success)
+            {
+                new ExecExecuteCode(_mainVm, gen.GeneratedCode).Execute(null);
+            }
         }
 
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
-        private bool CanExecuteOnInspectCode() => _layers != null && _layers.Count > 0;
+        private bool CanExecuteOnInspectCode() => Layers != null && Layers.Count > 0;
 
         private void OnDeleteLayer()
         {
             if (SelectedLayer == null) return;
+            /*
+             * XXX: Observable collection sets SelectedLayer = null on Remove,
+             * So it is important to first remove it from Model before we remove it from viewmodel.
+             */
+            Layers.Remove(SelectedLayer);
 
-            _layers.Remove(SelectedLayer);
-            Model.Layers.Remove(SelectedLayer);
             SelectedLayer = null;
             OnPropertyChanged(nameof(Layers));
         }
@@ -89,20 +106,12 @@ namespace StrucEngLib
                 return;
             }
 
-            Layer l;
-            if (LayerToAddType == LAYER_TYPE_ELEMENT)
-            {
-                l = Model.AddElement(LayerToAdd);
-            }
-            else
-            {
-                l = Model.AddSet(LayerToAdd);
-            }
+            var l = LayerToAddType == LAYER_TYPE_ELEMENT
+                ? Element.CreateElement(LayerToAdd)
+                : Set.CreateSet(LayerToAdd);
 
             LayerToAdd = "";
-            _layers.Add(l);
-
-            CommandOnInspectCode.UpdateCanExecute();
+            Layers.Add(l);
             OnPropertyChanged(nameof(Layers));
             SelectedLayer = l;
         }
@@ -129,7 +138,7 @@ namespace StrucEngLib
                 _selectedLayer = value;
                 OnPropertyChanged();
                 CommandOnDeleteLayer.UpdateCanExecute();
-                
+
                 // Select Layer in doc
                 if (_selectedLayer != null)
                 {
@@ -138,7 +147,7 @@ namespace StrucEngLib
             }
         }
 
-        public ObservableCollection<Layer> Layers => _layers;
+        public ObservableCollection<Layer> Layers { get; }
 
         public int LayerToAddType
         {
@@ -159,7 +168,15 @@ namespace StrucEngLib
                 if (_layerToAdd == value) return;
                 _layerToAdd = value;
                 OnPropertyChanged();
-                //CommandOnAddLayer.UpdateCanExecute();
+            }
+        }
+
+        public override void UpdateModel()
+        {
+            _mainVm.Workbench.Layers.Clear();
+            foreach (var layer in Layers)
+            {
+                _mainVm.Workbench.Layers.Add(layer);
             }
         }
     }

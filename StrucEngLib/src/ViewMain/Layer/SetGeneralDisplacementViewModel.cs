@@ -6,9 +6,9 @@ using StrucEngLib.Model;
 namespace StrucEngLib
 {
     /// <summary>
-    /// Vm for Displacement
+    /// Vm for General Displacement attributes
     /// </summary>
-    public class LayerDisplacementViewModel : ViewModelBase
+    public class SetGeneralDisplacementViewModel : ViewModelBase
     {
         private readonly ListLayerViewModel _listLayerVm;
 
@@ -96,17 +96,17 @@ namespace StrucEngLib
         {
             if (_ignoreStoreVmToModel) return;
             var e = (Set) GetLayer();
-            if (e.SetDisplacement == null)
+            if (e.SetGeneralDisplacement == null)
             {
-                e.SetDisplacement = new SetDisplacement();
+                e.SetGeneralDisplacement = new SetGeneralDisplacement();
             }
 
-            e.SetDisplacement.Rotx = Rotx;
-            e.SetDisplacement.Rotz = Rotz;
-            e.SetDisplacement.Roty = Roty;
-            e.SetDisplacement.Ux = Ux;
-            e.SetDisplacement.Uy = Uy;
-            e.SetDisplacement.Uz = Uz;
+            e.SetGeneralDisplacement.Rotx = Rotx;
+            e.SetGeneralDisplacement.Rotz = Rotz;
+            e.SetGeneralDisplacement.Roty = Roty;
+            e.SetGeneralDisplacement.Ux = Ux;
+            e.SetGeneralDisplacement.Uy = Uy;
+            e.SetGeneralDisplacement.Uz = Uz;
         }
 
         private bool _ignoreStoreVmToModel = false;
@@ -115,20 +115,20 @@ namespace StrucEngLib
         {
             _ignoreStoreVmToModel = true;
             var el = (Set) GetLayer();
-            if (el.SetDisplacement != null)
+            if (el.SetGeneralDisplacement != null)
             {
-                Rotx = el.SetDisplacement.Rotx;
-                Rotz = el.SetDisplacement.Rotz;
-                Roty = el.SetDisplacement.Roty;
-                Ux = el.SetDisplacement.Ux;
-                Uy = el.SetDisplacement.Uy;
-                Uz = el.SetDisplacement.Uz;
+                Rotx = el.SetGeneralDisplacement.Rotx;
+                Rotz = el.SetGeneralDisplacement.Rotz;
+                Roty = el.SetGeneralDisplacement.Roty;
+                Ux = el.SetGeneralDisplacement.Ux;
+                Uy = el.SetGeneralDisplacement.Uy;
+                Uz = el.SetGeneralDisplacement.Uz;
             }
 
             _ignoreStoreVmToModel = false;
         }
 
-        public LayerDisplacementViewModel(ListLayerViewModel listLayerVm)
+        public SetGeneralDisplacementViewModel(ListLayerViewModel listLayerVm)
         {
             _listLayerVm = listLayerVm;
             _listLayerVm.PropertyChanged += ListLayerVmOnPropertyChanged;

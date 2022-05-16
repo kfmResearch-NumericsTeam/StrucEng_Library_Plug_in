@@ -18,9 +18,30 @@ namespace StrucEngLib
     /// </summary>
     public class AreaLoadViewModel : AbstractLoadViewModel
     {
+        
+        private string _x;
+        public string X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _y;
+        public string Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                OnPropertyChanged();
+            }
+        }
 
         private String _z;
-
         public String Z
         {
             get => _z;
@@ -43,6 +64,7 @@ namespace StrucEngLib
             }
         }
 
+
         public AreaLoadViewModel(MainViewModel mainVm) : base(mainVm)
         {
         }
@@ -54,6 +76,8 @@ namespace StrucEngLib
                 var l = (LoadArea) ListLoadVm.SelectedLoad;
                 l.Axes = Axes;
                 l.Z = Z;
+                l.X = X;
+                l.Y = Y;
             }
         }
 
@@ -62,7 +86,9 @@ namespace StrucEngLib
             if (ListLoadVm.SelectedLoad.LoadType == LoadType.Area)
             {
                 var l = (LoadArea) ListLoadVm.SelectedLoad;
-                Z = l.Z;
+                _z = l.Z;
+                _x = l.X;
+                _y = l.Y;
                 Axes = l.Axes;
             }
         }

@@ -6,7 +6,8 @@ namespace StrucEngLib.Model
     public enum LoadType
     {
         Area,
-        Gravity
+        Gravity,
+        Point
     }
 
     public static class LoadTypeMethods
@@ -19,6 +20,8 @@ namespace StrucEngLib.Model
                     return "Area";
                 case LoadType.Gravity:
                     return "Gravity";
+                case LoadType.Point:
+                    return "Point";
                 default:
                     return "Unknown";
             }
@@ -30,15 +33,4 @@ namespace StrucEngLib.Model
         List<Layer> Layers { get; set; }
         LoadType LoadType { get; }
     }
-
-    // public enum StrucEngType
-    // {
-    //     Element, Set, Load, Step
-    // }
-    //
-    // public interface StrucEngObject
-    // {
-    //     StrucEngType Type { get; }
-    //     string Key { get; }
-    // }
 }

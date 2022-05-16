@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using Eto.Drawing;
 using Eto.Forms;
+using StrucEngLib.Analysis;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 using StrucEngLib.Views;
@@ -17,6 +19,7 @@ namespace StrucEngLib
     public class ListLayerView : DynamicLayout
     {
         private Button _btnInspectPython;
+        private Button _btnExecPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
@@ -26,6 +29,7 @@ namespace StrucEngLib
         private GroupBox _gbSelectLayer;
         private RadioButtonList _rdlElementSetSelection;
 
+        private readonly MainViewModel _vm;
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
@@ -33,11 +37,12 @@ namespace StrucEngLib
 
         public ListLayerView(MainViewModel vm)
         {
+            _vm = vm;
             _vmListLayer = vm.ListLayerVm;
             _vmDetailView = vm.DetailLayerVm;
             _vmListStep = vm.ListStepVm;
             _vmListLoad = vm.ListLoadVm;
-            
+
             BuildGui();
             BindGui();
         }
@@ -48,29 +53,18 @@ namespace StrucEngLib
             _btnInspectPython.Command = _vmListLayer.CommandOnInspectCode;
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
-            
+            _btnExecPython.Command = _vmListLayer.CommandOnExecuteCode;
+
             _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
             _dropdownLayers.Bind<Layer>("SelectedValue", _vmListLayer, "SelectedLayer", DualBindingMode.TwoWay);
             _rdlElementSetSelection.Bind<int>("SelectedIndex", _vmListLayer, "LayerToAddType", DualBindingMode.TwoWay);
             _gbSelectLayer.Bind<bool>("Visible", _vmListLayer, "SelectLayerViewVisible", DualBindingMode.TwoWay);
-            
-            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible", DualBindingMode.TwoWay);
-            _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
-        }
 
-        protected Control GenerateTitle(string text)
-        {
-            var s = new Label().Font.Size;
-            return new ViewSeparator()
-            {
-                Text = text,
-                Label =
-                {
-                    Font = new Font(FontFamilies.Sans, s, FontStyle.Bold)  
-                }
-            };
+            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible",
+                DualBindingMode.TwoWay);
+            _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
         }
 
         protected void BuildGui()
@@ -78,28 +72,7 @@ namespace StrucEngLib
             Padding = new Padding(10, 10);
             Spacing = new Size(0, 10);
 
-            AddRow(GenerateTitle("Settings"));
-            AddRow(
-                new GroupBox
-                {
-                    Text = "Generate Code",
-                    Padding = new Padding(5),
-                    Content = new TableLayout
-                    {
-                        Spacing = new Size(10, 10),
-                        Rows =
-                        {
-                            new TableRow(
-                                new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
-                                    true
-                                )
-                            )
-                        }
-                    }
-                });
-            
-            AddRow(GenerateTitle("Layers"));
+            AddRow(UiUtils.GenerateTitle("Step 1: Define Parts, Materials and Constraints"));
             AddRow(
                 new GroupBox
                 {
@@ -184,8 +157,11 @@ namespace StrucEngLib
                                     {
                                         ScaleHeight = false, Cells =
                                         {
-                                            new TableCell((_dropdownLayers = new ListBox() { }), true),
-                                            new TableCell((TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
+                                            new TableCell((_dropdownLayers = new ListBox()
+                                            {
+                                            }), true),
+                                            new TableCell(
+                                                (TableLayout.AutoSized(_btnDeleteLayer = new Button {Text = "Delete"})))
                                         }
                                     },
                                 }
@@ -203,14 +179,41 @@ namespace StrucEngLib
                     }
                 ));
 
-            AddRow(GenerateTitle("Loads"));
+            AddRow(UiUtils.GenerateTitle("Step 2: Define Load Coordinates"));
+            AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
+
+            AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
             AddRow(new ListLoadView(_vmListLoad));
-            
-            AddRow(GenerateTitle("Steps"));
-            AddRow(new StepView(_vmListStep));
-            
-            // XXX: Last element gets scaled vertically
-            AddRow(new Label {Text = ""});
+
+            AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
+            AddRow(new ListStepView(_vmListStep));
+
+            AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
+
+            AddRow(new AnalysisView(_vm.AnalysisVm));
+            AddRow(
+                new GroupBox
+                {
+                    Text = "Generate Code",
+                    Padding = new Padding(5),
+                    Content = new TableLayout
+                    {
+                        Spacing = new Size(10, 10),
+                        Rows =
+                        {
+                            new TableRow(
+                                new TableCell(
+                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
+                                    true
+                                ),
+                                new TableCell(
+                                    (_btnExecPython = new Button {Text = "Execute Model"}),
+                                    true
+                                )
+                            )
+                        }
+                    }
+                });
         }
     }
 }

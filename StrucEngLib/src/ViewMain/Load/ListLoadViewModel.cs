@@ -16,7 +16,6 @@ namespace StrucEngLib
     public class ListLoadViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
-        private readonly ListLayerViewModel _listLayerVm;
 
         public ObservableCollection<ListItem> LoadNames { get; }
 
@@ -89,23 +88,18 @@ namespace StrucEngLib
         public RelayCommand CommandAddLoad { get; }
         public RelayCommand CommandDeleteLoad { get; }
 
-        public Workbench Model
-        {
-            get => _listLayerVm.Model;
-        }
-
         public ListLoadViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            _listLayerVm = mainVm.ListLayerVm;
             CommandAddLoad = new RelayCommand(OnAddLoad);
             CommandDeleteLoad = new RelayCommand(OnLoadDelete, CanLoadDelete);
             LoadNames = new ObservableCollection<ListItem>
             {
                 new ListItem {Key = LoadType.Area.ToString(), Text = "Area"},
                 new ListItem {Key = LoadType.Gravity.ToString(), Text = "Gravity"},
+                new ListItem {Key = LoadType.Point.ToString(), Text = "Point"},
             };
-            Loads = new ObservableCollection<Load>(Model.Loads);
+            Loads = new ObservableCollection<Load>(mainVm.Workbench.Loads);
             Loads.CollectionChanged += (sender, args) =>
             {
                 SelectLoadViewVisible = Loads.Count != 0;
@@ -124,13 +118,16 @@ namespace StrucEngLib
             {
                 newLoad = new LoadArea();
             }
+            else if (LoadName == LoadType.Point)
+            {
+                newLoad = new LoadPoint();
+            }
             else
             {
                 throw new Exception("unknown load type");
             }
 
             Loads.Add(newLoad);
-            Model.Loads.Add(newLoad);
             OnPropertyChanged(nameof(Loads));
 
             SelectedLoad = newLoad;
@@ -139,7 +136,6 @@ namespace StrucEngLib
         private void OnLoadDelete()
         {
             if (SelectedLoad == null) return;
-            Model.Loads.Remove(SelectedLoad);
             Loads.Remove(SelectedLoad);
             OnPropertyChanged(nameof(Loads));
             SelectedLoad = null;
@@ -160,6 +156,10 @@ namespace StrucEngLib
             else if (SelectedLoad.LoadType == LoadType.Gravity)
             {
                 LoadView = new GravityLoadView(new GravityLoadViewModel(_mainVm));
+            }
+            else if (SelectedLoad.LoadType == LoadType.Point)
+            {
+                LoadView = new PointLoadView(new PointLoadViewModel(_mainVm));
             }
             else
             {
@@ -182,19 +182,26 @@ namespace StrucEngLib
                 List<string> layerNames = new List<string>();
                 foreach (var l in _selectedLoad.Layers)
                 {
-                    Rhino.RhinoApp.WriteLine("{0}", l.GetName());
                     layerNames.Add(l.GetName());
                 }
 
                 if (layerNames.Count == 0)
                 {
-                    Rhino.RhinoApp.WriteLine("No");
                     RhinoUtils.UnSelectAll(RhinoDoc.ActiveDoc);
                 }
                 else
                 {
                     RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, layerNames);
                 }
+            }
+        }
+
+        public override void UpdateModel()
+        {
+            _mainVm.Workbench.Loads.Clear();
+            foreach (var load in Loads)
+            {
+                _mainVm.Workbench.Loads.Add(load);
             }
         }
     }
