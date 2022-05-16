@@ -172,8 +172,11 @@ namespace StrucEngLib.Step
             _mainVm.Workbench.Steps.Clear();
             foreach (var s in Steps)
             {
-                s.UpdateModel();
-                _mainVm.Workbench.Steps.Add(s.Model);
+                if (s.Order != StepNameExclude)
+                {
+                    s.UpdateModel();
+                    _mainVm.Workbench.Steps.Add(s.Model);    
+                }
             }
         }
     }

@@ -35,11 +35,13 @@ namespace StrucEngLib
                 if (valMsgs.Count != 0)
                 {
                     _vm.ErrorVm.ShowMessages(valMsgs);
+                    return;
                 }
             }
             catch (Exception e)
             {
                 _vm.ErrorVm.ShowException("Error during model validation", e);
+                return;
             }
 
             PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
@@ -51,6 +53,7 @@ namespace StrucEngLib
             catch (Exception e)
             {
                 _vm.ErrorVm.ShowException("Error during code generation", e);
+                return;
             }
 
             Success = true;

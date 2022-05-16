@@ -96,7 +96,7 @@ namespace StrucEngLib.Analysis
             foreach (var avm in AnalysisViewItems)
             {
                 avm.UpdateModel();
-                if (avm.Include == true)
+                if (avm.Include == true && avm.StepName != ListStepViewModel.StepNameExclude)
                 {
                     _vm.Workbench.AnalysisSettings.Add(avm.Model);
                 }
