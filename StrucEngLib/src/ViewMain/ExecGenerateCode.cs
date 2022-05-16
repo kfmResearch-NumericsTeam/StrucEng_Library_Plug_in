@@ -9,36 +9,40 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-    /// <summary>Generate and Execute Code</summary>
-    public class ExecGenerateCode : AsyncCommandBase
+    /// <summary>Generate Code</summary>
+    public class ExecGenerateCode : CommandBase
     {
         private readonly MainViewModel _vm;
+        private readonly Workbench _model;
 
-        public ExecGenerateCode(MainViewModel vm)
+        public bool Success { get; private set; } = false;
+
+        public string GeneratedCode { get; private set; }
+
+        public ExecGenerateCode(MainViewModel vm, Workbench model)
         {
             _vm = vm;
+            _model = model;
         }
 
-        public override Task ExecuteAsync(object parameter)
+        public override void Execute(object m)
         {
-            Workbench model = _vm.BuildModel();
+            Success = false;
             try
             {
                 ModelValidator validate = new ModelValidator();
-                var valMsgs = validate.ValidateModel(model);
+                var valMsgs = validate.ValidateModel(_model);
                 if (valMsgs.Count != 0)
                 {
                     _vm.ErrorVm.ShowMessages(valMsgs);
-                    return null;
                 }
             }
             catch (Exception e)
             {
                 _vm.ErrorVm.ShowException("Error during model validation", e);
-                return null;
             }
 
-            PythonCodeGenerator codeGen = new PythonCodeGenerator(model);
+            PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
             var sourceCode = "";
             try
             {
@@ -47,37 +51,10 @@ namespace StrucEngLib
             catch (Exception e)
             {
                 _vm.ErrorVm.ShowException("Error during code generation", e);
-                return null;
             }
 
-            var dialog = new InspectPythonDialog(sourceCode);
-            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
-            if (dialogRc == Eto.Forms.DialogResult.Ok)
-            {
-                sourceCode = dialog.Source;
-
-                if (dialog.State == InspectPythonDialog.STATE_EXEC)
-                {
-                    try
-                    {
-                        OnGenerateModel(sourceCode);
-                    }
-                    catch (Exception e)
-                    {
-                        _vm.ErrorVm.ShowException("Error during code execution", e);
-                        return null;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        protected void OnGenerateModel(string source)
-        {
-            string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
-            File.WriteAllText(fileName, source);
-            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
+            Success = true;
+            GeneratedCode = sourceCode;
         }
     }
 }

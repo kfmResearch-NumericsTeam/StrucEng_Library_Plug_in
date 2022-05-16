@@ -59,7 +59,24 @@ namespace StrucEngLib
 
         private void OnInspectCode()
         {
-            new ExecGenerateCode(_mainVm).ExecuteAsync(null);
+            var model = _mainVm.BuildModel();
+            var gen = new ExecGenerateCode(_mainVm, model);
+            gen.Execute(null);
+            if (gen.Success)
+            {
+                new ExecShowCode(_mainVm, gen.GeneratedCode).Execute(null);
+            }
+        }
+
+        private void OnExecCode()
+        {
+            var model = _mainVm.BuildModel();
+            var gen = new ExecGenerateCode(_mainVm, model);
+            gen.Execute(null);
+            if (gen.Success)
+            {
+                new ExecExecuteCode(_mainVm, gen.GeneratedCode).Execute(null);
+            }
         }
 
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
@@ -86,6 +103,7 @@ namespace StrucEngLib
                 _mainVm.ErrorVm.ShowMessage("Layer can't be empty");
                 return;
             }
+
             var l = LayerToAddType == LAYER_TYPE_ELEMENT
                 ? Element.CreateElement(LayerToAdd)
                 : Set.CreateSet(LayerToAdd);

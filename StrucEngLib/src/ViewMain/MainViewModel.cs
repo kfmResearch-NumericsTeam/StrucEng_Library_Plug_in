@@ -14,12 +14,12 @@ namespace StrucEngLib
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ListLayerViewModel ListLayerVm { get; set; }
-        public LayerDetailsViewModel DetailLayerVm { get; set; }
-        public ListLoadViewModel ListLoadVm { get; set; }
-        public ListStepViewModel ListStepVm { get; set; }
-        public ErrorViewModel ErrorVm { get; set; }
-        public AnalysisViewModel AnalysisVm { get; set; }
+        public ListLayerViewModel ListLayerVm { get; }
+        public LayerDetailsViewModel DetailLayerVm { get; }
+        public ListLoadViewModel ListLoadVm { get; }
+        public ListStepViewModel ListStepVm { get; }
+        public ErrorViewModel ErrorVm { get; }
+        public AnalysisViewModel AnalysisVm { get; }
 
         public Workbench Workbench { get; }
 
@@ -50,9 +50,8 @@ namespace StrucEngLib
             }
             catch (Exception e)
             {
-                RhinoApp.WriteLine("{0}", e.Message);
+                ErrorVm.ShowException("Error occured while extracting model data from view models", e);
             }
-
             return Workbench;
         }
     }
