@@ -28,10 +28,8 @@ namespace StrucEngLib
             _btConnectLayers.Command = _vm.CommandConnectLayer;
             _tbConnectLayers.KeyDown += (sender, args) =>
             {
-                RhinoApp.WriteLine("Onkeydown");
                 if (args.Key == Keys.Backspace || args.Key == Keys.Delete)
                 {
-                    RhinoApp.WriteLine("backspace or delete");
                     _vm.Layers.Clear();
                 }
             };
