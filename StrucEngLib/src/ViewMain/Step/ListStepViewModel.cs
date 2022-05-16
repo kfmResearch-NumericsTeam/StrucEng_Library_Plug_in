@@ -106,17 +106,6 @@ namespace StrucEngLib.Step
             }
         }
 
-        // private void RegisterOrderUpdate(SingleStepViewModel vm)
-        // {
-        //     vm.PropertyChanged += (sender, args) =>
-        //     {
-        //         if (args.PropertyName == nameof(SingleStepViewModel.Order))
-        //         {
-        //             
-        //         }
-        //     };
-        // }
-
         private void RemoveLoads(IList loads)
         {
             foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
@@ -147,12 +136,17 @@ namespace StrucEngLib.Step
             }
         }
 
-        private int HighestOrder() =>
-            Steps.Select(s => s.Order)
-                .DefaultIfEmpty("0")
-                .Where(order => int.TryParse(order, out _))
-                .Select(o => int.Parse(o))
-                .Max();
+        private int HighestOrder()
+        {
+            var max = 0;
+            foreach (var s in Steps)
+            {
+                int.TryParse(s.Order, out var order);
+                max = Math.Max(max, order);
+            }
+
+            return max;
+        }
 
         private void ForceRedraw()
         {
@@ -175,7 +169,7 @@ namespace StrucEngLib.Step
                 if (s.Order != StepNameExclude)
                 {
                     s.UpdateModel();
-                    _mainVm.Workbench.Steps.Add(s.Model);    
+                    _mainVm.Workbench.Steps.Add(s.Model);
                 }
             }
         }

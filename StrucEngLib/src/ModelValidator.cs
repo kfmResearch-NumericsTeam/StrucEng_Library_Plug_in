@@ -93,6 +93,7 @@ namespace StrucEngLib
                 }
             }
 
+            HashSet<string> steps = new HashSet<string>();
             foreach (var step in model.Steps)
             {
                 if (String.IsNullOrEmpty(step.Order))
@@ -103,10 +104,20 @@ namespace StrucEngLib
                 try
                 {
                     float.Parse(step.Order);
+                    steps.Add(step.Order);
                 }
                 catch (Exception e)
                 {
                     msgs.Add($"Order '{step.Order}' of '{step.GetSummary()}' is not numeric");
+                }
+            }
+
+            foreach (var a in model.AnalysisSettings)
+            {
+                if (!steps.Contains(a.StepId))
+                {
+                    msgs.Add($"Analysis for Step '{a.StepId}' was not defined as a valid step. " +
+                             $"Assign step or exclude from output");
                 }
             }
 
