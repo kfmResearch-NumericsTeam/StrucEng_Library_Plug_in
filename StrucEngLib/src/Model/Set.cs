@@ -1,10 +1,17 @@
 namespace StrucEngLib.Model
 {
+    /// <summary>
+    /// Set model
+    /// </summary>
     public class Set : Layer
     {
         public SetDisplacementType SetDisplacementType { get; set; } = SetDisplacementType.NONE;
 
         public SetGeneralDisplacement SetGeneralDisplacement { get; set; }
+
+        public string Name { get; set; }
+        
+        public LayerType LayerType => LayerType.SET;
 
         public static Set CreateSet(string name)
         {
@@ -14,24 +21,14 @@ namespace StrucEngLib.Model
             Set e = new Set() {Name = name};
             return e;
         }
-
-        public string Name { get; set; }
-
         public override string ToString()
         {
             return "Set: " + Name;
         }
-
-        public LayerType LayerType => LayerType.SET;
-
+        
         public string GetName()
         {
             return Name;
-        }
-
-        public string PrettyPrint()
-        {
-            return "Set: " + Name + ", " + SetGeneralDisplacement;
         }
     }
 }

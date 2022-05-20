@@ -6,12 +6,15 @@ using Rhino.Input.Custom;
 using Rhino.UI;
 using Rhino.DocObjects;
 using System;
+using Eto.Forms;
+using Newtonsoft.Json;
 using Rhino;
 using Rhino.Commands;
 using Rhino.DocObjects;
 using Rhino.Input;
 using Rhino.Input.Custom;
-
+using StrucEngLib.Model;
+using Command = Rhino.Commands.Command;
 namespace StrucEngLib
 {
     /// <summary>
@@ -31,6 +34,19 @@ namespace StrucEngLib
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
+            RhinoApp.WriteLine("Hello world");
+
+            Workbench model = new Workbench();
+            Set s = new Set();
+            s.Name = "set name";
+            s.SetGeneralDisplacement = new SetGeneralDisplacement();
+            s.SetDisplacementType = SetDisplacementType.GENERAL;
+            model.Layers.Add(s);
+            
+            var ser = JsonConvert.SerializeObject(model);
+            RhinoApp.WriteLine(ser);
+            
+            
             var panelId = MainView.PanelId;
             Panels.OpenPanel(panelId);
             return Result.Success;

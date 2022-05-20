@@ -13,4 +13,5 @@ VERSION="$1"
 
 sed -i "s/Version =.*/Version = \"$VERSION\";/" "$DIR/../StrucEngLib/src/StrucEngLibPlugin.cs"
 cat "$DIR/../StrucEngLib/src/StrucEngLibPlugin.cs" | grep Version
-xmlstarlet ed -u "//Version[1]" -v $VERSION "$DIR/../StrucEngLib/StrucEngLib.csproj"
+xmlstarlet ed --inplace -u "//Version[1]" -v $VERSION "$DIR/../StrucEngLib/StrucEngLib.csproj"
+cat "$DIR/../StrucEngLib/StrucEngLib.csproj" | grep Version

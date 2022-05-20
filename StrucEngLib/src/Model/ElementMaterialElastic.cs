@@ -8,7 +8,7 @@ namespace StrucEngLib.Model
         
         public override string ToString()
         {
-            return $"MaterialElastic: {E}, {V}, {P}";
+            return $"{nameof(E)}: {E}, {nameof(V)}: {V}, {nameof(P)}: {P}";
         }
     }
 }

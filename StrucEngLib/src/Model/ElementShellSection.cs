@@ -6,7 +6,7 @@ namespace StrucEngLib.Model
         
         public override string ToString()
         {
-            return $"ShellSection: {Thickness}";
+            return $"{nameof(Thickness)}: {Thickness}";
         }
     }
 }

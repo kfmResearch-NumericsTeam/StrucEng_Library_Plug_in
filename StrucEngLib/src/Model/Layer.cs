@@ -10,6 +10,5 @@ namespace StrucEngLib.Model
     {
         LayerType LayerType { get; }
         string GetName();
-        string PrettyPrint();
     }
 }
