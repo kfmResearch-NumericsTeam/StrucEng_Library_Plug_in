@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
-    <Version>0.0.1-alpha3</Version>
+    <Version>0.0.1-alpha4</Version>
     <Title>StrucEngLib</Title>
     <Description>The StrucEngLib Plugin</Description>
     <TargetExt>.rhp</TargetExt>
@@ -11,7 +11,7 @@
     <EmbeddedResource Include="EmbeddedResources\**\*"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" IncludeAssets="compile;build"/>
     <PackageReference Include="RhinoCommon" Version="7.13.21348.13001" IncludeAssets="compile;build"/>
   </ItemGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND $([MSBuild]::IsOSPlatform(Windows))">

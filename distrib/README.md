@@ -6,7 +6,7 @@
 
 # 2. Build project with vs studio...
 
-# 3. Create packaging directory
+# 3. Create packaging directory (XXX: We copy from DEBUG not RELEASE currently)
 ./create_package_dir.sh <version>
 
 # 4. Create yak package (exec on windows!)
@@ -15,7 +15,7 @@
 # 5. Upload yak to repo (exec on windows!)
 ./publish_yak.bat
 
-# 6. Package can be installed in rhino with _Package_Manger, then search for Plugin
+# 6. Package can be installed in rhino with PackageManager, then search for Plugin
 ```
 
 
