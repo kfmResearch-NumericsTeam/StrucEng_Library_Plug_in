@@ -34,9 +34,6 @@ namespace StrucEngLib
             b.Append($"Stacktrace: {e.StackTrace} \n");
             b.Append("\n Context:\n");
             b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel));
-            b.Append("\n Model:\n");
-            StrucEngLibPlugin.Instance.MainViewModel.UpdateModel();
-            b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel.Workbench));
             ShowMessage(b.ToString(), false);
         }
 

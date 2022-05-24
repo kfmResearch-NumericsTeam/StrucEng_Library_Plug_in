@@ -129,7 +129,6 @@ namespace StrucEngLib.Step
             int order = HighestOrder() + 1;
             foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
             {
-                RhinoApp.WriteLine("Load: {0}", l);
                 var vm = new SingleStepViewModel(
                     new Model.Step
                     {

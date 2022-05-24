@@ -17,6 +17,7 @@ namespace StrucEngLib.Model
                 TypeNameHandling = TypeNameHandling.All,
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.All
             };
         }
 
