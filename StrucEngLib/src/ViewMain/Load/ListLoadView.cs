@@ -1,3 +1,4 @@
+using System;
 using StrucEngLib.Views;
 using Eto.Drawing;
 using Eto.Forms;

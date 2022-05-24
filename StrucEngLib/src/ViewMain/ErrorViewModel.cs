@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Rhino.Runtime.RhinoAccounts;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
@@ -31,6 +32,11 @@ namespace StrucEngLib
             b.Append($"Message: {e.Message} \n");
             b.Append($"Source: {e.Source} \n");
             b.Append($"Stacktrace: {e.StackTrace} \n");
+            b.Append("\n Context:\n");
+            b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel));
+            b.Append("\n Model:\n");
+            StrucEngLibPlugin.Instance.MainViewModel.UpdateModel();
+            b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel.Workbench));
             ShowMessage(b.ToString(), false);
         }
 
