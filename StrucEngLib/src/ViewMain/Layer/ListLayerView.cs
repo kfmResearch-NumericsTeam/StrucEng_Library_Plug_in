@@ -55,6 +55,7 @@ namespace StrucEngLib
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
             _btnExecPython.Command = _vmListLayer.CommandOnExecuteCode;
+            _btnClearData.Command = _vmListLayer.CommandClearModel;
 
             _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
@@ -180,7 +181,7 @@ namespace StrucEngLib
                     }
                 ));
 
-            AddRow(UiUtils.GenerateTitle("Step 2: Define Load Coordinates"));
+            AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
 
             AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));

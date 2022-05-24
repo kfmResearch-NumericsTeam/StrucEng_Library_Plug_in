@@ -28,9 +28,10 @@ namespace StrucEngLib
             }
         }
 
+        /// <summary> Layers assigned to a load </summary>
         public ObservableCollection<Layer> Layers { get; }
 
-        public AbstractLoadViewModel(MainViewModel mainVm)
+        protected AbstractLoadViewModel(MainViewModel mainVm)
         {
             CommandConnectLayer = new RelayCommand(OnConnectLayer);
             ListLayerVm = mainVm.ListLayerVm;

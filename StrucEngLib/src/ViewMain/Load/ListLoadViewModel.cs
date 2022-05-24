@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Security.AccessControl;
 using Eto.Forms;
@@ -102,9 +103,15 @@ namespace StrucEngLib
             Loads = new ObservableCollection<Load>(mainVm.Workbench.Loads);
             Loads.CollectionChanged += (sender, args) =>
             {
-                SelectLoadViewVisible = Loads.Count != 0;
-                OnLoadSettingChanged();
+                LoadsChanged();
             };
+            LoadsChanged();
+        }
+
+        private void LoadsChanged()
+        {
+            SelectLoadViewVisible = Loads.Count != 0;
+            OnLoadSettingChanged();
         }
 
         private void OnAddLoad()

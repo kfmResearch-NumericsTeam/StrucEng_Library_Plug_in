@@ -14,27 +14,28 @@ namespace StrucEngLib
         private readonly MainViewModel _vm;
         public ICommand ExecElementNumbers;
 
-        private readonly ObservableCollection<LoadConstraintEntryViewModel> _loadConstraints;
-        public ObservableCollection<LoadConstraintEntryViewModel> LoadConstraints => _loadConstraints;
+        private readonly ObservableCollection<LocalCoordinateEntryViewModel> _loadConstraints;
+        public ObservableCollection<LocalCoordinateEntryViewModel> LoadConstraints => _loadConstraints;
 
         public LoadConstraintViewModel(MainViewModel vm)
         {
             _vm = vm;
             ExecElementNumbers = new ExecElementNumbers(vm);
-            _loadConstraints = new ObservableCollection<LoadConstraintEntryViewModel>();
+            _loadConstraints = new ObservableCollection<LocalCoordinateEntryViewModel>();
             PopulateLayers(vm);
             vm.ListLayerVm.Layers.CollectionChanged += LayersOnCollectionChanged;
         }
 
         private void PopulateLayers(MainViewModel vm)
         {
-            if (vm.ListLayerVm.Layers != null)
+            if (vm.Workbench.Layers != null)
             {
-                foreach (var layer in vm.ListLayerVm.Layers)
+                foreach (var layer in vm.Workbench.Layers)
                 {
                     if (layer.LayerType == LayerType.ELEMENT)
                     {
-                        _loadConstraints.Add(new LoadConstraintEntryViewModel(layer));
+                        var e = layer as Element;
+                        _loadConstraints.Add(new LocalCoordinateEntryViewModel(e));
                     }
                 }
             }
@@ -48,10 +49,7 @@ namespace StrucEngLib
                 {
                     if (newLayer.LayerType == LayerType.ELEMENT)
                     {
-                        LoadConstraintEntryViewModel c = new LoadConstraintEntryViewModel(newLayer)
-                        {
-                            LayerName = newLayer.GetName(),
-                        };
+                        LocalCoordinateEntryViewModel c = new LocalCoordinateEntryViewModel(newLayer as Element);
                         _loadConstraints.Add(c);
                     }
                 }
@@ -71,7 +69,7 @@ namespace StrucEngLib
             }
         }
 
-        private LoadConstraintEntryViewModel GetConstraintEntryByOrigin(Layer o)
+        private LocalCoordinateEntryViewModel GetConstraintEntryByOrigin(Layer o)
         {
             foreach (var vm in LoadConstraints)
             {

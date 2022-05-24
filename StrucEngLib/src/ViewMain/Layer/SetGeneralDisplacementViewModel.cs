@@ -7,6 +7,7 @@ namespace StrucEngLib
 {
     /// <summary>
     /// Vm for General Displacement attributes
+    /// On each change, we sync with model
     /// </summary>
     public class SetGeneralDisplacementViewModel : ViewModelBase
     {

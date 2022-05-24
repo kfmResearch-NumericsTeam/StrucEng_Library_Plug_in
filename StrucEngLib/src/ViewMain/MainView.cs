@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
@@ -12,16 +13,28 @@ namespace StrucEngLib
     public class MainView : Panel, IPanel
     {
         public static System.Guid PanelId => typeof(MainView).GUID;
+        
+        public static MainView Instance { get; private set; }
+
+        private Scrollable _scrollable;
 
         public MainView()
         {
+            Instance = this;
             LoadUi();
         }
 
         public void LoadUi()
         {
             var vm = StrucEngLibPlugin.Instance.MainViewModel;
-            Content = new Scrollable {Content = new ListLayerView(vm)};
+            var v = new ListLayerView(vm);
+            
+            Content = (_scrollable = new Scrollable
+            {
+                Content = v
+                
+            });
+            
         }
 
         public void DisposeUi()

@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Eto.Forms;
+using Rhino;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -16,7 +18,14 @@ namespace StrucEngLib
 
         public override void Execute(object parameter)
         {
+            var res = MessageBox.Show("This will delete all user data from the Rhino Model. Are you sure?", MessageBoxType.Question);
             
+            if (res == DialogResult.Ok)
+            {
+                MainView.Instance.DisposeUi();
+                StrucEngLibPlugin.Instance.ResetData();
+                MainView.Instance.LoadUi();    
+            }
         }
     }
 }

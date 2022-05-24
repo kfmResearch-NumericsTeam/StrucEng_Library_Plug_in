@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Security.Permissions;
 using System.Windows.Input;
-using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
-using Rhino.UI;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -28,12 +23,14 @@ namespace StrucEngLib
         public RelayCommand CommandOnMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
+        public ICommand CommandClearModel { get; }
 
         // MVVC
         private Layer _selectedLayer;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
         private bool _selectLayerViewVisible;
+        public ObservableCollection<Layer> Layers { get; }
 
         public bool SelectLayerViewVisible
         {
@@ -44,21 +41,22 @@ namespace StrucEngLib
                 OnPropertyChanged();
             }
         }
-
+        
         public ListLayerViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            Layers = new ObservableCollection<Layer>(_mainVm.Workbench.Layers);
-
+            Layers = new ObservableCollection<Layer>();
             CommandOnInspectCode = new RelayCommand(OnInspectCode);
             CommandOnExecuteCode = new RelayCommand(OnExecCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
-            CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
+            CommandOnAddLayer = new RelayCommand(OnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-            
+            CommandClearModel =  new ExecClearModelData(_mainVm);
+
             var updateSelectLayerViewVisible = new Func<bool>(() => SelectLayerViewVisible = Layers.Count != 0);
             updateSelectLayerViewVisible();
             Layers.CollectionChanged += (sender, args) => { updateSelectLayerViewVisible(); };
+            UpdateViewModel();
         }
 
         private void OnInspectCode()
@@ -85,7 +83,6 @@ namespace StrucEngLib
 
         // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
-        private bool CanExecuteOnInspectCode() => Layers != null && Layers.Count > 0;
 
         private void OnDeleteLayer()
         {
@@ -128,10 +125,6 @@ namespace StrucEngLib
             }
         }
 
-        /*
-         * MVVC Getter/Setters
-         */
-
         public Layer SelectedLayer
         {
             get => _selectedLayer;
@@ -148,8 +141,6 @@ namespace StrucEngLib
                 }
             }
         }
-
-        public ObservableCollection<Layer> Layers { get; }
 
         public int LayerToAddType
         {
@@ -179,6 +170,15 @@ namespace StrucEngLib
             foreach (var layer in Layers)
             {
                 _mainVm.Workbench.Layers.Add(layer);
+            }
+        }
+
+        public override void UpdateViewModel()
+        {
+            Layers.Clear();
+            foreach (var layer in _mainVm.Workbench.Layers)
+            {
+                Layers.Add(layer);
             }
         }
     }

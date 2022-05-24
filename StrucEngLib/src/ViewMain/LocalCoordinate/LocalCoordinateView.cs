@@ -21,7 +21,7 @@ namespace StrucEngLib
 
         // XXX: Can be extension of root class
         protected IndirectBinding<string> FloatBinding(
-            Expression<Func<LoadConstraintEntryViewModel, float>> f, float defVal = 0)
+            Expression<Func<LocalCoordinateEntryViewModel, float>> f, float defVal = 0)
         {
             return Binding.Property(f).Convert(
                 v => v.ToString(),
@@ -33,7 +33,7 @@ namespace StrucEngLib
         }
 
         protected IndirectBinding<string> IntBinding(
-            Expression<Func<LoadConstraintEntryViewModel, int>> f, int defVal = 0)
+            Expression<Func<LocalCoordinateEntryViewModel, int>> f, int defVal = 0)
         {
             return Binding.Property(f).Convert(
                 v => v.ToString(),
@@ -51,7 +51,7 @@ namespace StrucEngLib
 
             Add(new GroupBox
                 {
-                    Text = "Set Constraints",
+                    Text = "Settings",
                     Padding = new Padding(5),
                     Visible = true,
                     Content = new DynamicLayout()
@@ -71,7 +71,7 @@ namespace StrucEngLib
                                         {
                                             Binding =
                                                 Binding
-                                                    .Property<LoadConstraintEntryViewModel,
+                                                    .Property<LocalCoordinateEntryViewModel,
                                                         string>(r =>
                                                         r.LayerName)
                                         },

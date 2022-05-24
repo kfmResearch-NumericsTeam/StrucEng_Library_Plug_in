@@ -5,7 +5,7 @@ namespace StrucEngLib
     /// <summary>
     /// Represents a single entry in the list
     /// </summary>
-    public class LoadConstraintEntryViewModel : ViewModelBase
+    public class LocalCoordinateEntryViewModel : ViewModelBase
     {
         private int _elementNumber;
         private int _ex0 = 0;
@@ -18,12 +18,13 @@ namespace StrucEngLib
         private int _ez1 = 0;
         private int _ez2 = 0;
         public string LayerName { get; set; }
-        public Layer Origin { get; }
+        public Element Origin { get; }
 
-        public LoadConstraintEntryViewModel(Layer origin)
+        public LocalCoordinateEntryViewModel(Element origin)
         {
             Origin = origin;
             ModelToVm();
+            LayerName = origin.GetName();
         }
 
         public int ElementNumber
@@ -162,7 +163,10 @@ namespace StrucEngLib
         protected void ModelToVm()
         {
             var el = (Element) Origin;
-            el.LoadConstraint = new ElementLoadConstraint();
+            if (el.LoadConstraint == null)
+            {
+                el.LoadConstraint = new ElementLoadConstraint();
+            }
             var e = el.LoadConstraint;
             
             _ex0 = e.Ex0;

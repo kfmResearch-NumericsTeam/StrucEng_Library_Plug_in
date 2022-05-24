@@ -30,6 +30,13 @@ namespace StrucEngLib
 
         protected override bool ShouldCallWriteDocument(FileWriteOptions options) => true;
 
+        public void ResetData()
+        {
+            MainViewModel.Dispose();
+            MainViewModel = null;
+            MainViewModel = new MainViewModel(new Workbench());
+        }
+        
         protected override void WriteDocument(
             RhinoDoc doc,
             BinaryArchiveWriter archive,

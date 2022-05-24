@@ -32,7 +32,10 @@ namespace StrucEngLib.Model
             }
 
             Workbench bench = JsonConvert.DeserializeObject<Workbench>(data, _settings);
-
+            if (bench == null)
+            {
+                bench = new Workbench();
+            }
             foreach (var l in bench.Layers)
             {
                 RhinoApp.WriteLine("Layer deserial: {0}", l.GetName());
