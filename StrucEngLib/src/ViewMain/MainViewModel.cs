@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
+using Newtonsoft.Json;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Analysis;
@@ -21,17 +22,38 @@ namespace StrucEngLib
         public ErrorViewModel ErrorVm { get; }
         public AnalysisViewModel AnalysisVm { get; }
 
+        private UnhandledExceptionEventHandler _exceptionHandler;
+
         public Workbench Workbench { get; }
 
-        public MainViewModel()
+        public MainViewModel(): this(new Workbench())
         {
-            Workbench = new Workbench();
+        }
+        
+        public MainViewModel(Workbench wb)
+        {
+            Workbench = wb;
             ListLayerVm = new ListLayerViewModel(this);
             DetailLayerVm = new LayerDetailsViewModel(this);
             ListLoadVm = new ListLoadViewModel(this);
             ListStepVm = new ListStepViewModel(this);
             ErrorVm = new ErrorViewModel();
             AnalysisVm = new AnalysisViewModel(this);
+
+
+            _exceptionHandler = (sender, args) =>
+            {
+                this.ErrorVm.ShowException("Something went wrong, we caught an unhandled exception. " +
+                                           "This is a bug. This will leave the application in an inconsistent state",
+                    (Exception) args.ExceptionObject);
+            };
+            AppDomain.CurrentDomain.UnhandledException += _exceptionHandler;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            AppDomain.CurrentDomain.UnhandledException -= _exceptionHandler;
         }
 
         public override void UpdateModel()
@@ -52,6 +74,7 @@ namespace StrucEngLib
             {
                 ErrorVm.ShowException("Error occured while extracting model data from view models", e);
             }
+
             return Workbench;
         }
     }

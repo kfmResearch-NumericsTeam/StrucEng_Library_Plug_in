@@ -34,6 +34,7 @@ namespace StrucEngLib
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
         private readonly ListStepViewModel _vmListStep;
+        private LinkButton _btnClearData;
 
         public ListLayerView(MainViewModel vm)
         {
@@ -210,7 +211,12 @@ namespace StrucEngLib
                                     (_btnExecPython = new Button {Text = "Execute Model"}),
                                     true
                                 )
-                            )
+                            ),
+                            new TableRow(
+                                new TableCell(
+                                    (_btnClearData = new LinkButton() {Text = "Clear Model Data"}),
+                                    false
+                                ))
                         }
                     }
                 });

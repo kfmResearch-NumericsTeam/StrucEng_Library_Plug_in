@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace StrucEngLib.Utils
 {
@@ -25,6 +26,11 @@ namespace StrucEngLib.Utils
 
             b.Append(" ] ");
             return b.ToString();
+        }
+
+        public static string ToJson(object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

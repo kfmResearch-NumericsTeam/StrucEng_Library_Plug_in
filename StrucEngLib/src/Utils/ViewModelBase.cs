@@ -22,5 +22,9 @@ namespace StrucEngLib
         public virtual void UpdateModel()
         {
         }
+        
+        public virtual void UpdateViewModel()
+        {
+        }
     }
 }

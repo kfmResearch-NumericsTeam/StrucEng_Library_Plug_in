@@ -55,8 +55,10 @@ namespace StrucEngLib
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer /*, CanExecuteOnAddLayer */);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-
-            Layers.CollectionChanged += (sender, args) => { SelectLayerViewVisible = Layers.Count != 0; };
+            
+            var updateSelectLayerViewVisible = new Func<bool>(() => SelectLayerViewVisible = Layers.Count != 0);
+            updateSelectLayerViewVisible();
+            Layers.CollectionChanged += (sender, args) => { updateSelectLayerViewVisible(); };
         }
 
         private void OnInspectCode()

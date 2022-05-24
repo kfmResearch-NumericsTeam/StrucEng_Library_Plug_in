@@ -1,5 +1,6 @@
 using System;
 using Eto.Forms;
+using Rhino;
 using Rhino.UI;
 
 namespace StrucEngLib
@@ -14,16 +15,19 @@ namespace StrucEngLib
 
         public MainView()
         {
-            MainViewModel vm = new MainViewModel();
-            Content = new Scrollable {Content = new ListLayerView(vm)};
-            // Content = new Scrollable {Content = };
+            LoadUi();
+        }
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-            {
-                vm.ErrorVm.ShowException("Something went wrong, we caught an unhandled exception. " +
-                                         "This is a bug. This will leave the application in an inconsistent state",
-                    (Exception) args.ExceptionObject);
-            };
+        public void LoadUi()
+        {
+            var vm = StrucEngLibPlugin.Instance.MainViewModel;
+            Content = new Scrollable {Content = new ListLayerView(vm)};
+        }
+
+        public void DisposeUi()
+        {
+            Content.Dispose();
+            Content = null;
         }
 
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
