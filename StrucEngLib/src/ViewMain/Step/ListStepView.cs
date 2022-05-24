@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino;
 using Rhino.Input;
 using StrucEngLib.Step;
 
@@ -19,6 +20,7 @@ namespace StrucEngLib
             _listStepVm = listStepVm;
             Build();
             Bind();
+            DrawLayout();
         }
 
         private void Bind()
@@ -33,6 +35,7 @@ namespace StrucEngLib
 
         private void DrawLayout()
         {
+            RhinoApp.WriteLine("Dray layout, {0}", _listStepVm.Steps.Count);
             var l = new TableLayout()
             {
                 Spacing = new Size(5, 5)
@@ -46,6 +49,7 @@ namespace StrucEngLib
             {
                 foreach (var step in _listStepVm.Steps)
                 {
+                    RhinoApp.WriteLine("step: , {0}", step.Label);
                     var dbStep = new DropDown()
                     {
                         DataStore = _listStepVm.StepNames,
@@ -73,7 +77,7 @@ namespace StrucEngLib
                 }
             }
 
-            _stepListLayout.Content = l;
+            _gbSelectSteps.Content = l;
         }
 
         private void Build()

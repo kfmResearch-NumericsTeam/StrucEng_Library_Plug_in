@@ -50,8 +50,9 @@ namespace StrucEngLib.Step
             Steps = new ObservableCollection<SingleStepViewModel>();
             _stepMap = new Dictionary<object, SingleStepViewModel>();
 
+            // XXX: This view logic is tedious, do we have a more straight forward way?
             _mainVm.ListLoadVm.LoadSettingsChanged += (sender, args) => ForceRedraw();
-            Steps.CollectionChanged += (sender, args) => HasSteps = Steps.Count != 0;
+            Steps.CollectionChanged += (sender, args) => StepsChanged();
             _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
             {
                 AddLayers(args.NewItems);
@@ -68,6 +69,13 @@ namespace StrucEngLib.Step
 
             AddLoads(_mainVm.ListLoadVm.Loads);
             AddLayers(_mainVm.ListLayerVm.Layers);
+            StepsChanged();
+            ForceRedraw();
+        }
+
+        private void StepsChanged()
+        {
+            HasSteps = Steps.Count != 0;
         }
 
         private void RemoveLayers(IList layers)
@@ -121,6 +129,7 @@ namespace StrucEngLib.Step
             int order = HighestOrder() + 1;
             foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
             {
+                RhinoApp.WriteLine("Load: {0}", l);
                 var vm = new SingleStepViewModel(
                     new Model.Step
                     {
@@ -166,11 +175,8 @@ namespace StrucEngLib.Step
             _mainVm.Workbench.Steps.Clear();
             foreach (var s in Steps)
             {
-                if (s.Order != StepNameExclude)
-                {
-                    s.UpdateModel();
-                    _mainVm.Workbench.Steps.Add(s.Model);
-                }
+                s.UpdateModel();
+                _mainVm.Workbench.Steps.Add(s.Model);
             }
         }
     }

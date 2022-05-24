@@ -101,10 +101,7 @@ namespace StrucEngLib
                 new ListItem {Key = LoadType.Point.ToString(), Text = "Point"},
             };
             Loads = new ObservableCollection<Load>(mainVm.Workbench.Loads);
-            Loads.CollectionChanged += (sender, args) =>
-            {
-                LoadsChanged();
-            };
+            Loads.CollectionChanged += (sender, args) => { LoadsChanged(); };
             LoadsChanged();
         }
 
@@ -131,7 +128,8 @@ namespace StrucEngLib
             }
             else
             {
-                throw new Exception("unknown load type");
+                _mainVm.ErrorVm.ShowMessage($"Unknown Load (OnAddLoad) {LoadName}");
+                return;
             }
 
             Loads.Add(newLoad);
@@ -170,7 +168,8 @@ namespace StrucEngLib
             }
             else
             {
-                throw new Exception("unsupported load");
+                _mainVm.ErrorVm.ShowMessage($"Unknown Load (UpdateContentView): {SelectedLoad.LoadType}");
+                return;
             }
         }
 
