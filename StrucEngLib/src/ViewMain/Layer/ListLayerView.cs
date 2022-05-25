@@ -57,16 +57,19 @@ namespace StrucEngLib
             _btnExecPython.Command = _vmListLayer.CommandOnExecuteCode;
             _btnClearData.Command = _vmListLayer.CommandClearModel;
 
-            _tbLayerToAdd.Bind<string>("Text", _vmListLayer, "LayerToAdd", DualBindingMode.TwoWay);
+            _tbLayerToAdd.Bind<string>(nameof(_tbLayerToAdd.Text), _vmListLayer, nameof(_vmListLayer.LayerToAdd));
             _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
-            _dropdownLayers.Bind<Layer>("SelectedValue", _vmListLayer, "SelectedLayer", DualBindingMode.TwoWay);
-            _rdlElementSetSelection.Bind<int>("SelectedIndex", _vmListLayer, "LayerToAddType", DualBindingMode.TwoWay);
-            _gbSelectLayer.Bind<bool>("Visible", _vmListLayer, "SelectLayerViewVisible", DualBindingMode.TwoWay);
-
-            _gbPropertiesForLayer.Bind<bool>("Visible", _vmDetailView, "LayerDetailViewVisible",
-                DualBindingMode.TwoWay);
-            _gbPropertiesForLayer.Bind<Control>("Content", _vmDetailView, "LayerDetailView", DualBindingMode.TwoWay);
+            _dropdownLayers.Bind<Layer>(nameof(_dropdownLayers.SelectedValue), _vmListLayer,
+                nameof(_vmListLayer.SelectedLayer));
+            _rdlElementSetSelection.Bind<int>(nameof(_rdlElementSetSelection.SelectedIndex), _vmListLayer,
+                nameof(_vmListLayer.LayerToAddType));
+            _gbSelectLayer.Bind<bool>(nameof(_gbSelectLayer.Visible), _vmListLayer,
+                nameof(_vmListLayer.SelectLayerViewVisible), DualBindingMode.TwoWay);
+            _gbPropertiesForLayer.Bind<bool>(nameof(_gbPropertiesForLayer.Visible), _vmDetailView,
+                nameof(_vmDetailView.LayerDetailViewVisible));
+            _gbPropertiesForLayer.Bind<Control>(nameof(_gbPropertiesForLayer.Content), _vmDetailView,
+                nameof(_vmDetailView.LayerDetailView));
         }
 
         protected void BuildGui()

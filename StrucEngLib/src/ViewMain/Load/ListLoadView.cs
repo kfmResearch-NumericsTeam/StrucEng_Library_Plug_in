@@ -37,13 +37,13 @@ namespace StrucEngLib
                 Binding.Property((ListLoadViewModel m) => m.LoadName).EnumToString(),
                 defaultContextValue: string.Empty);
 
-            _lbSelectLoad.Bind<Load>("SelectedValue", _vm, "SelectedLoad", DualBindingMode.TwoWay);
+            _lbSelectLoad.Bind<Load>(nameof(_lbSelectLoad.SelectedValue), _vm, nameof(_vm.SelectedLoad));
             _lbSelectLoad.ItemTextBinding = Binding.Property((Load t) => t.LoadType.GetName());
             _lbSelectLoad.DataStore = _vm.Loads;
 
-            _container.Bind<Control>("Content", _vm, "LoadView", DualBindingMode.TwoWay);
-            _gbPropsForLoad.Bind<bool>("Visible", _vm, "LoadViewVisible", DualBindingMode.TwoWay);
-            _gbSelectLoad.Bind<bool>("Visible", _vm, "SelectLoadViewVisible", DualBindingMode.TwoWay);
+            _container.Bind<Control>(nameof(_container.Content), _vm, nameof(_vm.LoadView));
+            _gbPropsForLoad.Bind<bool>(nameof(_gbPropsForLoad.Visible), _vm, nameof(_vm.LoadViewVisible));
+            _gbSelectLoad.Bind<bool>(nameof(_gbSelectLoad.Visible), _vm, nameof(_vm.SelectLoadViewVisible));
 
             DataContext = _vm;
         }
@@ -105,7 +105,8 @@ namespace StrucEngLib
                                             new TableCell((_lbSelectLoad = new ListBox()
                                             {
                                             }), true),
-                                            new TableCell(TableLayout.AutoSized((_btDeleteLoad = new Button {Text = "Delete"})))
+                                            new TableCell(
+                                                TableLayout.AutoSized((_btDeleteLoad = new Button {Text = "Delete"})))
                                         }
                                     },
                                 }

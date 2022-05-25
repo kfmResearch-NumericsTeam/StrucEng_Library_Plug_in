@@ -24,7 +24,7 @@ namespace StrucEngLib
         {
             var tb = new ComboBoxWithMemory(propName);
 
-            tb.Bind<string>("Text", vm, propName, DualBindingMode.TwoWay);
+            tb.Bind<string>(nameof(tb.Text), vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
 
             Type myType = vm.GetType();

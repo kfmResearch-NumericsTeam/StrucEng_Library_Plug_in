@@ -86,7 +86,7 @@ namespace StrucEngLib
             sectionLayout.Rows.Add(TableLayout.HorizontalScaled((_dbSectionSelection = new DropDown { })));
 
             _dbSectionSelection.DataStore = _items;
-            _dbSectionSelection.Bind<int>("SelectedIndex", _vm, "SelectedIndex",
+            _dbSectionSelection.Bind<int>(nameof(_dbSectionSelection.SelectedIndex), _vm, nameof(_vm.SelectedIndex),
                 DualBindingMode.TwoWay);
 
             _propertyLayout = new DynamicLayout
@@ -99,7 +99,7 @@ namespace StrucEngLib
             _vm.View = views[0];
             _vm.SelectedIndex = 0;
 
-            _propertyLayout.Bind<Control>("Content", _vm, "View",
+            _propertyLayout.Bind<Control>(nameof(_propertyLayout.Content), _vm, nameof(_vm.View),
                 DualBindingMode.TwoWay);
 
             sectionLayout.Rows.Add(_propertyLayout);

@@ -57,7 +57,7 @@ namespace StrucEngLib
             {
                 _propertyLayout.Add(_vm.EntryView);
             }
-            _propertyLayout.Bind<Control>("Content", _vm, "EntryView",
+            _propertyLayout.Bind<Control>(nameof(_propertyLayout.Content), _vm, nameof(_vm.EntryView),
                 DualBindingMode.TwoWay);
 
             sectionLayout.Rows.Add(_propertyLayout);

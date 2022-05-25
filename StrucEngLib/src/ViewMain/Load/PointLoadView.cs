@@ -1,17 +1,17 @@
 namespace StrucEngLib
 {
     /// <summary>Point Load View</summary>
-    public class PointLoadView: AbstractLoadView
+    public class PointLoadView : AbstractLoadView
     {
         // XXX: This load currently has no properties
-        public PointLoadView(AbstractLoadViewModel vm) : base(vm)
+        public PointLoadView(PointLoadViewModel vm) : base(vm)
         {
-            UiUtils.AddLabelTextRow(this, vm, "x [N]", "X", "");
-            UiUtils.AddLabelTextRow(this, vm, "y [N]", "Y", "");
-            UiUtils.AddLabelTextRow(this, vm, "z [N]", "Z", "");
-            UiUtils.AddLabelTextRow(this, vm, "xx [Nm]", "XX", "");
-            UiUtils.AddLabelTextRow(this, vm, "yy [Nm]", "YY", "");
-            UiUtils.AddLabelTextRow(this, vm, "zz [Nm]", "ZZ", "");
+            UiUtils.AddLabelTextRow(this, vm, "x [N]", nameof(vm.X), "");
+            UiUtils.AddLabelTextRow(this, vm, "y [N]", nameof(vm.Y), "");
+            UiUtils.AddLabelTextRow(this, vm, "z [N]", nameof(vm.Z), "");
+            UiUtils.AddLabelTextRow(this, vm, "xx [Nm]", nameof(vm.XX), "");
+            UiUtils.AddLabelTextRow(this, vm, "yy [Nm]", nameof(vm.YY), "");
+            UiUtils.AddLabelTextRow(this, vm, "zz [Nm]", nameof(vm.ZZ), "");
         }
     }
 }
