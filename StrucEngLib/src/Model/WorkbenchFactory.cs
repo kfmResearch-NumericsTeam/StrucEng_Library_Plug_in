@@ -25,21 +25,30 @@ namespace StrucEngLib.Model
 
         public Workbench DeserializeFromString(string data)
         {
-            RhinoApp.WriteLine("Deserialize model: {0}", data);
-            if (string.IsNullOrWhiteSpace(data))
+            var bench = new Workbench();
+            try
             {
-                RhinoApp.WriteLine("Model data empty");
-                return new Workbench();
-            }
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    return new Workbench();
+                }
 
-            Workbench bench = JsonConvert.DeserializeObject<Workbench>(data, _settings);
-            if (bench == null)
-            {
-                bench = new Workbench();
+                bench = JsonConvert.DeserializeObject<Workbench>(data, _settings);
+                if (bench == null)
+                {
+                    bench = new Workbench();
+                }
+
+                foreach (var l in bench.Layers)
+                {
+                    RhinoApp.WriteLine("Layer deserial: {0}", l.GetName());
+                }
             }
-            foreach (var l in bench.Layers)
+            catch (Exception e)
             {
-                RhinoApp.WriteLine("Layer deserial: {0}", l.GetName());
+                RhinoApp.WriteLine("Something went wrong wile reading the model: {0}", data);
+                RhinoApp.WriteLine(e.Message);
+                RhinoApp.WriteLine("We start off an empty model instead...");
             }
 
             return bench;

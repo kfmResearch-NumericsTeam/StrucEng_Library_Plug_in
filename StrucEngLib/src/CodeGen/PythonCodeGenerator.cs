@@ -64,7 +64,7 @@ mdl = Structure(name=name, path=path)
         private string PropId(string id) => RemoveSpaces(id) + "_prop";
         private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
         private string DispId(string id) => RemoveSpaces(id) + "_disp";
-        
+
         private string CreateStepName(string id) => "step_" + RemoveSpaces(id);
 
         private string EmitIfNotEmpty(string key, string value, string comma = ",")
@@ -90,7 +90,7 @@ mdl = Structure(name=name, path=path)
             b.Append($"{_nl}# == Summary" + _nl);
             b.Append("mdl.summary()" + _nl);
 
-            EmitAnalysisSettings(b, _model.AnalysisSettings);
+            EmitAnalysisSettings(b, _model);
 
             b.Append(footer);
             return b.ToString();
@@ -268,28 +268,35 @@ mdl = Structure(name=name, path=path)
              * stepPair: <float order as key, List<Steps> which belong to same order
              * Order is already by key (asc)
              */
-            var stepOrderList = new Dictionary<string, List<Model.Step>>();
-            foreach (var stepPair in _model.GroupSteps())
+
+            _model.Steps.Sort(delegate(Model.Step s1, Model.Step s2)
             {
-                var stepName = CreateStepName(stepPair.Value[0].Order);
-                stepOrderList.Add(stepName, stepPair.Value);
+                return String.Compare(s1.Order, s2.Order, StringComparison.Ordinal);
+            });
+
+            Dictionary<string, Model.Step> stepMap = new Dictionary<string, Model.Step>();
+            foreach (var step in _model.Steps)
+            {
+                var stepName = CreateStepName(step.Order);
+                stepMap.Add(stepName, step);
                 var loadsNames = new List<string>();
                 var dispNames = new List<string>();
-                foreach (var stepEntry in stepPair.Value)
+                foreach (var stepEntry in step.Entries)
                 {
-                    switch (stepEntry.StepType)
+                    switch (stepEntry.Type)
                     {
                         case StepType.Load:
-                            loadsNames.Add(loadNameMap[stepEntry.Load]);
+                            loadsNames.Add(loadNameMap[stepEntry.Value as Load]);
                             break;
                         case StepType.Set:
-                            dispNames.Add(stepEntry.Set.Name);
+                            dispNames.Add(SetId(((Set) stepEntry.Value).Name));
                             break;
                         default:
                             // XXX: Ignore rest
                             break;
                     }
                 }
+
                 var loadStr = "";
                 var dispStr = "";
                 if (loadsNames.Count > 0)
@@ -305,7 +312,7 @@ mdl = Structure(name=name, path=path)
                 b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
             }
 
-            b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepOrderList.Keys.ToList(), s => s)} " + _nl);
+            b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepMap.Keys.ToList(), s => s)} " + _nl);
         }
 
         private void EmitPlotData(StringBuilder b, string step, string field, bool take = true)
@@ -315,8 +322,17 @@ mdl = Structure(name=name, path=path)
             b.Append($@"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1) {_nl}");
         }
 
-        private void EmitAnalysisSettings(StringBuilder b, List<AnalysisSetting> sx)
+        private void EmitAnalysisSettings(StringBuilder b, Workbench model)
         {
+            List<AnalysisSetting> sx = new List<AnalysisSetting>();
+            foreach (var step in model.Steps)
+            {
+                if (step.Setting != null && step.Setting.Include)
+                {
+                    sx.Add(step.Setting);
+                }
+            }
+
             b.Append($@"{_nl}# == Run {_nl}");
             var fields = StringUtils.ListToPyStr<string>(new List<string>()
                 {
@@ -330,12 +346,12 @@ mdl = Structure(name=name, path=path)
             );
 
             b.Append($@"mdl.analyse_and_extract(software='abaqus', fields={fields}) {_nl}");
-            
+
             foreach (var s in sx)
             {
                 var step = CreateStepName(s.StepId);
                 b.Append($@"{_nl}# == Plot Step {step} {_nl}");
-                
+
                 EmitPlotData(b, step, "rfx", s.Rf);
                 EmitPlotData(b, step, "rfy", s.Rf);
                 EmitPlotData(b, step, "rfz", s.Rf);
@@ -365,7 +381,6 @@ mdl = Structure(name=name, path=path)
                 EmitPlotData(b, step, "cmy", s.Cm);
                 EmitPlotData(b, step, "cmz", s.Cm);
                 EmitPlotData(b, step, "cmm", s.Cm);
-
             }
         }
     }

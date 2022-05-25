@@ -4,10 +4,11 @@ using System.Xml;
 
 namespace StrucEngLib.Model
 {
-    /// <summary></summary>
+    /// <summary>Analysis Settings</summary>
     public class AnalysisSetting
     {
         public string StepId { get; set; } = null;
+        public bool Include { get; set; }
         public bool Rf { get; set; }
         public bool Rm { get; set; }
         public bool U { get; set; }

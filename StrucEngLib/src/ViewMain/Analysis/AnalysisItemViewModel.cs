@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Eto.Forms;
 using Rhino;
 using StrucEngLib.Model;
@@ -26,6 +27,7 @@ namespace StrucEngLib.Analysis
         public static void ModelToVm(AnalysisSetting model, AnalysisItemViewModel v)
         {
             v.StepName = model.StepId;
+            v.Include = model.Include;
             v.Rf = model.Rf;
             v.Rm = model.Rm;
             v.U = model.U;
@@ -37,6 +39,7 @@ namespace StrucEngLib.Analysis
         public static void VmToModel(AnalysisItemViewModel v, AnalysisSetting model)
         {
             model.StepId = v.StepName;
+            model.Include = v.Include ?? false;
             model.Rf = v.Rf ?? false;
             model.Rm = v.Rm ?? false;
             model.U = v.U ?? false;

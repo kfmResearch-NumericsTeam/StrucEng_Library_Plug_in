@@ -8,7 +8,7 @@ using StrucEngLib.Step;
 
 namespace StrucEngLib
 {
-    /// <summary>View to show Step ordering</summary>
+    /// <summary>Main view to assign steps to entries</summary>
     public class ListStepView : DynamicLayout
     {
         private readonly ListStepViewModel _listStepVm;
@@ -35,7 +35,6 @@ namespace StrucEngLib
 
         private void DrawLayout()
         {
-            RhinoApp.WriteLine("Dray layout, {0}", _listStepVm.Steps.Count);
             var l = new TableLayout()
             {
                 Spacing = new Size(5, 5)
@@ -49,7 +48,6 @@ namespace StrucEngLib
             {
                 foreach (var step in _listStepVm.Steps)
                 {
-                    RhinoApp.WriteLine("step: , {0}", step.Label);
                     var dbStep = new DropDown()
                     {
                         DataStore = _listStepVm.StepNames,

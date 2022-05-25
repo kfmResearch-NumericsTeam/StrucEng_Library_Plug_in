@@ -1,17 +1,15 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StrucEngLib.Model;
 
 namespace StrucEngLib.ViewMain.Step
 {
-    /// <summary> VM for a single Step in step view </summary>
-    public class SingleStepViewModel : ViewModelBase
+    /// <summary>
+    /// VM to assign a step id to a single entry
+    /// </summary>
+    public class StepViewModel : ViewModelBase
     {
-        // public KeyValuePair<StepType, object> Step { get; }
-
-        public Model.Step Model { get; }
-
+        public StepEntry Model { get; }
         private string _order;
 
         public string Order
@@ -24,15 +22,21 @@ namespace StrucEngLib.ViewMain.Step
             }
         }
 
+        public StepViewModel(StepEntry m, string order)
+        {
+            Model = m;
+            Order = order;
+        }
+
         public string Label
         {
             get
             {
                 string res = "";
-                if (Model.StepType == StepType.Load)
+                if (Model.Type == StepType.Load)
                 {
                     StringBuilder b = new StringBuilder();
-                    var l = (Load) Model.Load;
+                    var l = (Load) Model.Value;
 
                     b.Append("Load: ");
                     b.Append(l.LoadType.GetName());
@@ -50,25 +54,14 @@ namespace StrucEngLib.ViewMain.Step
 
                     res = b.ToString();
                 }
-                else if (Model.StepType == StepType.Set)
+                else if (Model.Type == StepType.Set)
                 {
-                    var s = (Set) Model.Set;
+                    var s = (Set) Model.Value;
                     res = "Set: " + s?.GetName();
                 }
 
                 return res;
             }
-        }
-
-        public SingleStepViewModel(Model.Step step)
-        {
-            Model = step;
-            Order = step.Order;
-        }
-
-        public override void UpdateModel()
-        {
-            Model.Order = Order;
         }
     }
 }

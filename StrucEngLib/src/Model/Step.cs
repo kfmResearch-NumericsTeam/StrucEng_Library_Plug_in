@@ -1,16 +1,17 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace StrucEngLib.Model
 {
-    public class NewStep
+    public class Step
     {
-        public float Order { get; set; }
-        
-        public List<NewStepEntry> Entries = new List<NewStepEntry>();
+        public static string OrderExcluded = "Excluded";
+
+        public string Order { get; set; }
+
+        public List<StepEntry> Entries = new List<StepEntry>();
+
+        public AnalysisSetting Setting { get; set; }
 
         public void RemoveStepEntryWithValue(object o)
         {
@@ -22,11 +23,21 @@ namespace StrucEngLib.Model
         {
             return Entries.Select(e => e.Value).Contains(o);
         }
+
+        public void AddEntry(StepType type, object o)
+        {
+            StepEntry e = new StepEntry(type, o);
+            Entries.Add(e);
+        }
     }
 
-    public class NewStepEntry
+    public class StepEntry
     {
-        public NewStepEntry(StepType type, object value)
+        public StepEntry()
+        {
+        }
+
+        public StepEntry(StepType type, object value)
         {
             Type = type;
             Value = value;
@@ -34,65 +45,5 @@ namespace StrucEngLib.Model
 
         public StepType Type { get; set; }
         public object Value { get; set; }
-    }
-
-    public enum StepType
-    {
-        Load,
-        Set
-    };
-
-    public class Step
-    {
-        public string Order { get; set; }
-        public StepType StepType { get; set; }
-        public Load Load { get; set; }
-        public Set Set { get; set; }
-
-        public string GetSummary()
-        {
-            string res = "";
-            if (StepType == StepType.Load)
-            {
-                StringBuilder b = new StringBuilder();
-                if (Load != null)
-                {
-                    b.Append("Load: ");
-                    b.Append(Load.LoadType.GetName());
-                    if (Load.Layers.Count > 0)
-                    {
-                        b.Append(" (");
-                        foreach (var l in Load.Layers)
-                        {
-                            b.Append(l.GetName() + ";");
-                        }
-
-                        b.Append(")");
-                    }
-                    else
-                    {
-                        b.Append(" (No layers connected)");
-                    }
-
-                    res = b.ToString();
-                }
-            }
-            else
-            {
-                res = "Set: " + Set?.GetName();
-            }
-
-            return res;
-        }
-
-        public Step(StepType type)
-        {
-            StepType = type;
-        }
-
-        public Step()
-        {
-            
-        }
     }
 }
