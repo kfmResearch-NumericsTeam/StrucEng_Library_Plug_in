@@ -13,6 +13,13 @@ namespace StrucEngLib.ViewMain.Step
         public string Order { get; }
 
         public ObservableCollection<StepViewModel> Steps { get; }
+        
+        public AggregatedStepViewModel(Model.Step model, string order)
+        {
+            Model = model;
+            Steps = new ObservableCollection<StepViewModel> {};
+            Order = order;
+        }
 
         public AggregatedStepViewModel(Model.Step model, StepViewModel initalEntry, string order)
         {

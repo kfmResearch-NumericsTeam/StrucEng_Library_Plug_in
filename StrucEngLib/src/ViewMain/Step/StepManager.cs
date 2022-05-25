@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Eto.Forms;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 
@@ -22,7 +23,7 @@ namespace StrucEngLib.ViewMain.Step
     public class StepManager : ViewModelBase
     {
         private readonly MainViewModel _vm;
-        public static string StepNameExclude { get; } = "Excluded";
+        public static string StepNameExclude { get; } = Model.Step.OrderExcluded;
 
         public ObservableCollection<AggregatedStepViewModel> AggregatedSteps;
 
@@ -50,12 +51,24 @@ namespace StrucEngLib.ViewMain.Step
             return steps;
         }
 
+        public static AggregatedStepViewModel ExcludedStep()
+        {
+            var excluded = new Model.Step()
+            {
+                Order = Model.Step.OrderExcluded
+            };
+            var excludedStep = new AggregatedStepViewModel(excluded, excluded.Order);
+            return excludedStep;
+        }
+
         public StepManager(MainViewModel vm)
         {
             _vm = vm;
-            AggregatedSteps = new ObservableCollection<AggregatedStepViewModel>();
+            AggregatedSteps = new ObservableCollection<AggregatedStepViewModel>
+            {
+            };
+            StepNames = new ObservableCollection<string>() {StepNameExclude};    
             Steps = new ObservableCollection<StepViewModel>();
-            StepNames = new ObservableCollection<string>() {StepNameExclude};
         }
 
         protected StepViewModel StepViewModelByObject(object o)
@@ -99,14 +112,6 @@ namespace StrucEngLib.ViewMain.Step
             {
                 c.Add(value);
             }
-        }
-
-        public void Clear()
-        {
-            Steps.Clear();
-            AggregatedSteps.Clear();
-            StepNames.Clear();
-            StepNames.Add(StepNameExclude);
         }
 
         protected void RemoveFromAggregation(StepViewModel step)
@@ -155,7 +160,7 @@ namespace StrucEngLib.ViewMain.Step
 
         private StepViewModel NewStepEntryVm(StepEntry entryStep, string order)
         {
-            var stepVm = new StepViewModel(entryStep, StepNameExclude);
+            var stepVm = new StepViewModel(entryStep, order);
             stepVm.PropertyChanged += (sender, args) =>
             {
                 // Logic to change step entry into other bucket if order changed
@@ -189,7 +194,6 @@ namespace StrucEngLib.ViewMain.Step
                 entryVms.Add(eVm);
                 Steps.Add(eVm);
             }
-
             var aVm = new AggregatedStepViewModel(model, entryVms, model.Order);
             AddIfNotContains(StepNames, model.Order);
             AggregatedSteps.Add(aVm);

@@ -32,12 +32,12 @@ namespace StrucEngLib
         
         public MainViewModel(Workbench wb)
         {
+            ErrorVm = new ErrorViewModel();
             Workbench = wb;
             ListLayerVm = new ListLayerViewModel(this);
             DetailLayerVm = new LayerDetailsViewModel(this);
             ListLoadVm = new ListLoadViewModel(this);
             ListStepVm = new ListStepViewModel(this);
-            ErrorVm = new ErrorViewModel();
             AnalysisVm = new AnalysisViewModel(this);
 
 

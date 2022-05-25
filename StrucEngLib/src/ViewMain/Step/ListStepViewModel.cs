@@ -89,7 +89,7 @@ namespace StrucEngLib.Step
 
         private void UpdateVm()
         {
-            foreach (var s in _mainVm.Workbench.Steps)
+            foreach (var s in _mainVm.Workbench?.Steps)
             {
                 StepManager.ExistingAggregateStep(s);
             }

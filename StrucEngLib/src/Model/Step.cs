@@ -4,7 +4,7 @@ using System.Linq;
 namespace StrucEngLib.Model
 {
     public class Step
-    {
+    {   
         public static string OrderExcluded = "Excluded";
 
         public string Order { get; set; }

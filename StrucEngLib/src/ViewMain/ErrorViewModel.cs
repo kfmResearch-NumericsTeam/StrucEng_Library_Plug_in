@@ -36,6 +36,17 @@ namespace StrucEngLib
             b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel));
             ShowMessage(b.ToString(), false);
         }
+        
+        public void DebugMessage(params object[] values)
+        {
+            StringBuilder b = new StringBuilder();
+            foreach (var o in values)
+            {
+                b.Append(StringUtils.ToJson(o));
+                b.Append("\n");
+            }
+            ShowMessages(new List<string>() {b.ToString()}, false);
+        }
 
         public void ShowMessage(string m, bool enumerate = true)
         {
