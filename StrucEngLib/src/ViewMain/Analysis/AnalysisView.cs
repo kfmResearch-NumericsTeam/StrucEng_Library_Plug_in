@@ -53,9 +53,8 @@ namespace StrucEngLib.Analysis
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Step\t\t",
+                HeaderText = "Step\t\t\t\t\t\t\t",
                 Editable = false,
-                Expand = true,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new TextBoxCell()
                 {
@@ -68,9 +67,9 @@ namespace StrucEngLib.Analysis
 
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Include\t",
+                HeaderText = "Include\t\t",
                 Editable = true,
-                HeaderTextAlignment = TextAlignment.Center,
+                HeaderTextAlignment = TextAlignment.Left,
                 DataCell = new CheckBoxCell()
                 {
                     Binding = Binding.Property<AnalysisItemViewModel, bool?>(r => r.Include)

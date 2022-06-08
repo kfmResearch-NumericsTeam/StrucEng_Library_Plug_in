@@ -180,6 +180,7 @@ namespace StrucEngLib
             AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
 
+            
             AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
             AddRow(new ListLoadView(_vmListLoad));
 
@@ -196,6 +197,7 @@ namespace StrucEngLib
                     Padding = new Padding(5),
                     Content = new TableLayout
                     {
+                        Padding = new Padding(5),
                         Spacing = new Size(10, 10),
                         Rows =
                         {
@@ -211,12 +213,13 @@ namespace StrucEngLib
                             ),
                             new TableRow(
                                 new TableCell(
-                                    (_btnClearData = new LinkButton() {Text = "Clear Model Data"}),
+                                    (_btnClearData = new LinkButton() {Text = "Reset Data"}),
                                     false
                                 ))
                         }
                     }
                 });
+            
         }
     }
 }

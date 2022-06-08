@@ -43,7 +43,7 @@ namespace StrucEngLib.Step
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Step order\t\t",
+                HeaderText = "Step order \t",
                 Editable = false,
                 Expand = false,
                 HeaderTextAlignment = TextAlignment.Left,
@@ -57,9 +57,9 @@ namespace StrucEngLib.Step
 
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Description\t",
+                HeaderText = "Description\t\t\t\t",
                 Editable = true,
-                Expand = true,
+                Expand = false,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new CustomCell()
                 {
