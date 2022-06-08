@@ -1,30 +1,26 @@
 using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
-using StrucEngLib.ViewMain.Step;
-
-namespace StrucEngLib.NewStep
+namespace StrucEngLib.Step
 {
     /// <summary>Main view model to assign steps to entries</summary>
-    public class ListNewStepViewModel : ViewModelBase
+    public class ListStepViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
         public RelayCommand CommandChangeStep { get; }
         public RelayCommand CommandDeleteStep { get; }
         public RelayCommand CommandAddStep { get; }
 
-        public ObservableCollection<NewStepViewModel> StepItems;
+        public ObservableCollection<StepEntryViewModel> StepItems;
 
-        private NewStepViewModel _selectedStepItem;
+        private StepEntryViewModel _selectedStepItem;
 
-        public NewStepViewModel SelectedStepItem
+        public StepEntryViewModel SelectedStepItem
         {
             get => _selectedStepItem;
             set
@@ -34,10 +30,10 @@ namespace StrucEngLib.NewStep
             }
         }
 
-        public ListNewStepViewModel(MainViewModel mainVm)
+        public ListStepViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            StepItems = new ObservableCollection<NewStepViewModel>() { };
+            StepItems = new ObservableCollection<StepEntryViewModel>() { };
             UpdateVm();
 
             CommandDeleteStep = new RelayCommand(OnDeleteStep);
@@ -75,7 +71,7 @@ namespace StrucEngLib.NewStep
             {
                 foreach (var step in _mainVm.Workbench?.Steps)
                 {
-                    var sVm = new NewStepViewModel(step)
+                    var sVm = new StepEntryViewModel(step)
                     {
                         Order = step.Order
                     };
@@ -149,7 +145,7 @@ namespace StrucEngLib.NewStep
                     step.Entries.Add(e);
                 }
 
-                var vm = new NewStepViewModel(step)
+                var vm = new StepEntryViewModel(step)
                 {
                     Order = stepOrder
                 };

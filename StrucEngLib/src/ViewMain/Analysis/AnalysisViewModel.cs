@@ -1,13 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Eto.Forms;
 using StrucEngLib.Model;
-using StrucEngLib.NewStep;
 using StrucEngLib.Step;
-using StrucEngLib.ViewMain.Step;
 
 namespace StrucEngLib.Analysis
 {
@@ -45,7 +39,7 @@ namespace StrucEngLib.Analysis
             {
                 if (args.NewItems != null && args.NewItems.Count > 0)
                 {
-                    foreach (NewStepViewModel stepVm in args.NewItems)
+                    foreach (StepEntryViewModel stepVm in args.NewItems)
                     {
                         OnNewStep(stepVm);
                     }
@@ -53,7 +47,7 @@ namespace StrucEngLib.Analysis
 
                 if (args.OldItems != null && args.OldItems.Count > 0)
                 {
-                    foreach (NewStepViewModel stepVm in args.OldItems)
+                    foreach (StepEntryViewModel stepVm in args.OldItems)
                     {
                         OnRemoveStep(stepVm);
                     }
@@ -78,7 +72,7 @@ namespace StrucEngLib.Analysis
             };
         }
 
-        private void OnNewStep(NewStepViewModel stepVm)
+        private void OnNewStep(StepEntryViewModel stepVm)
         {
             if (stepVm.Model.Setting == null)
             {
@@ -93,7 +87,7 @@ namespace StrucEngLib.Analysis
             RegisterEvents(avm);
         }
 
-        private void OnRemoveStep(NewStepViewModel stepVm)
+        private void OnRemoveStep(StepEntryViewModel stepVm)
         {
             var vm = ViewModelByModel(stepVm.Model);
             if (vm != null)

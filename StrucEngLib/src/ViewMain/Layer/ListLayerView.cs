@@ -1,16 +1,8 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Analysis;
 using StrucEngLib.Model;
-using StrucEngLib.NewStep;
 using StrucEngLib.Step;
-using StrucEngLib.Views;
-using Font = Eto.Drawing.Font;
-using FontStyle = Eto.Drawing.FontStyle;
-using Size = Eto.Drawing.Size;
 
 namespace StrucEngLib
 {
@@ -34,7 +26,7 @@ namespace StrucEngLib
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
-        private readonly ListNewStepViewModel _vmListStep;
+        private readonly ListStepViewModel _vmListStep;
         private LinkButton _btnClearData;
 
         public ListLayerView(MainViewModel vm)
@@ -192,7 +184,7 @@ namespace StrucEngLib
             AddRow(new ListLoadView(_vmListLoad));
 
             AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
-            AddRow(new ListNewStepView(_vmListStep));
+            AddRow(new ListStepView(_vmListStep));
 
             AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
 

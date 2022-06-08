@@ -1,113 +1,20 @@
-using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
-using Rhino.Input;
 using StrucEngLib.Model;
-using StrucEngLib.NewStep;
-using StrucEngLib.Step;
 
-namespace StrucEngLib.NewStep
+namespace StrucEngLib.Step
 {
-    public class NewStepViewModel : TreeGridItem, INotifyPropertyChanged
-    {
-        public Model.Step Model { set; get; }
-
-        public string Order
-        {
-            get => Model.Order;
-            set
-            {
-                Model.Order = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public void ModelUpdated()
-        {
-            OnPropertyChanged(nameof(Description));
-        }
-
-        public string Description
-        {
-            get
-            {
-                if (Model == null)
-                {
-                    return "";
-                }
-
-
-                StringBuilder s = new StringBuilder();
-
-                if (Model.Entries == null || Model.Entries.Count == 0)
-                {
-                    s.Append("Step contains no entries");
-                }
-                else
-                {
-                    bool multiLine = false;
-                    foreach (var e in Model.Entries)
-                    {
-                        if (e.Value == null)
-                        {
-                            continue;
-                        }
-
-                        if (e.Type == StepType.Load)
-                        {
-                            if (multiLine)
-                            {
-                                s.Append("\n");
-                            }
-
-                            var load = e.Value as Load;
-                            s.Append("Load: " + load.Description + " ");
-                            multiLine = true;
-                        }
-                        else if (e.Type == StepType.Set)
-                        {
-                            if (multiLine)
-                            {
-                                s.Append("\n");
-                            }
-
-                            var set = e.Value as Set;
-                            s.Append("Set: " + set.Name + " ");
-                            multiLine = true;
-                        }
-                    }
-                }
-
-                return s.ToString();
-            }
-        }
-
-        public NewStepViewModel(Model.Step model)
-        {
-            Model = model;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
     /// <summary>Main view to assign steps to entries</summary>
-    public class ListNewStepView : DynamicLayout
+    public class ListStepView : DynamicLayout
     {
-        private readonly ListNewStepViewModel _listStepVm;
+        private readonly ListStepViewModel _listStepVm;
         private TableLayout _stepListLayout;
         private GridView _grid;
 
-        public ListNewStepView(ListNewStepViewModel listStepVm)
+        public ListStepView(ListStepViewModel listStepVm)
         {
             _listStepVm = listStepVm;
             Build();
@@ -118,7 +25,7 @@ namespace StrucEngLib.NewStep
         {
             _grid.DataStore = _listStepVm.StepItems;
             _grid.DataContext = _listStepVm;
-            _grid.SelectedItemBinding.BindDataContext((ListNewStepViewModel m) => m.SelectedStepItem);
+            _grid.SelectedItemBinding.BindDataContext((ListStepViewModel m) => m.SelectedStepItem);
         }
 
         private void Build()
@@ -143,7 +50,7 @@ namespace StrucEngLib.NewStep
 
                 DataCell = new TextBoxCell()
                 {
-                    Binding = Binding.Property<NewStepViewModel, string>(r => r.Order)
+                    Binding = Binding.Property<StepEntryViewModel, string>(r => r.Order)
                 },
                 Resizable = true,
             });
@@ -159,7 +66,7 @@ namespace StrucEngLib.NewStep
                     CreateCell = (args =>
                     {
                         Label l = new Label();
-                        l.BindDataContext(c => c.Text, Binding.Property((NewStepViewModel m) => m.Description));
+                        l.BindDataContext(c => c.Text, Binding.Property((StepEntryViewModel m) => m.Description));
                         return l;
                     }),
                 },

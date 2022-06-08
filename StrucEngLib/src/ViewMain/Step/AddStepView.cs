@@ -5,7 +5,7 @@ using Eto.Forms;
 using Rhino;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.NewStep
+namespace StrucEngLib.Step
 {
     /// <summary>Simple View to select entries to group into a step</summary>
     public class AddStepView : Dialog<DialogResult>

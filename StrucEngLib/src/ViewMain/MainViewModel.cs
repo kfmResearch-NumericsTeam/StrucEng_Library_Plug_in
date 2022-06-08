@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Eto.Forms;
-using Newtonsoft.Json;
-using Rhino;
-using Rhino.UI;
 using StrucEngLib.Analysis;
 using StrucEngLib.Model;
-using StrucEngLib.NewStep;
 using StrucEngLib.Step;
+
 
 namespace StrucEngLib
 {
@@ -19,7 +15,7 @@ namespace StrucEngLib
         public ListLayerViewModel ListLayerVm { get; }
         public LayerDetailsViewModel DetailLayerVm { get; }
         public ListLoadViewModel ListLoadVm { get; }
-        public ListNewStepViewModel ListStepVm { get; }
+        public ListStepViewModel ListStepVm { get; }
         public ErrorViewModel ErrorVm { get; }
         public AnalysisViewModel AnalysisVm { get; }
 
@@ -38,7 +34,7 @@ namespace StrucEngLib
             ListLayerVm = new ListLayerViewModel(this);
             DetailLayerVm = new LayerDetailsViewModel(this);
             ListLoadVm = new ListLoadViewModel(this);
-            ListStepVm = new ListNewStepViewModel(this);
+            ListStepVm = new ListStepViewModel(this);
             AnalysisVm = new AnalysisViewModel(this);
 
 
