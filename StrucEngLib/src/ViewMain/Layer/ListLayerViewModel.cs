@@ -41,7 +41,7 @@ namespace StrucEngLib
                 OnPropertyChanged();
             }
         }
-        
+
         public ListLayerViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
@@ -51,7 +51,7 @@ namespace StrucEngLib
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-            CommandClearModel =  new ExecClearModelData(_mainVm);
+            CommandClearModel = new ExecClearModelData(_mainVm);
 
             var updateSelectLayerViewVisible = new Func<bool>(() => SelectLayerViewVisible = Layers.Count != 0);
             updateSelectLayerViewVisible();
@@ -101,7 +101,8 @@ namespace StrucEngLib
         {
             if (string.IsNullOrEmpty(LayerToAdd))
             {
-                _mainVm.ErrorVm.ShowMessage("Layer can't be empty");
+                _mainVm.ErrorVm.ShowMessage("Layer can't be empty. " +
+                                            "Type layer name manually or press Select button to mouse select");
                 return;
             }
 

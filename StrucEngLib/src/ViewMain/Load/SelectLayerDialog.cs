@@ -17,15 +17,15 @@ namespace StrucEngLib
     {
         public List<Layer> SelectedLayers { get; } = new List<Layer>();
 
-        public SelectLayerDialog(List<Layer> layers)
-        {
-            Padding = new Padding(15) { };
-            Title = "Select layers";
-            DynamicLayout layout = new DynamicLayout();
-            layout.Spacing = new Size(10, 10);
-            layout.Padding = new Padding() {Top = 10, Bottom = 10, Left = 10, Right = 40};
 
-            layout.AddRow(new Label() {Text = "Select layers for Load:"});
+        private void NoLayers(DynamicLayout layout)
+        {
+            layout.AddRow(new Label() {Text = "No layers found. Add layers first."});
+        }
+
+        private Dictionary<CheckBox, Layer> HasLayers(DynamicLayout layout, List<Layer> layers)
+        {
+            layout.AddRow(new Label() {Text = "Select layers for load:"});
             Dictionary<CheckBox, Layer> cbMap = new Dictionary<CheckBox, Layer>();
             foreach (var l in layers)
             {
@@ -38,9 +38,8 @@ namespace StrucEngLib
                     try
                     {
                         var cb = (CheckBox) sender;
-                        bool check = cb.Checked != null && (bool) cb.Checked; 
+                        bool check = cb.Checked != null && (bool) cb.Checked;
                         RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, cb.Text, true, check);
-                        
                     }
                     catch (Exception e)
                     {
@@ -48,6 +47,29 @@ namespace StrucEngLib
                     }
                 };
             }
+
+            return cbMap;
+        }
+
+        public SelectLayerDialog(List<Layer> layers)
+        {
+            Padding = new Padding(15) { };
+            Title = "Select layers to connect with load";
+            DynamicLayout layout = new DynamicLayout();
+            layout.Spacing = new Size(10, 10);
+            layout.Padding = new Padding() {Top = 10, Bottom = 10, Left = 10, Right = 40};
+
+
+            var cbMap = new Dictionary<CheckBox, Layer>();
+            if (layers == null || layers.Count == 0)
+            {
+                NoLayers(layout);
+            }
+            else
+            {
+                cbMap = HasLayers(layout, layers);
+            }
+
 
             var button = new Button();
             button.Text = "Ok";

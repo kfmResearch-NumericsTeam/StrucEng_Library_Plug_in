@@ -136,7 +136,7 @@ namespace StrucEngLib
                                 {
                                     new TableRow(
                                         TableLayout.AutoSized(
-                                            _btnAddLayer = new Button {Text = "Add", Enabled = true})
+                                            _btnAddLayer = new Button {Text = "Add Layer", Enabled = true})
                                     )
                                 }
                             }

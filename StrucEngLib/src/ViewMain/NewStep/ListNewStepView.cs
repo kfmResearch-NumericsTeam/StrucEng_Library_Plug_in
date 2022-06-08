@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Eto.Drawing;
 using Eto.Forms;
@@ -11,21 +13,23 @@ using StrucEngLib.Step;
 
 namespace StrucEngLib.NewStep
 {
-    public class NewStepViewModel : ViewModelBase
+    public class NewStepViewModel : TreeGridItem, INotifyPropertyChanged
     {
         public Model.Step Model { set; get; }
 
-        private string _order;
-
         public string Order
         {
-            get => _order;
+            get => Model.Order;
             set
             {
-                _order = value;
-                RhinoApp.WriteLine("Order: {0}", value);
+                Model.Order = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void ModelUpdated()
+        {
+            OnPropertyChanged(nameof(Description));
         }
 
         public string Description
@@ -46,6 +50,7 @@ namespace StrucEngLib.NewStep
                 }
                 else
                 {
+                    bool multiLine = false;
                     foreach (var e in Model.Entries)
                     {
                         if (e.Value == null)
@@ -55,15 +60,25 @@ namespace StrucEngLib.NewStep
 
                         if (e.Type == StepType.Load)
                         {
+                            if (multiLine)
+                            {
+                                s.Append("\n");
+                            }
+
                             var load = e.Value as Load;
-                            s.Append(load.Description);
-                            s.Append("; ");
+                            s.Append("Load: " + load.Description + " ");
+                            multiLine = true;
                         }
                         else if (e.Type == StepType.Set)
                         {
+                            if (multiLine)
+                            {
+                                s.Append("\n");
+                            }
+
                             var set = e.Value as Set;
-                            s.Append("Set: " + set.Name);
-                            s.Append("; ");
+                            s.Append("Set: " + set.Name + " ");
+                            multiLine = true;
                         }
                     }
                 }
@@ -75,6 +90,13 @@ namespace StrucEngLib.NewStep
         public NewStepViewModel(Model.Step model)
         {
             Model = model;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -105,7 +127,6 @@ namespace StrucEngLib.NewStep
             {
                 Border = BorderType.None
             };
-            _grid.AllowEmptySelection = false; // XXX: Needed otherwise dropbox not clickable if outside of grid
             _grid.AllowMultipleSelection = false;
             _grid.CellFormatting += (sender, args) =>
             {
@@ -133,9 +154,14 @@ namespace StrucEngLib.NewStep
                 Editable = true,
                 Expand = true,
                 HeaderTextAlignment = TextAlignment.Center,
-                DataCell = new TextBoxCell()
+                DataCell = new CustomCell()
                 {
-                    Binding = Binding.Property<NewStepViewModel, string>(r => r.Description)
+                    CreateCell = (args =>
+                    {
+                        Label l = new Label();
+                        l.BindDataContext(c => c.Text, Binding.Property((NewStepViewModel m) => m.Description));
+                        return l;
+                    }),
                 },
                 Resizable = true,
                 AutoSize = true,

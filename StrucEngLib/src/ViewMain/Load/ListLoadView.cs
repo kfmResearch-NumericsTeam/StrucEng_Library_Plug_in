@@ -75,7 +75,7 @@ namespace StrucEngLib
                                     },
                                     new TableRow(
                                         TableLayout.AutoSized(
-                                            _btAddLoad = new Button {Text = "Add", Enabled = true})
+                                            _btAddLoad = new Button {Text = "Add Load", Enabled = true})
                                     )
                                 }
                             }

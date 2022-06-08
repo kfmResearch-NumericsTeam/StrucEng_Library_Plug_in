@@ -38,50 +38,59 @@ namespace StrucEngLib.NewStep
         {
             _mainVm = mainVm;
             StepItems = new ObservableCollection<NewStepViewModel>() { };
+            UpdateVm();
 
             CommandDeleteStep = new RelayCommand(OnDeleteStep);
             CommandChangeStep = new RelayCommand(OnChangeStep);
             CommandAddStep = new RelayCommand(OnAddStep);
 
-            // UpdateVm();
 
-            // _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
-            // {
-            //     AddLayers(args.NewItems);
-            //     RemoveLayers(args.OldItems);
-            //     ForceRedraw();
-            // };
-            // _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
-            // {
-            //     AddLoads(args.NewItems);
-            //     RemoveLoads(args.OldItems);
-            //     ForceRedraw();
-            // };
-            //
-            // ForceRedraw();
-        }
-
-
-        private void UpdateVm()
-        {
-            foreach (var s in _mainVm.Workbench?.Steps)
+            // XXX: Redraw view model if something changes
+            _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
             {
-                // StepManager.ExistingAggregateStep(s);
+                foreach (var item in StepItems)
+                {
+                    item.ModelUpdated();
+                }
+            };
+            _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
+            {
+                foreach (var item in StepItems)
+                {
+                    item.ModelUpdated();
+                }
+            };
+
+            if (StepItems.Count > 0)
+            {
+                // XXX: Preselect first entry
+                SelectedStepItem = StepItems[0];
             }
         }
 
-        private void ForceRedraw()
+        private void UpdateVm()
         {
+            StepItems.Clear();
+            if (_mainVm.Workbench.Steps != null)
+            {
+                foreach (var step in _mainVm.Workbench?.Steps)
+                {
+                    var sVm = new NewStepViewModel(step)
+                    {
+                        Order = step.Order
+                    };
+                    StepItems.Add(sVm);
+                }
+            }
         }
-
 
         public override void UpdateModel()
         {
-            // _mainVm.Workbench.Steps.Clear();
-            // foreach (var m in StepManager.ExportModel())
-            // {
-            //     _mainVm.Workbench.Steps.Add(m);
-            // }
+            _mainVm.Workbench.Steps.Clear();
+            foreach (var m in StepItems)
+            {
+                _mainVm.Workbench.Steps.Add(m.Model);
+            }
         }
 
         public void OnDeleteStep()
@@ -113,6 +122,8 @@ namespace StrucEngLib.NewStep
                 {
                     vm.Model.Entries.Add(e);
                 }
+
+                vm.ModelUpdated();
             }
         }
 
