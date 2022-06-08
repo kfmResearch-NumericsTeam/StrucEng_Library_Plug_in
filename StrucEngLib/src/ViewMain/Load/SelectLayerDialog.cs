@@ -44,7 +44,7 @@ namespace StrucEngLib
                     }
                     catch (Exception e)
                     {
-                        // Best effort
+                        // XXX: Preselect layers for visual aid, ignore on error
                     }
                 };
             }
@@ -64,7 +64,8 @@ namespace StrucEngLib
                 Close(DialogResult.Ok);
             };
 
-            layout.AddRow(TableLayout.AutoSized(button));
+            layout.AddSpace();
+            layout.AddSeparateRow(TableLayout.AutoSized(button));
             Content = layout;
         }
 

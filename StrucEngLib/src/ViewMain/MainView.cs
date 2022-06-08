@@ -34,7 +34,6 @@ namespace StrucEngLib
                 Content = v
                 
             });
-            
         }
 
         public void DisposeUi()

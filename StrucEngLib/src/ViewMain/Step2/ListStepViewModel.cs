@@ -21,6 +21,9 @@ namespace StrucEngLib.Step
         public ObservableCollection<AggregatedStepViewModel> AggregatedSteps => StepManager.AggregatedSteps;
         public ObservableCollection<StepViewModel> Steps => StepManager.Steps;
         public ObservableCollection<string> StepNames => StepManager.StepNames;
+        
+        
+        // public ObservableCollection<StepViewModel> StepItems { get; set; }
 
         public ListStepViewModel(MainViewModel mainVm)
         {

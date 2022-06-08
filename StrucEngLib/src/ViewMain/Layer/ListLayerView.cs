@@ -191,7 +191,7 @@ namespace StrucEngLib
             AddRow(new ListLoadView(_vmListLoad));
 
             AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
-            AddRow(new ListStepView(_vmListStep));
+            AddRow(new ListNewStepView(_vmListStep));
 
             AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
 
