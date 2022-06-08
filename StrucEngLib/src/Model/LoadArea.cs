@@ -25,7 +25,7 @@ namespace StrucEngLib.Model
                     }
                 }
 
-                return "Area, {" + res.ToString() + "}";
+                return "Area {" + res.ToString() + "}";
             }
         }
     }

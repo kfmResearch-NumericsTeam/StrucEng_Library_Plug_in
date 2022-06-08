@@ -42,11 +42,10 @@ namespace StrucEngLib.NewStep
 
                 if (Model.Entries == null || Model.Entries.Count == 0)
                 {
-                    s.Append("(no step entries)");
+                    s.Append("Step contains no entries");
                 }
                 else
                 {
-                    s.Append("(");
                     foreach (var e in Model.Entries)
                     {
                         if (e.Value == null)
@@ -63,12 +62,10 @@ namespace StrucEngLib.NewStep
                         else if (e.Type == StepType.Set)
                         {
                             var set = e.Value as Set;
-                            s.Append(set.Name);
+                            s.Append("Set: " + set.Name);
                             s.Append("; ");
                         }
                     }
-
-                    s.Append(")");
                 }
 
                 return s.ToString();
@@ -118,29 +115,14 @@ namespace StrucEngLib.NewStep
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Order\t\t",
-                Editable = true,
+                HeaderText = "Step order\t\t",
+                Editable = false,
                 Expand = false,
                 HeaderTextAlignment = TextAlignment.Left,
 
-                DataCell = new CustomCell()
+                DataCell = new TextBoxCell()
                 {
-                    CreateCell = (args =>
-                    {
-                        Spacing = new Size(5, 5);
-                        Padding = new Padding(5, 5, 5, 5);
-                        var db = new DropDown()
-                        {
-                            DataStore = _listStepVm.StepNames,
-                        };
-                        db.Bind<string>(
-                            nameof(db.SelectedValue),
-                            db.DataContext,
-                            nameof(NewStepViewModel.Order),
-                            DualBindingMode.TwoWay);
-
-                        return db;
-                    })
+                    Binding = Binding.Property<NewStepViewModel, string>(r => r.Order)
                 },
                 Resizable = true,
             });
@@ -172,7 +154,7 @@ namespace StrucEngLib.NewStep
                         {
                             Text = "Change"
                         };
-                        bt1.Command = _listStepVm.CommandDeleteStep;
+                        bt1.Command = _listStepVm.CommandChangeStep;
 
                         var bt2 = new LinkButton()
                         {

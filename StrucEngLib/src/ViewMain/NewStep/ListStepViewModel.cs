@@ -16,20 +16,11 @@ namespace StrucEngLib.NewStep
     public class ListNewStepViewModel : ViewModelBase
     {
         private readonly MainViewModel _mainVm;
-
-        public static string StepNameExclude = "Excluded";
-
         public RelayCommand CommandChangeStep { get; }
         public RelayCommand CommandDeleteStep { get; }
         public RelayCommand CommandAddStep { get; }
 
-        public StepManager StepManager { get; }
-
-        public ObservableCollection<AggregatedStepViewModel> AggregatedSteps => StepManager.AggregatedSteps;
-
         public ObservableCollection<NewStepViewModel> StepItems;
-
-        public ObservableCollection<string> StepNames;
 
         private NewStepViewModel _selectedStepItem;
 
@@ -43,25 +34,105 @@ namespace StrucEngLib.NewStep
             }
         }
 
+        public ListNewStepViewModel(MainViewModel mainVm)
+        {
+            _mainVm = mainVm;
+            StepItems = new ObservableCollection<NewStepViewModel>() { };
+
+            CommandDeleteStep = new RelayCommand(OnDeleteStep);
+            CommandChangeStep = new RelayCommand(OnChangeStep);
+            CommandAddStep = new RelayCommand(OnAddStep);
+
+            // UpdateVm();
+
+            // _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
+            // {
+            //     AddLayers(args.NewItems);
+            //     RemoveLayers(args.OldItems);
+            //     ForceRedraw();
+            // };
+            // _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
+            // {
+            //     AddLoads(args.NewItems);
+            //     RemoveLoads(args.OldItems);
+            //     ForceRedraw();
+            // };
+            //
+            // ForceRedraw();
+        }
+
+
+        private void UpdateVm()
+        {
+            foreach (var s in _mainVm.Workbench?.Steps)
+            {
+                // StepManager.ExistingAggregateStep(s);
+            }
+        }
+
+        private void ForceRedraw()
+        {
+        }
+
+
+        public override void UpdateModel()
+        {
+            // _mainVm.Workbench.Steps.Clear();
+            // foreach (var m in StepManager.ExportModel())
+            // {
+            //     _mainVm.Workbench.Steps.Add(m);
+            // }
+        }
+
         public void OnDeleteStep()
         {
-            RhinoApp.WriteLine("On Delete Step: {0}", SelectedStepItem);
+            if (SelectedStepItem == null)
+            {
+                return;
+            }
+
+            StepItems.Remove(SelectedStepItem);
         }
 
         public void OnChangeStep()
         {
-            RhinoApp.WriteLine("On Change Step: {0}", SelectedStepItem);
+            if (SelectedStepItem == null)
+            {
+                return;
+            }
+
+            var selection = GetSelectionListToAdd();
+            var dialog = new AddStepView(SelectedStepItem.Order, selection);
+            var rc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (rc == DialogResult.Ok)
+            {
+                var selected = dialog.SelectedEntries;
+                var vm = SelectedStepItem;
+                vm.Model.Entries.Clear();
+                foreach (var e in dialog.SelectedEntries)
+                {
+                    vm.Model.Entries.Add(e);
+                }
+            }
         }
 
         public void OnAddStep()
         {
             var selection = GetSelectionListToAdd();
-            var dialog = new AddStepView(selection);
+            var stepOrder = NewStepOrder();
+
+            var dialog = new AddStepView(stepOrder, selection);
             var rc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (rc == DialogResult.Ok)
             {
                 var selected = dialog.SelectedEntries;
-                Model.Step step = new Model.Step();
+                if (selected == null || selected.Count == 0)
+                {
+                    // XXX: Nothing to add
+                    return;
+                }
+
+                var step = new Model.Step();
                 foreach (var e in dialog.SelectedEntries)
                 {
                     step.Entries.Add(e);
@@ -69,13 +140,11 @@ namespace StrucEngLib.NewStep
 
                 var vm = new NewStepViewModel(step)
                 {
-                    Order = "1"
+                    Order = stepOrder
                 };
-                RhinoApp.WriteLine("Add");
                 StepItems.Add(vm);
             }
         }
-
 
         public List<KeyValuePair<string, StepEntry>> GetSelectionListToAdd()
         {
@@ -98,7 +167,7 @@ namespace StrucEngLib.NewStep
                 foreach (Load l in _mainVm.ListLoadVm.Loads)
                 {
                     var newEntry = new StepEntry(StepType.Load, l);
-                    var desc = l.Description;
+                    var desc = "Load: " + l.Description;
                     entries.Add(new KeyValuePair<string, StepEntry>(desc, newEntry));
                 }
             }
@@ -106,99 +175,23 @@ namespace StrucEngLib.NewStep
             return entries;
         }
 
-        public ListNewStepViewModel(MainViewModel mainVm)
+        public string NewStepOrder()
         {
-            _mainVm = mainVm;
-            StepItems = new ObservableCollection<NewStepViewModel>()
+            int order = 0;
+            foreach (var stepVm in StepItems)
             {
-            };
-
-            CommandDeleteStep = new RelayCommand(OnDeleteStep);
-            CommandChangeStep = new RelayCommand(OnChangeStep);
-            CommandAddStep = new RelayCommand(OnAddStep);
-            StepNames = new ObservableCollection<string>() {StepNameExclude};
-
-            // UpdateVm();
-
-            // _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
-            // {
-            //     AddLayers(args.NewItems);
-            //     RemoveLayers(args.OldItems);
-            //     ForceRedraw();
-            // };
-            // _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
-            // {
-            //     AddLoads(args.NewItems);
-            //     RemoveLoads(args.OldItems);
-            //     ForceRedraw();
-            // };
-            //
-            // ForceRedraw();
-        }
-
-        private void RemoveLayers(IList layers)
-        {
-            foreach (var oldItem in layers ?? Enumerable.Empty<Load>().ToList())
-            {
-                var l = (Layer) oldItem;
-                if (l.LayerType == LayerType.SET)
+                try
                 {
-                    StepManager.RemoveStep(StepType.Set, l);
+                    order = Math.Max(order, int.Parse(stepVm.Order));
+                }
+                catch (Exception e)
+                {
+                    // Ignore
                 }
             }
-        }
 
-        private void AddLayers(IList layers)
-        {
-            foreach (Layer l in layers ?? Enumerable.Empty<Load>().ToList())
-            {
-                if (l.LayerType == LayerType.SET)
-                {
-                    var newModel = new Model.Step();
-                    var newEntry = new StepEntry(StepType.Set, l);
-                    StepManager.NewAggregationStep(newModel, newEntry);
-                }
-            }
-        }
-
-        private void RemoveLoads(IList loads)
-        {
-            foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
-            {
-                StepManager.RemoveStep(StepType.Load, l);
-            }
-        }
-
-        private void AddLoads(IEnumerable loads)
-        {
-            foreach (Load l in loads ?? Enumerable.Empty<Load>().ToList())
-            {
-                var newModel = new Model.Step();
-                var newEntry = new StepEntry(StepType.Load, l);
-                StepManager.NewAggregationStep(newModel, newEntry);
-            }
-        }
-
-        private void UpdateVm()
-        {
-            foreach (var s in _mainVm.Workbench?.Steps)
-            {
-                StepManager.ExistingAggregateStep(s);
-            }
-        }
-
-        private void ForceRedraw()
-        {
-        }
-
-
-        public override void UpdateModel()
-        {
-            // _mainVm.Workbench.Steps.Clear();
-            // foreach (var m in StepManager.ExportModel())
-            // {
-            //     _mainVm.Workbench.Steps.Add(m);
-            // }
+            order++;
+            return order.ToString();
         }
     }
 }

@@ -7,12 +7,12 @@ using StrucEngLib.Model;
 
 namespace StrucEngLib.NewStep
 {
-    /// <summary></summary>
+    /// <summary>Simple View to select entries to group into a step</summary>
     public class AddStepView : Dialog<DialogResult>
     {
         public List<StepEntry> SelectedEntries = new List<StepEntry>();
 
-        public AddStepView(List<KeyValuePair<string, StepEntry>> entries)
+        public AddStepView(string stepId, List<KeyValuePair<string, StepEntry>> entries)
         {
             SelectedEntries = new List<StepEntry>();
             Padding = new Padding(15) { };
@@ -20,7 +20,7 @@ namespace StrucEngLib.NewStep
             layout.Spacing = new Size(10, 10);
             layout.Padding = new Padding() {Top = 10, Bottom = 10, Left = 10, Right = 40};
             Title = "Add or modify a step";
-            layout.AddRow(new Label() {Text = "Select entries to group into a step:"});
+            layout.AddRow(new Label() {Text = "Select entries to group into step " + stepId});
 
 
             if (entries.Count == 0)

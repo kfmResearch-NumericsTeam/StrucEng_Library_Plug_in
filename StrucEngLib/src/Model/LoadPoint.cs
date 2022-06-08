@@ -30,7 +30,7 @@ namespace StrucEngLib.Model
                     }
                 }
 
-                return "Point, {" + res.ToString() + "}";
+                return "Point {" + res.ToString() + "}";
             }
         }
     }
