@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace StrucEngLib.Model
@@ -6,5 +7,6 @@ namespace StrucEngLib.Model
     {
         List<Layer> Layers { get; set; }
         LoadType LoadType { get; }
+        string Description { get; }
     }
 }

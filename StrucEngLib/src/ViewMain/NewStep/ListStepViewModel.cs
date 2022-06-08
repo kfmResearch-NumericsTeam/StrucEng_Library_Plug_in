@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Eto.Forms;
 using Rhino;
+using Rhino.UI;
 using StrucEngLib.Model;
 using StrucEngLib.ViewMain.Step;
 
@@ -17,7 +18,8 @@ namespace StrucEngLib.NewStep
         private readonly MainViewModel _mainVm;
 
         public static string StepNameExclude = "Excluded";
-        
+
+        public RelayCommand CommandChangeStep { get; }
         public RelayCommand CommandDeleteStep { get; }
         public RelayCommand CommandAddStep { get; }
 
@@ -28,7 +30,7 @@ namespace StrucEngLib.NewStep
         public ObservableCollection<NewStepViewModel> StepItems;
 
         public ObservableCollection<string> StepNames;
-        
+
         private NewStepViewModel _selectedStepItem;
 
         public NewStepViewModel SelectedStepItem
@@ -45,10 +47,63 @@ namespace StrucEngLib.NewStep
         {
             RhinoApp.WriteLine("On Delete Step: {0}", SelectedStepItem);
         }
-        
+
+        public void OnChangeStep()
+        {
+            RhinoApp.WriteLine("On Change Step: {0}", SelectedStepItem);
+        }
+
         public void OnAddStep()
         {
-            RhinoApp.WriteLine("On Add Step");
+            var selection = GetSelectionListToAdd();
+            var dialog = new AddStepView(selection);
+            var rc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (rc == DialogResult.Ok)
+            {
+                var selected = dialog.SelectedEntries;
+                Model.Step step = new Model.Step();
+                foreach (var e in dialog.SelectedEntries)
+                {
+                    step.Entries.Add(e);
+                }
+
+                var vm = new NewStepViewModel(step)
+                {
+                    Order = "1"
+                };
+                RhinoApp.WriteLine("Add");
+                StepItems.Add(vm);
+            }
+        }
+
+
+        public List<KeyValuePair<string, StepEntry>> GetSelectionListToAdd()
+        {
+            var entries = new List<KeyValuePair<string, StepEntry>>();
+            if (_mainVm.ListLayerVm.Layers != null)
+            {
+                foreach (Layer l in _mainVm.ListLayerVm.Layers)
+                {
+                    if (l.LayerType == LayerType.SET)
+                    {
+                        var newEntry = new StepEntry(StepType.Set, l);
+                        var desc = "Set: " + l.GetName();
+                        entries.Add(new KeyValuePair<string, StepEntry>(desc, newEntry));
+                    }
+                }
+            }
+
+            if (_mainVm.ListLoadVm.Loads != null)
+            {
+                foreach (Load l in _mainVm.ListLoadVm.Loads)
+                {
+                    var newEntry = new StepEntry(StepType.Load, l);
+                    var desc = l.Description;
+                    entries.Add(new KeyValuePair<string, StepEntry>(desc, newEntry));
+                }
+            }
+
+            return entries;
         }
 
         public ListNewStepViewModel(MainViewModel mainVm)
@@ -56,39 +111,29 @@ namespace StrucEngLib.NewStep
             _mainVm = mainVm;
             StepItems = new ObservableCollection<NewStepViewModel>()
             {
-                new NewStepViewModel()
-                {
-                    Order = "0"
-                },
-                new NewStepViewModel()
-                {
-                    Order = "1"
-                }
             };
 
             CommandDeleteStep = new RelayCommand(OnDeleteStep);
+            CommandChangeStep = new RelayCommand(OnChangeStep);
             CommandAddStep = new RelayCommand(OnAddStep);
             StepNames = new ObservableCollection<string>() {StepNameExclude};
-            // StepNames.Add("0");
-            // StepNames.Add("1");
-            
-            StepManager = new StepManager(mainVm);
-            UpdateVm();
 
-            _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
-            {
-                AddLayers(args.NewItems);
-                RemoveLayers(args.OldItems);
-                ForceRedraw();
-            };
-            _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
-            {
-                AddLoads(args.NewItems);
-                RemoveLoads(args.OldItems);
-                ForceRedraw();
-            };
+            // UpdateVm();
 
-            ForceRedraw();
+            // _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
+            // {
+            //     AddLayers(args.NewItems);
+            //     RemoveLayers(args.OldItems);
+            //     ForceRedraw();
+            // };
+            // _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
+            // {
+            //     AddLoads(args.NewItems);
+            //     RemoveLoads(args.OldItems);
+            //     ForceRedraw();
+            // };
+            //
+            // ForceRedraw();
         }
 
         private void RemoveLayers(IList layers)
@@ -136,10 +181,10 @@ namespace StrucEngLib.NewStep
 
         private void UpdateVm()
         {
-            // foreach (var s in _mainVm.Workbench?.Steps)
-            // {
-            //     StepManager.ExistingAggregateStep(s);
-            // }
+            foreach (var s in _mainVm.Workbench?.Steps)
+            {
+                StepManager.ExistingAggregateStep(s);
+            }
         }
 
         private void ForceRedraw()

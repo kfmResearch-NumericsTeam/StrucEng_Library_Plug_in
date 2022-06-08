@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace StrucEngLib.Model
 {
     public class Step
-    {   
+    {
         public static string OrderExcluded = "Excluded";
 
         public string Order { get; set; }

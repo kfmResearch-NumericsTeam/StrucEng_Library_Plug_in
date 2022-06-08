@@ -115,12 +115,12 @@ namespace StrucEngLib.Analysis
         {
             _vm = vm;
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
-            vm.ListStepVm.AggregatedSteps.CollectionChanged += (sender, args) =>
-            {
-                OnNewStep(args.NewItems);
-                OnRemoveStep(args.OldItems);
-            };
-            UpdateViewModel();
+            // vm.ListStepVm.AggregatedSteps.CollectionChanged += (sender, args) =>
+            // {
+            //     OnNewStep(args.NewItems);
+            //     OnRemoveStep(args.OldItems);
+            // };
+            // UpdateViewModel();
         }
 
         public override void UpdateModel()

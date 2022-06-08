@@ -1,15 +1,20 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Text;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 using Rhino.Input;
+using StrucEngLib.Model;
+using StrucEngLib.NewStep;
 using StrucEngLib.Step;
 
 namespace StrucEngLib.NewStep
 {
     public class NewStepViewModel : ViewModelBase
     {
+        public Model.Step Model { set; get; }
+
         private string _order;
 
         public string Order
@@ -23,10 +28,56 @@ namespace StrucEngLib.NewStep
             }
         }
 
-
         public string Description
         {
-            get => "Description";
+            get
+            {
+                if (Model == null)
+                {
+                    return "";
+                }
+
+
+                StringBuilder s = new StringBuilder();
+
+                if (Model.Entries == null || Model.Entries.Count == 0)
+                {
+                    s.Append("(no step entries)");
+                }
+                else
+                {
+                    s.Append("(");
+                    foreach (var e in Model.Entries)
+                    {
+                        if (e.Value == null)
+                        {
+                            continue;
+                        }
+
+                        if (e.Type == StepType.Load)
+                        {
+                            var load = e.Value as Load;
+                            s.Append(load.Description);
+                            s.Append("; ");
+                        }
+                        else if (e.Type == StepType.Set)
+                        {
+                            var set = e.Value as Set;
+                            s.Append(set.Name);
+                            s.Append("; ");
+                        }
+                    }
+
+                    s.Append(")");
+                }
+
+                return s.ToString();
+            }
+        }
+
+        public NewStepViewModel(Model.Step model)
+        {
+            Model = model;
         }
     }
 
@@ -117,12 +168,30 @@ namespace StrucEngLib.NewStep
                 {
                     CreateCell = (args =>
                     {
-                        var bt = new LinkButton()
+                        var bt1 = new LinkButton()
+                        {
+                            Text = "Change"
+                        };
+                        bt1.Command = _listStepVm.CommandDeleteStep;
+
+                        var bt2 = new LinkButton()
                         {
                             Text = "Delete"
                         };
-                        bt.Command = _listStepVm.CommandDeleteStep;
-                        return bt;
+                        bt2.Command = _listStepVm.CommandDeleteStep;
+                        var l = new TableLayout
+                        {
+                            Spacing = new Size(5, 5),
+                            Rows =
+                            {
+                                new TableRow(
+                                    new TableCell(bt1, false),
+                                    new TableCell(bt2, false))
+                                {
+                                }
+                            }
+                        };
+                        return l;
                     })
                 },
                 Resizable = true,

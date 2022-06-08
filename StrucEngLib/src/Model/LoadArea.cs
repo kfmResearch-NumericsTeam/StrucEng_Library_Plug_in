@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace StrucEngLib.Model
 {
@@ -10,5 +11,22 @@ namespace StrucEngLib.Model
         public string Axes { get; set; }
         public List<Layer> Layers { get; set; } = new List<Layer>();
         public LoadType LoadType => LoadType.Area;
+
+        public string Description
+        {
+            get
+            {
+                StringBuilder res = new StringBuilder();
+                if (Layers != null)
+                {
+                    foreach (var layer in Layers)
+                    {
+                        res.Append(layer.GetName() + "; ");
+                    }
+                }
+
+                return "Area, {" + res.ToString() + "}";
+            }
+        }
     }
 }
