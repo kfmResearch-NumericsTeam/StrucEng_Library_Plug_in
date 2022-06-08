@@ -2,6 +2,6 @@
 name: StrucEngLibPlugin
 version: __VERSION__
 authors:
-  - "Numerics-AI group of kfmResearch"
+  - "kfmResearch"
 description: "StrucEngLibPlugin"
 url: https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in

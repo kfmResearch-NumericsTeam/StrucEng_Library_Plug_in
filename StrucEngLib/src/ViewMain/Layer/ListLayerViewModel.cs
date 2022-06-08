@@ -82,8 +82,7 @@ namespace StrucEngLib.Layer
                 new ExecExecuteCode(_mainVm, gen.GeneratedCode).Execute(null);
             }
         }
-
-        // private bool CanExecuteOnAddLayer() => !string.IsNullOrEmpty(LayerToAdd);
+        
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
 
         private void OnDeleteLayer()

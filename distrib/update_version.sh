@@ -2,6 +2,7 @@
 #
 # Update versions in files
 #
+
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 if [ -z "$1" ] 
 then

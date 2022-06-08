@@ -18,7 +18,7 @@ namespace StrucEngLib
 
         public override void Execute(object parameter)
         {
-            var res = MessageBox.Show("This will delete all user data from the Rhino Model. Are you sure?", MessageBoxType.Question);
+            var res = MessageBox.Show("All user data associated with StrucEngLib was deleted.", MessageBoxType.Information);
             
             if (res == DialogResult.Ok)
             {
