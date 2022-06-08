@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RhinoUI major_ver="3" minor_ver="0" guid="8abe4ee6-f165-420b-ab66-41762728ce82" localize="False" default_language_id="1033" dpi_scale="100">
+  <extend_rhino_menus>
+    <menu guid="d58ceae7-fdb0-4104-80da-274b94ad44a9">
+      <text>
+        <locale_1033>Extend Rhino Menus</locale_1033>
+      </text>
+      <menu guid="a118cef8-fdcd-4bc2-9baf-1a7668e9f053" ExtendRhinoMenu="Too&amp;ls::Repeat Co&amp;mmand Script">
+        <text>
+          <locale_1033>StrucEngLib Plugin</locale_1033>
+        </text>
+        <menu_item guid="fc063129-b783-4c21-a5ea-4755858610e5">
+          <text>
+            <locale_1033>Show...</locale_1033>
+          </text>
+          <macro_id>7ea35ee4-2a65-48c9-a521-e5d86df1c99b</macro_id>
+        </menu_item>
+        <menu_item guid="33be54b0-de74-4ac7-903b-a467b090f74c">
+          <text>
+            <locale_1033>Help...</locale_1033>
+          </text>
+          <macro_id>9b2ebe53-f26d-4243-a396-9963705e2afc</macro_id>
+        </menu_item>
+      </menu>
+    </menu>
+  </extend_rhino_menus>
+  <menus />
+  <tool_bar_groups />
+  <tool_bars />
+  <macros>
+    <macro_item guid="c341ecdc-7641-4c78-bb7f-85ca94c2bb97" bitmap_id="63618d99-cf69-4866-8ee7-5c2babba14f0">
+      <text>
+        <locale_1033>Macro</locale_1033>
+      </text>
+      <help_text>
+        <locale_1033>Tools for StrucEngLib Plugin</locale_1033>
+      </help_text>
+      <button_text>
+        <locale_1033>test</locale_1033>
+      </button_text>
+      <menu_text>
+        <locale_1033>StrucEngLib Plugin</locale_1033>
+      </menu_text>
+    </macro_item>
+    <macro_item guid="7ea35ee4-2a65-48c9-a521-e5d86df1c99b" bitmap_id="bf3b1e0f-0957-491c-8b6b-7d681454e0cc">
+      <text>
+        <locale_1033>Macro 00</locale_1033>
+      </text>
+      <help_text>
+        <locale_1033>Show the Main Window</locale_1033>
+      </help_text>
+      <menu_text>
+        <locale_1033>Show...</locale_1033>
+      </menu_text>
+      <script>StrucEngLibShowWindow</script>
+    </macro_item>
+    <macro_item guid="9b2ebe53-f26d-4243-a396-9963705e2afc" bitmap_id="199b1174-bffe-461d-9280-25567873549e">
+      <text>
+        <locale_1033>Macro 01</locale_1033>
+      </text>
+      <tooltip>
+        <locale_1033 />
+      </tooltip>
+      <help_text>
+        <locale_1033>Browse Wiki</locale_1033>
+      </help_text>
+      <button_text>
+        <locale_1033 />
+      </button_text>
+      <menu_text>
+        <locale_1033>Help...</locale_1033>
+      </menu_text>
+      <script>OpenURL https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki</script>
+    </macro_item>
+  </macros>
+  <bitmaps>
+    <small_bitmap item_width="16" item_height="16">
+      <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
+      <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
+      <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAwCAYAAAAYX/pXAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVEhL7cGBAAAAAMOg+VNf4AhVAAAAVw0M
+MAABdHz1SwAAAABJRU5ErkJgggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </small_bitmap>
+    <normal_bitmap item_width="24" item_height="24">
+      <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
+      <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
+      <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAABICAYAAADs+TUPAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U/tbwYgAAAAAAAA
+4NQAG0gAAXY6NDAAAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </normal_bitmap>
+    <large_bitmap item_width="32" item_height="32">
+      <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
+      <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
+      <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAABgCAYAAAB8InCYAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAiSURBVGhD7cEBAQAAAIIg/69uSEAAAAAAAAAA
+AAAAAMC5GjBgAAFtDxevAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </large_bitmap>
+  </bitmaps>
+  <scripts />
+</RhinoUI>
