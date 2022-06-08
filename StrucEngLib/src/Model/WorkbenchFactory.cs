@@ -38,11 +38,6 @@ namespace StrucEngLib.Model
                 {
                     bench = new Workbench();
                 }
-
-                foreach (var l in bench.Layers)
-                {
-                    RhinoApp.WriteLine("Layer deserial: {0}", l.GetName());
-                }
             }
             catch (Exception e)
             {
@@ -56,11 +51,6 @@ namespace StrucEngLib.Model
 
         public string SerializeToString(Workbench data)
         {
-            foreach (var l in data.Layers)
-            {
-                RhinoApp.WriteLine("Layer: {0}", l.GetName());
-            }
-
             var s = JsonConvert.SerializeObject(data, _settings);
             RhinoApp.WriteLine("serialize: {0}", s);
             return s;

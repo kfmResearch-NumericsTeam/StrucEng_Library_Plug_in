@@ -38,6 +38,7 @@ namespace StrucEngLib.Analysis
         private void BuildGui()
         {
             Spacing = new Size(10, 10);
+            Padding = new Padding(5);
 
             _grid = new GridView()
             {
@@ -81,11 +82,18 @@ namespace StrucEngLib.Analysis
             {
                 Text = "Include Steps in Output",
                 Padding = new Padding(5),
-                Content = _grid
+                
+                Content = new DynamicLayout(_grid)
+                {
+                    Spacing = new Size(5, 10),
+                    Padding = new Padding(5),
+                }
             });
             
             AddRow(_detailView = new AnalysisItemView()
             {
+                Spacing = new Size(5, 10),
+                Padding = new Padding(5),
                 Visible = false
             });
         }

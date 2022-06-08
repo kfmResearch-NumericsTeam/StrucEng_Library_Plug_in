@@ -201,7 +201,7 @@ namespace StrucEngLib
                         {
                             new TableRow(
                                 new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Model"}),
+                                    (_btnInspectPython = new Button {Text = "Inspect Model..."}),
                                     true
                                 ),
                                 new TableCell(

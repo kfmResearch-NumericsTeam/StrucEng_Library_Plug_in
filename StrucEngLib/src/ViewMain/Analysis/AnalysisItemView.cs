@@ -17,14 +17,16 @@ namespace StrucEngLib.Analysis
         private readonly AnalysisItemViewModel _vm;
         private readonly GroupBox _gbDetail;
 
-
         private Control TextControlRow(Control text, Control value)
         {
             return TableLayout.HorizontalScaled(text, value);
         }
-        
+
         public AnalysisItemView()
         {
+            Padding = new Padding(5);
+            Spacing = new Size(5, 10);
+            
             Add(_gbDetail = new GroupBox
             {
                 Padding = new Padding(5),
@@ -99,12 +101,7 @@ namespace StrucEngLib.Analysis
         {
             var c = new TableCell()
             {
-                Control = (new Label()
-                        {
-                            Text = text,
-                            // Width = 150
-                        }
-                    ),
+                Control = (new Label() {Text = text,}),
             };
             return c;
         }
