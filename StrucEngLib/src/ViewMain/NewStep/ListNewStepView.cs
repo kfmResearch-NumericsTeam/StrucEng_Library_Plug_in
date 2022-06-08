@@ -18,6 +18,7 @@ namespace StrucEngLib.NewStep
             set
             {
                 _order = value;
+                RhinoApp.WriteLine("Order: {0}", value);
                 OnPropertyChanged();
             }
         }
@@ -34,30 +35,29 @@ namespace StrucEngLib.NewStep
     {
         private readonly ListNewStepViewModel _listStepVm;
         private TableLayout _stepListLayout;
-        private GroupBox _gbSelectSteps;
         private GridView _grid;
-        private Button _btAddStep;
 
         public ListNewStepView(ListNewStepViewModel listStepVm)
         {
             _listStepVm = listStepVm;
             Build();
+            Bind();
         }
 
         private void Bind()
         {
             _grid.DataStore = _listStepVm.StepItems;
             _grid.DataContext = _listStepVm;
-
             _grid.SelectedItemBinding.BindDataContext((ListNewStepViewModel m) => m.SelectedStepItem);
         }
-        
+
         private void Build()
         {
             _grid = new GridView()
             {
                 Border = BorderType.None
             };
+            _grid.AllowEmptySelection = false; // XXX: Needed otherwise dropbox not clickable if outside of grid
             _grid.AllowMultipleSelection = false;
             _grid.CellFormatting += (sender, args) =>
             {
@@ -67,18 +67,27 @@ namespace StrucEngLib.NewStep
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Order\t",
-                Editable = false,
-                Expand = true,
-                HeaderTextAlignment = TextAlignment.Center,
+                HeaderText = "Order\t\t",
+                Editable = true,
+                Expand = false,
+                HeaderTextAlignment = TextAlignment.Left,
+
                 DataCell = new CustomCell()
                 {
                     CreateCell = (args =>
                     {
+                        Spacing = new Size(5, 5);
+                        Padding = new Padding(5, 5, 5, 5);
                         var db = new DropDown()
                         {
-                            Items = {"a", "b", "c"},
+                            DataStore = _listStepVm.StepNames,
                         };
+                        db.Bind<string>(
+                            nameof(db.SelectedValue),
+                            db.DataContext,
+                            nameof(NewStepViewModel.Order),
+                            DualBindingMode.TwoWay);
+
                         return db;
                     })
                 },
@@ -89,10 +98,11 @@ namespace StrucEngLib.NewStep
             {
                 HeaderText = "Description\t",
                 Editable = true,
+                Expand = true,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new TextBoxCell()
                 {
-                    // Binding = Binding.Property<AnalysisItemViewModel, bool?>(r => r.Include)
+                    Binding = Binding.Property<NewStepViewModel, string>(r => r.Description)
                 },
                 Resizable = true,
                 AutoSize = true,
@@ -100,18 +110,18 @@ namespace StrucEngLib.NewStep
 
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Action\t",
+                HeaderText = "Action\t\t",
                 Editable = false,
-                HeaderTextAlignment = TextAlignment.Center,
+                HeaderTextAlignment = TextAlignment.Left,
                 DataCell = new CustomCell()
                 {
                     CreateCell = (args =>
                     {
-                        var bt = new Button()
+                        var bt = new LinkButton()
                         {
                             Text = "Delete"
                         };
-
+                        bt.Command = _listStepVm.CommandDeleteStep;
                         return bt;
                     })
                 },
@@ -123,6 +133,7 @@ namespace StrucEngLib.NewStep
             _stepListLayout = new TableLayout()
             {
                 Spacing = new Size(5, 10),
+                Padding = new Padding(5),
                 Rows =
                 {
                     new TableRow
@@ -135,13 +146,18 @@ namespace StrucEngLib.NewStep
                     },
                     new TableRow(
                         TableLayout.AutoSized(
-                            _btAddStep = new Button {Text = "Add Step...", Enabled = true})
+                            new Button
+                            {
+                                Text = "Add Step...",
+                                Enabled = true,
+                                Command = _listStepVm.CommandAddStep
+                            })
                     )
                 }
             };
 
             AddRow(
-                (_gbSelectSteps = new GroupBox
+                (new GroupBox
                 {
                     Text = "Settings",
                     Padding = new Padding(5),

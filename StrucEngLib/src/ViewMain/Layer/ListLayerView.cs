@@ -5,6 +5,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Analysis;
 using StrucEngLib.Model;
+using StrucEngLib.NewStep;
 using StrucEngLib.Step;
 using StrucEngLib.Views;
 using Font = Eto.Drawing.Font;
@@ -33,7 +34,7 @@ namespace StrucEngLib
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
-        private readonly ListStepViewModel _vmListStep;
+        private readonly ListNewStepViewModel _vmListStep;
         private LinkButton _btnClearData;
 
         public ListLayerView(MainViewModel vm)

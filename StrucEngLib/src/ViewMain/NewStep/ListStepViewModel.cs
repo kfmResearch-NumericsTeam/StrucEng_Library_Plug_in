@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Eto.Forms;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.ViewMain.Step;
 
@@ -14,15 +16,19 @@ namespace StrucEngLib.NewStep
     {
         private readonly MainViewModel _mainVm;
 
-        public event EventHandler RedrawEventHandler;
+        public static string StepNameExclude = "Excluded";
+        
+        public RelayCommand CommandDeleteStep { get; }
+        public RelayCommand CommandAddStep { get; }
 
         public StepManager StepManager { get; }
 
         public ObservableCollection<AggregatedStepViewModel> AggregatedSteps => StepManager.AggregatedSteps;
-        public ObservableCollection<StepViewModel> Steps => StepManager.Steps;
-
 
         public ObservableCollection<NewStepViewModel> StepItems;
+
+        public ObservableCollection<string> StepNames;
+        
         private NewStepViewModel _selectedStepItem;
 
         public NewStepViewModel SelectedStepItem
@@ -33,6 +39,16 @@ namespace StrucEngLib.NewStep
                 _selectedStepItem = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void OnDeleteStep()
+        {
+            RhinoApp.WriteLine("On Delete Step: {0}", SelectedStepItem);
+        }
+        
+        public void OnAddStep()
+        {
+            RhinoApp.WriteLine("On Add Step");
         }
 
         public ListNewStepViewModel(MainViewModel mainVm)
@@ -49,6 +65,12 @@ namespace StrucEngLib.NewStep
                     Order = "1"
                 }
             };
+
+            CommandDeleteStep = new RelayCommand(OnDeleteStep);
+            CommandAddStep = new RelayCommand(OnAddStep);
+            StepNames = new ObservableCollection<string>() {StepNameExclude};
+            // StepNames.Add("0");
+            // StepNames.Add("1");
             
             StepManager = new StepManager(mainVm);
             UpdateVm();
@@ -114,15 +136,14 @@ namespace StrucEngLib.NewStep
 
         private void UpdateVm()
         {
-            foreach (var s in _mainVm.Workbench?.Steps)
-            {
-                StepManager.ExistingAggregateStep(s);
-            }
+            // foreach (var s in _mainVm.Workbench?.Steps)
+            // {
+            //     StepManager.ExistingAggregateStep(s);
+            // }
         }
 
         private void ForceRedraw()
         {
-            RedrawEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
 

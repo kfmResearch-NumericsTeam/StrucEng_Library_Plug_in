@@ -56,6 +56,8 @@ namespace StrucEngLib
                     Visible = true,
                     Content = new DynamicLayout()
                     {
+                        Spacing = new Size(5, 10),
+                        Padding = new Padding(5),
                         Rows =
                         {
                             (_gridView = new GridView()
