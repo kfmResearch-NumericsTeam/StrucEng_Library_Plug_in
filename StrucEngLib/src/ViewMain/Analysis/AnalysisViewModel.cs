@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Eto.Forms;
 using StrucEngLib.Model;
+using StrucEngLib.NewStep;
 using StrucEngLib.Step;
 using StrucEngLib.ViewMain.Step;
 
@@ -15,24 +17,8 @@ namespace StrucEngLib.Analysis
         private readonly MainViewModel _vm;
 
         public ObservableCollection<AnalysisItemViewModel> AnalysisViewItems { get; }
-
         private AnalysisItemViewModel _selectedItem;
-
         public bool SelectedItemVisible => SelectedItem != null && SelectedItem.Include == true;
-
-        private AnalysisItemViewModel ViewModelBySettingsObj(AnalysisSetting setting)
-        {
-            if (setting == null) return null;
-            foreach (var settingVm in AnalysisViewItems)
-            {
-                if (settingVm.Model == setting)
-                {
-                    return settingVm;
-                }
-            }
-
-            return null;
-        }
 
         public AnalysisItemViewModel SelectedItem
         {
@@ -43,6 +29,36 @@ namespace StrucEngLib.Analysis
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
             }
+        }
+
+        public AnalysisViewModel(MainViewModel vm)
+        {
+            if (vm.ListStepVm == null)
+            {
+                throw new Exception("ListStepVm must be created first");
+            }
+
+            _vm = vm;
+            AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
+            UpdateViewModel();
+            vm.ListStepVm.StepItems.CollectionChanged += (sender, args) =>
+            {
+                if (args.NewItems != null && args.NewItems.Count > 0)
+                {
+                    foreach (NewStepViewModel stepVm in args.NewItems)
+                    {
+                        OnNewStep(stepVm);
+                    }
+                }
+
+                if (args.OldItems != null && args.OldItems.Count > 0)
+                {
+                    foreach (NewStepViewModel stepVm in args.OldItems)
+                    {
+                        OnRemoveStep(stepVm);
+                    }
+                }
+            };
         }
 
         private void RegisterEvents(AnalysisItemViewModel vm)
@@ -62,72 +78,59 @@ namespace StrucEngLib.Analysis
             };
         }
 
-        public override void UpdateViewModel()
+        private void OnNewStep(NewStepViewModel stepVm)
         {
-            AnalysisViewItems.Clear();
-            foreach (var s in _vm.Workbench.Steps)
+            if (stepVm.Model.Setting == null)
             {
-                if (s.Setting == null)
-                {
-                    s.Setting = new AnalysisSetting();
-                }
-
-                var avm = new AnalysisItemViewModel(s.Setting)
-                {
-                    Include = true,
-                    StepName = s.Order
-                };
-                RegisterEvents(avm);
-                AnalysisViewItems.Add(avm);
+                stepVm.Model.Setting = new AnalysisSetting();
             }
+
+            var avm = new AnalysisItemViewModel(stepVm.Model)
+            {
+                StepName = stepVm.Order
+            };
+            AnalysisViewItems.Add(avm);
+            RegisterEvents(avm);
         }
 
-        private void OnNewStep(IList steps)
+        private void OnRemoveStep(NewStepViewModel stepVm)
         {
-            if (steps == null) return;
-            foreach (AggregatedStepViewModel s in steps)
+            var vm = ViewModelByModel(stepVm.Model);
+            if (vm != null)
             {
-                if (s.Model.Setting == null)
-                {
-                    s.Model.Setting = new AnalysisSetting();
-                }
-
-                var avm = new AnalysisItemViewModel(s.Model.Setting)
-                {
-                    StepName = s.Order
-                };
-                AnalysisViewItems.Add(avm);
-                RegisterEvents(avm);
-            }
-        }
-
-        private void OnRemoveStep(IList steps)
-        {
-            if (steps == null) return;
-            foreach (AggregatedStepViewModel s in steps)
-            {
-                var vm = ViewModelBySettingsObj(s.Model.Setting);
                 AnalysisViewItems.Remove(vm);
             }
         }
 
-        public AnalysisViewModel(MainViewModel vm)
+        private AnalysisItemViewModel ViewModelByModel(Model.Step model)
         {
-            _vm = vm;
-            AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
-            // vm.ListStepVm.AggregatedSteps.CollectionChanged += (sender, args) =>
-            // {
-            //     OnNewStep(args.NewItems);
-            //     OnRemoveStep(args.OldItems);
-            // };
-            // UpdateViewModel();
+            foreach (var vm in AnalysisViewItems)
+            {
+                if (vm.StepModel == model)
+                {
+                    return vm;
+                }
+            }
+
+            return null;
         }
+
 
         public override void UpdateModel()
         {
+            // XXX: Analysis Setting is part of Step Model
             foreach (var avm in AnalysisViewItems)
             {
                 avm.UpdateModel();
+            }
+        }
+
+        public sealed override void UpdateViewModel()
+        {
+            AnalysisViewItems.Clear();
+            foreach (var step in _vm.ListStepVm.StepItems)
+            {
+                OnNewStep(step);
             }
         }
     }

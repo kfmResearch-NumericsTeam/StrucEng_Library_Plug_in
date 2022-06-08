@@ -10,13 +10,20 @@ namespace StrucEngLib.Analysis
     /// <summary>Vm for a single analysis item</summary>
     public class AnalysisItemViewModel : ViewModelBase
     {
-        public AnalysisSetting Model { get; }
+        public AnalysisSetting Model => StepModel.Setting;
 
-        public AnalysisItemViewModel(AnalysisSetting model)
+        public Model.Step StepModel { get; }
+
+        public AnalysisItemViewModel(Model.Step model)
         {
-            Model = model;
+            StepModel = model;
             init();
-            ModelToVm(model, this);
+            if (model.Setting == null)
+            {
+                model.Setting = new AnalysisSetting();
+            }
+
+            ModelToVm(model.Setting, this);
         }
 
         public override void UpdateModel()
