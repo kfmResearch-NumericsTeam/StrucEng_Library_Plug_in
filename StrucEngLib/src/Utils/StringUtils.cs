@@ -30,7 +30,11 @@ namespace StrucEngLib.Utils
 
         public static string ToJson(object obj)
         {
-            return JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
+            return JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
         }
     }
 }

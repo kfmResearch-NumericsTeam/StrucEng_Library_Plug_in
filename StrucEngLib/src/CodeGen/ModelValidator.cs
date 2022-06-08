@@ -82,7 +82,7 @@ namespace StrucEngLib
                         var set = (Set) layer;
                         if (set.SetDisplacementType == SetDisplacementType.NONE)
                         {
-                            ctx.AddWarning("No Displacement for Layer " + set.GetName());
+                            ctx.AddError("No Displacement for Layer " + set.GetName());
                             if (set.SetGeneralDisplacement != null)
                             {
                                 ctx.AddError(
@@ -172,7 +172,6 @@ namespace StrucEngLib
                     hasAnalysis = hasAnalysis || (step.Setting != null && step.Setting.Include == true);
                     foreach (var entry in step.Entries)
                     {
-                        RhinoApp.WriteLine("{0}", entry.Value);
                         if (objectsInSteps.Contains(entry.Value))
                         {
                             ctx.AddInfo($"Entries in step {step.Order} ambiguously assigned to other steps.");
