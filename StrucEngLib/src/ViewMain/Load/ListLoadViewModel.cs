@@ -9,8 +9,10 @@ using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
+    using Load = StrucEngLib.Model.Load;
+    
     /// <summary>
     /// Main Vm for load information
     /// </summary>

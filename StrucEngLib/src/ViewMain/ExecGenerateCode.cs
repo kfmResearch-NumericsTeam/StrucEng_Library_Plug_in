@@ -31,11 +31,15 @@ namespace StrucEngLib
             try
             {
                 ModelValidator validate = new ModelValidator();
-                var valMsgs = validate.ValidateModel(_model);
-                if (valMsgs.Count != 0)
+                var ctx = validate.ValidateModel(_model);
+                if (ctx.Messages.Count != 0)
                 {
-                    _vm.ErrorVm.ShowMessages(valMsgs);
-                    return;
+                    _vm.ErrorVm.ShowMessages(ctx);
+                    if (ctx.GetByType(MessageType.Error).Count > 0)
+                    {
+                        // XXX: Only stop if ctx contains error msg, otherwise continue
+                        return;
+                    }
                 }
             }
             catch (Exception e)

@@ -6,6 +6,9 @@ using StrucEngLib.Model;
 
 namespace StrucEngLib.Step
 {
+    using Layer = StrucEngLib.Model.Layer;
+    using Load = StrucEngLib.Model.Load;
+
     /// <summary>
     /// Vm for a single entry in step view
     /// </summary>

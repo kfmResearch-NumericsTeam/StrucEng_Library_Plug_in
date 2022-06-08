@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// Vm for General Displacement attributes
@@ -91,7 +91,7 @@ namespace StrucEngLib
             }
         }
 
-        private Layer GetLayer() => _listLayerVm.SelectedLayer;
+        private Model.Layer GetLayer() => _listLayerVm.SelectedLayer;
 
         private void StoreVmToModel()
         {

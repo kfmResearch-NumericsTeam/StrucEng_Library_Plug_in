@@ -20,8 +20,9 @@ namespace StrucEngLib
                 doc.Objects.UnselectAll();    
             }
             
-            for (int i = 0; i < rhobjs.Length; i++)
+            for (int i = 0; i < rhobjs.Length; i++) 
                 rhobjs[i].Select(selectType);
+            
             doc.Views.Redraw();
             return true;
         }

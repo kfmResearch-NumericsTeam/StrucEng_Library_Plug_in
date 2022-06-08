@@ -5,10 +5,10 @@ using System.Text;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
-using StrucEngLib.Model;
+using StrucEngLib.Layer;
 
-namespace StrucEngLib
-{
+namespace StrucEngLib.Load
+{   
     /// <summary>Abstract vm for load related views</summary>
     public abstract class AbstractLoadViewModel : ViewModelBase
     {
@@ -29,14 +29,14 @@ namespace StrucEngLib
         }
 
         /// <summary> Layers assigned to a load </summary>
-        public ObservableCollection<Layer> Layers { get; }
+        public ObservableCollection<Model.Layer> Layers { get; }
 
         protected AbstractLoadViewModel(MainViewModel mainVm)
         {
             CommandConnectLayer = new RelayCommand(OnConnectLayer);
             ListLayerVm = mainVm.ListLayerVm;
             ListLoadVm = mainVm.ListLoadVm;
-            Layers = new ObservableCollection<Layer>();
+            Layers = new ObservableCollection<Model.Layer>();
 
             PropertyChanged += ((sender, args) => DoStoreVmToModel());
             Layers.CollectionChanged += (sender, args) =>

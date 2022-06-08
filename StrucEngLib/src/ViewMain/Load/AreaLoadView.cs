@@ -8,7 +8,7 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
     /// <summary>
     /// View for area load

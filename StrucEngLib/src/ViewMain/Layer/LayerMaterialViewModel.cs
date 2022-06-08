@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// View model for materials
@@ -50,7 +50,7 @@ namespace StrucEngLib
             }
         }
 
-        private Layer GetLayer() => _listLayerVm.SelectedLayer;
+        private Model.Layer GetLayer() => _listLayerVm.SelectedLayer;
 
         public LayerMaterialViewModel(ListLayerViewModel listLayerVm)
         {

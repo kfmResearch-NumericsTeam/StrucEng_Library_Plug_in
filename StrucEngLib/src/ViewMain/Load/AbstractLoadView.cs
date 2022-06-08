@@ -3,7 +3,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
     /// <summary>Abstract view class with base functionality for loads</summary>
     public abstract class AbstractLoadView : DynamicLayout

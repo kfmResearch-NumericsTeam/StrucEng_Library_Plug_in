@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
-using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
+    using Layer = StrucEngLib.Model.Layer;
     ///
     ///<summary>
     /// A simple dialog which presents a list of layers to select.

@@ -1,7 +1,7 @@
 using Eto.Forms;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>View to show set specific actions</summary>
     public class SetView : DynamicLayout

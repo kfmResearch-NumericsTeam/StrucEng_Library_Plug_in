@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// View to show information about general displacements

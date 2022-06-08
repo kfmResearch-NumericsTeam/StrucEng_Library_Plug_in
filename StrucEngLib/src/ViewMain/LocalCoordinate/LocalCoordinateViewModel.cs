@@ -6,12 +6,15 @@ using System.Linq;
 using System.Windows.Input;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.LocalCoordinate
 {
+    using Layer = StrucEngLib.Model.Layer;
+
     /// <summary>Vm for LoadConstriants</summary>
     public class LoadConstraintViewModel : ViewModelBase
     {
         private readonly MainViewModel _vm;
+        
         public ICommand ExecElementNumbers;
 
         private readonly ObservableCollection<LocalCoordinateEntryViewModel> _loadConstraints;

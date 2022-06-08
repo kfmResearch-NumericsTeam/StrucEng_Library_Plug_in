@@ -2,7 +2,7 @@ using Microsoft.SqlServer.Server;
 using Rhino;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
     /// <summary>Gravity load vm</summary>
     public class GravityLoadViewModel : AbstractLoadViewModel

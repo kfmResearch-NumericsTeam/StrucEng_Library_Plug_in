@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// Vm for Section information
@@ -24,7 +24,7 @@ namespace StrucEngLib
             }
         }
 
-        private Layer GetLayer() => _listLayerVm.SelectedLayer;
+        private Model.Layer GetLayer() => _listLayerVm.SelectedLayer;
 
         private bool _ignoreStoreVmToModel = false;
 

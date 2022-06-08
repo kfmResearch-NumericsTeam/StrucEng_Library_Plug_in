@@ -1,10 +1,12 @@
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Analysis;
+using StrucEngLib.Load;
+using StrucEngLib.LocalCoordinate;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// Main view to show layer information
@@ -51,9 +53,9 @@ namespace StrucEngLib
             _btnClearData.Command = _vmListLayer.CommandClearModel;
 
             _tbLayerToAdd.Bind<string>(nameof(_tbLayerToAdd.Text), _vmListLayer, nameof(_vmListLayer.LayerToAdd));
-            _dropdownLayers.ItemTextBinding = Binding.Property((Layer t) => t.ToString());
+            _dropdownLayers.ItemTextBinding = Binding.Property((Model.Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
-            _dropdownLayers.Bind<Layer>(nameof(_dropdownLayers.SelectedValue), _vmListLayer,
+            _dropdownLayers.Bind<Model.Layer>(nameof(_dropdownLayers.SelectedValue), _vmListLayer,
                 nameof(_vmListLayer.SelectedLayer));
             _rdlElementSetSelection.Bind<int>(nameof(_rdlElementSetSelection.SelectedIndex), _vmListLayer,
                 nameof(_vmListLayer.LayerToAddType));

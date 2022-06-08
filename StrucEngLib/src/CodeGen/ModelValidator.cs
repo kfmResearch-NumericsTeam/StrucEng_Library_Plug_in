@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Rhino;
 using Rhino.Runtime.InteropWrappers;
+using StrucEngLib;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -8,44 +10,70 @@ namespace StrucEngLib
     /// <summary>Validation of model</summary>
     public class ModelValidator
     {
-        /// <summary>
-        /// Returns a list of validation messages. If list has count = 0, no errors occured
-        /// </summary>
-        public List<string> ValidateModel(Workbench model)
+        private void ValidateLayerNames(List<Model.Layer> layers, ErrorMessageContext ctx)
         {
-            var msgs = new List<string>();
+            if (layers != null)
+            {
+                foreach (var l in layers)
+                {
+                    var name = l.GetName();
+                    Rhino.DocObjects.RhinoObject[] rhobjs = RhinoDoc.ActiveDoc.Objects.FindByLayer(name);
+                    if (rhobjs == null || rhobjs.Length < 1)
+                    {
+                        ctx.AddWarning($"No layer with name '{name}' found in active Rhino document.");
+                    }
+                }
+            }
+        }
+
+        public ErrorMessageContext ValidateModel(Workbench model)
+        {
+            var ctx = new ErrorMessageContext();
             if (model.Layers == null || model.Layers.Count == 0)
             {
-                msgs.Add("No Layers added");
+                ctx.AddWarning("No Layers added");
             }
             else
             {
+                ValidateLayerNames(model.Layers, ctx);
                 foreach (var layer in model.Layers)
                 {
                     if (layer.LayerType == LayerType.ELEMENT)
                     {
+                        var name = layer.GetName();
                         var element = (Element) layer;
                         if (element.ElementMaterialElastic == null)
                         {
-                            msgs.Add("No Material Elastic for Layer " + element.GetName());
+                            ctx.AddError("No Material Elastic for Layer " + element.GetName());
                         }
                         else
                         {
                             var matEl = element.ElementMaterialElastic;
-                            if (String.IsNullOrEmpty(matEl.E)) msgs.Add("E in Material Elastic can't be empty");
-                            if (String.IsNullOrEmpty(matEl.P)) msgs.Add("P in Material Elastic can't be empty");
-                            if (String.IsNullOrEmpty(matEl.V)) msgs.Add("V in Material Elastic can't be empty");
+                            if (String.IsNullOrEmpty(matEl.E))
+                            {
+                                ctx.AddError("E in Material Elastic can't be empty: " + name);
+                            }
+
+                            if (String.IsNullOrEmpty(matEl.P))
+                            {
+                                ctx.AddError("P in Material Elastic can't be empty: " + name);
+                            }
+
+                            if (String.IsNullOrEmpty(matEl.V))
+                            {
+                                ctx.AddError("V in Material Elastic can't be empty: " + name);
+                            }
                         }
 
                         if (element.ElementShellSection == null)
                         {
-                            msgs.Add("No Shell Section for Layer " + element.GetName());
+                            ctx.AddError(("No Shell Section for Layer " + element.GetName()));
                         }
                         else
                         {
                             var shellSec = element.ElementShellSection;
                             if (String.IsNullOrEmpty(shellSec.Thickness))
-                                msgs.Add("Thickness in Shell Section can't be empty");
+                                ctx.AddError("Thickness in Shell Section can't be empty: " + name);
                         }
                     }
 
@@ -54,18 +82,19 @@ namespace StrucEngLib
                         var set = (Set) layer;
                         if (set.SetDisplacementType == SetDisplacementType.NONE)
                         {
-                            msgs.Add("No Displacement for Layer " + set.GetName());
+                            ctx.AddWarning("No Displacement for Layer " + set.GetName());
                             if (set.SetGeneralDisplacement != null)
                             {
-                                msgs.Add("Invalid state: general displacement set for displacement which has no data" +
-                                         set.GetName());
+                                ctx.AddError(
+                                    "Invalid state: general displacement set for displacement which has no data" +
+                                    set.GetName());
                             }
                         }
 
                         if (set.SetDisplacementType == SetDisplacementType.GENERAL &&
                             set.SetGeneralDisplacement == null)
                         {
-                            msgs.Add("General displacement cannot have no data set: " + set.GetName());
+                            ctx.AddError("General displacement cannot have no set: " + set.GetName());
                         }
                     }
                 }
@@ -75,32 +104,118 @@ namespace StrucEngLib
             {
                 if (load.Layers == null || load.Layers.Count == 0)
                 {
-                    msgs.Add("No Layers in load " + load.LoadType);
+                    ctx.AddWarning("No Layers in load " + load.LoadType);
+                }
+                else
+                {
+                    ValidateLayerNames(load.Layers, ctx);
                 }
 
                 if (load.LoadType == LoadType.Area)
                 {
                     var a = (LoadArea) load;
-                    // XXX: No validation for now
+                    if (!EmptyOrValidDouble(a.X)) ctx.AddError($"X: {a.X} not numeric for area load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Y)) ctx.AddError($"Y: {a.Y} not numeric for area load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Z)) ctx.AddError($"Z: {a.Z} not numeric for area load: " + a.Description);
                 }
 
                 if (load.LoadType == LoadType.Gravity)
                 {
                     var a = (LoadGravity) load;
-                    if (!isDouble(a.X)) msgs.Add($"X: {a.X} not numeric for gravity load");
-                    if (!isDouble(a.Y)) msgs.Add($"Y: {a.Y} not numeric for gravity load");
-                    if (!isDouble(a.Z)) msgs.Add($"Z: {a.Z} not numeric for gravity load");
+                    if (!EmptyOrValidDouble(a.X))
+                        ctx.AddError($"X: {a.X} not numeric for gravity load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Y))
+                        ctx.AddError($"Y: {a.Y} not numeric for gravity load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Z))
+                        ctx.AddError($"Z: {a.Z} not numeric for gravity load: " + a.Description);
+                }
+
+                if (load.LoadType == LoadType.Point)
+                {
+                    var a = (LoadPoint) load;
+                    if (!EmptyOrValidDouble(a.X))
+                        ctx.AddError($"X: {a.X} not numeric for point load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Y))
+                        ctx.AddError($"Y: {a.Y} not numeric for point load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.Z))
+                        ctx.AddError($"Z: {a.Z} not numeric for point load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.XX))
+                        ctx.AddError($"XX: {a.XX} not numeric for point load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.YY))
+                        ctx.AddError($"YY: {a.YY} not numeric for point load: " + a.Description);
+                    if (!EmptyOrValidDouble(a.ZZ))
+                        ctx.AddError($"ZZ: {a.ZZ} not numeric for point load: " + a.Description);
                 }
             }
 
+
+            if (model.Steps == null || model.Steps.Count == 0)
+            {
+                ctx.AddInfo("No steps defined");
+            }
+
+            var hasAnalysis = false;
+            var objectsInSteps = new HashSet<object>();
+            foreach (var step in model.Steps)
+            {
+                if (!IsInt(step.Order))
+                {
+                    ctx.AddWarning($"Step Id {step.Order} not numeric");
+                }
+
+                if (step.Entries == null || step.Entries.Count == 0)
+                {
+                    ctx.AddWarning($"Step {step.Order} contains no step entries");
+                }
+                else
+                {
+                    hasAnalysis = hasAnalysis || (step.Setting != null && step.Setting.Include == true);
+                    foreach (var entry in step.Entries)
+                    {
+                        RhinoApp.WriteLine("{0}", entry.Value);
+                        if (objectsInSteps.Contains(entry.Value))
+                        {
+                            ctx.AddInfo($"Entries in step {step.Order} ambiguously assigned to other steps.");
+                        }
+                        else
+                        {
+                            objectsInSteps.Add(entry.Value);
+                        }
+
+                        if (entry.Value == null)
+                        {
+                            ctx.AddWarning($"Step {step.Order} contains an invalid entry (null)");
+                        }
+                    }
+                }
+            }
+
+            if (!hasAnalysis)
+            {
+                ctx.AddInfo("No Analysis output defined");
+            }
+
             // XXX: We currently don't return success flag
-            return msgs;
+            return ctx;
         }
 
-        protected bool isDouble(string v)
+        protected bool IsInt(string v)
+        {
+            int _;
+            return int.TryParse(v, out _);
+        }
+
+        protected bool IsDouble(string v)
         {
             double _;
             return double.TryParse(v, out _);
+        }
+
+        protected bool EmptyOrValidDouble(string v)
+        {
+            double _;
+            bool isDouble = double.TryParse(v, out _);
+            return isDouble || String.IsNullOrEmpty(v);
         }
     }
 }

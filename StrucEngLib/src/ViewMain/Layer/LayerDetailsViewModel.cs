@@ -5,7 +5,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// LayerDetailsViewModel builds subviews which show detail information for a layer.
@@ -87,7 +87,7 @@ namespace StrucEngLib
             return layout;
         }
 
-        public Control GetPropertyContentForLayer(Layer e)
+        public Control GetPropertyContentForLayer(Model.Layer e)
         {
             if (e.LayerType == LayerType.ELEMENT)
             {

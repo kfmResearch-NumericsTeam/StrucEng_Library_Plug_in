@@ -1,4 +1,4 @@
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
     /// <summary>Point Load View</summary>
     public class PointLoadView : AbstractLoadView

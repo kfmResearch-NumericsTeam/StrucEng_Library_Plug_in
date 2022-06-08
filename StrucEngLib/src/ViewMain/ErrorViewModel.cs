@@ -25,7 +25,8 @@ namespace StrucEngLib
         public void ShowException(string info, Exception e)
         {
             StringBuilder b = new StringBuilder();
-            b.Append($"An Exception occured. This is likely a bug, try to reproduce the bug and file an issue: {StrucEngLibPlugin.Website} \n\n");
+            b.Append(
+                $"An Exception occured. This is likely a bug, try to reproduce the bug and file an issue: {StrucEngLibPlugin.Website} \n\n");
             b.Append($"Version: {StrucEngLibPlugin.Version} \n");
             b.Append($"Info: {info} \n\n");
             b.Append($"Exception: {e.GetType().ToString()} \n");
@@ -36,7 +37,7 @@ namespace StrucEngLib
             b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel));
             ShowMessage(b.ToString(), false);
         }
-        
+
         public void DebugMessage(params object[] values)
         {
             StringBuilder b = new StringBuilder();
@@ -45,6 +46,7 @@ namespace StrucEngLib
                 b.Append(StringUtils.ToJson(o));
                 b.Append("\n");
             }
+
             ShowMessages(new List<string>() {b.ToString()}, false);
         }
 
@@ -69,6 +71,67 @@ namespace StrucEngLib
                     b.Append(m + "\n");
                 }
             }
+
+            Message = b.ToString();
+            Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");
+            Message = "";
+        }
+
+        public void ShowMessages(ErrorMessageContext ctx, bool enumerate = true)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("The following messages occured: \n\n");
+            var infoMessages = ctx.GetByType(MessageType.Info);
+            if (infoMessages != null && infoMessages.Count > 0)
+            {
+                b.Append("Info Messages: \n");
+                foreach (var m in infoMessages)
+                {
+                    if (enumerate)
+                    {
+                        b.Append("\t- " + m.Text + "\n");
+                    }
+                    else
+                    {
+                        b.Append(m.Text + "\n");
+                    }
+                }
+            }
+
+            var warnMessages = ctx.GetByType(MessageType.Warning);
+            if (warnMessages != null && warnMessages.Count > 0)
+            {
+                b.Append("Warning Messages: \n");
+                foreach (var m in warnMessages)
+                {
+                    if (enumerate)
+                    {
+                        b.Append("\t- " + m.Text + "\n");
+                    }
+                    else
+                    {
+                        b.Append(m.Text + "\n");
+                    }
+                }
+            }
+
+            var errorMsgs = ctx.GetByType(MessageType.Error);
+            if (errorMsgs != null && errorMsgs.Count > 0)
+            {
+                b.Append("Error Messages: \n");
+                foreach (var m in errorMsgs)
+                {
+                    if (enumerate)
+                    {
+                        b.Append("\t- " + m.Text + "\n");
+                    }
+                    else
+                    {
+                        b.Append(m.Text + "\n");
+                    }
+                }
+            }
+
 
             Message = b.ToString();
             Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");

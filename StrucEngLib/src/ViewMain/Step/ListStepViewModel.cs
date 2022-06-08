@@ -6,8 +6,12 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+
 namespace StrucEngLib.Step
 {
+    using Layer = StrucEngLib.Model.Layer;
+    using Load = StrucEngLib.Model.Load;
+    
     /// <summary>Main view model to assign steps to entries</summary>
     public class ListStepViewModel : ViewModelBase
     {

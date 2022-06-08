@@ -4,8 +4,10 @@ using System.Windows.Input;
 using Eto.Forms;
 using Rhino;
 using StrucEngLib.Model;
+using StrucEngLib.Model;
 
-namespace StrucEngLib
+
+namespace StrucEngLib.Layer
 {
     /// <summary>
     /// Main vm for layer information
@@ -26,11 +28,11 @@ namespace StrucEngLib
         public ICommand CommandClearModel { get; }
 
         // MVVC
-        private Layer _selectedLayer;
+        private Model.Layer _selectedLayer;
         private int _layerToAddType = 0; /* 0: Element, 1: set */
         private string _layerToAdd;
         private bool _selectLayerViewVisible;
-        public ObservableCollection<Layer> Layers { get; }
+        public ObservableCollection<Model.Layer> Layers { get; }
 
         public bool SelectLayerViewVisible
         {
@@ -45,7 +47,7 @@ namespace StrucEngLib
         public ListLayerViewModel(MainViewModel mainVm)
         {
             _mainVm = mainVm;
-            Layers = new ObservableCollection<Layer>();
+            Layers = new ObservableCollection<Model.Layer>();
             CommandOnInspectCode = new RelayCommand(OnInspectCode);
             CommandOnExecuteCode = new RelayCommand(OnExecCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
@@ -126,7 +128,7 @@ namespace StrucEngLib
             }
         }
 
-        public Layer SelectedLayer
+        public Model.Layer SelectedLayer
         {
             get => _selectedLayer;
             set

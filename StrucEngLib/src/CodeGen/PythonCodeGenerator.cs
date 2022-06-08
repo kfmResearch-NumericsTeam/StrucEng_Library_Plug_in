@@ -6,7 +6,6 @@ using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-
 namespace StrucEngLib
 {
     /// <summary>
@@ -79,8 +78,8 @@ mdl = Structure(name=name, path=path)
             b.Append(header);
             EmitLayers(_model.Layers, b);
 
-            var loadNameMap = new Dictionary<Load, string>();
-            foreach (var load in _model.Loads ?? Enumerable.Empty<Load>())
+            var loadNameMap = new Dictionary<Model.Load, string>();
+            foreach (var load in _model.Loads ?? Enumerable.Empty<Model.Load>())
             {
                 EmitLoad(load, b, loadNameMap);
             }
@@ -96,9 +95,9 @@ mdl = Structure(name=name, path=path)
             return b.ToString();
         }
 
-        private void EmitLayers(List<Layer> layers, StringBuilder b)
+        private void EmitLayers(List<Model.Layer> layers, StringBuilder b)
         {
-            foreach (var layer in layers ?? Enumerable.Empty<Layer>())
+            foreach (var layer in layers ?? Enumerable.Empty<Model.Layer>())
             {
                 if (layer.LayerType == LayerType.ELEMENT)
                 {
@@ -112,7 +111,7 @@ mdl = Structure(name=name, path=path)
             }
         }
 
-        private void EmitElement(Layer layer, StringBuilder b)
+        private void EmitElement(Model.Layer layer, StringBuilder b)
         {
             var element = (Element) layer;
             var layerId = LayerId(element.GetName());
@@ -142,7 +141,7 @@ mdl = Structure(name=name, path=path)
             }
         }
 
-        private void EmitDisplacement(Layer layer, StringBuilder b)
+        private void EmitDisplacement(Model.Layer layer, StringBuilder b)
         {
             var set = (Set) layer;
             var setName = set.GetName();
@@ -206,7 +205,7 @@ mdl = Structure(name=name, path=path)
             b.Append($@"mdl.add([{name}(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
         }
 
-        private void EmitLoad(Load load, StringBuilder b, Dictionary<Load, string> loadNameMap)
+        private void EmitLoad(Model.Load load, StringBuilder b, Dictionary<Model.Load, string> loadNameMap)
         {
             var loadId = "";
             switch (load.LoadType)
@@ -254,6 +253,7 @@ mdl = Structure(name=name, path=path)
                     break;
                 }
                 default:
+                    RhinoApp.WriteLine("Ignoring unknown load: {0}", load.LoadType);
                     // XXX: Ignore rest
                     break;
             }
@@ -261,7 +261,7 @@ mdl = Structure(name=name, path=path)
             loadNameMap.Add(load, loadId);
         }
 
-        private void EmitSteps(StringBuilder b, Dictionary<Load, string> loadNameMap)
+        private void EmitSteps(StringBuilder b, Dictionary<Model.Load, string> loadNameMap)
         {
             b.Append(_nl + $@"# == Steps" + _nl);
             /*
@@ -286,7 +286,7 @@ mdl = Structure(name=name, path=path)
                     switch (stepEntry.Type)
                     {
                         case StepType.Load:
-                            loadsNames.Add(loadNameMap[stepEntry.Value as Load]);
+                            loadsNames.Add(loadNameMap[stepEntry.Value as Model.Load]);
                             break;
                         case StepType.Set:
                             dispNames.Add(SetId(((Set) stepEntry.Value).Name));
@@ -312,7 +312,10 @@ mdl = Structure(name=name, path=path)
                 b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
             }
 
-            b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepMap.Keys.ToList(), s => s)} " + _nl);
+            if (stepMap.Keys.ToList().Count > 0)
+            {
+                b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepMap.Keys.ToList(), s => s)} " + _nl);
+            }
         }
 
         private void EmitPlotData(StringBuilder b, string step, string field, bool take = true)

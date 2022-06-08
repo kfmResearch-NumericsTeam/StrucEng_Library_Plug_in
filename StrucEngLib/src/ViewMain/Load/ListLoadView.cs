@@ -1,11 +1,10 @@
-using System;
-using StrucEngLib.Views;
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
-
-namespace StrucEngLib
+namespace StrucEngLib.Load
 {
+    using Load = StrucEngLib.Model.Load;
+    
     /// <summary>
     /// Main view model to add/ remove loads
     /// </summary>

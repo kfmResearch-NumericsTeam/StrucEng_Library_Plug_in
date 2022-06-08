@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.LocalCoordinate
 {
     /// <summary>View for LoadConstraints</summary>
     public class LoadConstraintView : DynamicLayout
@@ -94,11 +94,6 @@ namespace StrucEngLib
                             new TableLayout
                             {
                                 Spacing = new Size(5, 10),
-                                Padding = new Padding()
-                                {
-                                    Top = 10,
-                                    Bottom = 5,
-                                },
                                 Rows =
                                 {
                                     new TableRow(

@@ -3,7 +3,7 @@ using Eto.Forms;
 using Rhino;
 using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Layer
 {
     /// <summary>View model for set data</summary>
     public class SetViewModel : NewSectionViewModel<SetDisplacementType>
