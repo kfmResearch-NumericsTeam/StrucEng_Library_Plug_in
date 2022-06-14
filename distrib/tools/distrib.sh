@@ -31,6 +31,12 @@ ensure_binary() {
     fi
 }
 
+version() {
+    local f1="$proj_root/StrucEngLib/StrucEngLib.csproj"
+
+    xmlstarlet sel -t -m "//Version[1]"  -v . -n $f1
+}
+
 update_version() {
     local version=${1:-}
     if [ -z "$version" ]
@@ -150,13 +156,31 @@ distrib_test() {
 }
 
 ci_build() {
- local datetag=$(date +"%Y-%m-%dT%H-%M-%S%z")
- local version="-preview-$datetag"
+    local datetag=$(date +"%Y-%m-%dT%H-%M-%S%z")
+    local v="-develop-$datetag"
+    local version=$(version | cut -d'-' -f1)
+    local interactive="yes"
 
+    version="${version}${v}"
+
+    update_version "$version"
+
+    build
+
+    create_package_dir "$version"
+
+    package
+
+    if [ "$interactive" == "yes" ]
+    then
+        read -p "Press enter to deploy"
+    fi
+
+    deploy_test
 }
 
 help() {
-    echo "distrib.sh: $0 {update_version|create_package_dir|build|publish|package|deploy_test|deploy|distrib|distrib_test}" >&2
+    echo "distrib.sh: $0 {update_version|create_package_dir|build|publish|package|deploy_test|deploy|distrib|distrib_test|ci_build}" >&2
 }
 
 ensure_binaries
@@ -175,6 +199,9 @@ case "$command" in
     build)
         build
         ;;
+    version)
+        version
+        ;;
     deploy_test)
         deploy_test
         ;;
@@ -183,6 +210,9 @@ case "$command" in
         ;;
     package)
         package
+        ;;
+    ci_build)
+        ci_build
         ;;
     distrib)
         version=${2:-}
