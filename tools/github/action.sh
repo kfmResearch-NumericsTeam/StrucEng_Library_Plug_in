@@ -5,7 +5,7 @@
 
 set -euo pipefail
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-proj_root="$script_dir/../../"
+proj_root="$script_dir/../.."
 
 sudo apt-get upgrade -y || true
 sudo apt-get update -y || true
@@ -33,11 +33,14 @@ echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | su
 sudo apt update -y
 sudo apt --fix-broken install -y  mono-devel
 
-
-sudo apt-get install -y wine-stable
-sudo dpkg --add-architecture i386
+# wine
+sudo dpkg --add-architecture i386 
+wget -nc https://dl.winehq.org/wine-builds/winehq.key
+sudo mv winehq.key /usr/share/keyrings/winehq-archive.key
+wget -nc https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/winehq-bionic.sources
+sudo mv winehq-bionic.sources /etc/apt/sources.list.d/
 sudo apt-get update
-sudo apt-get install -y wine32 
+sudo apt install -y --install-recommends winehq-stable
 
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet

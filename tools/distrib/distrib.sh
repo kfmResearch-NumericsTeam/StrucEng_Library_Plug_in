@@ -101,8 +101,8 @@ package() {
     cd "$proj_root/distrib/build"
 
     $yak_bin build
+    
     printf '\033[0m'  # Reset color
-
     cd "$_cd"
 }
 
