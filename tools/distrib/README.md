@@ -3,7 +3,22 @@
 This document describes the setup tools to build, package and deploy strucenglib
 on linux. All dependencies are captured in the provided vagrant box. Install vagrant as described in /tools/vagrant.
 
+### Distrib Tool
+```sh
+distrib.sh: ./distrib.sh {update_version|version|build|package|deploy_test|deploy|distrib|distrib_test}
+commands: 
+  update_version <version>.....: updates version
+  version......................: list version
+  build........................: build dotnet solution
+  package......................: builds solution, creates yak package format
+  deploy_test..................: deploys the yak package found to test store
+  deploy.......................: deploys the yak package found store
+  distrib......................: builds, packages, deploys package to store
+  distrib_test.................: builds, packages, deploys package to test store
 ```
+
+### Build
+```sh
 # boot vagrant and login
 cd /project/root/dir
 vagrant up
