@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrucEngLib", "StrucEngLib\StrucEngLib.csproj", "{1CBB4A58-FA1C-4770-8DAE-5285EBC70F6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrucEngLibTest", "StrucEngLibTest\StrucEngLibTest.csproj", "{0F4D10E8-BB16-4229-A130-10A58E30E488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1CBB4A58-FA1C-4770-8DAE-5285EBC70F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBB4A58-FA1C-4770-8DAE-5285EBC70F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CBB4A58-FA1C-4770-8DAE-5285EBC70F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F4D10E8-BB16-4229-A130-10A58E30E488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F4D10E8-BB16-4229-A130-10A58E30E488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F4D10E8-BB16-4229-A130-10A58E30E488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F4D10E8-BB16-4229-A130-10A58E30E488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
