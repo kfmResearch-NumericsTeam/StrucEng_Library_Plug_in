@@ -14,8 +14,12 @@ cd /vagrant/tools/distrib
 
 # build the dotnet solution
 ./distrib.sh build
+
+# Package into yak format
+./distrib.sh package
 ```
-The build Rhino plugin can susequently be found in ./StrucEngLib/bin/Debug/net48/.
+The built Rhino plugin can susequently be found in `./StrucEngLib/bin/Debug/net48/`.
+The yak package can be found in `./distrib/build`
 
 ### Publish to Rhino Store
 Log into yak with wine yak.exe login. Your mcneel account must be connected with
