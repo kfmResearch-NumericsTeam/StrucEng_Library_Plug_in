@@ -41,14 +41,17 @@ wget -nc https://dl.winehq.org/wine-builds/ubuntu/dists/bionic/winehq-bionic.sou
 sudo mv winehq-bionic.sources /etc/apt/sources.list.d/
 sudo apt-get update
 sudo apt install -y --install-recommends winehq-stable
+sudo apt-get install -y winetricks
+winetricks -q dotnet46
+wine --version
 
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet
 
-## check build
+## check build 
 $proj_root/tools/distrib/distrib.sh version
 $proj_root/tools/distrib/distrib.sh build
-$proj_root/tools/distrib/distrib.sh package
+$proj_root/tools/distrib/distrib.sh package || true
 $proj_root/tools/distrib/distrib.sh test
 
 echo "Setup successful!"
