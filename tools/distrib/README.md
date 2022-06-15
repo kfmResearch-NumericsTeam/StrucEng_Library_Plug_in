@@ -63,7 +63,8 @@ cd /vagrant/tools/distrib
 ```
 
 - Yak Cmd line tool: https://developer.rhino3d.com/guides/yak/yak-cli-reference/
-
+- https://developer.rhino3d.com/guides/yak/pushing-a-package-to-the-server/
+- https://developer.rhino3d.com/guides/yak/the-anatomy-of-a-package/
 
 ### Links
 - In case wine has issues publishing the yak file, update dotnet binary as described here
