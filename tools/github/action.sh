@@ -28,8 +28,14 @@ sudo apt-get update; \
 sudo apt install -y gnupg ca-certificates
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-sudo apt update
+sudo apt update -y
 sudo apt --fix-broken install -y  mono-devel
+
+
+sudo apt-get install -y wine-stable
+sudo dpkg --add-architecture i386
+sudo apt-get update
+sudo apt-get install -y wine32 
 
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet
