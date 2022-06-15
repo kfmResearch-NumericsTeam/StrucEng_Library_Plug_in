@@ -1,11 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # for ubuntu 18.04
 # also used in github action
 #
 set -euo pipefail
-script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
+echo "proj_root: $proj_root"
+ls -al $proj_root
 
 sudo mkdir -p /etc/gcrypt
 sudo su root -c "echo all >> /etc/gcrypt/hwf.deny"

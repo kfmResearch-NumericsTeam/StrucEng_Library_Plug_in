@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
-script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
 
 # setup script for fedora vagrant box
