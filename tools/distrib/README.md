@@ -1,30 +1,47 @@
 ## Tools
 
 This document describes the setup tools to build, package and deploy strucenglib
-on linux.
+on linux. All dependencies are captured in the provided vagrant box.
 
-- Install Wine https://www.winehq.org/
-- Install dotnet https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
-- install xmlstarlet
+```
+# boot vagrant and login
+cd /project/root/dir
+vagrant up
+vagrant ssh
 
+# cd into distrib tools
+cd /vagrant/tools/distrib
 
-Package management is done with Yak.exe by mcneel, freely distributed at
-https://files.mcneel.com/yak/tools/latest/yak.exe.
+# build the dotnet solution
+./distrib.sh build
+```
+The build Rhino plugin can susequently be found in ./StrucEngLib/bin/Debug/net48/.
 
-
-### Getting Started
+### Publish to Rhino Store
 Log into yak with wine yak.exe login. Your mcneel account must be connected with
 strucenglib.
 
 ```sh
+vagrant ssh
+cd /vagrant/tools/distrib
 wine yak.exe login
 ```
 
+Publish to test store
 ```sh
-./distrib.sh help
+vagrant ssh
+cd /vagrant/tools/distrib
+./distrib.sh distrib_test
+```
+
+Publish to store
+```sh
+vagrant ssh
+cd /vagrant/tools/distrib
+./distrib.sh distrib
 ```
 
 
-### Issues
+### Links
 - In case wine has issues publishing the yak file, update dotnet binary as described here
 https://web.archive.org/save/https://gist.github.com/abertschi/464c5143f0290572711bb909b610208d
