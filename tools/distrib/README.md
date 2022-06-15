@@ -15,7 +15,7 @@ cd /vagrant/tools/distrib
 # build the dotnet solution
 ./distrib.sh build
 
-# Package into yak format
+# Package yak format
 ./distrib.sh package
 ```
 The built Rhino plugin can susequently be found in `/StrucEngLib/bin/Debug/net48/`.
@@ -35,6 +35,7 @@ Publish to test store
 ```sh
 vagrant ssh
 cd /vagrant/tools/distrib
+./distrib package
 ./distrib.sh distrib_test
 ```
 
@@ -42,6 +43,7 @@ Publish to store
 ```sh
 vagrant ssh
 cd /vagrant/tools/distrib
+./distrib package
 ./distrib.sh distrib
 ```
 
