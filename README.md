@@ -18,4 +18,5 @@ Please consider [./tools/vagrant](./tools/vagrant) for build instructions.
 ./tools/.................: Development tools
 ./tools/vagrant/.........: Vagrant documentation and scripts
 ./tools/distrib/.........: Build and distribution tools
+./tools/test/...........: Unit test runner
 ```
