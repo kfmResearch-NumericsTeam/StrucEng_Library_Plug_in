@@ -3,11 +3,14 @@
 ### Linux
 
 The development build of this project is captured in a vagrant linux box. For a
-reproducible setup on linux, install vagrant https://www.vagrantup.com/ as well
-as virtualbox https://www.virtualbox.org/. Upon installation, run `vagrant up`
-in the root directory of this project. A virtual machine running fedora and all
+reproducible setup on linux, install the following binaries:
+
+- vagrant https://www.vagrantup.com/
+-  virtualbox https://www.virtualbox.org/.
+ 
+Upon installation, run `vagrant up` in the root directory of this project. A virtual machine running fedora and all
 build packages will set up. Release management can subsequently be done with
-/tools/distrib. This setup will cross compile strucenglib on linux for windows.
+`/tools/distrib` in the project root directory. This setup will cross compile strucenglib on linux for windows.
 
 The official build system for this project is Linux.
 Wine is needed to run yak.exe on Linux, Rhino's Package Manager.
