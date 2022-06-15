@@ -11,7 +11,7 @@ for more detailed instructions.
 The build setup is specified and reproducible with a Fedora based Vagrant image.
 Please consider [./tools/vagrant](./tools/vagrant) for build instructions. 
 
-### Code and Structure
+### Files
 ```
 ./StrucEngLib/...........: .net C# Rhino Plugin
 ./distrib/...............: Assets files for Distribution management, logo, manifest...
