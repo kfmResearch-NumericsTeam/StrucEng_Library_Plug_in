@@ -6,8 +6,6 @@
 set -euo pipefail
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
-echo "proj_root: $proj_root"
-ls -al $proj_root
 
 sudo mkdir -p /etc/gcrypt
 sudo su root -c "echo all >> /etc/gcrypt/hwf.deny"
@@ -35,7 +33,7 @@ sudo apt install -y mono-devel
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet
 
-## check build
+# check build
 $proj_root/tools/distrib/distrib.sh version
 $proj_root/tools/distrib/distrib.sh build
 $proj_root/tools/distrib/distrib.sh package
