@@ -17,7 +17,7 @@ ensure_binary() {
     if ! command -v "$cmd" &> /dev/null
     then
         echo "$cmd could not be found"
-        exit
+        exit 1
     fi
 }
 
