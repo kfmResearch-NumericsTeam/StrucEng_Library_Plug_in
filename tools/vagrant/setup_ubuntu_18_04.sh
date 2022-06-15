@@ -11,6 +11,7 @@ sudo mkdir -p /etc/gcrypt
 sudo su root -c "echo all >> /etc/gcrypt/hwf.deny"
 sudo apt-get upgrade -y || true
 sudo apt-get update -y || true
+sudo apt-get install -y unzip
 
 # .net https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
 wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb

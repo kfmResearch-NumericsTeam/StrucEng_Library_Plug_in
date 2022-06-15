@@ -10,7 +10,7 @@ MONO_INLINELIMIT=0
 
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
-yak_bin="$script_dir/yak.exe"
+yak_bin="mono $script_dir/yak.exe"
 
 
 ensure_binaries() {
@@ -91,16 +91,12 @@ package() {
     echo "package..."
 
     build
-
     local v=$(version)
     create_package_dir "$v"
 
     local _cd=$(pwd)
     cd "$proj_root/distrib/build"
-    
-    ls $yak_bin
-    ls -al .
-    mono $yak_bin build
+    $yak_bin build
     
     printf '\033[0m'  # Reset color
     cd "$_cd"
@@ -115,7 +111,7 @@ deploy() {
     local yak_out=$(ls | grep yak)
 
     set -x
-    mono $yak_bin push $yak_out
+    $yak_bin push $yak_out
     set +x
 
     cd "$_cd"
@@ -131,7 +127,7 @@ deploy_test() {
     local yak_out=$(ls | grep yak)
 
     set -x
-    mono $yak_bin push $test_repo $yak_out
+    $yak_bin push $test_repo $yak_out
     set +x
 
     cd "$_cd"
