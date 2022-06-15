@@ -1,5 +1,5 @@
 using NUnit.Framework;
-
+using StrucEngLib.Model;
 
 namespace StrucEngLibTest
 {
@@ -7,10 +7,10 @@ namespace StrucEngLibTest
     public class ModelTest
     {
         [Test]
-        public void IsPrime_InputIs1_ReturnFalse()
+        public void TestModel()
         {
-            
-            Assert.IsTrue("1" == "1", "this should be 1");
+            var m = new Workbench();
+            Assert.IsTrue(m.Version == "1", "this should be 1");
         }
     }
 }

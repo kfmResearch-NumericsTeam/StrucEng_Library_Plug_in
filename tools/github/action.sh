@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 #
 # ubuntu 20.04 lts
 #
+
+
+set -euo pipefail
+script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+proj_root="$script_dir/../../"
 
 sudo mkdir -p /etc/gcrypt
 sudo su root -c "echo all >> /etc/gcrypt/hwf.deny"
@@ -27,27 +30,17 @@ echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sud
 sudo apt update
 sudo apt install -y mono-devel
 
-# wine https://wine.htmlvalidator.com/install-wine-on-ubuntu-20.04.html
-#sudo rm -rf /var/lib/apt/lists/*
-#sudo apt-get update -o Acquire::CompressionTypes::Order::=gz
-#sudo apt-get update && sudo apt-get upgrade
-#
-#sudo dpkg --add-architecture i386 
-#wget -nc https://dl.winehq.org/wine-builds/winehq.key
-#sudo mv winehq.key /usr/share/keyrings/winehq-archive.key
-#wget -nc https://dl.winehq.org/wine-builds/ubuntu/dists/focal/winehq-focal.sources
-#sudo mv winehq-focal.sources /etc/apt/sources.list.d/
-#sudo apt update -y
-#sudo apt --fix-broken install -y --install-recommends winehq-devel
-#wine --version
+sudo apt-get install wine-stable 
+sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
+wine --version
 
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet
 
 ## check build
-/vagrant/tools/distrib/distrib.sh version
-/vagrant/tools/distrib/distrib.sh build
-/vagrant/tools/distrib/distrib.sh package
-/vagrant/tools/distrib/distrib.sh test
+$proj_root/tools/distrib/distrib.sh version
+$proj_root/tools/distrib/distrib.sh build
+$proj_root/tools/distrib/distrib.sh package
+$proj_root/tools/distrib/distrib.sh test
 
 echo "Setup successful!"
