@@ -1,5 +1,6 @@
-# StrucEngLib Plugin
+[![CI](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/build_solution.yml/badge.svg?branch=master)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/build_solution.yml) 
 
+# StrucEngLib Plugin
 
 ### Installation
 To install, search for "StrucEngLib" in Rhino's Package Store. Please consider
