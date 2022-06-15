@@ -9,7 +9,7 @@ wiki](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki/
 for more detailed instructions.
 
 ### Build
-The build setup is specified and reproducible with a Fedora based Vagrant image.
+The build setup is specified and reproducible with a linux based Vagrant image.
 Please consider [./tools/vagrant](./tools/vagrant) for detailed build instructions. 
 ```
 $ vagrant up

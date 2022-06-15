@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+proj_root="$script_dir/../.."
 
 # setup script for fedora vagrant box
 sudo dnf -y update --nogpgcheck || true
@@ -15,9 +17,9 @@ sudo dnf install -y --nogpgcheck mono-devel
 sudo dnf -y install --nogpgcheck xmlstarlet
 
 # check build
-/vagrant/tools/distrib/distrib.sh version
-/vagrant/tools/distrib/distrib.sh build
-/vagrant/tools/distrib/distrib.sh package
-/vagrant/tools/distrib/distrib.sh test
+$proj_root/tools/distrib/distrib.sh version
+$proj_root/tools/distrib/distrib.sh build
+$proj_root/tools/distrib/distrib.sh package
+$proj_root/tools/distrib/distrib.sh test
 
 echo "Setup successful!"
