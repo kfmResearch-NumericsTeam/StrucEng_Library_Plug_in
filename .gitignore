@@ -2,7 +2,7 @@
 /.vs/
 bin
 obj
-
+.vagrant
 
 
 #ignore thumbnails created by windows

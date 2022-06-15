@@ -72,8 +72,8 @@ create_package_dir() {
     fi
 
     local bin="$proj_root/StrucEngLib/bin/Debug/net48"
-    local out="$script_dir/../build"
-    local assets="$script_dir/../assets"
+    local out="$proj_root/distrib/build"
+    local assets="$proj_root/distrib/assets"
 
     # Copy relevant bits
     rm -rf "$out"

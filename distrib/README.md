@@ -1,22 +1,4 @@
-### Create new release
-
-```
-# 1. Update project version
-./update_version.sh <version>
-
-# 2. Build project with vs studio...
-
-# 3. Create packaging directory (XXX: We copy from DEBUG not RELEASE currently)
-./create_package_dir.sh <version>
-
-# 4. Create yak package (exec on windows!)
-./build_yak.bat
-
-# 5. Upload yak to repo (exec on windows!)
-./publish_yak.bat
-
-# 6. Package can be installed in rhino with PackageManager, then search for Plugin
-```
+### Distrib
 
 - Test store: https://test.yak.rhino3d.com
   - Must be enabled in Rhino Settings
