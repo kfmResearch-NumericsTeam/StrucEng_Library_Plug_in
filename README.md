@@ -10,8 +10,15 @@ for more detailed instructions.
 
 ### Build
 The build setup is specified and reproducible with a Fedora based Vagrant image.
-Please consider [./tools/vagrant](./tools/vagrant) for build instructions. 
-
+Please consider [./tools/vagrant](./tools/vagrant) for detailed build instructions. 
+```
+$ vagrant up
+$ ./tools/distrib/distrib_vagrant.sh help
+$ ./tools/distrib/distrib_vagrant.sh build
+$ ./tools/distrib/distrib_vagrant.sh test
+$ ./tools/distrib/distrib_vagrant.sh package
+$ ./tools/distrib/distrib_vagrant.sh deploy
+```
 ### Files
 ```
 ./StrucEngLib/...........: .net C# Rhino Plugin

@@ -2,21 +2,14 @@
 set -euo pipefail
 
 # setup script for fedora vagrant box
-
 sudo dnf -y update --nogpgcheck || true
+sudo dnf -y upgrade --nogpgcheck || true
 sudo dnf install -y --nogpgcheck dnf-plugins-core
 
 # .net
 sudo dnf install -y --nogpgcheck dotnet-sdk-6.0
 sudo dnf install -y --nogpgcheck dotnet-runtime-6.0
 sudo dnf install -y --nogpgcheck mono-devel
-
-# wine
-sudo dnf -y install --nogpgcheck wine
-
-# Not needed
-# sudo dnf -y install winetricks
-# winetricks -q dotnet48
 
 # other tools for distrib.sh
 sudo dnf -y install --nogpgcheck xmlstarlet

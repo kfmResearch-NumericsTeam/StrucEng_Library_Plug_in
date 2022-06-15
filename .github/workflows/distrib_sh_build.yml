@@ -1,0 +1,19 @@
+name: distrib.sh build
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+    
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+        
+      - name: Setup env and build
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
+          "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
