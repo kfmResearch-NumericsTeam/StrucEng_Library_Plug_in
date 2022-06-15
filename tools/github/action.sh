@@ -30,6 +30,7 @@ echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sud
 sudo apt update
 sudo apt install -y mono-devel
 
+sudo apt-get install lib32z1
 sudo apt-get install wine-stable 
 sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
 wine --version
