@@ -13,7 +13,10 @@ The official build system for this project is Linux.
 Wine is needed to run yak.exe on Linux, Rhino's Package Manager.
 
 ``` sh
+# boot box
 vagrant up
+
+# build solution
 /tools/distrib/distrib_vagrant.sh build
 ```
 
