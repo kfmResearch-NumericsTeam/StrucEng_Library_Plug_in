@@ -99,7 +99,10 @@ package() {
 
     local _cd=$(pwd)
     cd "$proj_root/distrib/build"
+
     $yak_bin build
+    printf '\033[0m'  # Reset color
+
     cd "$_cd"
 }
 
@@ -110,6 +113,7 @@ deploy() {
     cd "$proj_root/distrib/build"
 
     local yak_out=$(ls | grep yak)
+
     set -x
     $yak_bin push $yak_out
     set +x
@@ -125,6 +129,7 @@ deploy_test() {
     cd "$proj_root/distrib/build"
 
     local yak_out=$(ls | grep yak)
+
     set -x
     $yak_bin push $test_repo $yak_out
     set +x
@@ -145,11 +150,8 @@ distrib_test() {
     fi
 
     update_version "$version"
-
     build
-
     create_package_dir "$version"
-
     package
 
     if [ "$interactive" == "yes" ]
@@ -158,6 +160,13 @@ distrib_test() {
     fi
 
     deploy_test
+}
+
+unit_test() {
+    echo "Unit testing..."
+    local test_bin=$proj_root/tools/test/run_tests.sh
+
+    $test_bin
 }
 
 ci_build() {
@@ -169,11 +178,8 @@ ci_build() {
     version="${version}${v}"
 
     update_version "$version"
-
     build
-
     create_package_dir "$version"
-
     package
 
     if [ "$interactive" == "yes" ]
@@ -190,6 +196,7 @@ help() {
     echo "  update_version <version>.....: updates version" >&2
     echo "  version......................: list version" >&2
     echo "  build........................: build dotnet solution" >&2
+    echo "  test.........................: build dotnet solution, run tests" >&2
     echo "  package......................: builds solution, creates yak package format" >&2
     echo "  deploy_test..................: deploys the yak package found to test store" >&2
     echo "  deploy.......................: deploys the yak package found store" >&2
@@ -215,6 +222,9 @@ case "$command" in
         ;;
     build)
         build
+        ;;
+    test)
+        unit_test
         ;;
     deploy_test)
         deploy_test

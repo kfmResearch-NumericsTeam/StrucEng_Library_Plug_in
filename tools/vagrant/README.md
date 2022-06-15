@@ -12,6 +12,11 @@ build packages will set up. Release management can subsequently be done with
 The official build system for this project is Linux.
 Wine is needed to run yak.exe on Linux, Rhino's Package Manager.
 
+``` sh
+vagrant up
+/tools/distrib/distrib_vagrant.sh build
+```
+
 ### Windows
 On windows, install Rhino, dotnet and visual studio, import the project in
 visual studio and build the solution with "build".
