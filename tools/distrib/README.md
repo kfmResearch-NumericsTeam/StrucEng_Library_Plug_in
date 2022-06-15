@@ -45,6 +45,8 @@ cd /vagrant/tools/distrib
 ./distrib.sh distrib
 ```
 
+- Yak Cmd line tool: https://developer.rhino3d.com/guides/yak/yak-cli-reference/
+
 
 ### Links
 - In case wine has issues publishing the yak file, update dotnet binary as described here
