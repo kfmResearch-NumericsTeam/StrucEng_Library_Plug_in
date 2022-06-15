@@ -3,7 +3,7 @@
 bin
 obj
 .vagrant
-
+tmp_files
 
 #ignore thumbnails created by windows
 Thumbs.db

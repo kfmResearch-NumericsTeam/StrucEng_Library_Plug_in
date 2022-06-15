@@ -18,7 +18,6 @@ yak_bin="wine $script_dir/yak.exe"
 ensure_binaries() {
     ensure_binary xmlstarlet
     ensure_binary dotnet
-    ensure_binary wine
 }
 
 
@@ -100,6 +99,7 @@ package() {
     local _cd=$(pwd)
     cd "$proj_root/distrib/build"
 
+    ensure_binary wine
     $yak_bin build
     
     printf '\033[0m'  # Reset color
@@ -115,6 +115,7 @@ deploy() {
     local yak_out=$(ls | grep yak)
 
     set -x
+    ensure_binary wine
     $yak_bin push $yak_out
     set +x
 
@@ -131,6 +132,7 @@ deploy_test() {
     local yak_out=$(ls | grep yak)
 
     set -x
+    ensure_binary wine
     $yak_bin push $test_repo $yak_out
     set +x
 
