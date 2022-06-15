@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace StrucEngLibTest
 {
     [TestFixture]
-    public class PrimeService_IsPrimeShould
+    public class ModelTest
     {
         [Test]
         public void IsPrime_InputIs1_ReturnFalse()
