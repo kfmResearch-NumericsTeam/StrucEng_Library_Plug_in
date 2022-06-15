@@ -28,12 +28,17 @@ sudo apt-get install -y dotnet-runtime-6.0
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 sudo apt update
-sudo apt install -y mono-devel
+sudo apt --fix-broken install -y  mono-devel
 
-sudo apt-get install lib32z1
-sudo apt-get install wine-stable 
-sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32
-wine --version
+sudo apt-get --fix-broken install lib32z1
+sudo dpkg --add-architecture i386 
+wget -nc https://dl.winehq.org/wine-builds/winehq.key
+sudo mv winehq.key /usr/share/keyrings/winehq-archive.key
+wget -nc https://dl.winehq.org/wine-builds/ubuntu/dists/focal/winehq-focal.sources
+sudo mv winehq-focal.sources /etc/apt/sources.list.d/
+sudo apt update
+
+sudo apt install --install-recommends winehq-stable
 
 ## other tools for distrib.sh
 sudo apt-get install -y xmlstarlet
