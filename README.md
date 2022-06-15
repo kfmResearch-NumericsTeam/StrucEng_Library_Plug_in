@@ -1,5 +1,4 @@
-[![CI](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/build_solution.yml/badge.svg?branch=master)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/build_solution.yml) 
-
+[![Continuous Integration](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml/badge.svg?branch=master)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml)
 # StrucEngLib Plugin
 
 ### Installation
