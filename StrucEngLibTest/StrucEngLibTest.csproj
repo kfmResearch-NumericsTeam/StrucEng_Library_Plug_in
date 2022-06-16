@@ -7,6 +7,8 @@
         <GenerateProgramFile>true</GenerateProgramFile>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="IronPython" Version="2.7.12" IncludeAssets="compile;build;runtime" />
+        <PackageReference Include="IronPython.Interpreter" Version="2.7.4" IncludeAssets="compile;build;runtime" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.1.0" />
         <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.2.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />

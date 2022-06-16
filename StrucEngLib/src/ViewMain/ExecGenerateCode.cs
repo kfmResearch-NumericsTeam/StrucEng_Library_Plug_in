@@ -48,11 +48,11 @@ namespace StrucEngLib
                 return;
             }
 
-            PythonCodeGenerator codeGen = new PythonCodeGenerator(_model);
+            PythonCodeGenerator codeGen = new PythonCodeGenerator();
             var sourceCode = "";
             try
             {
-                sourceCode = codeGen.Generate();
+                sourceCode = codeGen.GenerateLinFeCode(_model);
             }
             catch (Exception e)
             {

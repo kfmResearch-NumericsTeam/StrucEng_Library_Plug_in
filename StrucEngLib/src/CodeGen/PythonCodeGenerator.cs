@@ -14,7 +14,46 @@ namespace StrucEngLib
     /// </summary>
     public class PythonCodeGenerator
     {
-        private string header = $@"
+        public string GenerateLinFeCode(Workbench bench)
+        {
+            var state = new EmitState(bench);
+            EmitHeaders(state);
+            EmitElements(state);
+            EmitSets(state);
+            EmitMaterials(state);
+            EmitSections(state);
+            EmitProperties(state);
+            EmitDisplacements(state);
+            EmitLoads(state);
+            EmitSteps(state);
+            EmitSummary(state);
+            EmitRun(state);
+
+            return state.Buffer.ToString();
+        }
+
+        public string GenerateSmmCode(Workbench bench)
+        {
+            var state = new EmitState(bench);
+            EmitHeaders(state);
+            EmitElements(state);
+            EmitSets(state);
+            EmitMaterials(state);
+            EmitSections(state);
+            EmitProperties(state);
+            EmitDisplacements(state);
+            EmitLoads(state);
+            EmitSteps(state);
+            EmitSummary(state);
+            EmitRun(state);
+            EmitSmm(state);
+            return state.Buffer.ToString();
+        }
+
+
+        private void EmitHeaders(EmitState s)
+        {
+            string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
 # Code generated at {DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}
@@ -48,125 +87,93 @@ name = 'Rahmen'
 path = 'C:/Temp/'
 mdl = Structure(name=name, path=path)
 ";
-
-        private const string footer = @"
-";
-
-        private readonly Workbench _model;
-
-        public PythonCodeGenerator(Workbench model)
-        {
-            _model = model;
+            s.Buffer.Append(header);
         }
 
-        private int _loadIdCounter = 0;
-        private string RemoveSpaces(string id) => id.Replace(" ", "_");
-        private string LoadId() => "load_" + _loadIdCounter++;
-        private string LayerId(string id) => RemoveSpaces(id) + "_element";
-        private string SetId(string id) => RemoveSpaces(id) + "_set";
-        private string SectionId(string id) => RemoveSpaces(id) + "_sec";
-        private string PropId(string id) => RemoveSpaces(id) + "_prop";
-        private string MatElasticId(string id) => RemoveSpaces(id) + "_mat_elastic";
-        private string DispId(string id) => RemoveSpaces(id) + "_disp";
-
-        private string CreateStepName(string id) => "step_" + RemoveSpaces(id);
-
-        private string EmitIfNotEmpty(string key, string value, string comma = ",")
-            => string.IsNullOrWhiteSpace(value) ? "" : $" {key}={value}{comma}";
-
-        private string _nl = Environment.NewLine;
-
-        public string Generate()
+        private void EmitElements(EmitState s)
         {
-            _loadIdCounter = 0;
-            var b = new StringBuilder();
-            b.Append(header);
-            EmitLayers(_model.Layers, b);
+            s.CommentLine("Elements");
+            var elements = s.Elements();
+            elements.ForEach(e => s.LayerIds.Add(e, s.ElementId(e.GetName())));
 
-            var loadNameMap = new Dictionary<Model.Load, string>();
-            foreach (var load in _model.Loads ?? Enumerable.Empty<Model.Load>())
-            {
-                EmitLoad(load, b, loadNameMap);
-            }
+            s.Line("rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', " +
+                   $"layers={StringUtils.ListToPyStr(elements, el => el.GetName())})");
 
-            EmitSteps(b, loadNameMap);
-
-            b.Append($"{_nl}# == Summary" + _nl);
-            b.Append("mdl.summary()" + _nl);
-
-            EmitAnalysisSettings(b, _model);
-
-            b.Append(footer);
-            return b.ToString();
-        }
-
-        private void EmitLayers(List<Model.Layer> layers, StringBuilder b)
-        {
-            foreach (var layer in layers ?? Enumerable.Empty<Model.Layer>())
-            {
-                if (layer.LayerType == LayerType.ELEMENT)
+            elements
+                .Select(e => e as Element)
+                .ToList()
+                .Where(e => e.LoadConstraint != null)
+                .Select(e => e.LoadConstraint)
+                .ToList().ForEach(c =>
                 {
-                    EmitElement(layer, b);
-                }
-
-                if (layer.LayerType == LayerType.SET)
-                {
-                    EmitDisplacement(layer, b);
-                }
-            }
+                    s.Line(
+                        $"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}})");
+                });
         }
 
-        private void EmitElement(Model.Layer layer, StringBuilder b)
+        private void EmitSets(EmitState s)
         {
-            var element = (Element) layer;
-            var layerId = LayerId(element.GetName());
-            var layerName = element.GetName();
-            b.Append(_nl + $@"# == Element {layerName}" + _nl);
-            b.Append(
-                $@"rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['{layerName}']) {_nl}");
+            s.CommentLine("Sets");
+            var sets = s.Sets();
+            sets.ForEach(set => s.LayerIds.Add(set, s.SetId(set.GetName())));
 
-            var mat = element.ElementMaterialElastic;
-            var matId = MatElasticId(layerId);
-            b.Append($@"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P}))" + _nl);
-            var sectionId = SectionId(layerId);
-            b.Append(
-                $@"mdl.add(ShellSection(name='{sectionId}', t={element.ElementShellSection.Thickness})) #[mm] " +
-                _nl);
-            var propId = PropId(layerId);
-            b.Append(
-                $@"mdl.add(Properties(name='{propId}', material='{matId}', section='{sectionId}', elset='{layerName}'))" +
-                _nl);
+            s.Line($"rhino.add_sets_from_layers(mdl, layers={StringUtils.ListToPyStr(sets, set => set.GetName())})");
+        }
 
-            if (element.LoadConstraint != null)
+        private void EmitMaterials(EmitState s)
+        {
+            s.CommentLine("Materials");
+            var elements = s.Elements();
+            elements.ForEach(e =>
             {
-                var c = element.LoadConstraint;
-                b.Append(
-                    $@"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) " +
-                    _nl);
-            }
+                var matId = s.MatElasticId(s.LayerIds[e]);
+                s.MaterialIds.Add(e, matId);
+                var mat = e.ElementMaterialElastic;
+                s.Line(
+                    $"mdl.add(ElasticIsotropic(name='{matId}', E={mat.E}, v={mat.V}, p={mat.P})) # for layer: {e.GetName()}");
+            });
         }
 
-        private void EmitDisplacement(Model.Layer layer, StringBuilder b)
+        private void EmitSections(EmitState s)
         {
-            var set = (Set) layer;
-            var setName = set.GetName();
-            var setId = SetId(setName);
-            b.Append(_nl + $@"# == Set {set.GetName()}" + _nl);
-            b.Append($@"rhino.add_sets_from_layers(mdl, layers=['{setName}'] ) " + _nl);
-            var dispId = DispId(setId);
+            s.CommentLine("Sections");
+            var elements = s.Elements();
+            elements.ForEach(e =>
+            {
+                var sectionId = s.SectionId(s.LayerIds[e]);
+                s.SectionIds.Add(e, sectionId);
+                s.Line(
+                    $"mdl.add(ShellSection(name='{sectionId}', t={e.ElementShellSection.Thickness})) # for layer: {e.GetName()}");
+            });
+        }
 
+        private void EmitProperties(EmitState s)
+        {
+            s.CommentLine("Properties");
+            var elements = s.Elements();
+            elements.ForEach(e =>
+            {
+                var propId = s.PropId(s.LayerIds[e]);
+                s.PropertyIds.Add(e, propId);
+                s.Line(
+                    $"mdl.add(Properties(name='{propId}', material='{s.MaterialIds[e]}', section='{s.SectionIds[e]}', elset='{e.GetName()}'))");
+            });
+        }
+
+        private string GenerateDisplacementForSet(EmitState s, Set set)
+        {
             var args = new StringBuilder();
-            var name = "";
+            var name = "Unknown";
             switch (set.SetDisplacementType)
             {
                 case SetDisplacementType.GENERAL:
                     name = "GeneralDisplacement";
-                    args.Append(EmitIfNotEmpty("x", set.SetGeneralDisplacement.Ux))
-                        .Append(EmitIfNotEmpty("y", set.SetGeneralDisplacement.Uy))
-                        .Append(EmitIfNotEmpty("z", set.SetGeneralDisplacement.Uz))
-                        .Append(EmitIfNotEmpty("xx", set.SetGeneralDisplacement.Rotx))
-                        .Append(EmitIfNotEmpty("yy", set.SetGeneralDisplacement.Roty))
-                        .Append(EmitIfNotEmpty("zz", set.SetGeneralDisplacement.Rotz));
+                    args.Append(s.EmitIfNotEmpty("x", set.SetGeneralDisplacement.Ux))
+                        .Append(s.EmitIfNotEmpty("y", set.SetGeneralDisplacement.Uy))
+                        .Append(s.EmitIfNotEmpty("z", set.SetGeneralDisplacement.Uz))
+                        .Append(s.EmitIfNotEmpty("xx", set.SetGeneralDisplacement.Rotx))
+                        .Append(s.EmitIfNotEmpty("yy", set.SetGeneralDisplacement.Roty))
+                        .Append(s.EmitIfNotEmpty("zz", set.SetGeneralDisplacement.Rotz));
                     break;
                 case SetDisplacementType.FIXED:
                     name = "FixedDisplacement";
@@ -205,191 +212,209 @@ mdl = Structure(name=name, path=path)
                 // XXX: Must have a displacement
                 default:
                     throw new Exception("Unknown Displacement type: " + set.SetDisplacementType.ToString());
+                    break;
             }
 
-            b.Append($@"mdl.add([{name}(name='{dispId}', {args} nodes='{setName}')]) " + _nl);
+            var dispId = s.DispId(s.LayerIds[set]);
+            s.DisplacementIds.Add(set, dispId);
+            return $"{name}(name='{dispId}', {args} nodes='{set.GetName()}')";
         }
 
-        private void EmitLoad(Model.Load load, StringBuilder b, Dictionary<Model.Load, string> loadNameMap)
+        private void EmitAdditionalProperties(EmitState s)
         {
-            var loadId = "";
+            throw new NotImplementedException();
+        }
+
+        private void EmitDisplacements(EmitState s)
+        {
+            s.CommentLine("Displacements");
+            var sets = s.Sets();
+            s.Line("mdl.add([");
+            sets.ForEach(set => { s.Line(GenerateDisplacementForSet(s, set) + ","); });
+            s.Line("])");
+        }
+
+        private void EmitLoads(EmitState s)
+        {
+            s.CommentLine("Loads");
+            s.Workbench.Loads.ForEach(l => { s.Line($"mdl.add({EmitLoad(s, l)})"); });
+        }
+
+        private string EmitLoad(EmitState s, Model.Load load)
+        {
             switch (load.LoadType)
             {
                 case LoadType.Area:
                 {
+                    var loadId = s.LoadId() + "_area";
+                    s.LoadIds.Add(load, loadId);
+
                     var area = (LoadArea) load;
                     var layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
-                    b.Append(_nl + $@"# == Load Area {layersList}" + _nl);
-                    loadId = LoadId() + "_area";
-                    var z = EmitIfNotEmpty("z", area.Z);
-                    var x = EmitIfNotEmpty("x", area.X);
-                    var y = EmitIfNotEmpty("y", area.Y);
-                    b.Append(
-                        $@"mdl.add(AreaLoad(name='{loadId}', elements={layersList}, {z} {x} {y} axes='{area.Axes}')) " +
-                        _nl);
-                    break;
+                    var z = s.EmitIfNotEmpty("z", area.Z);
+                    var x = s.EmitIfNotEmpty("x", area.X);
+                    var y = s.EmitIfNotEmpty("y", area.Y);
+
+                    return $"AreaLoad(name='{loadId}', elements={layersList}, {z} {x} {y} axes='{area.Axes}')";
                 }
                 case LoadType.Gravity:
                 {
+                    var loadId = s.LoadId() + "_gravity";
+                    s.LoadIds.Add(load, loadId);
+
                     var g = (LoadGravity) load;
-                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
-                    b.Append(_nl + $@"#== Load Gravity {layersList}" + _nl);
-                    loadId = LoadId() + "_gravity";
-                    b.Append(
-                        $@"mdl.add(GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList}))" +
-                        _nl);
-                    break;
+                    var layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
+                    return $"GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList})";
                 }
                 case LoadType.Point:
                 {
+                    var loadId = s.LoadId() + "_point";
+                    s.LoadIds.Add(load, loadId);
+
                     var p = (LoadPoint) load;
-                    string layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
-                    b.Append(_nl + $@"#== Load Point {layersList}" + _nl);
-                    loadId = LoadId() + "_point";
-                    var z = EmitIfNotEmpty("z", p.Z);
-                    var x = EmitIfNotEmpty("x", p.X);
-                    var y = EmitIfNotEmpty("y", p.Y);
-                    var zz = EmitIfNotEmpty("zz", p.ZZ);
-                    var xx = EmitIfNotEmpty("xx", p.XX);
-                    var yy = EmitIfNotEmpty("yy", p.YY);
-                    b.Append(
-                        $@"mdl.add(PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList}))" +
-                        _nl);
-                    break;
+                    var layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
+                    var z = s.EmitIfNotEmpty("z", p.Z);
+                    var x = s.EmitIfNotEmpty("x", p.X);
+                    var y = s.EmitIfNotEmpty("y", p.Y);
+                    var zz = s.EmitIfNotEmpty("zz", p.ZZ);
+                    var xx = s.EmitIfNotEmpty("xx", p.XX);
+                    var yy = s.EmitIfNotEmpty("yy", p.YY);
+
+                    return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList})";
                 }
                 default:
                     RhinoApp.WriteLine("Ignoring unknown load: {0}", load.LoadType);
-                    // XXX: Ignore rest
-                    break;
+                    throw new Exception($"Unknown load: {load.LoadType}");
             }
-
-            loadNameMap.Add(load, loadId);
         }
 
-        private void EmitSteps(StringBuilder b, Dictionary<Model.Load, string> loadNameMap)
+
+        private void EmitSteps(EmitState s)
         {
-            b.Append(_nl + $@"# == Steps" + _nl);
-            /*
-             * stepPair: <float order as key, List<Steps> which belong to same order
-             * Order is already by key (asc)
-             */
+            s.Workbench.Steps.Sort((s1, s2) => string.Compare(s1.Order, s2.Order, StringComparison.Ordinal));
+            s.CommentLine("Steps");
+            s.Line("mdl.add([");
+            s.Workbench.Steps.ForEach(step => { s.Line(EmitStep(s, step) + ","); });
+            s.Line("])");
 
-            _model.Steps.Sort(delegate(Model.Step s1, Model.Step s2)
+            if (s.StepNames.Keys.ToList().Count > 0)
             {
-                return String.Compare(s1.Order, s2.Order, StringComparison.Ordinal);
-            });
-
-            Dictionary<string, Model.Step> stepMap = new Dictionary<string, Model.Step>();
-            foreach (var step in _model.Steps)
-            {
-                var stepName = CreateStepName(step.Order);
-                stepMap.Add(stepName, step);
-                var loadsNames = new List<string>();
-                var dispNames = new List<string>();
-                foreach (var stepEntry in step.Entries)
-                {
-                    switch (stepEntry.Type)
-                    {
-                        case StepType.Load:
-                            loadsNames.Add(loadNameMap[stepEntry.Value as Model.Load]);
-                            break;
-                        case StepType.Set:
-                            dispNames.Add(SetId(((Set) stepEntry.Value).Name));
-                            break;
-                        default:
-                            // XXX: Ignore rest
-                            break;
-                    }
-                }
-
-                var loadStr = "";
-                var dispStr = "";
-                if (loadsNames.Count > 0)
-                {
-                    loadStr = $" loads={StringUtils.ListToPyStr(loadsNames, name => name)}, ";
-                }
-
-                if (dispNames.Count > 0)
-                {
-                    dispStr = $" displacements={StringUtils.ListToPyStr(dispNames, name => name)}, ";
-                }
-
-                b.Append($@"mdl.add(GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False))" + _nl);
-            }
-
-            if (stepMap.Keys.ToList().Count > 0)
-            {
-                b.Append($@"mdl.steps_order = {StringUtils.ListToPyStr(stepMap.Keys.ToList(), s => s)} " + _nl);
+                s.Line($"mdl.steps_order = {StringUtils.ListToPyStr(s.StepNames.Keys.ToList(), st => st)} ");
             }
         }
 
-        private void EmitPlotData(StringBuilder b, string step, string field, bool take = true)
+        private string EmitStep(EmitState s, Model.Step step)
+        {
+            var stepName = s.CreateStepName(step.Order);
+            s.StepNames.Add(stepName, step);
+
+            var loadNames = new List<string>();
+            var dispNames = new List<string>();
+
+            foreach (var stepEntry in step.Entries)
+            {
+                switch (stepEntry.Type)
+                {
+                    case StepType.Load:
+                        loadNames.Add(s.LoadIds[stepEntry.Value as Model.Load]);
+                        break;
+                    case StepType.Set:
+                        dispNames.Add(s.SetId(((Set) stepEntry.Value).Name));
+                        break;
+                    default:
+                        // XXX: Ignore rest
+                        break;
+                }
+            }
+
+            var loadStr = "";
+            var dispStr = "";
+            if (loadNames.Count > 0)
+            {
+                loadStr = $" loads={StringUtils.ListToPyStr(loadNames, name => name)}, ";
+            }
+
+            if (dispNames.Count > 0)
+            {
+                dispStr = $" displacements={StringUtils.ListToPyStr(dispNames, name => name)}, ";
+            }
+
+            return $"GeneralStep(name='{stepName}', {loadStr} {dispStr} nlgeom=False)";
+        }
+
+        private void EmitSummary(EmitState s)
+        {
+            s.CommentLine("Summary");
+            s.Line("mdl.summary()");
+        }
+
+        private void EmitRun(EmitState s)
+        {
+            s.CommentLine("Run");
+            var sx = s.Workbench.Steps
+                .Where(step => step.Setting != null && step.Setting.Include)
+                .Select(step => step.Setting)
+                .ToList();
+            var fields = StringUtils.ListToPyStr<string>(new List<string>()
+                {
+                    sx.Select(setting => setting.Rf).Contains(true) ? "rf" : "",
+                    sx.Select(setting => setting.Rm).Contains(true) ? "rm" : "",
+                    sx.Select(setting => setting.U).Contains(true) ? "u" : "",
+                    sx.Select(setting => setting.Ur).Contains(true) ? "ur" : "",
+                    sx.Select(setting => setting.Cf).Contains(true) ? "cf" : "",
+                    sx.Select(setting => setting.Cm).Contains(true) ? "cm" : "",
+                }.Where(setting => setting != "").ToList(), (id => id)
+            );
+            s.Line($"mdl.analyse_and_extract(software='abaqus', fields={fields})");
+
+            sx.ForEach(setting =>
+            {
+                var step = s.CreateStepName(setting.StepId);
+                s.CommentLine($"Plot Step {step}");
+
+                EmitPlotData(s, step, "rfx", setting.Rf);
+                EmitPlotData(s, step, "rfy", setting.Rf);
+                EmitPlotData(s, step, "rfz", setting.Rf);
+                EmitPlotData(s, step, "rfm", setting.Rf);
+
+                EmitPlotData(s, step, "rmx", setting.Rm);
+                EmitPlotData(s, step, "rmy", setting.Rm);
+                EmitPlotData(s, step, "rmz", setting.Rm);
+                EmitPlotData(s, step, "rmm", setting.Rm);
+
+                EmitPlotData(s, step, "ux", setting.U);
+                EmitPlotData(s, step, "uy", setting.U);
+                EmitPlotData(s, step, "uz", setting.U);
+                EmitPlotData(s, step, "um", setting.U);
+
+                EmitPlotData(s, step, "urx", setting.Ur);
+                EmitPlotData(s, step, "ury", setting.Ur);
+                EmitPlotData(s, step, "urz", setting.Ur);
+                EmitPlotData(s, step, "urm", setting.Ur);
+
+                EmitPlotData(s, step, "cfx", setting.Cf);
+                EmitPlotData(s, step, "cfy", setting.Cf);
+                EmitPlotData(s, step, "cfz", setting.Cf);
+                EmitPlotData(s, step, "cfm", setting.Cf);
+
+                EmitPlotData(s, step, "cmx", setting.Cm);
+                EmitPlotData(s, step, "cmy", setting.Cm);
+                EmitPlotData(s, step, "cmz", setting.Cm);
+                EmitPlotData(s, step, "cmm", setting.Cm);
+            });
+        }
+
+        private void EmitPlotData(EmitState s, string step, string field, bool take = true)
         {
             if (!take)
                 return;
-            b.Append($@"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1) {_nl}");
+            s.Line($"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1)");
         }
 
-        private void EmitAnalysisSettings(StringBuilder b, Workbench model)
+
+        private void EmitSmm(EmitState s)
         {
-            List<AnalysisSetting> sx = new List<AnalysisSetting>();
-            foreach (var step in model.Steps)
-            {
-                if (step.Setting != null && step.Setting.Include)
-                {
-                    sx.Add(step.Setting);
-                }
-            }
-
-            b.Append($@"{_nl}# == Run {_nl}");
-            var fields = StringUtils.ListToPyStr<string>(new List<string>()
-                {
-                    sx.Select(s => s.Rf).Contains(true) ? "rf" : "",
-                    sx.Select(s => s.Rm).Contains(true) ? "rm" : "",
-                    sx.Select(s => s.U).Contains(true) ? "u" : "",
-                    sx.Select(s => s.Ur).Contains(true) ? "ur" : "",
-                    sx.Select(s => s.Cf).Contains(true) ? "cf" : "",
-                    sx.Select(s => s.Cm).Contains(true) ? "cm" : "",
-                }.Where(s => s != "").ToList(), (id => id)
-            );
-
-            b.Append($@"mdl.analyse_and_extract(software='abaqus', fields={fields}) {_nl}");
-
-            foreach (var s in sx)
-            {
-                var step = CreateStepName(s.StepId);
-                b.Append($@"{_nl}# == Plot Step {step} {_nl}");
-
-                EmitPlotData(b, step, "rfx", s.Rf);
-                EmitPlotData(b, step, "rfy", s.Rf);
-                EmitPlotData(b, step, "rfz", s.Rf);
-                EmitPlotData(b, step, "rfm", s.Rf);
-
-                EmitPlotData(b, step, "rmx", s.Rm);
-                EmitPlotData(b, step, "rmy", s.Rm);
-                EmitPlotData(b, step, "rmz", s.Rm);
-                EmitPlotData(b, step, "rmm", s.Rm);
-
-                EmitPlotData(b, step, "ux", s.U);
-                EmitPlotData(b, step, "uy", s.U);
-                EmitPlotData(b, step, "uz", s.U);
-                EmitPlotData(b, step, "um", s.U);
-
-                EmitPlotData(b, step, "urx", s.Ur);
-                EmitPlotData(b, step, "ury", s.Ur);
-                EmitPlotData(b, step, "urz", s.Ur);
-                EmitPlotData(b, step, "urm", s.Ur);
-
-                EmitPlotData(b, step, "cfx", s.Cf);
-                EmitPlotData(b, step, "cfy", s.Cf);
-                EmitPlotData(b, step, "cfz", s.Cf);
-                EmitPlotData(b, step, "cfm", s.Cf);
-
-                EmitPlotData(b, step, "cmx", s.Cm);
-                EmitPlotData(b, step, "cmy", s.Cm);
-                EmitPlotData(b, step, "cmz", s.Cm);
-                EmitPlotData(b, step, "cmm", s.Cm);
-            }
+            s.CommentLine("SM");
         }
     }
 }
