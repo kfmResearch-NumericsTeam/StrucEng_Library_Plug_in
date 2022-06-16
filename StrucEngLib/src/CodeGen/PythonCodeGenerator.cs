@@ -103,11 +103,12 @@ mdl = Structure(name=name, path=path)
                 .Select(e => e as Element)
                 .ToList()
                 .Where(e => e.LoadConstraint != null)
-                .Select(e => e.LoadConstraint)
-                .ToList().ForEach(c =>
+                .ToList().ForEach(e =>
                 {
+                    var c = e.LoadConstraint;
                     s.Line(
-                        $"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}})");
+                        $"mdl.elements[{c.ElementNumber}].axes.update({{'ex': [{c.Ex0}, {c.Ex1}, {c.Ex2}], 'ey': [{c.Ey0}, {c.Ey1}, {c.Ey2}], 'ez': [{c.Ez0}, {c.Ez1}, {c.Ez2}]}}) "
+                        + $"# for layer: {e.GetName()}");
                 });
         }
 
@@ -264,7 +265,10 @@ mdl = Structure(name=name, path=path)
 
                     var g = (LoadGravity) load;
                     var layersList = StringUtils.ListToPyStr(load.Layers, layer => layer.GetName());
-                    return $"GravityLoad(name='{loadId}', x={g.X}, y={g.Y}, z={g.Z}, elements={layersList})";
+                    var z = s.EmitIfNotEmpty("z", g.Z);
+                    var x = s.EmitIfNotEmpty("x", g.X);
+                    var y = s.EmitIfNotEmpty("y", g.Y);
+                    return $"GravityLoad(name='{loadId}', {x} {y} {z} elements={layersList})";
                 }
                 case LoadType.Point:
                 {
