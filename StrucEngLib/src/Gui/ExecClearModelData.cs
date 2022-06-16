@@ -9,9 +9,9 @@ namespace StrucEngLib
     /// <summary>Clears all user data</summary>
     public class ExecClearModelData : CommandBase
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
 
-        public ExecClearModelData(MainViewModel vm)
+        public ExecClearModelData(LinFeMainViewModel vm)
         {
             _vm = vm;
         }

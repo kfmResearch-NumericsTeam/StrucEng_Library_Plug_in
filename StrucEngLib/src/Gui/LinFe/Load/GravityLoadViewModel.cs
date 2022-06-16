@@ -44,7 +44,7 @@ namespace StrucEngLib.Load
         }
 
         // XXX: This load currently has no properties
-        public GravityLoadViewModel(MainViewModel mainVm) : base(mainVm)
+        public GravityLoadViewModel(LinFeMainViewModel mainVm) : base(mainVm)
         {
         }
 

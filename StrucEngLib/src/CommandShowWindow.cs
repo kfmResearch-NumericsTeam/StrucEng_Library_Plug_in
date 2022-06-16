@@ -18,7 +18,7 @@ namespace StrucEngLib
         public CommandShowWindow()
         {
             Instance = this;
-            Panels.RegisterPanel(PlugIn, typeof(MainView), "StrucEngLib", null);
+            Panels.RegisterPanel(PlugIn, typeof(MainView), "StrucEngLib Plugin", null);
         }
 
         public static CommandShowWindow Instance { get; private set; }

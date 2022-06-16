@@ -14,7 +14,7 @@ namespace StrucEngLib.Layer
     /// </summary>
     public class ListLayerViewModel : ViewModelBase
     {
-        private readonly MainViewModel _mainVm;
+        private readonly LinFeMainViewModel _mainVm;
 
         private static readonly int LAYER_TYPE_ELEMENT = 0;
         private static readonly int LAYER_TYPE_SET = 1;
@@ -44,7 +44,7 @@ namespace StrucEngLib.Layer
             }
         }
 
-        public ListLayerViewModel(MainViewModel mainVm)
+        public ListLayerViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             Layers = new ObservableCollection<Model.Layer>();

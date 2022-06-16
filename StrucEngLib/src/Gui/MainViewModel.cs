@@ -14,36 +14,28 @@ namespace StrucEngLib
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ListLayerViewModel ListLayerVm { get; }
-        public LayerDetailsViewModel DetailLayerVm { get; }
-        public ListLoadViewModel ListLoadVm { get; }
-        public ListStepViewModel ListStepVm { get; }
         public ErrorViewModel ErrorVm { get; }
-        public AnalysisViewModel AnalysisVm { get; }
+        public LinFeMainViewModel LinFeMainVm { get; }
 
         private UnhandledExceptionEventHandler _exceptionHandler;
 
         public Workbench Workbench { get; }
 
-        public MainViewModel(): this(new Workbench())
+        public MainViewModel() : this(new Workbench())
         {
         }
-        
+
         public MainViewModel(Workbench wb)
         {
             ErrorVm = new ErrorViewModel();
-            Workbench = wb;
-            ListLayerVm = new ListLayerViewModel(this);
-            DetailLayerVm = new LayerDetailsViewModel(this);
-            ListLoadVm = new ListLoadViewModel(this);
-            ListStepVm = new ListStepViewModel(this);
-            AnalysisVm = new AnalysisViewModel(this);
+            LinFeMainVm = new LinFeMainViewModel(wb, ErrorVm);
 
+            Workbench = wb;
 
             _exceptionHandler = (sender, args) =>
             {
-                this.ErrorVm.ShowException("Something went wrong, we caught an unhandled exception. " +
-                                           "This is a bug. This will leave the application in an inconsistent state",
+                ErrorVm.ShowException("Something went wrong, we caught an unhandled exception. " +
+                                      "This is a bug. This will leave the application in an inconsistent state",
                     (Exception) args.ExceptionObject);
             };
             AppDomain.CurrentDomain.UnhandledException += _exceptionHandler;
@@ -59,7 +51,7 @@ namespace StrucEngLib
         {
             new List<ViewModelBase>()
             {
-                ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, ErrorVm, AnalysisVm
+                ErrorVm, LinFeMainVm,
             }.ForEach(vm => vm.UpdateModel());
         }
 

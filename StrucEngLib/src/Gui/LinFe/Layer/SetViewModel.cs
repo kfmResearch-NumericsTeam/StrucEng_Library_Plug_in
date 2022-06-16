@@ -8,9 +8,9 @@ namespace StrucEngLib.Layer
     /// <summary>View model for set data</summary>
     public class SetViewModel : NewSectionViewModel<SetDisplacementType>
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
 
-        public SetViewModel(MainViewModel vm) : base(
+        public SetViewModel(LinFeMainViewModel vm) : base(
             new List<ListItem>
             {
                 new ListItem()

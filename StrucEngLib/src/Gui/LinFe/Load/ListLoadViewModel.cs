@@ -18,7 +18,7 @@ namespace StrucEngLib.Load
     /// </summary>
     public class ListLoadViewModel : ViewModelBase
     {
-        private readonly MainViewModel _mainVm;
+        private readonly LinFeMainViewModel _mainVm;
 
         public ObservableCollection<ListItem> LoadNames { get; }
 
@@ -91,7 +91,7 @@ namespace StrucEngLib.Load
         public RelayCommand CommandAddLoad { get; }
         public RelayCommand CommandDeleteLoad { get; }
 
-        public ListLoadViewModel(MainViewModel mainVm)
+        public ListLoadViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             CommandAddLoad = new RelayCommand(OnAddLoad);

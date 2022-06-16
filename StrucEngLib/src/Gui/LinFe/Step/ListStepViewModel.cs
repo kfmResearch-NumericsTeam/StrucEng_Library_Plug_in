@@ -15,7 +15,7 @@ namespace StrucEngLib.Step
     /// <summary>Main view model to assign steps to entries</summary>
     public class ListStepViewModel : ViewModelBase
     {
-        private readonly MainViewModel _mainVm;
+        private readonly LinFeMainViewModel _mainVm;
         public RelayCommand CommandChangeStep { get; }
         public RelayCommand CommandDeleteStep { get; }
         public RelayCommand CommandAddStep { get; }
@@ -34,7 +34,7 @@ namespace StrucEngLib.Step
             }
         }
 
-        public ListStepViewModel(MainViewModel mainVm)
+        public ListStepViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             StepItems = new ObservableCollection<StepEntryViewModel>() { };

@@ -24,14 +24,14 @@ namespace StrucEngLib.Layer
         private GroupBox _gbSelectLayer;
         private RadioButtonList _rdlElementSetSelection;
 
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
         private readonly ListLoadViewModel _vmListLoad;
         private readonly ListStepViewModel _vmListStep;
         private LinkButton _btnClearData;
 
-        public ListLayerView(MainViewModel vm)
+        public ListLayerView(LinFeMainViewModel vm)
         {
             _vm = vm;
             _vmListLayer = vm.ListLayerVm;

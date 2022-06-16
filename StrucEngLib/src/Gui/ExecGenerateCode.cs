@@ -12,14 +12,14 @@ namespace StrucEngLib
     /// <summary>Generate Code</summary>
     public class ExecGenerateCode : CommandBase
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
         private readonly Workbench _model;
 
         public bool Success { get; private set; } = false;
 
         public string GeneratedCode { get; private set; }
 
-        public ExecGenerateCode(MainViewModel vm, Workbench model)
+        public ExecGenerateCode(LinFeMainViewModel vm, Workbench model)
         {
             _vm = vm;
             _model = model;

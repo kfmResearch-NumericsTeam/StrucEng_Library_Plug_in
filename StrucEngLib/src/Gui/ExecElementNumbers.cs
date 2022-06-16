@@ -13,9 +13,9 @@ namespace StrucEngLib
     /// <summary>Invokes compas, draws compas element numbers onto rhino canvas</summary>
     public class ExecElementNumbers : AsyncCommandBase
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
 
-        public ExecElementNumbers(MainViewModel vm)
+        public ExecElementNumbers(LinFeMainViewModel vm)
         {
             _vm = vm;
         }

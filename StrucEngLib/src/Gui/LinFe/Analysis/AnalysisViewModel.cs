@@ -8,7 +8,7 @@ namespace StrucEngLib.Analysis
     /// <summary>VM to attach settings to a step. For each aggregated step we create a settings object</summary>
     public class AnalysisViewModel : ViewModelBase
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
 
         public ObservableCollection<AnalysisItemViewModel> AnalysisViewItems { get; }
         private AnalysisItemViewModel _selectedItem;
@@ -25,7 +25,7 @@ namespace StrucEngLib.Analysis
             }
         }
 
-        public AnalysisViewModel(MainViewModel vm)
+        public AnalysisViewModel(LinFeMainViewModel vm)
         {
             if (vm.ListStepVm == null)
             {

@@ -12,7 +12,7 @@ namespace StrucEngLib.Layer
     /// </summary>
     public class LayerDetailsViewModel : ViewModelBase
     {
-        private readonly MainViewModel _mainVm;
+        private readonly LinFeMainViewModel _mainVm;
         private bool _layerDetailViewVisible;
 
         public bool LayerDetailViewVisible
@@ -40,7 +40,7 @@ namespace StrucEngLib.Layer
 
         private readonly ListLayerViewModel _listLayerVm;
 
-        public LayerDetailsViewModel(MainViewModel mainVm)
+        public LayerDetailsViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             _listLayerVm = mainVm.ListLayerVm;

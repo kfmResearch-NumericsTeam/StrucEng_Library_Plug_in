@@ -80,7 +80,7 @@ namespace StrucEngLib.Load
         }
 
         // XXX: This load currently has no properties
-        public PointLoadViewModel(MainViewModel mainVm) : base(mainVm)
+        public PointLoadViewModel(LinFeMainViewModel mainVm) : base(mainVm)
         {
         }
 

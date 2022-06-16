@@ -13,14 +13,14 @@ namespace StrucEngLib.LocalCoordinate
     /// <summary>Vm for LoadConstriants</summary>
     public class LoadConstraintViewModel : ViewModelBase
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
         
         public ICommand ExecElementNumbers;
 
         private readonly ObservableCollection<LocalCoordinateEntryViewModel> _loadConstraints;
         public ObservableCollection<LocalCoordinateEntryViewModel> LoadConstraints => _loadConstraints;
 
-        public LoadConstraintViewModel(MainViewModel vm)
+        public LoadConstraintViewModel(LinFeMainViewModel vm)
         {
             _vm = vm;
             ExecElementNumbers = new ExecElementNumbers(vm);
@@ -29,7 +29,7 @@ namespace StrucEngLib.LocalCoordinate
             vm.ListLayerVm.Layers.CollectionChanged += LayersOnCollectionChanged;
         }
 
-        private void PopulateLayers(MainViewModel vm)
+        private void PopulateLayers(LinFeMainViewModel vm)
         {
             if (vm.Workbench.Layers != null)
             {

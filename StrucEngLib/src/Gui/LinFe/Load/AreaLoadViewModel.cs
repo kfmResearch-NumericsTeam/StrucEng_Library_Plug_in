@@ -65,7 +65,7 @@ namespace StrucEngLib.Load
         }
 
 
-        public AreaLoadViewModel(MainViewModel mainVm) : base(mainVm)
+        public AreaLoadViewModel(LinFeMainViewModel mainVm) : base(mainVm)
         {
         }
 
