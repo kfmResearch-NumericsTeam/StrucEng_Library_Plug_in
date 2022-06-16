@@ -96,8 +96,11 @@ mdl = Structure(name=name, path=path)
             var elements = s.Elements();
             elements.ForEach(e => s.LayerIds.Add(e, s.ElementId(e.GetName())));
 
-            s.Line("rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', " +
-                   $"layers={StringUtils.ListToPyStr(elements, el => el.GetName())})");
+            if (elements.Count > 0)
+            {
+                s.Line("rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', " +
+                       $"layers={StringUtils.ListToPyStr(elements, el => el.GetName())})");
+            }
 
             elements
                 .Select(e => e as Element)
@@ -117,8 +120,11 @@ mdl = Structure(name=name, path=path)
             s.CommentLine("Sets");
             var sets = s.Sets();
             sets.ForEach(set => s.LayerIds.Add(set, s.SetId(set.GetName())));
-
-            s.Line($"rhino.add_sets_from_layers(mdl, layers={StringUtils.ListToPyStr(sets, set => set.GetName())})");
+            if (sets.Count > 0)
+            {
+                s.Line(
+                    $"rhino.add_sets_from_layers(mdl, layers={StringUtils.ListToPyStr(sets, set => set.GetName())})");
+            }
         }
 
         private void EmitMaterials(EmitState s)
@@ -230,9 +236,12 @@ mdl = Structure(name=name, path=path)
         {
             s.CommentLine("Displacements");
             var sets = s.Sets();
-            s.Line("mdl.add([");
-            sets.ForEach(set => { s.Line(GenerateDisplacementForSet(s, set) + ","); });
-            s.Line("])");
+            if (sets.Count > 0)
+            {
+                s.Line("mdl.add([");
+                sets.ForEach(set => { s.Line(GenerateDisplacementForSet(s, set) + ","); });
+                s.Line("])");
+            }
         }
 
         private void EmitLoads(EmitState s)
@@ -297,9 +306,12 @@ mdl = Structure(name=name, path=path)
         {
             s.Workbench.Steps.Sort((s1, s2) => string.Compare(s1.Order, s2.Order, StringComparison.Ordinal));
             s.CommentLine("Steps");
-            s.Line("mdl.add([");
-            s.Workbench.Steps.ForEach(step => { s.Line(EmitStep(s, step) + ","); });
-            s.Line("])");
+            if (s.Workbench.Steps.Count > 0)
+            {
+                s.Line("mdl.add([");
+                s.Workbench.Steps.ForEach(step => { s.Line(EmitStep(s, step) + ","); });
+                s.Line("])");
+            }
 
             if (s.StepNames.Keys.ToList().Count > 0)
             {
