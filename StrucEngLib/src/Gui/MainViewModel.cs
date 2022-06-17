@@ -16,6 +16,7 @@ namespace StrucEngLib
     {
         public ErrorViewModel ErrorVm { get; }
         public LinFeMainViewModel LinFeMainVm { get; }
+        public SmMainViewModel SmMainVm { get; }
 
         private UnhandledExceptionEventHandler _exceptionHandler;
 
@@ -29,6 +30,7 @@ namespace StrucEngLib
         {
             ErrorVm = new ErrorViewModel();
             LinFeMainVm = new LinFeMainViewModel(wb, ErrorVm);
+            SmMainVm = new SmMainViewModel(wb, ErrorVm);
 
             Workbench = wb;
 

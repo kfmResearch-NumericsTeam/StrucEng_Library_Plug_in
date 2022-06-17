@@ -47,7 +47,7 @@ namespace StrucEngLib.LocalCoordinate
         private void BuildGui()
         {
             Padding = new Padding(5);
-            Spacing = new Size(5, 10);
+            Spacing = new Size(5, 0);
 
             Add(new GroupBox
                 {

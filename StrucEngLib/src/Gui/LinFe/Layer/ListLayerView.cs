@@ -173,12 +173,11 @@ namespace StrucEngLib.Layer
                 (_gbPropertiesForLayer = new GroupBox
                     {
                         Text = "Properties for Layer",
-                        Padding = new Padding(5),
                         Visible = false,
                         Content = _vmDetailView.LayerDetailView
                     }
                 ));
-
+            
             AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
             AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
 

@@ -10,24 +10,23 @@ namespace StrucEngLib
 {
     /// <summary>
     /// </summary>
-    public class LinFeMainView : Scrollable
+    public class SmMainView : Scrollable
     {
-        public static LinFeMainView Instance { get; private set; }
+        public static SmMainView Instance { get; private set; }
 
-        public LinFeMainView(LinFeMainViewModel vm)
+        public SmMainView(SmMainViewModel vm)
         {
             Instance = this;
             LoadUi(vm);
         }
 
-        public void LoadUi(LinFeMainViewModel vm)
+        public void LoadUi(SmMainViewModel vm)
         {
             BackgroundColor = new Label().BackgroundColor;
-            var v = new ListLayerView(vm);
-            Padding = new Padding()
+            Content = new Label()
             {
+                Text = "Sandwich View"
             };
-            Content = v;
         }
 
         public void DisposeUi()

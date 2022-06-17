@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
@@ -13,10 +14,11 @@ namespace StrucEngLib
     [System.Runtime.InteropServices.Guid("0E7780CA-F004-4AE7-B918-19E68BF7C7C8")]
     public class MainView : Panel, IPanel
     {
-        private Scrollable _scrollable;
         private LinFeMainView _linFeMainView;
-        public static System.Guid PanelId => typeof(MainView).GUID;
+        private SmMainView _smMainView;
+        private Color _bgColor = new Label().BackgroundColor;
 
+        public static Guid PanelId => typeof(MainView).GUID;
         public static MainView Instance { get; private set; }
 
         public MainView()
@@ -28,18 +30,18 @@ namespace StrucEngLib
         public void LoadUi()
         {
             var tabs = new TabControl();
+            tabs.BackgroundColor = _bgColor;
             var pageLinFe = new TabPage
             {
+                BackgroundColor = _bgColor,
                 Text = "LinFE Model",
                 Content = _linFeMainView = new LinFeMainView(StrucEngLibPlugin.Instance.MainViewModel.LinFeMainVm)
             };
             var pageSm = new TabPage
             {
+                BackgroundColor = _bgColor,
                 Text = "Sandwich Model",
-                Content = new Button()
-                {
-                    Text = "Test"
-                }
+                Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm)
             };
             tabs.Pages.Add(pageLinFe);
             tabs.Pages.Add(pageSm);
@@ -49,9 +51,11 @@ namespace StrucEngLib
         public void DisposeUi()
         {
             _linFeMainView?.DisposeUi();
+            _smMainView?.DisposeUi();
             Content.Dispose();
             Content = null;
             _linFeMainView = null;
+            _smMainView = null;
         }
 
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
