@@ -53,7 +53,7 @@ namespace StrucEngLib
         {
             new List<ViewModelBase>()
             {
-                ErrorVm, LinFeMainVm,
+                ErrorVm, LinFeMainVm, SmMainVm,
             }.ForEach(vm => vm.UpdateModel());
         }
 
@@ -67,7 +67,6 @@ namespace StrucEngLib
             {
                 ErrorVm.ShowException("Error occured while extracting model data from view models", e);
             }
-
             return Workbench;
         }
     }

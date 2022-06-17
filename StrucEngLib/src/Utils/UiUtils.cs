@@ -39,6 +39,33 @@ namespace StrucEngLib
             }
         }
 
+        public static void AddLabelDropdownRowBoolean(
+            DynamicLayout dynamicLayout,
+            object vm,
+            string label,
+            string propName,
+            bool defaultTrue = true)
+        {
+            AddLabelDropdownRow(dynamicLayout, vm, label, propName, new ListItemCollection() {"true", "false"},
+                defaultTrue ? 0 : 1);
+        }
+
+        public static void AddLabelDropdownRow(
+            DynamicLayout dynamicLayout,
+            object vm,
+            string label,
+            string propName,
+            ListItemCollection items,
+            int defaultSelectionIndex = 0)
+        {
+            var tb = new DropDown();
+            tb.DataStore = items;
+
+            tb.Bind<string>(nameof(tb.SelectedValue), vm, propName, DualBindingMode.TwoWay);
+            tb.SelectedIndex = defaultSelectionIndex;
+            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+        }
+
         public static Control GenerateTitle(string text)
         {
             var s = new Label().Font.Size;
@@ -47,7 +74,6 @@ namespace StrucEngLib
                 Text = text,
                 Label =
                 {
-                    // Font = new Font(FontFamilies.Sans, s, FontStyle.Bold)
                     Font = new Font(FontFamilies.Sans, s, FontStyle.None)
                 }
             };

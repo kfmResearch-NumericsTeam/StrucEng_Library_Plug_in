@@ -41,8 +41,14 @@ namespace StrucEngLib
             {
                 BackgroundColor = _bgColor,
                 Text = "Sandwich Model",
-                Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm)
+                Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm),
             };
+
+            // XXX: Whenever we access sandwich we sync model state into vms;
+            // We ensure that we only depend on state defined in model and not view model of LinFe
+            pageSm.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.SmMainVm.UpdateViewModel(); };
+            pageLinFe.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.SmMainVm.UpdateModel(); };
+
             tabs.Pages.Add(pageLinFe);
             tabs.Pages.Add(pageSm);
             Content = tabs;
