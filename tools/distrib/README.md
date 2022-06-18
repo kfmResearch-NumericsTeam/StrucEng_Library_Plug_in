@@ -11,8 +11,8 @@ commands:
   version......................: list version
   build........................: build dotnet solution
   package......................: builds solution, creates yak package format
-  deploy_test..................: deploys the yak package found to test store
-  deploy.......................: deploys the yak package found store
+  deploy_test..................: deploys the yak package to test store
+  deploy.......................: deploys the yak package to store
   distrib......................: builds, packages, deploys package to store
   distrib_test.................: builds, packages, deploys package to test store
 ```
@@ -37,13 +37,13 @@ The built Rhino plugin can susequently be found in `/StrucEngLib/bin/Debug/net48
 The yak package can be found in `/distrib/build`
 
 ## Publish to Rhino Store
-Log into yak with wine yak.exe login. Your mcneel account must be connected with
+Log into yak with mono yak.exe login. Your mcneel account must be connected with
 strucenglib.
 
 ```sh
 vagrant ssh
 cd /vagrant/tools/distrib
-wine yak.exe login
+mono yak.exe login
 ```
 
 Publish to test store
