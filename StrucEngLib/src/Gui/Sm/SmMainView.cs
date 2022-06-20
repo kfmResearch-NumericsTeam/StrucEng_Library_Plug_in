@@ -59,6 +59,9 @@ namespace StrucEngLib
         private readonly SmSettingViewModel _vm;
         private ListBox _dropdownLayers;
         private Button _btShowImage;
+        private DynamicLayout _propLayout;
+        private DynamicLayout _propLayoutHasData;
+        private DynamicLayout _propLayoutNoData;
 
         public SmLayerView(SmSettingViewModel vm)
         {
@@ -100,33 +103,54 @@ namespace StrucEngLib
                     }
                 }
             });
-
-            DynamicLayout propLayout;
             AddRow(new GroupBox
             {
                 Text = "Properties for Layer",
                 Padding = new Padding(5),
-                Content = propLayout = new DynamicLayout
+                Content = _propLayout = new DynamicLayout
                 {
                     Padding = new Padding(5),
                     Spacing = new Size(5, 5),
                 }
             });
-            UiUtils.AddLabelTextRow(propLayout, _vm, "d_strich_bot", nameof(_vm.SelectedProperty.DStrichBot), "40");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "d_strich_top", nameof(_vm.SelectedProperty.DStrichTop), "40");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "fc_k", nameof(_vm.SelectedProperty.FcK), "20");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "fc_theta_grad_kern", nameof(_vm.SelectedProperty.FcThetaGradKern), "45");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "fs_d", nameof(_vm.SelectedProperty.FsD), "435");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "alpha_bot", nameof(_vm.SelectedProperty.AlphaBot), "0");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "beta_bot", nameof(_vm.SelectedProperty.BetaBot), "90");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "alpha_top", nameof(_vm.SelectedProperty.AlphaTop), "0");
-            UiUtils.AddLabelTextRow(propLayout, _vm, "beta_top", nameof(_vm.SelectedProperty.BetaTop), "90");
-            propLayout.AddRow(null);
-            propLayout.AddRow(TableLayout.AutoSized((_btShowImage = new Button
+            _propLayoutNoData = new DynamicLayout
+            {
+                Padding = new Padding(5),
+                Spacing = new Size(5, 5),
+            };
+            _propLayoutNoData.Add(new Label() {Text = "No elements added to LinFe Model."});
+            _propLayoutHasData = new DynamicLayout
+            {
+                Padding = new Padding(5),
+                Spacing = new Size(5, 5),
+            };
+
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "d_strich_bot",
+                nameof(_vm.SelectedProperty.DStrichBot), "40");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "d_strich_top",
+                nameof(_vm.SelectedProperty.DStrichTop), "40");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fc_k", nameof(_vm.SelectedProperty.FcK), "20");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fc_theta_grad_kern",
+                nameof(_vm.SelectedProperty.FcThetaGradKern), "45");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fs_d", nameof(_vm.SelectedProperty.FsD), "435");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "alpha_bot", nameof(_vm.SelectedProperty.AlphaBot),
+                "0");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "beta_bot", nameof(_vm.SelectedProperty.BetaBot),
+                "90");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "alpha_top", nameof(_vm.SelectedProperty.AlphaTop),
+                "0");
+            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "beta_top", nameof(_vm.SelectedProperty.BetaTop),
+                "90");
+            _propLayoutHasData.AddRow(null);
+            _propLayoutHasData.AddRow(TableLayout.AutoSized((_btShowImage = new Button
             {
                 Size = new Size(110, -1),
                 Text = "Show Image...",
             })));
+
+            _propLayout.Add(_propLayoutHasData);
+            _propLayout.Add(_propLayoutNoData);
+
 
             _btShowImage.Click += (sender, args) =>
             {
@@ -140,6 +164,24 @@ namespace StrucEngLib
 
         private void BindGui()
         {
+            DataContext = _vm;
+            _dropdownLayers.DataContext = _vm;
+            _dropdownLayers.BindDataContext(c => c.DataStore, (SmSettingViewModel vm) => vm.Properties);
+            _dropdownLayers.ItemTextBinding =
+                Binding.Property<SmAdditionalPropertyViewModel, string>(vm => vm.Model.Layer.GetName());
+            _dropdownLayers.SelectedValueBinding.BindDataContext(
+                Binding.Property<SmSettingViewModel, object>((SmSettingViewModel vm) => vm.SelectedProperty));
+
+            _propLayoutHasData.Bind<bool>(nameof(_propLayoutHasData.Visible), _vm, nameof(_vm.HasLayers));
+            _propLayoutNoData.Bind<bool>(nameof(_propLayoutNoData.Visible), _vm, nameof(_vm.HasNoLayers));
+            try
+            {
+                _dropdownLayers.SelectedIndex = 0;
+            }
+            catch (Exception _)
+            {
+                // XXX: Ignore
+            }
         }
     }
 
@@ -198,6 +240,8 @@ namespace StrucEngLib
     public class SmSettingView : DynamicLayout
     {
         private readonly SmSettingViewModel _vm;
+        private DropDown _dbSteps;
+        private Label _lbNoStepsAdded;
 
         public SmSettingView(SmSettingViewModel vm)
         {
@@ -225,7 +269,11 @@ namespace StrucEngLib
                         }
                     }
                 });
-            layout.AddRow(TableLayout.HorizontalScaled(new Label {Text = "Step"}, new DropDown()));
+
+            layout.Add(TableLayout.HorizontalScaled(_lbNoStepsAdded = new Label()
+                {Text = "No steps added to LinFe Model.\n", Visible = false}));
+
+            layout.AddRow(TableLayout.HorizontalScaled(new Label {Text = "Step"}, (_dbSteps = new DropDown())));
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Mindestbewehrung", nameof(_vm.Mindestbewehrung), true);
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Druckzoneniteration", nameof(_vm.Druckzoneniteration),
                 true);
@@ -235,6 +283,12 @@ namespace StrucEngLib
 
         private void BindGui()
         {
+            DataContext = _vm;
+            _dbSteps.DataContext = _vm;
+            _dbSteps.DataStore = _vm.StepNames;
+            _dbSteps.ItemTextBinding = Binding.Property((string order) => "Step " + order);
+            _dbSteps.Bind<string>(nameof(_dbSteps.SelectedValue), _vm, nameof(_vm.SelectedStepName));
+            _lbNoStepsAdded.Bind<bool>(nameof(_lbNoStepsAdded.Visible), _vm, nameof(_vm.NoStepsAdded));
         }
     }
 }

@@ -54,7 +54,15 @@ namespace StrucEngLib
             StringBuilder b = new StringBuilder();
             foreach (var o in values)
             {
-                b.Append(StringUtils.ToJson(o));
+                try
+                {
+                    b.Append(StringUtils.ToJson(o));
+                }
+                catch (Exception e)
+                {
+                    /* XXX: Ignore */
+                }
+
                 b.Append("\n");
             }
 

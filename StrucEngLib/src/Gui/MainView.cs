@@ -46,16 +46,8 @@ namespace StrucEngLib
 
             // XXX: Whenever we access sandwich we sync model state into vms;
             // We ensure that we only depend on state defined in model and not view model of LinFe
-            pageSm.Click += (sender, args) =>
-            {
-                StrucEngLibPlugin.Instance.MainViewModel.LinFeMainVm.UpdateModel();
-                StrucEngLibPlugin.Instance.MainViewModel.SmMainVm.UpdateViewModel();
-            };
-            pageLinFe.Click += (sender, args) =>
-            {
-                StrucEngLibPlugin.Instance.MainViewModel.SmMainVm.UpdateModel();
-                StrucEngLibPlugin.Instance.MainViewModel.LinFeMainVm.UpdateViewModel();
-            };
+            pageSm.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadSandwich(); };
+            pageLinFe.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadLinFe(); };
 
             tabs.Pages.Add(pageLinFe);
             tabs.Pages.Add(pageSm);

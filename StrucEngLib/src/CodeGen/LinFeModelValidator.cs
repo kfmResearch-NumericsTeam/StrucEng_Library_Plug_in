@@ -186,6 +186,15 @@ namespace StrucEngLib
                 else
                 {
                     ValidateLayerNames(load.Layers, ctx);
+                    load.Layers.ForEach(loadLayer =>
+                    {
+                        if (!model.Layers.Contains(loadLayer))
+                        {
+                            ctx.AddWarning(
+                                $"Load '{load.Description}' contains a layer '{loadLayer.GetName()}' " +
+                                $"which was not added as a layer to the model.");
+                        }
+                    });
                 }
 
                 if (load.LoadType == LoadType.Area)

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
 
@@ -13,7 +14,29 @@ namespace StrucEngLib
         public ObservableCollection<SmAdditionalPropertyViewModel> Properties { get; private set; } =
             new ObservableCollection<SmAdditionalPropertyViewModel>();
 
-        public SmAdditionalPropertyViewModel _selectedProperty;
+        private bool _noStepsAdded = true;
+
+        public bool NoStepsAdded
+        {
+            get => _noStepsAdded;
+            set
+            {
+                _noStepsAdded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool HasLayers
+        {
+            get => Properties.Count > 0;
+        }
+
+        public bool HasNoLayers
+        {
+            get => !HasLayers;
+        }
+
+        private SmAdditionalPropertyViewModel _selectedProperty;
 
         public SmAdditionalPropertyViewModel SelectedProperty
         {
@@ -27,57 +50,39 @@ namespace StrucEngLib
 
 
         public ObservableCollection<string> StepNames = new ObservableCollection<string>();
-        
-        private string _stepName;
 
-        public string StepName
+        private string _selectedStepName;
+
+        public string SelectedStepName
         {
-            get => _stepName;
+            get => _selectedStepName;
             set
             {
-                _stepName = value;
+                _selectedStepName = value;
                 OnPropertyChanged();
             }
         }
 
-        public ObservableCollection<string> Steps { get; private set; }
-
-        private bool _mindestbewehrung;
+        private string _mindestbewehrung;
 
         public string Mindestbewehrung
         {
-            get => _mindestbewehrung ? "true" : "false";
+            get => _mindestbewehrung;
             set
             {
-                if ("true".Equals(value?.ToLower().Trim()))
-                {
-                    _mindestbewehrung = true;
-                }
-                else
-                {
-                    _mindestbewehrung = false;
-                }
-
+                _mindestbewehrung = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool _druckzoneniteration;
+        private string _druckzoneniteration;
 
         public string Druckzoneniteration
         {
-            get => _druckzoneniteration ? "true" : "false";
+            get => _druckzoneniteration;
             set
             {
-                if ("true".Equals(value?.ToLower().Trim()))
-                {
-                    _druckzoneniteration = true;
-                }
-                else
-                {
-                    _druckzoneniteration = false;
-                }
-
+                _druckzoneniteration = value;
                 OnPropertyChanged();
             }
         }
@@ -128,8 +133,16 @@ namespace StrucEngLib
 
         public sealed override void UpdateViewModel()
         {
+            NoStepsAdded = true;
             StepNames.Clear();
-            _vm.Workbench.Steps.ForEach(s => { StepNames.Add("Step " + s.Order); });
+            _vm.Workbench.Steps.ForEach(s =>
+            {
+                if (s.Setting?.Include == true)
+                {
+                    NoStepsAdded = false;
+                    StepNames.Add(s.Order);
+                }
+            });
             Properties.Clear();
             if (_vm.Workbench.SandwichModel != null)
             {
@@ -137,18 +150,22 @@ namespace StrucEngLib
                 AxesScale = m.AxesScale;
                 Druckzoneniteration = m.DruckzonenIteration;
                 Mindestbewehrung = m.MindestBewehrung;
-                StepName = m.StepName;
+                SelectedStepName = m.StepName;
                 _vm.Workbench.SandwichModel.AdditionalProperties.ForEach(p =>
                 {
-                    SmAdditionalPropertyViewModel vm = new SmAdditionalPropertyViewModel(_vm, p);
-                    Properties.Add(vm);
+                    // XXX: Only add properties to layer whose data is also present in workbench.Layers
+                    if (_vm.Workbench.Layers.Contains(p.Layer))
+                    {
+                        var vm = new SmAdditionalPropertyViewModel(_vm, p);
+                        Properties.Add(vm);
+                    }
                 });
 
                 _vm.Workbench.Elements().ForEach(element =>
                 {
                     if (!ContainsLayer(element, Properties))
                     {
-                        SmAdditionalPropertyViewModel vm = new SmAdditionalPropertyViewModel(_vm, new SandwichProperty()
+                        var vm = new SmAdditionalPropertyViewModel(_vm, new SandwichProperty()
                         {
                             Layer = element
                         });
@@ -156,6 +173,9 @@ namespace StrucEngLib
                     }
                 });
             }
+
+            OnPropertyChanged(nameof(HasLayers));
+            OnPropertyChanged(nameof(HasNoLayers));
         }
 
         public override void UpdateModel()
@@ -169,7 +189,7 @@ namespace StrucEngLib
             m.AxesScale = AxesScale;
             m.DruckzonenIteration = Druckzoneniteration;
             m.MindestBewehrung = Mindestbewehrung;
-            m.StepName = StepName;
+            m.StepName = SelectedStepName;
             m.AdditionalProperties.Clear();
             Properties.ToList().ForEach(p =>
             {

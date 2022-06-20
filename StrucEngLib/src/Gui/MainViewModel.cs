@@ -67,7 +67,24 @@ namespace StrucEngLib
             {
                 ErrorVm.ShowException("Error occured while extracting model data from view models", e);
             }
+
             return Workbench;
+        }
+
+        // Stores data into model and updates view model
+        public void ReloadLinFe()
+        {
+            SmMainVm?.UpdateModel();
+            ErrorVm.DebugMessage(Workbench);
+            LinFeMainVm?.UpdateViewModel();
+        }
+
+        // Stores data into model and updates view model
+        public void ReloadSandwich()
+        {
+            LinFeMainVm?.UpdateModel();
+            ErrorVm.DebugMessage(Workbench);
+            SmMainVm?.UpdateViewModel();
         }
     }
 }

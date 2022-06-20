@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -46,7 +48,7 @@ namespace StrucEngLib
             string propName,
             bool defaultTrue = true)
         {
-            AddLabelDropdownRow(dynamicLayout, vm, label, propName, new ListItemCollection() {"true", "false"},
+            AddLabelDropdownRow(dynamicLayout, vm, label, propName, new[] {"true", "false"},
                 defaultTrue ? 0 : 1);
         }
 
@@ -55,7 +57,7 @@ namespace StrucEngLib
             object vm,
             string label,
             string propName,
-            ListItemCollection items,
+            IEnumerable<string> items,
             int defaultSelectionIndex = 0)
         {
             var tb = new DropDown();
