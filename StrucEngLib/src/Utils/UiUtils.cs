@@ -17,6 +17,34 @@ namespace StrucEngLib
     /// </summary>g
     public class UiUtils
     {
+        public static Control TextInputWithDataContextBinding(IndirectBinding<string> binding, string defaultValue = "")
+        {
+            // Usage: IndirectBinding<string> binding = Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot);
+            var tb = new ComboBoxWithMemory();
+            var ctx = tb.BindDataContext(srcWidget => srcWidget.Text, binding);
+            tb.DataContextChanged += (sender, args) =>
+            {
+                var d = ctx.Destination.DataValue;
+                if (d == null || d == String.Empty)
+                {
+                    ctx.Destination.DataValue = defaultValue;
+                }
+            };
+
+            return tb;
+        }
+
+        public static void AddLabelTextRow(
+            DynamicLayout dynamicLayout,
+            string label,
+            IndirectBinding<string> binding,
+            string defaultValue = ""
+        )
+        {
+            var tb = TextInputWithDataContextBinding(binding, defaultValue);
+            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+        }
+
         public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
             object vm,

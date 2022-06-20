@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
@@ -58,9 +59,8 @@ namespace StrucEngLib
     {
         private readonly SmSettingViewModel _vm;
         private ListBox _dropdownLayers;
-        private Button _btShowImage;
         private DynamicLayout _propLayout;
-        private DynamicLayout _propLayoutHasData;
+        private SmAdditionalPropertyView _propLayoutHasData;
         private DynamicLayout _propLayoutNoData;
 
         public SmLayerView(SmSettingViewModel vm)
@@ -119,47 +119,50 @@ namespace StrucEngLib
                 Spacing = new Size(5, 5),
             };
             _propLayoutNoData.Add(new Label() {Text = "No elements added to LinFe Model."});
-            _propLayoutHasData = new DynamicLayout
-            {
-                Padding = new Padding(5),
-                Spacing = new Size(5, 5),
-            };
 
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "d_strich_bot",
-                nameof(_vm.SelectedProperty.DStrichBot), "40");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "d_strich_top",
-                nameof(_vm.SelectedProperty.DStrichTop), "40");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fc_k", nameof(_vm.SelectedProperty.FcK), "20");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fc_theta_grad_kern",
-                nameof(_vm.SelectedProperty.FcThetaGradKern), "45");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "fs_d", nameof(_vm.SelectedProperty.FsD), "435");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "alpha_bot", nameof(_vm.SelectedProperty.AlphaBot),
-                "0");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "beta_bot", nameof(_vm.SelectedProperty.BetaBot),
-                "90");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "alpha_top", nameof(_vm.SelectedProperty.AlphaTop),
-                "0");
-            UiUtils.AddLabelTextRow(_propLayoutHasData, _vm, "beta_top", nameof(_vm.SelectedProperty.BetaTop),
-                "90");
-            _propLayoutHasData.AddRow(null);
-            _propLayoutHasData.AddRow(TableLayout.AutoSized((_btShowImage = new Button
-            {
-                Size = new Size(110, -1),
-                Text = "Show Image...",
-            })));
-
+            _propLayoutHasData = new SmAdditionalPropertyView(_vm);
             _propLayout.Add(_propLayoutHasData);
             _propLayout.Add(_propLayoutNoData);
+        }
+
+        class SmAdditionalPropertyView : DynamicLayout
+        {
+            private readonly SmSettingViewModel _vm;
+            private Button _btShowImage;
 
 
-            _btShowImage.Click += (sender, args) =>
+            public SmAdditionalPropertyView(SmSettingViewModel _vm)
             {
-                var d = new ShowImageForm()
+                this._vm = _vm;
+                Padding = new Padding(5);
+                Spacing = new Size(5, 5);
+
+                UiUtils.AddLabelTextRow(this, "d_strich_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
+                UiUtils.AddLabelTextRow(this, "d_strich_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichTop), "40");
+                UiUtils.AddLabelTextRow(this,  "fc_k", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK) , "20");
+                UiUtils.AddLabelTextRow(this,  "fc_theta_grad_kern", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern),"45");
+                UiUtils.AddLabelTextRow(this,  "fs_d", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
+                UiUtils.AddLabelTextRow(this,  "alpha_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
+                UiUtils.AddLabelTextRow(this,  "beta_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
+                UiUtils.AddLabelTextRow(this,  "alpha_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaTop), "0");
+                UiUtils.AddLabelTextRow(this,  "beta_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
+
+                this.AddRow(null);
+                this.AddRow(TableLayout.AutoSized((_btShowImage = new Button
                 {
-                    Owner = RhinoEtoApp.MainWindow
+                    Size = new Size(110, -1),
+                    Text = "Show Image...",
+                })));
+
+                _btShowImage.Click += (sender, args) =>
+                {
+                    var d = new ShowImageForm()
+                    {
+                        Owner = RhinoEtoApp.MainWindow
+                    };
+                    d.Show();
                 };
-                d.Show();
-            };
+            }
         }
 
         private void BindGui()
@@ -174,6 +177,8 @@ namespace StrucEngLib
 
             _propLayoutHasData.Bind<bool>(nameof(_propLayoutHasData.Visible), _vm, nameof(_vm.HasLayers));
             _propLayoutNoData.Bind<bool>(nameof(_propLayoutNoData.Visible), _vm, nameof(_vm.HasNoLayers));
+            _propLayoutHasData.Bind<object>(nameof(_propLayoutHasData.DataContext), _vm, nameof(_vm.SelectedProperty));
+
             try
             {
                 _dropdownLayers.SelectedIndex = 0;
