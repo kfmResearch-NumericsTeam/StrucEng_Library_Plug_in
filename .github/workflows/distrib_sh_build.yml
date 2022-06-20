@@ -1,9 +1,9 @@
 name: distrib.sh build
 on:
   push:
-    branches: [ "*" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "*" ]
+    branches: [ "**" ]
     
   workflow_dispatch:
     
