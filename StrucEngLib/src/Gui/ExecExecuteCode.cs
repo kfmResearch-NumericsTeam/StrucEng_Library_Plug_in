@@ -7,10 +7,10 @@ namespace StrucEngLib
     /// <summary></summary>
     public class ExecExecuteCode : CommandBase
     {
-        private readonly LinFeMainViewModel _vm;
+        private readonly MainViewModel _vm;
         private readonly string _code;
 
-        public ExecExecuteCode(LinFeMainViewModel vm, string code)
+        public ExecExecuteCode(MainViewModel vm, string code)
         {
             _vm = vm;
             _code = code;

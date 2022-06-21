@@ -5,6 +5,7 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Layer;
+using StrucEngLib.Sm;
 
 namespace StrucEngLib
 {
@@ -29,29 +30,29 @@ namespace StrucEngLib
 
         public void LoadUi()
         {
-            var tabs = new TabControl();
-            tabs.BackgroundColor = _bgColor;
-            var pageLinFe = new TabPage
+            TabPage pageLinFe, pageSm;
+            Content = new TabControl()
             {
                 BackgroundColor = _bgColor,
-                Text = "LinFE Model",
-                Content = _linFeMainView = new LinFeMainView(StrucEngLibPlugin.Instance.MainViewModel.LinFeMainVm)
+                Pages =
+                {
+                    (pageLinFe = new TabPage
+                    {
+                        BackgroundColor = _bgColor,
+                        Text = "LinFE Model",
+                        Content = _linFeMainView =
+                            new LinFeMainView(StrucEngLibPlugin.Instance.MainViewModel.LinFeMainVm)
+                    }),
+                    (pageSm = new TabPage
+                    {
+                        BackgroundColor = _bgColor,
+                        Text = "Sandwich Model",
+                        Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm),
+                    })
+                }
             };
-            var pageSm = new TabPage
-            {
-                BackgroundColor = _bgColor,
-                Text = "Sandwich Model",
-                Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm),
-            };
-
-            // XXX: Whenever we access sandwich we sync model state into vms;
-            // We ensure that we only depend on state defined in model and not view model of LinFe
             pageSm.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadSandwich(); };
             pageLinFe.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadLinFe(); };
-
-            tabs.Pages.Add(pageLinFe);
-            tabs.Pages.Add(pageSm);
-            Content = tabs;
         }
 
         public void DisposeUi()

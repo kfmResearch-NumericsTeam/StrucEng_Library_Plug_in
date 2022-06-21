@@ -78,7 +78,7 @@ namespace StrucEngLib
         public void ShowMessages(List<string> ms, bool enumerate = true)
         {
             StringBuilder b = new StringBuilder();
-            b.Append("The following messages occured: \n");
+            b.Append("The following messages occured: \n\n");
             foreach (var m in ms)
             {
                 if (enumerate)
@@ -96,65 +96,79 @@ namespace StrucEngLib
             Message = "";
         }
 
+        public void ShowMessages(ErrorMessageContext[] ctxx, bool enumerate = true)
+        {
+            StringBuilder b = new StringBuilder("The following messages occured: \n\n");
+            foreach (var ctx in ctxx)
+            {
+                PrepareErrorMessage(ctx, b, enumerate);
+                b.Append("\n\n");
+            }
+
+            Message = b.ToString();
+            Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");
+            Message = "";
+        }
+
         public void ShowMessages(ErrorMessageContext ctx, bool enumerate = true)
         {
-            StringBuilder b = new StringBuilder();
-            b.Append("The following messages occured: \n\n");
+            ShowMessages(new[] {ctx}, enumerate);
+        }
+
+        private void AppendText(StringBuilder b, string m, bool enumerate = true, int indent = 1)
+        {
+            var indentStr = "";
+            for (var i = 0; i < indent; i++)
+            {
+                indentStr += "    ";
+            }
+
+            if (enumerate)
+            {
+                b.Append($"{indentStr}- {m}\n");
+            }
+            else
+            {
+                b.Append(m + "\n");
+            }
+        }
+
+        protected void PrepareErrorMessage(ErrorMessageContext ctx, StringBuilder b, bool enumerate)
+        {
+            if (!String.IsNullOrWhiteSpace(ctx.ContextDescription))
+            {
+                b.Append($"{ctx.ContextDescription}:\n");
+            }
+
             var infoMessages = ctx.GetByType(MessageType.Info);
             if (infoMessages != null && infoMessages.Count > 0)
             {
-                b.Append("Info Messages: \n");
+                AppendText(b, "Info:", enumerate, 1);
                 foreach (var m in infoMessages)
                 {
-                    if (enumerate)
-                    {
-                        b.Append("\t- " + m.Text + "\n");
-                    }
-                    else
-                    {
-                        b.Append(m.Text + "\n");
-                    }
+                    AppendText(b, m.Text, enumerate, 2);
                 }
             }
 
             var warnMessages = ctx.GetByType(MessageType.Warning);
             if (warnMessages != null && warnMessages.Count > 0)
             {
-                b.Append("Warning Messages: \n");
+                AppendText(b, "Warning:", enumerate, 1);
                 foreach (var m in warnMessages)
                 {
-                    if (enumerate)
-                    {
-                        b.Append("\t- " + m.Text + "\n");
-                    }
-                    else
-                    {
-                        b.Append(m.Text + "\n");
-                    }
+                    AppendText(b, m.Text, enumerate, 2);
                 }
             }
 
             var errorMsgs = ctx.GetByType(MessageType.Error);
             if (errorMsgs != null && errorMsgs.Count > 0)
             {
-                b.Append("Error Messages: \n");
+                AppendText(b, "Error:", enumerate, 1);
                 foreach (var m in errorMsgs)
                 {
-                    if (enumerate)
-                    {
-                        b.Append("\t- " + m.Text + "\n");
-                    }
-                    else
-                    {
-                        b.Append(m.Text + "\n");
-                    }
+                    AppendText(b, m.Text, enumerate, 2);
                 }
             }
-
-
-            Message = b.ToString();
-            Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");
-            Message = "";
         }
     }
 }

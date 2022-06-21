@@ -19,7 +19,6 @@ namespace StrucEngLib
         public ListStepViewModel ListStepVm { get; }
         public ErrorViewModel ErrorVm { get; }
         public AnalysisViewModel AnalysisVm { get; }
-
         public Workbench Workbench { get; }
 
         public LinFeMainViewModel(Workbench wb, ErrorViewModel evm)
@@ -40,7 +39,7 @@ namespace StrucEngLib
                 ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, AnalysisVm
             }.ForEach(vm => vm.UpdateModel());
         }
-        
+
         public Workbench BuildModel()
         {
             try
@@ -53,6 +52,11 @@ namespace StrucEngLib
             }
 
             return Workbench;
+        }
+
+        public MainViewModel MainViewModel
+        {
+            get => StrucEngLibPlugin.Instance.MainViewModel;
         }
     }
 }

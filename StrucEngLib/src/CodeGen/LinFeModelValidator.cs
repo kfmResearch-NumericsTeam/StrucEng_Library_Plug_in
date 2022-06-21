@@ -8,11 +8,14 @@ using StrucEngLib.Model;
 namespace StrucEngLib
 {
     /// <summary>Validation of model</summary>
-    public class ModelValidator
+    public class LinFeModelValidator
     {
         public ErrorMessageContext ValidateModel(Workbench model)
         {
-            var ctx = new ErrorMessageContext();
+            var ctx = new ErrorMessageContext()
+            {
+                ContextDescription = "LinFe Model"
+            };
             if (model.Layers == null || model.Layers.Count == 0)
             {
                 ctx.AddWarning("No Layers added");

@@ -9,10 +9,10 @@ namespace StrucEngLib
     /// <summary></summary>
     public class ExecShowCode : CommandBase
     {
-        private readonly LinFeMainViewModel _vm;
+        private readonly MainViewModel _vm;
         private readonly string _code;
 
-        public ExecShowCode(LinFeMainViewModel vm, string code)
+        public ExecShowCode(MainViewModel vm, string code)
         {
             _vm = vm;
             _code = code;

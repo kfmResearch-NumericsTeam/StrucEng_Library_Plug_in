@@ -7,12 +7,13 @@ using StrucEngLib.Layer;
 using StrucEngLib.Load;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
+using StrucEngLib.Sm;
 using StrucEngLib.Step;
 
-namespace StrucEngLib
+namespace StrucEngLib.Sm
 {
     /// <summary>
-    /// Context class with references to all primary view model of Sandwich Model
+    /// Main View Model for Sandwich Model
     /// </summary>
     public class SmMainViewModel : ViewModelBase
     {
@@ -67,6 +68,11 @@ namespace StrucEngLib
             }
 
             return Workbench;
+        }
+
+        public MainViewModel MainViewModel
+        {
+            get => StrucEngLibPlugin.Instance.MainViewModel;
         }
     }
 }

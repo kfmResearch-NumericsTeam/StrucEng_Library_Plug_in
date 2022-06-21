@@ -37,6 +37,15 @@ namespace StrucEngLib
             MainViewModel = new MainViewModel(new Workbench());
         }
 
+        public void ResetSandwichData()
+        {
+            var wb = MainViewModel.Workbench;
+            MainViewModel.Dispose();
+            wb.SandwichModel = null;
+            MainViewModel = null;
+            MainViewModel = new MainViewModel(wb);
+        }
+
         protected override void WriteDocument(
             RhinoDoc doc,
             BinaryArchiveWriter archive,

@@ -39,6 +39,9 @@ namespace StrucEngLib
 
     public class ErrorMessageContext
     {
+        
+        public string ContextDescription { get; set; }
+
         public List<ErrorMessage> Messages { get; private set; }
 
         public List<ErrorMessage> GetByType(MessageType type)

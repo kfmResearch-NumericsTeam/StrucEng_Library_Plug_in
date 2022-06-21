@@ -9,22 +9,41 @@ namespace StrucEngLib
     /// <summary>Clears all user data</summary>
     public class ExecClearModelData : CommandBase
     {
-        private readonly LinFeMainViewModel _vm;
+        private readonly MainViewModel _vm;
+        private readonly ClearState _clearState;
 
-        public ExecClearModelData(LinFeMainViewModel vm)
+        public enum ClearState
+        {
+            ALL,
+            SANDWICH
+        }
+
+        public ExecClearModelData(MainViewModel vm, ClearState clearState = ClearState.ALL)
         {
             _vm = vm;
+            _clearState = clearState;
         }
 
         public override void Execute(object parameter)
         {
-            var res = MessageBox.Show("All user data associated with StrucEngLib was deleted.", MessageBoxType.Information);
-            
+            var res = MessageBox.Show("All user data associated with StrucEngLib was deleted.",
+                MessageBoxType.Information);
+
             if (res == DialogResult.Ok)
             {
-                MainView.Instance.DisposeUi();
-                StrucEngLibPlugin.Instance.ResetData();
-                MainView.Instance.LoadUi();    
+                if (_clearState == ClearState.ALL)
+                {
+                    MainView.Instance.DisposeUi();
+                    StrucEngLibPlugin.Instance.ResetData();
+                    MainView.Instance.LoadUi();
+                }
+                else
+                {
+                    MainView.Instance.DisposeUi();
+                    StrucEngLibPlugin.Instance.ResetSandwichData();
+                    MainView.Instance.LoadUi();
+                    
+                }
             }
         }
     }

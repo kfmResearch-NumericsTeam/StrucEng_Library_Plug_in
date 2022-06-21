@@ -1,13 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Rhino;
-using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
 
-namespace StrucEngLib
+namespace StrucEngLib.Sm
 {
-    /// <summary></summary>
+    /// <summary>Vm for general settings of sandwich model</summary>
     public class SmSettingViewModel : ViewModelBase
     {
         private readonly SmMainViewModel _vm;
@@ -52,7 +50,6 @@ namespace StrucEngLib
             get => _selectedProperty;
             set
             {
-
                 UpdateLayerVisibility();
                 _selectedProperty = value;
                 OnPropertyChanged();

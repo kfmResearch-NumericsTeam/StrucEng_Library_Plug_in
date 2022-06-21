@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using StrucEngLib.Analysis;
-using StrucEngLib.Layer;
-using StrucEngLib.Load;
 using StrucEngLib.Model;
-using StrucEngLib.Step;
+using StrucEngLib.Sm;
 
 
 namespace StrucEngLib
@@ -41,6 +38,8 @@ namespace StrucEngLib
                     (Exception) args.ExceptionObject);
             };
             AppDomain.CurrentDomain.UnhandledException += _exceptionHandler;
+            LinFeMainVm.UpdateViewModel();
+            SmMainVm.UpdateViewModel();
         }
 
         public override void Dispose()
@@ -75,7 +74,6 @@ namespace StrucEngLib
         public void ReloadLinFe()
         {
             SmMainVm?.UpdateModel();
-            ErrorVm.DebugMessage(Workbench);
             LinFeMainVm?.UpdateViewModel();
         }
 
@@ -83,7 +81,6 @@ namespace StrucEngLib
         public void ReloadSandwich()
         {
             LinFeMainVm?.UpdateModel();
-            ErrorVm.DebugMessage(Workbench);
             SmMainVm?.UpdateViewModel();
         }
     }

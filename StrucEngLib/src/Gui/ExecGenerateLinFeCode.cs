@@ -10,7 +10,7 @@ using StrucEngLib.Utils;
 namespace StrucEngLib
 {
     /// <summary>Generate Code</summary>
-    public class ExecGenerateCode : CommandBase
+    public class ExecGenerateLinFeCode : CommandBase
     {
         private readonly LinFeMainViewModel _vm;
         private readonly Workbench _model;
@@ -19,7 +19,7 @@ namespace StrucEngLib
 
         public string GeneratedCode { get; private set; }
 
-        public ExecGenerateCode(LinFeMainViewModel vm, Workbench model)
+        public ExecGenerateLinFeCode(LinFeMainViewModel vm, Workbench model)
         {
             _vm = vm;
             _model = model;
@@ -30,7 +30,7 @@ namespace StrucEngLib
             Success = false;
             try
             {
-                ModelValidator validate = new ModelValidator();
+                LinFeModelValidator validate = new LinFeModelValidator();
                 var ctx = validate.ValidateModel(_model);
                 if (ctx.Messages.Count != 0)
                 {

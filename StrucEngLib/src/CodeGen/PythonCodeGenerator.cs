@@ -41,6 +41,7 @@ namespace StrucEngLib
             EmitMaterials(state);
             EmitSections(state);
             EmitProperties(state);
+            EmitAdditionalProperties(state);
             EmitDisplacements(state);
             EmitLoads(state);
             EmitSteps(state);
@@ -229,7 +230,7 @@ mdl = Structure(name=name, path=path)
 
         private void EmitAdditionalProperties(EmitState s)
         {
-            throw new NotImplementedException();
+            s.CommentLine("Additional Properties");
         }
 
         private void EmitDisplacements(EmitState s)

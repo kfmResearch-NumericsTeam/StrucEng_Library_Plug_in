@@ -53,7 +53,7 @@ namespace StrucEngLib.Layer
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-            CommandClearModel = new ExecClearModelData(_mainVm);
+            CommandClearModel = new ExecClearModelData(mainVm.MainViewModel);
 
             var updateSelectLayerViewVisible = new Func<bool>(() => SelectLayerViewVisible = Layers.Count != 0);
             updateSelectLayerViewVisible();
@@ -64,25 +64,25 @@ namespace StrucEngLib.Layer
         private void OnInspectCode()
         {
             var model = _mainVm.BuildModel();
-            var gen = new ExecGenerateCode(_mainVm, model);
+            var gen = new ExecGenerateLinFeCode(_mainVm, model);
             gen.Execute(null);
             if (gen.Success)
             {
-                new ExecShowCode(_mainVm, gen.GeneratedCode).Execute(null);
+                new ExecShowCode(_mainVm.MainViewModel, gen.GeneratedCode).Execute(null);
             }
         }
 
         private void OnExecCode()
         {
             var model = _mainVm.BuildModel();
-            var gen = new ExecGenerateCode(_mainVm, model);
+            var gen = new ExecGenerateLinFeCode(_mainVm, model);
             gen.Execute(null);
             if (gen.Success)
             {
-                new ExecExecuteCode(_mainVm, gen.GeneratedCode).Execute(null);
+                new ExecExecuteCode(_mainVm.MainViewModel, gen.GeneratedCode).Execute(null);
             }
         }
-        
+
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
 
         private void OnDeleteLayer()
