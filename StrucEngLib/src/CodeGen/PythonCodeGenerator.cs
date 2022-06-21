@@ -35,7 +35,9 @@ namespace StrucEngLib
         public string GenerateSmmCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            EmitHeaders(state, "Generate Sandwich Code");
+            const string customImports = "import sandwichmodel_main as SMM\n";
+
+            EmitHeaders(state, "Generate Sandwich Code", customImports);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -51,15 +53,14 @@ namespace StrucEngLib
             return state.Buffer.ToString();
         }
 
-
-        private void EmitHeaders(EmitState s, string action)
+        private void EmitHeaders(EmitState s, string action, string customImports = "")
         {
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
 # Code generated at {DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}
 # Issued by user {Environment.UserName}
-# Action {action}
+# Action: {action}
 
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
@@ -82,6 +83,8 @@ from compas_fea.structure import RollerDisplacementYZ
 from compas_fea.structure import RollerDisplacementXZ
 from compas_fea.structure import ShellSection
 from compas_fea.structure import Structure
+
+{customImports}
 
 # Snippets based on code of Andrew Liew (github.com/andrewliew), Benjamin Berger (github.com/Beberger)
 
@@ -319,7 +322,6 @@ mdl = Structure(name=name, path=path)
         private string EmitStep(EmitState s, Model.Step step)
         {
             var stepName = s.CreateStepName(step.Order);
-            s.StepNames.Add(stepName, step);
 
             var loadNames = new List<string>();
             var dispNames = new List<string>();
@@ -424,6 +426,11 @@ mdl = Structure(name=name, path=path)
             s.Line($"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1)");
         }
 
+        private string ValueOrDefault(string value, string defaultValue)
+        {
+            return String.IsNullOrWhiteSpace(value) ? defaultValue : value;
+        }
+
         private void EmitAdditionalProperties(EmitState s)
         {
             s.CommentLine("Additional Properties");
@@ -432,16 +439,17 @@ mdl = Structure(name=name, path=path)
             {
                 var name = s.PropertyIds[p.Layer];
                 var data = new StringBuilder();
+                var def = "0";
                 data.Append($"prop_name='{name}', ");
-                data.Append($"d_strich_bot = {p.DStrichBot}, ");
-                data.Append($"d_strich_top = {p.DStrichTop}, ");
-                data.Append($"fc_k = {p.FcK}, ");
-                data.Append($"theta_grad_kern = {p.FcThetaGradKern}, ");
-                data.Append($"fs_d = {p.FsD}, ");
-                data.Append($"alpha_bot = {p.AlphaBot}, ");
-                data.Append($"beta_bot = {p.BetaBot}, ");
-                data.Append($"alpha_top = {p.AlphaTop}, ");
-                data.Append($"beta_top = {p.BetaTop}");
+                data.Append($"d_strich_bot = {ValueOrDefault(p.DStrichBot, def)}, ");
+                data.Append($"d_strich_top = {ValueOrDefault(p.DStrichTop, def)}, ");
+                data.Append($"fc_k = {ValueOrDefault(p.FcK, def)}, ");
+                data.Append($"theta_grad_kern = {ValueOrDefault(p.FcThetaGradKern, def)}, ");
+                data.Append($"fs_d = {ValueOrDefault(p.FsD, def)}, ");
+                data.Append($"alpha_bot = {ValueOrDefault(p.AlphaBot, def)}, ");
+                data.Append($"beta_bot = {ValueOrDefault(p.BetaBot, def)}, ");
+                data.Append($"alpha_top = {ValueOrDefault(p.AlphaTop, def)}, ");
+                data.Append($"beta_top = {ValueOrDefault(p.BetaTop, def)}");
                 s.Line($"SMM.additionalproperty(data, {data})");
             });
         }
@@ -476,8 +484,8 @@ mdl = Structure(name=name, path=path)
             EmitSmmPlotData(s, stepName, "as_eta_bot", sm.AsEtaBot);
             EmitSmmPlotData(s, stepName, "as_eta_top", sm.AsEtaTop);
             EmitSmmPlotData(s, stepName, "as_z", sm.AsZ);
-            EmitSmmPlotData(s, stepName, "CC_bot", sm.cCBot);
-            EmitSmmPlotData(s, stepName, "CC_top", sm.cCTop);
+            EmitSmmPlotData(s, stepName, "CC_bot", sm.CCBot);
+            EmitSmmPlotData(s, stepName, "CC_top", sm.CCTop);
             EmitSmmPlotData(s, stepName, "k_bot", sm.KBot);
             EmitSmmPlotData(s, stepName, "k_top", sm.KTop);
             EmitSmmPlotData(s, stepName, "t_bot", sm.TBot);

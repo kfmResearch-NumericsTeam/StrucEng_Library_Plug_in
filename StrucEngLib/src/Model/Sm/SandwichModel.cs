@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace StrucEngLib.Model.Sm
 {
-    /// <summary></summary>
+    /// <summary>Model data for sandwich</summary>
     public class SandwichModel
     {
         public List<SandwichProperty> AdditionalProperties { get; set; } = new List<SandwichProperty>();
@@ -19,8 +19,8 @@ namespace StrucEngLib.Model.Sm
         public bool AsEtaBot { get; set; }
         public bool AsEtaTop { get; set; }
         public bool AsZ { get; set; }
-        public bool cCBot { get; set; }
-        public bool cCTop { get; set; }
+        public bool CCBot { get; set; }
+        public bool CCTop { get; set; }
         public bool KBot { get; set; }
         public bool KTop { get; set; }
         public bool TBot { get; set; }

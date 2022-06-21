@@ -43,11 +43,67 @@ namespace StrucEngLib.Sm
                 {Text = "No steps added to LinFe Model.\n", Visible = false}));
 
             layout.AddRow(TableLayout.HorizontalScaled(new Label {Text = "Step"}, (_dbSteps = new DropDown())));
+            
+            // layout.Add(new Label());
+            
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Mindestbewehrung", nameof(_vm.Mindestbewehrung), true);
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Druckzoneniteration", nameof(_vm.Druckzoneniteration),
                 true);
             UiUtils.AddLabelTextRow(layout, _vm, "Schubnachweis", nameof(_vm.Schubnachweis), "sia");
+            UiUtils.AddLabelTextRow(layout, _vm, "Code", nameof(_vm.Code), "sia");
             UiUtils.AddLabelTextRow(layout, _vm, "axes_scale", nameof(_vm.AxesScale), "100");
+
+            var boolLayout = new TableLayout
+            {
+                Padding = new Padding(0, 5),
+                Spacing = new Size(0, 10)
+            };
+
+            Checkbox(boolLayout, _vm, "as_xi_bot", nameof(_vm.AsXiBot));
+            Checkbox(boolLayout, _vm, "as_xi_top", nameof(_vm.AsXiTop));
+            Checkbox(boolLayout, _vm, "as_eta_bot", nameof(_vm.AsEtaBot));
+            Checkbox(boolLayout, _vm, "as_eta_top", nameof(_vm.AsEtaTop));
+            Checkbox(boolLayout, _vm, "as_z", nameof(_vm.AsZ));
+            Checkbox(boolLayout, _vm, "CC_bot", nameof(_vm.CCBot));
+            Checkbox(boolLayout, _vm, "CC_top", nameof(_vm.CCTop));
+            Checkbox(boolLayout, _vm, "k_bot", nameof(_vm.KBot));
+            Checkbox(boolLayout, _vm, "k_top", nameof(_vm.KTop));
+            Checkbox(boolLayout, _vm, "t_bot", nameof(_vm.TBot));
+            Checkbox(boolLayout, _vm, "t_top", nameof(_vm.TTop));
+            Checkbox(boolLayout, _vm, "psi_bot", nameof(_vm.PsiBot));
+            Checkbox(boolLayout, _vm, "psi_top", nameof(_vm.PsiTop));
+            Checkbox(boolLayout, _vm, "Fall_bot", nameof(_vm.FallBot));
+            Checkbox(boolLayout, _vm, "Fall_top", nameof(_vm.FallTop));
+            Checkbox(boolLayout, _vm, "m_cc_bot", nameof(_vm.MCcBot));
+            Checkbox(boolLayout, _vm, "m_cc_top", nameof(_vm.MCcTop));
+            Checkbox(boolLayout, _vm, "m_shear_c", nameof(_vm.MShearC));
+            Checkbox(boolLayout, _vm, "m_c_total", nameof(_vm.MCTotal));
+            
+            layout.Add(new Label());
+            layout.Add(boolLayout);
+        }
+
+        private void Checkbox(
+            TableLayout layout,
+            object vm,
+            string label,
+            string propName)
+        {
+            var cb = new CheckBox();
+            var l = new Label {Text = label};
+            l.MouseDown += (sender, args) => { cb.Checked = !cb.Checked; };
+            cb.Bind<bool>(nameof(cb.Checked), vm, propName, DualBindingMode.TwoWay);
+
+            var c1 = new TableCell()
+            {
+                Control = l
+            };
+            var c2 = new TableCell()
+            {
+                Control = cb
+            };
+            var table = TableLayout.HorizontalScaled(c1, c2);
+            layout.Rows.Add(table);
         }
 
         private void BindGui()

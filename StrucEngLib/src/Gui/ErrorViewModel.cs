@@ -27,7 +27,7 @@ namespace StrucEngLib
             StringBuilder b = new StringBuilder();
             b.Append(
                 $"An Exception occured. This is likely a bug. Save this message, " +
-                $"try to reproduce the bug and file an issue: {StrucEngLibPlugin.Website} \n\n");
+                $"try to reproduce the bug and file an issue: {StrucEngLibPlugin.Website}. \n\n");
             b.Append($"Version: {StrucEngLibPlugin.Version} \n");
             b.Append($"Info: {info} \n\n");
             b.Append($"Exception: {e.GetType().ToString()} \n");
@@ -38,6 +38,13 @@ namespace StrucEngLib
             try
             {
                 b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel));
+            }
+            catch (Exception)
+            {
+                // XXX: Ignore errors caused by serialization error context
+            }
+            try
+            {
                 b.Append("\n Model:\n");
                 b.Append(StringUtils.ToJson(StrucEngLibPlugin.Instance.MainViewModel.Workbench));
             }

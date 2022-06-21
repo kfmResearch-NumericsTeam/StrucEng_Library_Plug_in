@@ -139,12 +139,24 @@ namespace StrucEngLib
 
             var hasAnalysis = false;
             var objectsInSteps = new HashSet<object>();
+            var stepIds = new HashSet<string>();
             foreach (var step in model.Steps)
             {
+                if (stepIds.Contains(step.Order))
+                {
+                    ctx.AddWarning($"Several steps contain the same step ID ({step.Order}). This will likely cause invalid state.");
+                }
+                else
+                {
+                    stepIds.Add(step.Order);
+                }
+
                 if (!IsInt(step.Order))
                 {
                     ctx.AddWarning($"Step Id {step.Order} not numeric");
                 }
+                
+                hasAnalysis = hasAnalysis || (step.Setting != null && step.Setting.Include == true);
 
                 if (step.Entries == null || step.Entries.Count == 0)
                 {
@@ -152,7 +164,6 @@ namespace StrucEngLib
                 }
                 else
                 {
-                    hasAnalysis = hasAnalysis || (step.Setting != null && step.Setting.Include == true);
                     foreach (var entry in step.Entries)
                     {
                         if (objectsInSteps.Contains(entry.Value))

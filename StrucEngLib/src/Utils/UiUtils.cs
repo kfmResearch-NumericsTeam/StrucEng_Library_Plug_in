@@ -34,6 +34,13 @@ namespace StrucEngLib
             return tb;
         }
 
+        public static Control CheckboxInputWithDataContextBinding(IndirectBinding<bool?> binding)
+        {
+            var cb = new CheckBox();
+            var ctx = cb.BindDataContext<CheckBox, bool?>(srcWidget => srcWidget.Checked, binding);
+            return cb;
+        }
+
         public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
             string label,
@@ -42,6 +49,16 @@ namespace StrucEngLib
         )
         {
             var tb = TextInputWithDataContextBinding(binding, defaultValue);
+            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+        }
+
+        public static void AddLabelCheckboxRow(
+            DynamicLayout dynamicLayout,
+            string label,
+            IndirectBinding<bool?> binding
+        )
+        {
+            var tb = CheckboxInputWithDataContextBinding(binding);
             dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
         }
 
@@ -67,6 +84,19 @@ namespace StrucEngLib
                     tb.Text = defaultVal;
                 }
             }
+        }
+
+        public static void AddLabelCheckboxRow(
+            DynamicLayout dynamicLayout,
+            object vm,
+            string label,
+            string propName)
+        {
+            var cb = new CheckBox();
+            var l = new Label {Text = label};
+            l.MouseDown += (sender, args) => { cb.Checked = !cb.Checked; };
+            cb.Bind<bool>(nameof(cb.Checked), vm, propName, DualBindingMode.TwoWay);
+            dynamicLayout.Add(TableLayout.HorizontalScaled(l, cb));
         }
 
         public static void AddLabelDropdownRowBoolean(

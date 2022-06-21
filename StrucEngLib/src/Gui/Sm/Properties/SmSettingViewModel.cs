@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Rhino;
 using StrucEngLib.Model.Sm;
 
 namespace StrucEngLib.Sm
@@ -107,7 +108,20 @@ namespace StrucEngLib.Sm
             }
         }
 
+        private string _code;
+
+        public string Code
+        {
+            get => _code;
+            set
+            {
+                _code = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _axesScale;
+
 
         public string AxesScale
         {
@@ -115,6 +129,235 @@ namespace StrucEngLib.Sm
             set
             {
                 _axesScale = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _asXiBot = true;
+
+        public bool AsXiBot
+        {
+            get => _asXiBot;
+            set
+            {
+                _asXiBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _asXiTop = true;
+
+
+        public bool AsXiTop
+        {
+            get => _asXiTop;
+            set
+            {
+                _asXiTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _asEtaBot = true;
+
+        public bool AsEtaBot
+        {
+            get => _asEtaBot;
+            set
+            {
+                _asEtaBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _asEtaTop = true;
+
+        public bool AsEtaTop
+        {
+            get => _asEtaTop;
+            set
+            {
+                _asEtaTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _asZ = true;
+
+        public bool AsZ
+        {
+            get => _asZ;
+            set
+            {
+                _asZ = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _cCBot = true;
+
+        public bool CCBot
+        {
+            get => _cCBot;
+            set
+            {
+                _cCBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _ccTop = true;
+
+        public bool CCTop
+        {
+            get => _ccTop;
+            set
+            {
+                _ccTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _kBot = true;
+
+        public bool KBot
+        {
+            get => _kBot;
+            set
+            {
+                _kBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _kTop = true;
+
+        public bool KTop
+        {
+            get => _kTop;
+            set
+            {
+                _kTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _TBot = true;
+
+        public bool TBot
+        {
+            get => _TBot;
+            set
+            {
+                _TBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _TTop = true;
+
+        public bool TTop
+        {
+            get => _TTop;
+            set
+            {
+                _TTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _psiBot = true;
+
+        public bool PsiBot
+        {
+            get => _psiBot;
+            set
+            {
+                _psiBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _psiTop = true;
+
+        public bool PsiTop
+        {
+            get => _psiTop;
+            set
+            {
+                _psiTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _fallBot = true;
+
+        public bool FallBot
+        {
+            get => _fallBot;
+            set
+            {
+                _fallBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _fallTop = true;
+
+        public bool FallTop
+        {
+            get => _fallTop;
+            set
+            {
+                _fallTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _mCcBot = true;
+
+        public bool MCcBot
+        {
+            get => _mCcBot;
+            set
+            {
+                _mCcBot = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _mCcTop = true;
+
+        public bool MCcTop
+        {
+            get => _mCcTop;
+            set
+            {
+                _mCcTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _mShearC = true;
+
+        public bool MShearC
+        {
+            get => _mShearC;
+            set
+            {
+                _mShearC = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _mcTotal = true;
+
+        public bool MCTotal
+        {
+            get => _mcTotal;
+            set
+            {
+                _mcTotal = value;
                 OnPropertyChanged();
             }
         }
@@ -159,6 +402,30 @@ namespace StrucEngLib.Sm
                 Druckzoneniteration = m.DruckzonenIteration;
                 Mindestbewehrung = m.MindestBewehrung;
                 SelectedStepName = m.StepName;
+                Schubnachweis = m.Schubnachweis;
+                Code = m.Code;
+
+                AsXiBot = m.AsXiBot;
+                AsXiTop = m.AsXiTop;
+                AsEtaBot = m.AsEtaBot;
+                AsEtaTop = m.AsEtaTop;
+                AsZ = m.AsZ;
+                CCBot = m.CCBot;
+                CCTop = m.CCTop;
+                KBot = m.KBot;
+                KTop = m.KTop;
+                TBot = m.TBot;
+                TTop = m.TTop;
+                PsiBot = m.PsiBot;
+                PsiTop = m.PsiTop;
+                FallBot = m.FallBot;
+                FallTop = m.FallTop;
+                MCcBot = m.MCcBot;
+                MCcTop = m.MCcTop;
+                MShearC = m.MShearC;
+                MCTotal = m.MCTotal;
+
+
                 _vm.Workbench.SandwichModel.AdditionalProperties.ForEach(p =>
                 {
                     // XXX: Only add properties to layer whose data is also present in workbench.Layers
@@ -198,12 +465,33 @@ namespace StrucEngLib.Sm
             m.DruckzonenIteration = Druckzoneniteration;
             m.MindestBewehrung = Mindestbewehrung;
             m.StepName = SelectedStepName;
+            m.Schubnachweis = Schubnachweis;
             m.AdditionalProperties.Clear();
             Properties.ToList().ForEach(p =>
             {
                 p.UpdateModel();
                 m.AdditionalProperties.Add(p.Model);
             });
+            m.Code = Code;
+            m.AsXiBot = AsXiBot;
+            m.AsXiTop = AsXiTop;
+            m.AsEtaBot = AsEtaBot;
+            m.AsEtaTop = AsEtaTop;
+            m.AsZ = AsZ;
+            m.CCBot = CCBot;
+            m.CCTop = CCTop;
+            m.KBot = KBot;
+            m.KTop = KTop;
+            m.TBot = TBot;
+            m.TTop = TTop;
+            m.PsiBot = PsiBot;
+            m.PsiTop = PsiTop;
+            m.FallBot = FallBot;
+            m.FallTop = FallTop;
+            m.MCcBot = MCcBot;
+            m.MCcTop = MCcTop;
+            m.MShearC = MShearC;
+            m.MCTotal = MCTotal;
         }
     }
 }
