@@ -17,7 +17,7 @@ namespace StrucEngLib
         public static string Website = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in";
 
         private static string _modelKey = "model";
-        
+
         public MainViewModel MainViewModel { get; private set; }
 
         public StrucEngLibPlugin()
@@ -36,7 +36,16 @@ namespace StrucEngLib
             MainViewModel = null;
             MainViewModel = new MainViewModel(new Workbench());
         }
-        
+
+        public void ResetSandwichData()
+        {
+            var wb = MainViewModel.Workbench;
+            MainViewModel.Dispose();
+            wb.SandwichModel = null;
+            MainViewModel = null;
+            MainViewModel = new MainViewModel(wb);
+        }
+
         protected override void WriteDocument(
             RhinoDoc doc,
             BinaryArchiveWriter archive,

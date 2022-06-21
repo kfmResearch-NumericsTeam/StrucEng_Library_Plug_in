@@ -26,7 +26,7 @@ namespace StrucEngLib.Model
                     }
                 }
 
-                return "Gravity {" + res.ToString() + "}";
+                return "Gravity (" + res.ToString() + ")";
             }
         }
     }
