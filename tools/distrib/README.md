@@ -64,7 +64,7 @@ cd /vagrant/tools/distrib
 
 ## Test Builds
 
-In order to install builds deployed with `distrib.sh distrib_test|deploy_test`, the test store in Rhino must be enabled. In Rhino, access Options/Tools/Advanced/ and add the value `https://test.yak.rhino3d.com` to the property `` (use semicolon as separator).
+In order to install builds deployed with `distrib.sh distrib_test|deploy_test`, the test store in Rhino must be enabled. In Rhino, access Options/Tools/Advanced/ and add the value `https://test.yak.rhino3d.com` to the property `Rhino.Options.PackageManager.Sources` (use semicolon as separator).
   
 
 ## Links
