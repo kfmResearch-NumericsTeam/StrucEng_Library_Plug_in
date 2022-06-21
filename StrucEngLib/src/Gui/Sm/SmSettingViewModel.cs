@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Rhino;
@@ -13,6 +14,8 @@ namespace StrucEngLib
 
         public ObservableCollection<SmAdditionalPropertyViewModel> Properties { get; private set; } =
             new ObservableCollection<SmAdditionalPropertyViewModel>();
+
+        public event EventHandler ViewModelInitialized;
 
         private bool _noStepsAdded = true;
 
@@ -31,6 +34,12 @@ namespace StrucEngLib
             get => Properties.Count > 0;
         }
 
+        public void UpdateLayerVisibility()
+        {
+            OnPropertyChanged(nameof(HasLayers));
+            OnPropertyChanged(nameof(HasNoLayers));
+        }
+
         public bool HasNoLayers
         {
             get => !HasLayers;
@@ -43,6 +52,8 @@ namespace StrucEngLib
             get => _selectedProperty;
             set
             {
+
+                UpdateLayerVisibility();
                 _selectedProperty = value;
                 OnPropertyChanged();
             }
@@ -174,8 +185,8 @@ namespace StrucEngLib
                 });
             }
 
-            OnPropertyChanged(nameof(HasLayers));
-            OnPropertyChanged(nameof(HasNoLayers));
+            UpdateLayerVisibility();
+            ViewModelInitialized?.Invoke(this, new EventArgs());
         }
 
         public override void UpdateModel()

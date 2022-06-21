@@ -119,7 +119,6 @@ namespace StrucEngLib
                 Spacing = new Size(5, 5),
             };
             _propLayoutNoData.Add(new Label() {Text = "No elements added to LinFe Model."});
-
             _propLayoutHasData = new SmAdditionalPropertyView(_vm);
             _propLayout.Add(_propLayoutHasData);
             _propLayout.Add(_propLayoutNoData);
@@ -137,15 +136,24 @@ namespace StrucEngLib
                 Padding = new Padding(5);
                 Spacing = new Size(5, 5);
 
-                UiUtils.AddLabelTextRow(this, "d_strich_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
-                UiUtils.AddLabelTextRow(this, "d_strich_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichTop), "40");
-                UiUtils.AddLabelTextRow(this,  "fc_k", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK) , "20");
-                UiUtils.AddLabelTextRow(this,  "fc_theta_grad_kern", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern),"45");
-                UiUtils.AddLabelTextRow(this,  "fs_d", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
-                UiUtils.AddLabelTextRow(this,  "alpha_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
-                UiUtils.AddLabelTextRow(this,  "beta_bot", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
-                UiUtils.AddLabelTextRow(this,  "alpha_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaTop), "0");
-                UiUtils.AddLabelTextRow(this,  "beta_top", Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
+                UiUtils.AddLabelTextRow(this, "d_strich_bot",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
+                UiUtils.AddLabelTextRow(this, "d_strich_top",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichTop), "40");
+                UiUtils.AddLabelTextRow(this, "fc_k",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK), "20");
+                UiUtils.AddLabelTextRow(this, "fc_theta_grad_kern",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern), "45");
+                UiUtils.AddLabelTextRow(this, "fs_d",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
+                UiUtils.AddLabelTextRow(this, "alpha_bot",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
+                UiUtils.AddLabelTextRow(this, "beta_bot",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
+                UiUtils.AddLabelTextRow(this, "alpha_top",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaTop), "0");
+                UiUtils.AddLabelTextRow(this, "beta_top",
+                    Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
 
                 this.AddRow(null);
                 this.AddRow(TableLayout.AutoSized((_btShowImage = new Button
@@ -179,14 +187,19 @@ namespace StrucEngLib
             _propLayoutNoData.Bind<bool>(nameof(_propLayoutNoData.Visible), _vm, nameof(_vm.HasNoLayers));
             _propLayoutHasData.Bind<object>(nameof(_propLayoutHasData.DataContext), _vm, nameof(_vm.SelectedProperty));
 
-            try
+
+            _vm.ViewModelInitialized += (sender, args) =>
             {
-                _dropdownLayers.SelectedIndex = 0;
-            }
-            catch (Exception _)
-            {
-                // XXX: Ignore
-            }
+                try
+                {
+                    // preselect first entry if possible
+                    _dropdownLayers.SelectedIndex = 0;
+                }
+                catch (Exception _)
+                {
+                    // XXX: Ignore
+                }
+            };
         }
     }
 
