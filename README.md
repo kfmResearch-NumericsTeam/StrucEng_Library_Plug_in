@@ -1,5 +1,12 @@
 [![Continuous Integration](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml/badge.svg?branch=master)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml)
 # StrucEngLib Plugin
+> Rhinoceros 3D Plugin For StrucEng Library.   
+> The StrucEng Library includes mechanical models, saftey concepts, GUI's, load generator, etc. for the strucutral analysis reinforced concrete and masonry.
+
+  
+<p align="left">
+    <img src="./.github/strucenglib_gh.png" alt="strucenglib" width="700"/>
+</p>
 
 ### Installation
 To install, search for "StrucEngLib" in Rhino's Package Store. Please consider
