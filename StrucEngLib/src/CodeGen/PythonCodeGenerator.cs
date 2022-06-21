@@ -479,7 +479,7 @@ mdl = Structure(name=name, path=path)
             data.Append(")");
             s.Line(data.ToString());
 
-            EmitSmmPlotData(s, stepName, "as_xi_bot'", sm.AsXiBot);
+            EmitSmmPlotData(s, stepName, "as_xi_bot", sm.AsXiBot);
             EmitSmmPlotData(s, stepName, "as_xi_top", sm.AsXiTop);
             EmitSmmPlotData(s, stepName, "as_eta_bot", sm.AsEtaBot);
             EmitSmmPlotData(s, stepName, "as_eta_top", sm.AsEtaTop);

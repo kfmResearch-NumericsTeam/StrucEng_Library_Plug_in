@@ -99,6 +99,8 @@ package() {
     $yak_bin build
     
     printf '\033[0m'  # Reset color
+    ls -al 
+    cat "manifest.yml"
     cd "$_cd"
 }
 
@@ -137,17 +139,13 @@ deploy_test() {
 distrib_test() {
     echo "distrib_test..."
 
-    local version=${1:-}
+    local v=$(version)
     local interactive=${2:-yes}
-    if [ -z "$version" ]
-    then
-        echo "No argument set. $0 <version>"
-        exit 1
-    fi
-
-    update_version "$version"
+    echo "using version: $v"
+    
     build
-    create_package_dir "$version"
+    unit_test
+    create_package_dir "$v"
     package
 
     if [ "$interactive" == "yes" ]
@@ -156,6 +154,26 @@ distrib_test() {
     fi
 
     deploy_test
+}
+
+distrib() {
+    echo "distrib..."
+
+    local v=$(version)
+    local interactive=${2:-yes}
+    echo "using version: $v"
+    
+    build
+    unit_test
+    create_package_dir "$v"
+    package
+
+    if [ "$interactive" == "yes" ]
+    then
+        read -p "Press enter to deploy"
+    fi
+
+    deploy
 }
 
 unit_test() {
@@ -235,24 +253,14 @@ case "$command" in
         ci_build
         ;;
     distrib)
-        version=${2:-}
-        interactive=${3:-yes}
-        if [ -z "$version" ]
-        then
-            echo "No argument set. $0 $1 <version>"
-            exit 1
-        fi
-        distrib "$version" "$interactive"
+        interactive=${2:-yes}
+        echo "run '$0 $1 no' to disable interative mode"
+        distrib "$interactive"
         ;;
     distrib_test)
-        version=${2:-}
-        interactive=${3:-yes}
-        if [ -z "$version" ]
-        then
-            echo "No argument set. $0 $1 <version>"
-            exit 1
-        fi
-        distrib_test "$version" "$interactive"
+        interactive=${2:-yes}
+        echo "run '$0 $1 no' to disable interative mode"
+        distrib_test "$interactive"
         ;;
     create_package_dir)
         version=${2:-}

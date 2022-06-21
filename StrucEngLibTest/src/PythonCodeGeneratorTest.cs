@@ -145,7 +145,7 @@ public class PythonCodeGeneratorTest
         var gen = new PythonCodeGenerator();
         AssertValidPythonCode(gen.GenerateSmmCode(b));
     }
-    
+
     [Test]
     public void TestSwWithProperties()
     {
@@ -177,7 +177,7 @@ public class PythonCodeGeneratorTest
                 ElementNumber = 100
             }
         });
-        
+
         b.SandwichModel = new SandwichModel()
         {
             StepName = "1"
@@ -196,6 +196,26 @@ public class PythonCodeGeneratorTest
         b.SandwichModel.Code = "sia";
         b.SandwichModel.StepName = "1";
         b.SandwichModel.AsEtaBot = true;
+        b.SandwichModel.AsXiBot = true;
+        b.SandwichModel.AsXiTop = true;
+        b.SandwichModel.AsEtaBot = true;
+        b.SandwichModel.AsEtaTop = true;
+        b.SandwichModel.AsZ = true;
+        b.SandwichModel.CCBot = true;
+        b.SandwichModel.CCTop = true;
+        b.SandwichModel.KBot = true;
+        b.SandwichModel.KTop = true;
+        b.SandwichModel.TBot = true;
+        b.SandwichModel.TTop = true;
+        b.SandwichModel.PsiBot = true;
+        b.SandwichModel.PsiTop = true;
+        b.SandwichModel.FallBot = true;
+        b.SandwichModel.FallTop = true;
+        b.SandwichModel.MCcBot = true;
+        b.SandwichModel.MCcTop = true;
+        b.SandwichModel.MShearC = true;
+        b.SandwichModel.MCTotal = true;
+
         b.SandwichModel.AdditionalProperties.Add(new SandwichProperty()
         {
             Layer = b.Layers[0],
