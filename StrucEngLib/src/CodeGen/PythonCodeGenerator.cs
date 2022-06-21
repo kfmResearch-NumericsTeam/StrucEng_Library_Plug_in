@@ -17,7 +17,7 @@ namespace StrucEngLib
         public string GenerateLinFeCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            EmitHeaders(state);
+            EmitHeaders(state, "Generate LinFe Code");
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -35,7 +35,7 @@ namespace StrucEngLib
         public string GenerateSmmCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            EmitHeaders(state);
+            EmitHeaders(state, "Generate Sandwich Code");
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -52,13 +52,14 @@ namespace StrucEngLib
         }
 
 
-        private void EmitHeaders(EmitState s)
+        private void EmitHeaders(EmitState s, string action)
         {
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
 # Code generated at {DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}
 # Issued by user {Environment.UserName}
+# Action {action}
 
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
@@ -226,11 +227,6 @@ mdl = Structure(name=name, path=path)
             var dispId = s.DispId(s.LayerIds[set]);
             s.DisplacementIds.Add(set, dispId);
             return $"{name}(name='{dispId}', {args} nodes='{set.GetName()}')";
-        }
-
-        private void EmitAdditionalProperties(EmitState s)
-        {
-            s.CommentLine("Additional Properties");
         }
 
         private void EmitDisplacements(EmitState s)
@@ -428,10 +424,73 @@ mdl = Structure(name=name, path=path)
             s.Line($"rhino.plot_data(mdl, step='{step}', field='{field}', cbar_size=1)");
         }
 
+        private void EmitAdditionalProperties(EmitState s)
+        {
+            s.CommentLine("Additional Properties");
+            s.Line("data = {}");
+            s.Workbench.SandwichModel.AdditionalProperties.ForEach(p =>
+            {
+                var name = s.PropertyIds[p.Layer];
+                var data = new StringBuilder();
+                data.Append($"prop_name='{name}', ");
+                data.Append($"d_strich_bot = {p.DStrichBot}, ");
+                data.Append($"d_strich_top = {p.DStrichTop}, ");
+                data.Append($"fc_k = {p.FcK}, ");
+                data.Append($"theta_grad_kern = {p.FcThetaGradKern}, ");
+                data.Append($"fs_d = {p.FsD}, ");
+                data.Append($"alpha_bot = {p.AlphaBot}, ");
+                data.Append($"beta_bot = {p.BetaBot}, ");
+                data.Append($"alpha_top = {p.AlphaTop}, ");
+                data.Append($"beta_top = {p.BetaTop}");
+                s.Line($"SMM.additionalproperty(data, {data})");
+            });
+        }
+
+
+        private void EmitSmmPlotData(EmitState s, string stepName, string fieldName, bool emit = true)
+        {
+            if (emit)
+            {
+                s.Line($"rhino.plot_data(mdl, step='{stepName}', field='{fieldName}', cbar_size=1)");
+            }
+        }
 
         private void EmitSmm(EmitState s)
         {
+            var sm = s.Workbench.SandwichModel;
+            var stepName = s.CreateStepName(sm.StepName);
             s.CommentLine("SM");
+            var data = new StringBuilder();
+            data.Append("SMM.Hauptfunktion(structure = mdl, data = data, ");
+            data.Append($"step = '{stepName}', ");
+            data.Append($"Mindestbewehrung = {s.PythonBoolean(sm.MindestBewehrung)}, ");
+            data.Append($"Druckzoneniteration = {s.PythonBoolean(sm.DruckzonenIteration)}, ");
+            data.Append($"Schubnachweis = '{sm.Schubnachweis}', ");
+            data.Append($"code = '{sm.Code}', ");
+            data.Append($"axes_scale = '{sm.AxesScale}'");
+            data.Append(")");
+            s.Line(data.ToString());
+
+            EmitSmmPlotData(s, stepName, "as_xi_bot'", sm.AsXiBot);
+            EmitSmmPlotData(s, stepName, "as_xi_top", sm.AsXiTop);
+            EmitSmmPlotData(s, stepName, "as_eta_bot", sm.AsEtaBot);
+            EmitSmmPlotData(s, stepName, "as_eta_top", sm.AsEtaTop);
+            EmitSmmPlotData(s, stepName, "as_z", sm.AsZ);
+            EmitSmmPlotData(s, stepName, "CC_bot", sm.cCBot);
+            EmitSmmPlotData(s, stepName, "CC_top", sm.cCTop);
+            EmitSmmPlotData(s, stepName, "k_bot", sm.KBot);
+            EmitSmmPlotData(s, stepName, "k_top", sm.KTop);
+            EmitSmmPlotData(s, stepName, "t_bot", sm.TBot);
+            EmitSmmPlotData(s, stepName, "t_top", sm.TTop);
+            EmitSmmPlotData(s, stepName, "psi_bot", sm.PsiBot);
+            EmitSmmPlotData(s, stepName, "psi_top", sm.PsiTop);
+            EmitSmmPlotData(s, stepName, "Fall_bot", sm.FallBot);
+            EmitSmmPlotData(s, stepName, "Fall_top", sm.FallTop);
+            EmitSmmPlotData(s, stepName, "m_cc_bot", sm.MCcBot);
+            EmitSmmPlotData(s, stepName, "m_cc_top", sm.MCcTop);
+            EmitSmmPlotData(s, stepName, "m_shear_c", sm.MShearC);
+            EmitSmmPlotData(s, stepName, "m_c_total", sm.MCTotal);
+            s.Line($"SMM.max_values(mdl,'{stepName}')");
         }
     }
 }

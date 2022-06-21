@@ -36,9 +36,11 @@ namespace StrucEngLib
                 var smCtx = new SmModelValidator().ValidateModel(_model);
                 var errorCtxx = new List<ErrorMessageContext>();
                 var stop = false;
+                var hasMessages = false;
 
                 if (linFeCtx.Messages.Count != 0)
                 {
+                    hasMessages = true;
                     errorCtxx.Add(linFeCtx);
                     if (linFeCtx.GetByType(MessageType.Error).Count > 0)
                     {
@@ -49,6 +51,7 @@ namespace StrucEngLib
 
                 if (smCtx.Messages.Count != 0)
                 {
+                    hasMessages = true;
                     errorCtxx.Add(smCtx);
                     if (smCtx.GetByType(MessageType.Error).Count > 0)
                     {
@@ -56,7 +59,11 @@ namespace StrucEngLib
                     }
                 }
 
-                _vm.ErrorVm.ShowMessages(errorCtxx.ToArray());
+                if (hasMessages)
+                {
+                    _vm.ErrorVm.ShowMessages(errorCtxx.ToArray());
+                }
+
                 if (stop)
                 {
                     return;

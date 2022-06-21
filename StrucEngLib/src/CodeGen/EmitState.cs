@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Rhino.DocObjects.Tables;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -25,6 +26,8 @@ namespace StrucEngLib
         public string EmitIfNotEmpty(string key, string value, string comma = ",")
             => string.IsNullOrWhiteSpace(value) ? "" : $" {key}={value}{comma}";
 
+        public string PythonBoolean(string val) =>
+            (val != null && val.ToLower().Trim().Equals("true")) ? "True" : "False";
 
         public Workbench Workbench { get; }
         public StringBuilder Buffer { get; } = new StringBuilder();
