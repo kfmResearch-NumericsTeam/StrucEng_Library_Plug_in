@@ -47,7 +47,7 @@ cd /vagrant/tools/distrib
 ./distrib.sh package
 ```
 The built Rhino plugin can susequently be found in `/StrucEngLib/bin/Debug/net48/`.
-The yak package can be found in `/distrib/build`
+The yak package can be found in `./build`
 
 ## Publish to Rhino Store
 Log into yak with yak.exe login. Your mcneel account must be connected with
