@@ -29,9 +29,9 @@ $ ./tools/distrib/distrib_vagrant.sh deploy
 ```
 ./StrucEngLib/...........: .net C# Rhino Plugin
 ./StrucEngLibTest/.......: Tests
-./distrib/...............: Assets files for Distribution management, logo, manifest...
 ./tools/.................: Development tools
 ./tools/vagrant/.........: Vagrant documentation and scripts
 ./tools/distrib/.........: Build and distribution tools
+./tools/distrib/assets...: Asset files for distribution, manifest
 ./tools/test/............: Unit test runner
 ```
