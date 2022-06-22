@@ -1,0 +1,17 @@
+.DS_Store
+.idea
+*.log
+tmp/
+
+
+strucenglib.env
+distrib.env
+
+.DS_Store
+.idea
+*.log
+tmp/
+
+test-config
+build
+.vagrant

@@ -21,6 +21,14 @@ rm packages-microsoft-prod.deb
 sudo apt-get update || true
 sudo apt-get install -y apt-transport-https dotnet-sdk-6.0 dotnet-runtime-6.0
 
+# Install powershell
+sudo apt-get install -y wget apt-transport-https software-properties-common
+wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update -y
+sudo apt-get install -y powershell
+
+
 # mono https://www.mono-project.com/download/stable/
 sudo apt install -y gnupg ca-certificates
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF

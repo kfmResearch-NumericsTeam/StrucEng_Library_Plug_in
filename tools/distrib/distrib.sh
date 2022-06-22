@@ -6,17 +6,31 @@ set -euo pipefail
 # See ensure_binaries for binary dependencies
 #
 
-MONO_INLINELIMIT=0
-
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
-yak_bin="mono $script_dir/yak.exe"
-
+yak_bin="pwsh -c $script_dir/./yak.exe"
+env_file=$script_dir/distrib.env
+build_dir=$script_dir/build
+asset_dir=$script_dir/assets
 
 ensure_binaries() {
     ensure_binary xmlstarlet
     ensure_binary dotnet
-    ensure_binary mono
+    ensure_binary pwsh
+}
+
+source_environment() {
+    if [ -f "$env_file" ]; then
+        echo "Sourcing environment file $env_file"
+        source "$env_file"
+    else
+        echo "Environment file does not exist: $env_file"
+        echo "Make sure YAK_TOKEN is set"
+    fi
+
+    if [[ -z "${YAK_TOKEN}" ]]; then
+        echo "YAK_TOKEN not set, deployment will likely fail"
+    fi
 }
 
 
@@ -70,8 +84,8 @@ create_package_dir() {
     fi
 
     local bin="$proj_root/StrucEngLib/bin/Debug/net48"
-    local out="$proj_root/distrib/build"
-    local assets="$proj_root/distrib/assets"
+    local out=$build_dir
+    local assets=$asset_dir
 
     # Copy relevant bits
     rm -rf "$out"
@@ -95,7 +109,7 @@ package() {
     create_package_dir "$v"
 
     local _cd=$(pwd)
-    cd "$proj_root/distrib/build"
+    cd $build_dir
     $yak_bin build
     
     printf '\033[0m'  # Reset color
@@ -108,9 +122,11 @@ deploy() {
     echo "deploy..."
 
     local _cd=$(pwd)
-    cd "$proj_root/distrib/build"
+    cd $build_dir
 
     local yak_out=$(ls | grep yak)
+
+    source_environment
 
     set -x
     $yak_bin push $yak_out
@@ -124,9 +140,11 @@ deploy_test() {
 
     local test_repo="--source=https://test.yak.rhino3d.com"
     local _cd=$(pwd)
-    cd "$proj_root/distrib/build"
+    cd $build_dir
 
     local yak_out=$(ls | grep yak)
+
+    source_environment
 
     set -x
     $yak_bin push $test_repo $yak_out
@@ -147,12 +165,11 @@ distrib_test() {
     unit_test
     create_package_dir "$v"
     package
-
     if [ "$interactive" == "yes" ]
     then
         read -p "Press enter to deploy"
     fi
-
+    source_environment
     deploy_test
 }
 
@@ -173,6 +190,7 @@ distrib() {
         read -p "Press enter to deploy"
     fi
 
+    source_environment
     deploy
 }
 
@@ -216,6 +234,8 @@ help() {
     echo "  deploy.......................: deploys the yak package found store" >&2
     echo "  distrib......................: builds, packages, deploys package to store" >&2
     echo "  distrib_test.................: builds, packages, deploys package to test store" >&2
+
+    echo ""
 }
 
 ensure_binaries
