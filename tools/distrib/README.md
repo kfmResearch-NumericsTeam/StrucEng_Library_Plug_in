@@ -66,6 +66,8 @@ cd /vagrant/tools/distrib
 
 In order to install builds deployed with `distrib.sh distrib_test|deploy_test`, the test store in Rhino must be enabled. In Rhino, access Options/Tools/Advanced/ and add the value `https://test.yak.rhino3d.com` to the property `Rhino.Options.PackageManager.Sources` (use semicolon as separator).
   
+## Deployment on Windows
+https://developer.rhino3d.com/guides/yak/pushing-a-package-to-the-server/
 
 ## Links
 - In case wine has issues publishing the yak file, update dotnet binary as described here
