@@ -4,7 +4,7 @@ bin
 obj
 .vagrant
 tmp_files
-
+tmp/
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
