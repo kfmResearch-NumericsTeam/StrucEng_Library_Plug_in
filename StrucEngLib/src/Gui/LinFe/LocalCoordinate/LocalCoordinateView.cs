@@ -93,7 +93,7 @@ namespace StrucEngLib.LocalCoordinate
                             }),
                             new TableLayout
                             {
-                                Spacing = new Size(5, 10),
+                                Spacing = new Size(10, 10),
                                 Rows =
                                 {
                                     new TableRow(
@@ -102,8 +102,15 @@ namespace StrucEngLib.LocalCoordinate
                                             {
                                                 Size = new Size(110, -1),
                                                 Text = "Show Numbers...",
-                                                Enabled = true,
                                                 Command = _vm.ExecElementNumbers
+                                            })
+                                        ,
+                                        TableLayout.AutoSized(
+                                            new Button()
+                                            {
+                                                Size = new Size(110, -1),
+                                                Text = "Show Code...",
+                                                Command = _vm.ExecShowCodeElementNumbers
                                             })
                                     )
                                 }

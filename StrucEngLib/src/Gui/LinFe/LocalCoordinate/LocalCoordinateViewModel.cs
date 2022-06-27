@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using Eto.Forms;
+using Rhino;
+using Rhino.UI;
 using StrucEngLib.Model;
 
 namespace StrucEngLib.LocalCoordinate
@@ -15,7 +18,8 @@ namespace StrucEngLib.LocalCoordinate
     {
         private readonly LinFeMainViewModel _vm;
         
-        public ICommand ExecElementNumbers;
+        public RelayCommand ExecElementNumbers;
+        public RelayCommand ExecShowCodeElementNumbers;
 
         private readonly ObservableCollection<LocalCoordinateEntryViewModel> _loadConstraints;
         public ObservableCollection<LocalCoordinateEntryViewModel> LoadConstraints => _loadConstraints;
@@ -23,10 +27,33 @@ namespace StrucEngLib.LocalCoordinate
         public LoadConstraintViewModel(LinFeMainViewModel vm)
         {
             _vm = vm;
-            ExecElementNumbers = new ExecElementNumbers(vm);
+            ExecElementNumbers = new RelayCommand(OnExecElementNumbers);
+            ExecShowCodeElementNumbers = new RelayCommand(OnShowCodeElementNumbers);
+            
             _loadConstraints = new ObservableCollection<LocalCoordinateEntryViewModel>();
             PopulateLayers(vm);
             vm.ListLayerVm.Layers.CollectionChanged += LayersOnCollectionChanged;
+        }
+
+        private void OnExecElementNumbers()
+        {
+            new ExecElementNumbers(_vm).ExecuteAsync(null);
+        }
+
+        private void OnShowCodeElementNumbers()
+        {
+            string sourceCode = new ExecElementNumbers(_vm).BuildScript();
+            var dialog = new InspectPythonDialog(sourceCode);
+            var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (dialogRc == Eto.Forms.DialogResult.Ok)
+            {
+                sourceCode = dialog.Source;
+
+                if (dialog.State == InspectPythonDialog.STATE_EXEC)
+                {
+                    new ExecElementNumbers(_vm).RunCode(sourceCode);
+                }
+            }
         }
 
         private void PopulateLayers(LinFeMainViewModel vm)
