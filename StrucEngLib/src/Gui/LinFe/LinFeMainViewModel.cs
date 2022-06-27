@@ -19,6 +19,7 @@ namespace StrucEngLib
         public ListStepViewModel ListStepVm { get; }
         public ErrorViewModel ErrorVm { get; }
         public AnalysisViewModel AnalysisVm { get; }
+        public GenerateCodeViewModel GenerateCodeVm { get; }
         public Workbench Workbench { get; }
 
         public LinFeMainViewModel(Workbench wb, ErrorViewModel evm)
@@ -30,13 +31,14 @@ namespace StrucEngLib
             ListLoadVm = new ListLoadViewModel(this);
             ListStepVm = new ListStepViewModel(this);
             AnalysisVm = new AnalysisViewModel(this);
+            GenerateCodeVm = new GenerateCodeViewModel(GenerateCodeViewModel.GenerateCodeMode.LinFe, this.MainViewModel);
         }
 
         public override void UpdateModel()
         {
             new List<ViewModelBase>()
             {
-                ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, AnalysisVm
+                ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, AnalysisVm, GenerateCodeVm
             }.ForEach(vm => vm.UpdateModel());
         }
 

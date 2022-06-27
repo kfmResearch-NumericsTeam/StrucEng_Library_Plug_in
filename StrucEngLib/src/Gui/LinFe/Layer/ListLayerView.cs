@@ -9,12 +9,10 @@ using StrucEngLib.Step;
 namespace StrucEngLib.Layer
 {
     /// <summary>
-    /// Main view to show layer information
+    /// View to show layer information
     /// </summary>
     public class ListLayerView : DynamicLayout
     {
-        private Button _btnInspectPython;
-        private Button _btnExecPython;
         private Button _btnMouseSelect;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
@@ -27,17 +25,13 @@ namespace StrucEngLib.Layer
         private readonly LinFeMainViewModel _vm;
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
-        private readonly ListLoadViewModel _vmListLoad;
-        private readonly ListStepViewModel _vmListStep;
-        private LinkButton _btnClearData;
-
+        
         public ListLayerView(LinFeMainViewModel vm)
         {
             _vm = vm;
             _vmListLayer = vm.ListLayerVm;
             _vmDetailView = vm.DetailLayerVm;
-            _vmListStep = vm.ListStepVm;
-            _vmListLoad = vm.ListLoadVm;
+
 
             BuildGui();
             BindGui();
@@ -46,11 +40,8 @@ namespace StrucEngLib.Layer
         protected void BindGui()
         {
             _btnAddLayer.Command = _vmListLayer.CommandOnAddLayer;
-            _btnInspectPython.Command = _vmListLayer.CommandOnInspectCode;
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
-            _btnExecPython.Command = _vmListLayer.CommandOnExecuteCode;
-            _btnClearData.Command = _vmListLayer.CommandClearModel;
 
             _tbLayerToAdd.Bind<string>(nameof(_tbLayerToAdd.Text), _vmListLayer, nameof(_vmListLayer.LayerToAdd));
             _dropdownLayers.ItemTextBinding = Binding.Property((Model.Layer t) => t.ToString());
@@ -69,10 +60,8 @@ namespace StrucEngLib.Layer
 
         protected void BuildGui()
         {
-            Padding = new Padding(10, 10);
-            Spacing = new Size(0, 10);
-
-            AddRow(UiUtils.GenerateTitle("Step 1: Define Parts, Materials and Constraints"));
+            Padding = new Padding(5);
+            Spacing = new Size(5, 0);
             AddRow(
                 new GroupBox
                 {
@@ -177,50 +166,6 @@ namespace StrucEngLib.Layer
                         Content = _vmDetailView.LayerDetailView
                     }
                 ));
-            
-            AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
-            AddRow(new LoadConstraintView(new LoadConstraintViewModel(_vm)));
-
-            
-            AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
-            AddRow(new ListLoadView(_vmListLoad));
-
-            AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
-            AddRow(new ListStepView(_vmListStep));
-
-            AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
-
-            AddRow(new AnalysisView(_vm.AnalysisVm));
-            AddRow(
-                new GroupBox
-                {
-                    Text = "Generate Code",
-                    Padding = new Padding(5),
-                    Content = new TableLayout
-                    {
-                        Padding = new Padding(5),
-                        Spacing = new Size(10, 10),
-                        Rows =
-                        {
-                            new TableRow(
-                                new TableCell(
-                                    (_btnInspectPython = new Button {Text = "Inspect Model..."}),
-                                    true
-                                ),
-                                new TableCell(
-                                    (_btnExecPython = new Button {Text = "Execute Model"}),
-                                    true
-                                )
-                            ),
-                            new TableRow(
-                                new TableCell(
-                                    (_btnClearData = new LinkButton() {Text = "Reset Data"}),
-                                    false
-                                ))
-                        }
-                    }
-                });
-            
         }
     }
 }

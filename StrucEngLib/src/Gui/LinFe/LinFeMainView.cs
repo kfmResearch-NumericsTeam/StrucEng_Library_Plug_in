@@ -4,7 +4,11 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
+using StrucEngLib.Analysis;
 using StrucEngLib.Layer;
+using StrucEngLib.Load;
+using StrucEngLib.LocalCoordinate;
+using StrucEngLib.Step;
 
 namespace StrucEngLib
 {
@@ -23,11 +27,23 @@ namespace StrucEngLib
         public void LoadUi(LinFeMainViewModel vm)
         {
             BackgroundColor = new Label().BackgroundColor;
-            var v = new ListLayerView(vm);
-            Padding = new Padding()
-            {
-            };
-            Content = v;
+            Padding = new Padding();
+            var layout = new DynamicLayout();
+            layout.Padding = new Padding(10, 10);
+            layout.Spacing = new Size(0, 10);
+            
+            layout.AddRow(UiUtils.GenerateTitle("Step 1: Define Parts, Materials and Constraints"));
+            layout.AddRow(new ListLayerView(vm));
+            layout.AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
+            layout.AddRow(new LoadConstraintView(new LoadConstraintViewModel(vm)));
+            layout.AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
+            layout.AddRow(new ListLoadView(vm.ListLoadVm));
+            layout.AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
+            layout.AddRow(new ListStepView(vm.ListStepVm));
+            layout.AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
+            layout.AddRow(new AnalysisView(vm.AnalysisVm));
+            layout.AddRow(new GenerateCodeView( vm));
+            Content = layout;
         }
 
         public void DisposeUi()
