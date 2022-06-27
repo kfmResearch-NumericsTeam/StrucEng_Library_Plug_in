@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
 using Size = Eto.Drawing.Size;
 
 namespace StrucEngLib.Analysis
@@ -14,9 +11,6 @@ namespace StrucEngLib.Analysis
     /// <summary>Renders a single analysis item</summary>
     public class AnalysisItemView : DynamicLayout
     {
-        private readonly AnalysisItemViewModel _vm;
-        private readonly GroupBox _gbDetail;
-
         private Control TextControlRow(Control text, Control value)
         {
             return TableLayout.HorizontalScaled(text, value);
@@ -24,10 +18,11 @@ namespace StrucEngLib.Analysis
 
         public AnalysisItemView()
         {
+            GroupBox gbDetail;
             Padding = new Padding(5);
             Spacing = new Size(5, 10);
             
-            Add(_gbDetail = new GroupBox
+            Add(gbDetail = new GroupBox
             {
                 Padding = new Padding(5),
                 Visible = true,
@@ -64,7 +59,7 @@ namespace StrucEngLib.Analysis
                     }
                 }
             });
-            _gbDetail.BindDataContext(lab => lab.Text,
+            gbDetail.BindDataContext(lab => lab.Text,
                 Binding.Property<AnalysisItemViewModel, string>((m => m.StepName))
                     .Convert(s => "Output for Step " + s));
         }
@@ -135,11 +130,11 @@ namespace StrucEngLib.Analysis
                     foreach (var cell in children)
                     {
                         var c = cell.Control as CheckBox;
-                        c.Checked = cbRoot.Checked;
+                        if (c != null) c.Checked = cbRoot.Checked;
                     }
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // XXX: Hacky/ Quick way to set children according to parent
             }

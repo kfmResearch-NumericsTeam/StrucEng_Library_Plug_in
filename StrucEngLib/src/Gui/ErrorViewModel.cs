@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
-using Rhino.Runtime.RhinoAccounts;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -58,14 +56,14 @@ namespace StrucEngLib
 
         public void DebugMessage(params object[] values)
         {
-            StringBuilder b = new StringBuilder();
+            var b = new StringBuilder();
             foreach (var o in values)
             {
                 try
                 {
                     b.Append(StringUtils.ToJson(o));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     /* XXX: Ignore */
                 }

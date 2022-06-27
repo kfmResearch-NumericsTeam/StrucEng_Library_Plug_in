@@ -195,7 +195,7 @@ namespace StrucEngLib.Step
                 {
                     order = Math.Max(order, int.Parse(stepVm.Order));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // Ignore
                 }

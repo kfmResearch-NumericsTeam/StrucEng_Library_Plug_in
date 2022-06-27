@@ -41,7 +41,7 @@ namespace StrucEngLib.Load
                         bool check = cb.Checked != null && (bool) cb.Checked;
                         RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, cb.Text, true, check);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // XXX: Preselect layers for visual aid, ignore on error
                     }

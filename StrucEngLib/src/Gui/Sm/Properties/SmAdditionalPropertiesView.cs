@@ -99,7 +99,7 @@ namespace StrucEngLib.Sm
                     // preselect first entry if possible
                     _dropdownLayers.SelectedIndex = 0;
                 }
-                catch (Exception _)
+                catch (Exception)
                 {
                     // XXX: Ignore
                 }

@@ -8,7 +8,7 @@ namespace StrucEngLib.Utils
     {
         private bool _isExecuting = false;
 
-        public bool CanExecute(object parameter)
+        public override bool CanExecute(object parameter)
         {
             return !_isExecuting && base.CanExecute(parameter);
         }

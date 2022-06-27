@@ -229,7 +229,6 @@ mdl = Structure(name=name, path=path)
                 // XXX: Must have a displacement
                 default:
                     throw new Exception("Unknown Displacement type: " + set.SetDisplacementType.ToString());
-                    break;
             }
 
             var dispId = s.DispId(s.LayerIds[set]);

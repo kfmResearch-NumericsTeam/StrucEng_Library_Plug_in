@@ -1,9 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using Eto.Forms;
 using Rhino;
-using StrucEngLib.Model;
 using StrucEngLib.Model;
 
 
@@ -16,8 +14,7 @@ namespace StrucEngLib.Layer
     {
         private readonly LinFeMainViewModel _mainVm;
 
-        private static readonly int LAYER_TYPE_ELEMENT = 0;
-        private static readonly int LAYER_TYPE_SET = 1;
+        private static readonly int LAYER_TYPE_ELEMENT = 0; // LAYER_TYPE_SET = 1;
 
         // Commands
         public RelayCommand CommandOnMouseSelect { get; }

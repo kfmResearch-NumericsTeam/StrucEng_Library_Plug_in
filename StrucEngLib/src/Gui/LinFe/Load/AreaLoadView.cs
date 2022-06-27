@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using StrucEngLib.Model;
-using StrucEngLib.Views;
-using Eto.Drawing;
-using Eto.Forms;
-using Rhino;
-using Rhino.UI;
-
 namespace StrucEngLib.Load
 {
     /// <summary>
@@ -23,7 +13,7 @@ namespace StrucEngLib.Load
             BuildGui();
         }
 
-        private void BuildGui()
+        private new void BuildGui()
         {
             UiUtils.AddLabelTextRow(this, _vm, "Pressure [N/mm^2]", nameof(_vm.Z), "0.03");
             UiUtils.AddLabelTextRow(this, _vm, "Surface Shear x [N/mm^2]", nameof(_vm.X), "");

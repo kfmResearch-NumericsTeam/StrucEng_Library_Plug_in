@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using Rhino;
+﻿using Rhino;
 using Rhino.Commands;
-using Rhino;
-using Rhino.Commands;
-using Rhino.Input.Custom;
 using Rhino.UI;
-using StrucEngLib.Model;
 using Command = Rhino.Commands.Command;
 
 namespace StrucEngLib

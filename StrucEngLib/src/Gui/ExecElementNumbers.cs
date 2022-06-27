@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Rhino;
-using Rhino.UI;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
@@ -27,7 +25,7 @@ namespace StrucEngLib
             return Task.FromResult<object>(null);
         }
 
-        protected string BuildScript()
+        public string BuildScript()
         {
             var ex = new List<string>();
             foreach (var layer in _vm.ListLayerVm.Layers.ToList())
@@ -79,15 +77,15 @@ if __name__=='__main__':
             return code;
         }
 
-        protected void RunCode(string code)
+        public void RunCode(string code)
         {
-            string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
+            string fileName = Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
             File.WriteAllText(fileName, code);
             try
             {
                 Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // XXX Ignore
             }
