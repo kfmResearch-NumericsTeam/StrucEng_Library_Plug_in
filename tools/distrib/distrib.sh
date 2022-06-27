@@ -6,17 +6,26 @@ set -euo pipefail
 # See ensure_binaries for binary dependencies
 #
 
-script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
+script_dir=$( dirname "$(readlink -f "$0")" )
+# script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
 proj_root="$script_dir/../.."
 yak_bin="pwsh -c $script_dir/./yak.exe"
 env_file=$script_dir/distrib.env
 build_dir=$script_dir/build
 asset_dir=$script_dir/assets
 
-ensure_binaries() {
+ensure_binaries_build() {
     ensure_binary xmlstarlet
     ensure_binary dotnet
+}
+
+ensure_binaries_deploy() {
     ensure_binary pwsh
+}
+
+ensure_binaries() {
+    ensure_binaries_build
+    ensure_binaries_deploy
 }
 
 source_environment() {
@@ -238,14 +247,14 @@ help() {
     echo ""
 }
 
-ensure_binaries
-
 command=${1:-}
 case "$command" in
     version)
+        ensure_binaries_build
         version
         ;;
     update_version)
+        ensure_binaries_build
         version=${2:-}
         if [ -z "$version" ]
         then
@@ -255,34 +264,43 @@ case "$command" in
         update_version "$version"
         ;;
     build)
+        ensure_binaries_build
         build
         ;;
     test)
+        ensure_binaries_build
         unit_test
         ;;
     deploy_test)
+        ensure_binaries_deploy
         deploy_test
         ;;
     deploy)
+        ensure_binaries_deploy
         deploy
         ;;
     package)
+        ensure_binaries_build
         package
         ;;
     ci_build)
+        ensure_binaries_deploy
         ci_build
         ;;
     distrib)
+        ensure_binaries_deploy
         interactive=${2:-yes}
         echo "run '$0 $1 no' to disable interative mode"
         distrib "$interactive"
         ;;
     distrib_test)
+        ensure_binaries_deploy
         interactive=${2:-yes}
         echo "run '$0 $1 no' to disable interative mode"
         distrib_test "$interactive"
         ;;
     create_package_dir)
+        ensure_binaries_build
         version=${2:-}
         if [ -z "$version" ]
         then
