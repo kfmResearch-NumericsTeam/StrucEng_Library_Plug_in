@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Rhino;
@@ -17,7 +18,8 @@ namespace StrucEngLib
         public string GenerateLinFeCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            EmitHeaders(state, "Generate LinFe Code");
+            EmitHeaders(state, "Generate LinFe Code", 
+                targetPath: state.Workbench.FileName);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -37,7 +39,9 @@ namespace StrucEngLib
             var state = new EmitState(bench);
             const string customImports = "import sandwichmodel_main as SMM\n";
 
-            EmitHeaders(state, "Generate Sandwich Code", customImports);
+            EmitHeaders(state, "Generate Sandwich Code",
+                targetPath: state.Workbench.SandwichModel.FileName,
+                customImports: customImports);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -53,7 +57,8 @@ namespace StrucEngLib
             return state.Buffer.ToString();
         }
 
-        private void EmitHeaders(EmitState s, string action, string customImports = "")
+        private void EmitHeaders(EmitState s, string action, string targetPath = "C:\\Temp\\Rahmen",
+            string customImports = "")
         {
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
@@ -88,8 +93,8 @@ from compas_fea.structure import Structure
 
 # Snippets based on code of Andrew Liew (github.com/andrewliew), Benjamin Berger (github.com/Beberger)
 
-name = 'Rahmen'
-path = 'C:/Temp/'
+name = '{Path.GetFileName(targetPath)}'
+path = '{Path.GetDirectoryName(targetPath)}'
 mdl = Structure(name=name, path=path)
 ";
             s.Buffer.Append(header);

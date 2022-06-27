@@ -25,11 +25,10 @@ namespace StrucEngLib
 
         public MainViewModel(Workbench wb)
         {
-            ErrorVm = new ErrorViewModel();
-            LinFeMainVm = new LinFeMainViewModel(wb, ErrorVm);
-            SmMainVm = new SmMainViewModel(wb, ErrorVm);
-
             Workbench = wb;
+            ErrorVm = new ErrorViewModel();
+            LinFeMainVm = new LinFeMainViewModel(wb, this);
+            SmMainVm = new SmMainViewModel(wb, this);
 
             _exceptionHandler = (sender, args) =>
             {

@@ -24,6 +24,7 @@ namespace StrucEngLib
         {
             Instance = this;
             MainViewModel = new MainViewModel(new Workbench());
+            
         }
 
         public static StrucEngLibPlugin Instance { get; private set; }

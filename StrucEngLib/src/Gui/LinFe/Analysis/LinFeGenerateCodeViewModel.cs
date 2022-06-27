@@ -4,25 +4,47 @@ using Eto.Forms;
 namespace StrucEngLib.Sm
 {
     /// <summary>Vm for Analysis Control in Sandwich Model</summary>
-    public class SmAnalysisViewModel : ViewModelBase
+    public class LinFeGenerateCodeViewModel : ViewModelBase
     {
-        private readonly SmMainViewModel _vm;
+        private readonly LinFeMainViewModel _vm;
         public RelayCommand CommandInspectModel { get; }
         public RelayCommand CommandExecuteModel { get; }
         public RelayCommand CommandResetData { get; }
+        
+        private string _fileName;
 
-        public SmAnalysisViewModel(SmMainViewModel vm)
+        public string FileName
+        {
+            get => _fileName;
+            set
+            {
+                _fileName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public LinFeGenerateCodeViewModel(LinFeMainViewModel vm)
         {
             _vm = vm;
             CommandInspectModel = new RelayCommand(OnInspectModel);
             CommandExecuteModel = new RelayCommand(OnExecuteModel);
             CommandResetData = new RelayCommand(OnResetData);
         }
+        
+        public sealed override void UpdateModel()
+        {
+            _vm.Workbench.FileName = FileName;
+        }
 
+        public sealed override void UpdateViewModel()
+        {
+            FileName = _vm.Workbench.FileName;
+        }
+        
         private void OnInspectModel()
         {
             var model = _vm.BuildModel();
-            var gen = new ExecGenerateSmCode(_vm.MainViewModel, model);
+            var gen = new ExecGenerateLinFeCode(_vm, model);
             gen.Execute(null);
             if (gen.Success)
             {
@@ -33,7 +55,7 @@ namespace StrucEngLib.Sm
         private void OnExecuteModel()
         {
             var model = _vm.BuildModel();
-            var gen = new ExecGenerateSmCode(_vm.MainViewModel, model);
+            var gen = new ExecGenerateLinFeCode(_vm, model);
             gen.Execute(null);
             if (gen.Success)
             {
@@ -43,7 +65,7 @@ namespace StrucEngLib.Sm
 
         private void OnResetData()
         {
-            new ExecClearModelData(_vm.MainViewModel, ExecClearModelData.ClearState.SANDWICH).Execute(null);
+            new ExecClearModelData(ExecClearModelData.ClearState.ALL).Execute(null);
         }
     }
 }

@@ -19,16 +19,18 @@ namespace StrucEngLib.Sm
     {
         public Workbench Workbench { get; }
 
+        public MainViewModel MainViewModel { get; }
         public ErrorViewModel ErrorVm { get; }
         public SmSettingViewModel SmSettingVm { get; }
-        public SmAnalysisViewModel AnalysisVm { get; }
+        public SmGenerateCodeViewModel GenerateCodeVm { get; }
 
-        public SmMainViewModel(Workbench wb, ErrorViewModel error)
+        public SmMainViewModel(Workbench wb, MainViewModel mvm)
         {
             Workbench = wb;
-            ErrorVm = error;
+            MainViewModel = mvm;
+            ErrorVm = new ErrorViewModel();
             SmSettingVm = new SmSettingViewModel(this);
-            AnalysisVm = new SmAnalysisViewModel(this);
+            GenerateCodeVm = new SmGenerateCodeViewModel(this);
         }
 
         public override void UpdateModel()
@@ -42,7 +44,7 @@ namespace StrucEngLib.Sm
             {
                 ErrorVm,
                 SmSettingVm,
-                AnalysisVm
+                GenerateCodeVm
             }.ForEach(vm => vm.UpdateModel());
         }
 
@@ -52,7 +54,7 @@ namespace StrucEngLib.Sm
             {
                 ErrorVm,
                 SmSettingVm,
-                AnalysisVm
+                GenerateCodeVm
             }.ForEach(vm => vm.UpdateViewModel());
         }
 
@@ -68,11 +70,6 @@ namespace StrucEngLib.Sm
             }
 
             return Workbench;
-        }
-
-        public MainViewModel MainViewModel
-        {
-            get => StrucEngLibPlugin.Instance.MainViewModel;
         }
     }
 }

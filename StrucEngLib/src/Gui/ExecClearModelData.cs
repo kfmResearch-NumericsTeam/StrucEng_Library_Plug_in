@@ -9,7 +9,6 @@ namespace StrucEngLib
     /// <summary>Clears all user data</summary>
     public class ExecClearModelData : CommandBase
     {
-        private readonly MainViewModel _vm;
         private readonly ClearState _clearState;
 
         public enum ClearState
@@ -18,9 +17,8 @@ namespace StrucEngLib
             SANDWICH
         }
 
-        public ExecClearModelData(MainViewModel vm, ClearState clearState = ClearState.ALL)
+        public ExecClearModelData(ClearState clearState = ClearState.ALL)
         {
-            _vm = vm;
             _clearState = clearState;
         }
 

@@ -4,6 +4,7 @@ using StrucEngLib.Analysis;
 using StrucEngLib.Layer;
 using StrucEngLib.Load;
 using StrucEngLib.Model;
+using StrucEngLib.Sm;
 using StrucEngLib.Step;
 
 namespace StrucEngLib
@@ -13,30 +14,35 @@ namespace StrucEngLib
     /// </summary>
     public class LinFeMainViewModel : ViewModelBase
     {
+        public MainViewModel MainViewModel { get; }
         public ListLayerViewModel ListLayerVm { get; }
         public LayerDetailsViewModel DetailLayerVm { get; }
         public ListLoadViewModel ListLoadVm { get; }
         public ListStepViewModel ListStepVm { get; }
         public ErrorViewModel ErrorVm { get; }
         public AnalysisViewModel AnalysisVm { get; }
+        public LinFeGenerateCodeViewModel GenerateCodeVm { get; }
         public Workbench Workbench { get; }
 
-        public LinFeMainViewModel(Workbench wb, ErrorViewModel evm)
+        public LinFeMainViewModel(Workbench wb, MainViewModel mvm)
         {
-            ErrorVm = evm;
             Workbench = wb;
+            MainViewModel = mvm;
+            ErrorVm = new ErrorViewModel();
             ListLayerVm = new ListLayerViewModel(this);
             DetailLayerVm = new LayerDetailsViewModel(this);
             ListLoadVm = new ListLoadViewModel(this);
             ListStepVm = new ListStepViewModel(this);
             AnalysisVm = new AnalysisViewModel(this);
+            GenerateCodeVm = new LinFeGenerateCodeViewModel(this);
         }
 
         public override void UpdateModel()
         {
             new List<ViewModelBase>()
             {
-                ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, AnalysisVm
+                // XXX: LinFe does not have UpdateViewModel implemented (legacy), we update in each view model when needed
+                ErrorVm, ListLayerVm, DetailLayerVm, ListLoadVm, ListStepVm, AnalysisVm, GenerateCodeVm
             }.ForEach(vm => vm.UpdateModel());
         }
 
@@ -52,11 +58,6 @@ namespace StrucEngLib
             }
 
             return Workbench;
-        }
-
-        public MainViewModel MainViewModel
-        {
-            get => StrucEngLibPlugin.Instance.MainViewModel;
         }
     }
 }

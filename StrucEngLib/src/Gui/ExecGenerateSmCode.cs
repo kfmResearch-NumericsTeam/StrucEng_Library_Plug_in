@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+using StrucEngLib.Sm;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -14,16 +15,16 @@ namespace StrucEngLib
     /// <summary>Generate Code for Sandwich Model</summary>
     public class ExecGenerateSmCode : CommandBase
     {
-        private readonly MainViewModel _vm;
+        private readonly SmMainViewModel _mainVm;
         private readonly Workbench _model;
 
         public bool Success { get; private set; } = false;
 
         public string GeneratedCode { get; private set; }
 
-        public ExecGenerateSmCode(MainViewModel vm, Workbench model)
+        public ExecGenerateSmCode(SmMainViewModel mainVm, Workbench model)
         {
-            _vm = vm;
+            _mainVm = mainVm;
             _model = model;
         }
 
@@ -61,7 +62,7 @@ namespace StrucEngLib
 
                 if (hasMessages)
                 {
-                    _vm.ErrorVm.ShowMessages(errorCtxx.ToArray());
+                    _mainVm.ErrorVm.ShowMessages(errorCtxx.ToArray());
                 }
 
                 if (stop)
@@ -71,7 +72,7 @@ namespace StrucEngLib
             }
             catch (Exception e)
             {
-                _vm.ErrorVm.ShowException("Error during model validation", e);
+                _mainVm.ErrorVm.ShowException("Error during model validation", e);
                 return;
             }
 
@@ -83,7 +84,7 @@ namespace StrucEngLib
             }
             catch (Exception e)
             {
-                _vm.ErrorVm.ShowException("Error during code generation of Sandwich Model", e);
+                _mainVm.ErrorVm.ShowException("Error during code generation of Sandwich Model", e);
                 return;
             }
 
