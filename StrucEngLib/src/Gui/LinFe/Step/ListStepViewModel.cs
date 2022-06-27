@@ -75,7 +75,7 @@ namespace StrucEngLib.Step
             {
                 foreach (var step in _mainVm.Workbench?.Steps)
                 {
-                    var sVm = new StepEntryViewModel(step)
+                    var sVm = new StepEntryViewModel(_mainVm, step)
                     {
                         Order = step.Order
                     };
@@ -149,7 +149,7 @@ namespace StrucEngLib.Step
                     step.Entries.Add(e);
                 }
 
-                var vm = new StepEntryViewModel(step)
+                var vm = new StepEntryViewModel(this._mainVm, step)
                 {
                     Order = stepOrder
                 };

@@ -109,7 +109,7 @@ namespace StrucEngLib.LocalCoordinate
                                             new Button()
                                             {
                                                 Size = new Size(110, -1),
-                                                Text = "Show Code...",
+                                                Text = "Inspect Code...",
                                                 Command = _vm.ExecShowCodeElementNumbers
                                             })
                                     )

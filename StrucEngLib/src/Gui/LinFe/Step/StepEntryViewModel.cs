@@ -86,8 +86,9 @@ namespace StrucEngLib.Step
             }
         }
 
-        public StepEntryViewModel(Model.Step model)
+        public StepEntryViewModel(LinFeMainViewModel mvm, Model.Step model)
         {
+            mvm.ListLoadVm.LoadSettingsChanged += (sender, args) => { ModelUpdated(); };
             Model = model;
         }
 

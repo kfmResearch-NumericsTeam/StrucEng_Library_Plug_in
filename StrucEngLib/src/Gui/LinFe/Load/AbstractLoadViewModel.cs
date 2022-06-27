@@ -52,6 +52,11 @@ namespace StrucEngLib.Load
             DoStoreModelToVm();
         }
 
+        public void OnLoadSettingsChanged()
+        {
+            ListLoadVm.OnLoadSettingChanged();
+        }
+
         /// <summary>
         /// Overwrite this method to store vm data to model 
         /// </summary>
@@ -97,6 +102,7 @@ namespace StrucEngLib.Load
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
             {
+                OnLoadSettingsChanged();
                 Layers.Clear();
 
                 foreach (var l in dialog.SelectedLayers)

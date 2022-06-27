@@ -29,6 +29,7 @@ namespace StrucEngLib.Load
             {
                 if (args.Key == Keys.Backspace || args.Key == Keys.Delete)
                 {
+                    _vm.OnLoadSettingsChanged();
                     _vm.Layers.Clear();
                 }
             };
