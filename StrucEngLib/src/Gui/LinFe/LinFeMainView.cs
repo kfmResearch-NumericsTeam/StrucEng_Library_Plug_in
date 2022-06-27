@@ -8,6 +8,7 @@ using StrucEngLib.Analysis;
 using StrucEngLib.Layer;
 using StrucEngLib.Load;
 using StrucEngLib.LocalCoordinate;
+using StrucEngLib.Sm;
 using StrucEngLib.Step;
 
 namespace StrucEngLib
@@ -42,7 +43,7 @@ namespace StrucEngLib
             layout.AddRow(new ListStepView(vm.ListStepVm));
             layout.AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
             layout.AddRow(new AnalysisView(vm.AnalysisVm));
-            layout.AddRow(new GenerateCodeView( vm));
+            layout.AddRow(new LinFeGenerateCodeView(vm.GenerateCodeVm));
             Content = layout;
         }
 

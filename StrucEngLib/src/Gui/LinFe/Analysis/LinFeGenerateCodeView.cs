@@ -1,23 +1,37 @@
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.Sm
 {
-    /// <summary></summary>
-    public class GenerateCodeView : GroupBox
+    /// <summary>
+    /// View for Analysis control in sandwich model
+    /// </summary>
+    public class LinFeGenerateCodeView : GroupBox
     {
-        private readonly MainViewModel _vm;
+        private readonly LinFeGenerateCodeViewModel _vm;
         private Button _btnInspectPython;
         private Button _btnExecPython;
         private LinkButton _btnClearData;
 
+        public LinFeGenerateCodeView(LinFeGenerateCodeViewModel vm)
+        {
+            _vm = vm;
+            BuidGui();
+            BindGui();
+        }
+
         private void BuidGui()
         {
-            Text = "Generate Code";
+            Text = "Generate Code for LinFE Model";
             Padding = new Padding(5);
 
-            var settings = new DynamicLayout();
-            UiUtils.AddLabelTextRow(settings, _vm, "Filename", "filename", "Rahmen"); // TODO
+            var settings = new DynamicLayout()
+            {
+                Padding = new Padding(5, 0),
+                Spacing = new Size(10, 0),
+            };
+            UiUtils.AddLabelTextRow(settings, _vm, "Name", nameof(LinFeGenerateCodeViewModel.FileName),
+                "C:\\Temp\\Rahmen");
 
             Content = new DynamicLayout()
             {
@@ -55,16 +69,9 @@ namespace StrucEngLib
 
         private void BindGui()
         {
-            _btnExecPython.Command = _vm.LinFeMainVm.ListLayerVm.CommandOnExecuteCode;
-            _btnInspectPython.Command = _vm.LinFeMainVm.ListLayerVm.CommandOnInspectCode;
-            _btnClearData.Command = _vm.LinFeMainVm.ListLayerVm.CommandClearModel;
-        }
-
-        public GenerateCodeView(MainViewModel vm)
-        {
-            _vm = vm;
-            BuidGui();
-            BindGui();
+            _btnExecPython.Command = _vm.CommandExecuteModel;
+            _btnInspectPython.Command = _vm.CommandInspectModel;
+            _btnClearData.Command = _vm.CommandResetData;
         }
     }
 }

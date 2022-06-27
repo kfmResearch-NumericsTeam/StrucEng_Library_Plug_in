@@ -14,6 +14,9 @@ namespace StrucEngLib.Model
         public List<Load> Loads { get; } = new List<Load>();
         public List<Step> Steps { get; } = new List<Step>();
 
+        /// <summary> The path to the generated file </summary>
+        public string FileName { get; set; }
+
         public SandwichModel SandwichModel { get; set; }
 
         public List<Element> Elements()

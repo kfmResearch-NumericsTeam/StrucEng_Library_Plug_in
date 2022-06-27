@@ -20,12 +20,9 @@ namespace StrucEngLib.Layer
         private static readonly int LAYER_TYPE_SET = 1;
 
         // Commands
-        public RelayCommand CommandOnInspectCode { get; }
-        public RelayCommand CommandOnExecuteCode { get; }
         public RelayCommand CommandOnMouseSelect { get; }
         public RelayCommand CommandOnAddLayer { get; }
         public RelayCommand CommandOnDeleteLayer { get; }
-        public ICommand CommandClearModel { get; }
 
         // MVVC
         private Model.Layer _selectedLayer;
@@ -48,41 +45,16 @@ namespace StrucEngLib.Layer
         {
             _mainVm = mainVm;
             Layers = new ObservableCollection<Model.Layer>();
-            CommandOnInspectCode = new RelayCommand(OnInspectCode);
-            CommandOnExecuteCode = new RelayCommand(OnExecCode);
             CommandOnMouseSelect = new RelayCommand(OnMouseSelect);
             CommandOnAddLayer = new RelayCommand(OnAddLayer);
             CommandOnDeleteLayer = new RelayCommand(OnDeleteLayer, CanExecuteOnDeleteLayer);
-            CommandClearModel = new ExecClearModelData(mainVm.MainViewModel);
 
             var updateSelectLayerViewVisible = new Func<bool>(() => SelectLayerViewVisible = Layers.Count != 0);
             updateSelectLayerViewVisible();
             Layers.CollectionChanged += (sender, args) => { updateSelectLayerViewVisible(); };
             UpdateViewModel();
         }
-
-        private void OnInspectCode()
-        {
-            var model = _mainVm.BuildModel();
-            var gen = new ExecGenerateLinFeCode(_mainVm, model);
-            gen.Execute(null);
-            if (gen.Success)
-            {
-                new ExecShowCode(_mainVm.MainViewModel, gen.GeneratedCode).Execute(null);
-            }
-        }
-
-        private void OnExecCode()
-        {
-            var model = _mainVm.BuildModel();
-            var gen = new ExecGenerateLinFeCode(_mainVm, model);
-            gen.Execute(null);
-            if (gen.Success)
-            {
-                new ExecExecuteCode(_mainVm.MainViewModel, gen.GeneratedCode).Execute(null);
-            }
-        }
-
+        
         private bool CanExecuteOnDeleteLayer() => SelectedLayer != null;
 
         private void OnDeleteLayer()

@@ -41,7 +41,7 @@ namespace StrucEngLib.Sm
                     UiUtils.GenerateTitle("Step 2: Define Model Settings"),
                     new SmSettingView(_vm.SmSettingVm),
                     UiUtils.GenerateTitle("Step 3: Run Analysis"),
-                    new SmAnalysisView(_vm.AnalysisVm),
+                    new SmGenerateCodeView(_vm.GenerateCodeVm),
                     new Label()
                 }
             };
