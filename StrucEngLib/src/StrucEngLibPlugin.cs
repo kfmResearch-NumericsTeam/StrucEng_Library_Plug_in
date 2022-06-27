@@ -1,9 +1,5 @@
 ﻿using Rhino;
-using System;
-using System.Security.Permissions;
-using Eto.Forms;
 using Rhino.FileIO;
-using Rhino.PlugIns;
 using StrucEngLib.Model;
 
 namespace StrucEngLib

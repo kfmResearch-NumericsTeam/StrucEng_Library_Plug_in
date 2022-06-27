@@ -25,7 +25,7 @@ namespace StrucEngLib.Layer
         private readonly LinFeMainViewModel _vm;
         private readonly ListLayerViewModel _vmListLayer;
         private readonly LayerDetailsViewModel _vmDetailView;
-        
+
         public ListLayerView(LinFeMainViewModel vm)
         {
             _vm = vm;
@@ -43,7 +43,14 @@ namespace StrucEngLib.Layer
             _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
 
+            _gbPropertiesForLayer.BindDataContext(
+                c => c.Text,
+                Binding.Property((ListLayerViewModel m) => m.SelectedLayer)
+                    .CatchException(exception => true)
+                    .Convert(l => l != null ? "Properties for " + l.GetName() : ""));
+
             _tbLayerToAdd.Bind<string>(nameof(_tbLayerToAdd.Text), _vmListLayer, nameof(_vmListLayer.LayerToAdd));
+
             _dropdownLayers.ItemTextBinding = Binding.Property((Model.Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
             _dropdownLayers.Bind<Model.Layer>(nameof(_dropdownLayers.SelectedValue), _vmListLayer,
@@ -56,6 +63,8 @@ namespace StrucEngLib.Layer
                 nameof(_vmDetailView.LayerDetailViewVisible));
             _gbPropertiesForLayer.Bind<Control>(nameof(_gbPropertiesForLayer.Content), _vmDetailView,
                 nameof(_vmDetailView.LayerDetailView));
+
+            DataContext = _vmListLayer;
         }
 
         protected void BuildGui()

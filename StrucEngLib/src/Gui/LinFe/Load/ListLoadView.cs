@@ -1,10 +1,11 @@
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
+
 namespace StrucEngLib.Load
 {
     using Load = StrucEngLib.Model.Load;
-    
+
     /// <summary>
     /// Main view model to add/ remove loads
     /// </summary>
@@ -30,6 +31,13 @@ namespace StrucEngLib.Load
         {
             _btAddLoad.Command = _vm.CommandAddLoad;
             _btDeleteLoad.Command = _vm.CommandDeleteLoad;
+
+            _gbPropsForLoad.BindDataContext(
+                c => c.Text,
+                Binding.Property((ListLoadViewModel m) => m.SelectedLoad)
+                    .CatchException(exception => true)
+                    .Convert(l => l != null ? "Properties for Load " + l.LoadType.GetName() : ""));
+
 
             _dbAddLoad.BindDataContext(c => c.DataStore, (ListLoadViewModel m) => m.LoadNames);
             _dbAddLoad.SelectedKeyBinding.BindDataContext(

@@ -14,6 +14,7 @@ namespace StrucEngLib.Sm
         private DynamicLayout _propLayout;
         private SmAdditionalPropertyView _propLayoutHasData;
         private DynamicLayout _propLayoutNoData;
+        private GroupBox _gbProperties;
 
         public SmAdditionalPropertiesView(SmSettingViewModel vm)
         {
@@ -55,7 +56,7 @@ namespace StrucEngLib.Sm
                     }
                 }
             });
-            AddRow(new GroupBox
+            AddRow(_gbProperties = new GroupBox
             {
                 Text = "Properties for Layer",
                 Padding = new Padding(5),
@@ -79,6 +80,14 @@ namespace StrucEngLib.Sm
         private void BindGui()
         {
             DataContext = _vm;
+            
+            _gbProperties.BindDataContext(
+                c => c.Text,
+                Binding.Property((SmSettingViewModel m) => m.SelectedProperty)
+                    .CatchException(exception => true)
+                    .Convert(l => l != null ? "Properties for Layer " + l.Model.Layer.GetName() : ""));
+
+
             _dropdownLayers.DataContext = _vm;
             _dropdownLayers.BindDataContext(c => c.DataStore, (SmSettingViewModel vm) => vm.Properties);
             _dropdownLayers.ItemTextBinding =

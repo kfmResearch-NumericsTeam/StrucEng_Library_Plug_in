@@ -13,6 +13,7 @@ namespace StrucEngLib.Layer
     public class LayerDetailsViewModel : ViewModelBase
     {
         private readonly LinFeMainViewModel _mainVm;
+        
         private bool _layerDetailViewVisible;
 
         public bool LayerDetailViewVisible
