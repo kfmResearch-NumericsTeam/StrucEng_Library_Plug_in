@@ -19,11 +19,18 @@ The build setup is specified and reproducible with a linux based Vagrant image.
 Please consider [./tools/vagrant](./tools/vagrant) for detailed build instructions. 
 ```
 $ vagrant up
-$ ./tools/distrib/distrib_vagrant.sh help
-$ ./tools/distrib/distrib_vagrant.sh build
-$ ./tools/distrib/distrib_vagrant.sh test
-$ ./tools/distrib/distrib_vagrant.sh package
-$ ./tools/distrib/distrib_vagrant.sh deploy
+$ ./distrib_vagrant.sh help
+distrib.sh: ./distrib.sh {update_version|version|build|package|deploy_test|deploy|distrib|distrib_test}
+commands: 
+  update_version <version>.....: updates version
+  version......................: list version
+  build........................: build dotnet solution
+  test.........................: build dotnet solution, run tests
+  package......................: builds solution, creates yak package format
+  deploy_test..................: deploys the yak package found to test store
+  deploy.......................: deploys the yak package found store
+  distrib......................: builds, packages, deploys package to store
+  distrib_test.................: builds, packages, deploys package to test store
 ```
 ### Files
 ```
