@@ -1,6 +1,7 @@
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
+using StrucEngLib.Views;
 
 namespace StrucEngLib.Sm
 {
@@ -20,24 +21,71 @@ namespace StrucEngLib.Sm
             Padding = new Padding(5);
             Spacing = new Size(5, 5);
 
-            UiUtils.AddLabelTextRow(this, "d_strich_bot",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
-            UiUtils.AddLabelTextRow(this, "d_strich_top",
+            UiUtils.AddLabelTextRow(this,
+                new SubscriptLabel()
+                {
+                    Text = "d_strich",
+                    TextSubscript = "top"
+                },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichTop), "40");
-            UiUtils.AddLabelTextRow(this, "fc_k",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK), "20");
-            UiUtils.AddLabelTextRow(this, "fc_theta_grad_kern",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern), "45");
-            UiUtils.AddLabelTextRow(this, "fs_d",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
-            UiUtils.AddLabelTextRow(this, "alpha_bot",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
-            UiUtils.AddLabelTextRow(this, "beta_bot",
-                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
-            UiUtils.AddLabelTextRow(this, "alpha_top",
+            UiUtils.AddLabelTextRow(
+                this,
+                new SubscriptLabel()
+                {
+                    Text = "d_strich",
+                    TextSubscript = "bot"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
+            UiUtils.AddLabelTextRow(this, 
+                new SubscriptLabel()
+                {
+                    Text = "alpha",
+                    TextSubscript = "top"
+                },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaTop), "0");
-            UiUtils.AddLabelTextRow(this, "beta_top",
+            UiUtils.AddLabelTextRow(this,
+                new SubscriptLabel()
+                {
+                    Text = "alpha",
+                    TextSubscript = "bot"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
+            
+            UiUtils.AddLabelTextRow(this, 
+                new SubscriptLabel()
+                {
+                    Text = "beta",
+                    TextSubscript = "top"
+                },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
+            UiUtils.AddLabelTextRow(this, 
+                new SubscriptLabel()
+                {
+                    Text = "beta",
+                    TextSubscript = "bot"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
+            UiUtils.AddLabelTextRow(this,
+                new SubscriptLabel()
+                {
+                    Text = "fc",
+                    TextSubscript = "k"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK), "20");
+            UiUtils.AddLabelTextRow(this,
+                new SubscriptLabel()
+                {
+                    Text = "fc",
+                    TextSubscript = "theta_grad_kern"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern), "45");
+            UiUtils.AddLabelTextRow(this,
+                new SubscriptLabel()
+                {
+                    Text = "fc",
+                    TextSubscript = "d"
+                },
+                Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
 
             AddRow(null);
             AddRow(TableLayout.AutoSized((_btShowImage = new Button

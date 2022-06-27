@@ -1,5 +1,6 @@
 using Eto.Drawing;
 using Eto.Forms;
+using StrucEngLib.Views;
 
 namespace StrucEngLib.Sm
 {
@@ -43,9 +44,9 @@ namespace StrucEngLib.Sm
                 {Text = "No steps added to LinFe Model.\n", Visible = false}));
 
             layout.AddRow(TableLayout.HorizontalScaled(new Label {Text = "Step"}, (_dbSteps = new DropDown())));
-            
+
             // layout.Add(new Label());
-            
+
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Mindestbewehrung", nameof(_vm.Mindestbewehrung), true);
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Druckzoneniteration", nameof(_vm.Druckzoneniteration),
                 true);
@@ -59,26 +60,26 @@ namespace StrucEngLib.Sm
                 Spacing = new Size(0, 10)
             };
 
-            Checkbox(boolLayout, _vm, "as_xi_bot", nameof(_vm.AsXiBot));
-            Checkbox(boolLayout, _vm, "as_xi_top", nameof(_vm.AsXiTop));
-            Checkbox(boolLayout, _vm, "as_eta_bot", nameof(_vm.AsEtaBot));
-            Checkbox(boolLayout, _vm, "as_eta_top", nameof(_vm.AsEtaTop));
-            Checkbox(boolLayout, _vm, "as_z", nameof(_vm.AsZ));
-            Checkbox(boolLayout, _vm, "CC_bot", nameof(_vm.CCBot));
-            Checkbox(boolLayout, _vm, "CC_top", nameof(_vm.CCTop));
-            Checkbox(boolLayout, _vm, "k_bot", nameof(_vm.KBot));
-            Checkbox(boolLayout, _vm, "k_top", nameof(_vm.KTop));
-            Checkbox(boolLayout, _vm, "t_bot", nameof(_vm.TBot));
-            Checkbox(boolLayout, _vm, "t_top", nameof(_vm.TTop));
-            Checkbox(boolLayout, _vm, "psi_bot", nameof(_vm.PsiBot));
-            Checkbox(boolLayout, _vm, "psi_top", nameof(_vm.PsiTop));
-            Checkbox(boolLayout, _vm, "Fall_bot", nameof(_vm.FallBot));
-            Checkbox(boolLayout, _vm, "Fall_top", nameof(_vm.FallTop));
-            Checkbox(boolLayout, _vm, "m_cc_bot", nameof(_vm.MCcBot));
-            Checkbox(boolLayout, _vm, "m_cc_top", nameof(_vm.MCcTop));
-            Checkbox(boolLayout, _vm, "m_shear_c", nameof(_vm.MShearC));
-            Checkbox(boolLayout, _vm, "m_c_total", nameof(_vm.MCTotal));
-            
+            Checkbox(boolLayout, _vm, "as", "xi_top", nameof(_vm.AsXiTop));
+            Checkbox(boolLayout, _vm, "as", "xi_bot", nameof(_vm.AsXiBot));
+            Checkbox(boolLayout, _vm, "as","eta_top", nameof(_vm.AsEtaTop));
+            Checkbox(boolLayout, _vm, "as","eta_bot", nameof(_vm.AsEtaBot));
+            Checkbox(boolLayout, _vm, "as","z", nameof(_vm.AsZ));
+            Checkbox(boolLayout, _vm, "CC", "top", nameof(_vm.CCTop));
+            Checkbox(boolLayout, _vm, "CC", "bot", nameof(_vm.CCBot));
+            Checkbox(boolLayout, _vm, "k", "top", nameof(_vm.KTop));
+            Checkbox(boolLayout, _vm, "k", "bot", nameof(_vm.KBot));
+            Checkbox(boolLayout, _vm, "t", "top", nameof(_vm.TTop));
+            Checkbox(boolLayout, _vm, "t", "bot", nameof(_vm.TBot));
+            Checkbox(boolLayout, _vm, "psi", "top", nameof(_vm.PsiTop));
+            Checkbox(boolLayout, _vm, "psi", "bot", nameof(_vm.PsiBot));
+            Checkbox(boolLayout, _vm, "Fall", "top", nameof(_vm.FallTop));
+            Checkbox(boolLayout, _vm, "Fall", "bot", nameof(_vm.FallBot));
+            Checkbox(boolLayout, _vm, "m", "cc_top", nameof(_vm.MCcTop));
+            Checkbox(boolLayout, _vm, "m", "cc_bot", nameof(_vm.MCcBot));
+            Checkbox(boolLayout, _vm, "m", "shear_c", nameof(_vm.MShearC));
+            Checkbox(boolLayout, _vm, "m", "c_total", nameof(_vm.MCTotal));
+
             layout.Add(new Label());
             layout.Add(boolLayout);
         }
@@ -87,10 +88,16 @@ namespace StrucEngLib.Sm
             TableLayout layout,
             object vm,
             string label,
+            string subLabel,
             string propName)
         {
             var cb = new CheckBox();
-            var l = new Label {Text = label};
+
+            var l = new SubscriptLabel()
+            {
+                Text = label,
+                TextSubscript = subLabel
+            };
             l.MouseDown += (sender, args) => { cb.Checked = !cb.Checked; };
             cb.Bind<bool>(nameof(cb.Checked), vm, propName, DualBindingMode.TwoWay);
 

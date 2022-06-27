@@ -43,6 +43,17 @@ namespace StrucEngLib
 
         public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
+            Control  label,
+            IndirectBinding<string> binding,
+            string defaultValue = ""
+        )
+        {
+            var tb = TextInputWithDataContextBinding(binding, defaultValue);
+            dynamicLayout.Add(TableLayout.HorizontalScaled(label, tb));
+        }
+        
+        public static void AddLabelTextRow(
+            DynamicLayout dynamicLayout,
             string label,
             IndirectBinding<string> binding,
             string defaultValue = ""

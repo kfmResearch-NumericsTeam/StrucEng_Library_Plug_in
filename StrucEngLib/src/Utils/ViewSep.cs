@@ -11,29 +11,28 @@ namespace StrucEngLib.Views
     /// </summary>
     public class ViewSeparator : Panel
     {
-        public Label Label => m_label;
+        public Label Label => _label;
 
-        private readonly Label m_label;
-        readonly Divider m_divider;
+        private readonly Label _label;
+        readonly Divider _divider;
 
         public string Text
         {
-            get { return m_label.Text; }
-            set { m_label.Text = value; }
+            get { return _label.Text; }
+            set { _label.Text = value; }
         }
 
         public Color Color
         {
-            get { return m_divider.Color; }
-            set { m_divider.Color = value; }
+            get { return _divider.Color; }
+            set { _divider.Color = value; }
         }
-        
-        
+
 
         public ViewSeparator()
         {
-            m_label = new Label();
-            m_divider = new Divider {Color = Colors.DarkGray};
+            _label = new Label();
+            _divider = new Divider {Color = Colors.DarkGray};
 
             Content = new StackLayout
             {
@@ -42,8 +41,8 @@ namespace StrucEngLib.Views
                 Spacing = 2,
                 Items =
                 {
-                    m_label,
-                    new StackLayoutItem(m_divider, true)
+                    _label,
+                    new StackLayoutItem(_divider, true)
                 }
             };
         }
@@ -51,19 +50,19 @@ namespace StrucEngLib.Views
 
     internal class Divider : Eto.Forms.Drawable
     {
-        private Eto.Drawing.Color m_color;
+        private Eto.Drawing.Color _color;
 
         public Eto.Drawing.Color Color
         {
-            get { return m_color; }
+            get { return _color; }
             set
             {
-                if (m_color == value)
+                if (_color == value)
                 {
                     return;
                 }
 
-                m_color = value;
+                _color = value;
                 Invalidate();
             }
         }
@@ -74,7 +73,7 @@ namespace StrucEngLib.Views
 
         public Divider()
         {
-            m_color = Colors.DarkGray;
+            _color = Colors.DarkGray;
             Size = new Size(3, 3);
         }
 
