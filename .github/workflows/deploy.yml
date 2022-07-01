@@ -1,5 +1,4 @@
-
-
+# Needs YAK_TOKEN (this is already set in this workflow)
 name: deploy
 on:
   workflow_dispatch:
@@ -19,6 +18,11 @@ jobs:
         run: |
           chmod +x "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
           "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
-      - name: Deploy
+      
+      - name: Update version
+      - if: ${{github.event.inputs.update-version=='true' }}
         run: |
-          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" distrib no
+          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" update_version ${{github.event.inputs.version}}
+          
+  
+
