@@ -195,14 +195,13 @@ distrib() {
     create_package_dir "$v"
     package
 
-    echo $interactive
     if [[ "$interactive" == "yes" ]]
     then
         read -p "Press enter to deploy"
     fi
 
-    # source_environment
-    # deploy
+    source_environment
+    deploy
 }
 
 unit_test() {
