@@ -111,6 +111,7 @@ namespace StrucEngLib
         {
             var cb = new CheckBox();
             var l = new Label {Text = label};
+            
             l.MouseDown += (sender, args) => { cb.Checked = !cb.Checked; };
             cb.Bind<bool>(nameof(cb.Checked), vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(l, cb));

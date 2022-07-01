@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Rhino;
 using StrucEngLib.Model;
+using StrucEngLib.Model.Sm;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -18,7 +19,7 @@ namespace StrucEngLib
         public string GenerateLinFeCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            EmitHeaders(state, "Generate LinFe Code", 
+            EmitHeaders(state, "Generate LinFe Code",
                 targetPath: state.Workbench.FileName);
             EmitElements(state);
             EmitSets(state);
@@ -53,7 +54,8 @@ namespace StrucEngLib
             EmitSteps(state);
             EmitSummary(state);
             EmitRun(state);
-            EmitSmm(state);
+            state.Workbench.SandwichModel?.AnalysisSettings?
+                .ForEach(s => EmitSmm(state, s));
             return state.Buffer.ToString();
         }
 
@@ -467,11 +469,16 @@ mdl = Structure(name=name, path=path)
             }
         }
 
-        private void EmitSmm(EmitState s)
+        private void EmitSmm(EmitState s, SmAnalysisSetting settings)
         {
-            var sm = s.Workbench.SandwichModel;
-            var stepName = s.CreateStepName(sm.StepName);
-            s.CommentLine("SM");
+            if (!settings.Include)
+            {
+                return;
+            }
+
+            var sm = settings;
+            var stepName = s.CreateStepName(sm.Step.Order);
+            s.CommentLine($"SM for {stepName}");
             var data = new StringBuilder();
             data.Append("SMM.Hauptfunktion(structure = mdl, data = data, ");
             data.Append($"step = '{stepName}', ");
