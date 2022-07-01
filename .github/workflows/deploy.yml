@@ -9,6 +9,10 @@ on:
       version:
         description: "Version (x.x.x-suffix)"
         required: false
+      deploy-test:
+        type: boolean
+        required: false
+        description: Deploys artifacts into Rhino Test store (https://test.yak.rhino3d.com)
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -19,10 +23,21 @@ jobs:
           chmod +x "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
           "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
       
-      - name: Update version
+      - name: Update Version
         if: ${{github.event.inputs.update-version=='true' }}
         run: |
           "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" update_version ${{github.event.inputs.version}}
-          
+       
+      - name: Deploy to Test Store (https://test.yak.rhino3d.com)
+        if: ${{github.event.inputs.deploy-test=='true' }}
+        run: |
+          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" distrib_test no
   
-
+      - name: Deploy to Store
+        if: ${{github.event.inputs.deploy-test=='false' }}
+        run: |
+          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" distrib no
+      
+      - name: Tag version    
+        run: |
+          echo test
