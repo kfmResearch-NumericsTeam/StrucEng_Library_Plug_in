@@ -43,15 +43,16 @@ namespace StrucEngLib
 
         public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
-            Control  label,
+            Control label,
             IndirectBinding<string> binding,
             string defaultValue = ""
         )
         {
             var tb = TextInputWithDataContextBinding(binding, defaultValue);
+            FocusOnClick(label, tb);
             dynamicLayout.Add(TableLayout.HorizontalScaled(label, tb));
         }
-        
+
         public static void AddLabelTextRow(
             DynamicLayout dynamicLayout,
             string label,
@@ -59,8 +60,10 @@ namespace StrucEngLib
             string defaultValue = ""
         )
         {
+            Label l;
             var tb = TextInputWithDataContextBinding(binding, defaultValue);
-            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+            FocusOnClick(l = new Label {Text = label}, tb);
+            dynamicLayout.Add(TableLayout.HorizontalScaled(l, tb));
         }
 
         public static void AddLabelCheckboxRow(
@@ -69,8 +72,10 @@ namespace StrucEngLib
             IndirectBinding<bool?> binding
         )
         {
+            Label l;
             var tb = CheckboxInputWithDataContextBinding(binding);
-            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+            dynamicLayout.Add(TableLayout.HorizontalScaled(l = new Label {Text = label}, tb));
+            FocusOnClick(l, tb);
         }
 
         public static void AddLabelTextRow(
@@ -80,10 +85,11 @@ namespace StrucEngLib
             string propName,
             string defaultVal = "")
         {
+            Label l;
             var tb = new ComboBoxWithMemory(propName);
-
             tb.Bind<string>(nameof(tb.Text), vm, propName, DualBindingMode.TwoWay);
-            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+            dynamicLayout.Add(TableLayout.HorizontalScaled(l = new Label {Text = label}, tb));
+            FocusOnClick(l, tb);
 
             Type myType = vm.GetType();
             var propertyInfo = myType.GetProperty(propName);
@@ -129,12 +135,14 @@ namespace StrucEngLib
             IEnumerable<string> items,
             int defaultSelectionIndex = 0)
         {
+            Label l;
             var tb = new DropDown();
             tb.DataStore = items;
 
             tb.Bind<string>(nameof(tb.SelectedValue), vm, propName, DualBindingMode.TwoWay);
             tb.SelectedIndex = defaultSelectionIndex;
-            dynamicLayout.Add(TableLayout.HorizontalScaled(new Label {Text = label}, tb));
+            dynamicLayout.Add(TableLayout.HorizontalScaled(l = new Label {Text = label}, tb));
+            FocusOnClick(l, tb);
         }
 
         public static Control GenerateTitle(string text)
@@ -148,6 +156,11 @@ namespace StrucEngLib
                     Font = new Font(FontFamilies.Sans, s, FontStyle.None)
                 }
             };
+        }
+
+        protected static void FocusOnClick(Control toClick, Control toFocus)
+        {
+            toClick.MouseDown += (sender, args) => { toFocus.Focus(); };
         }
     }
 }
