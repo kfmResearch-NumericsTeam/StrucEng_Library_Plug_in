@@ -169,7 +169,7 @@ distrib_test() {
     echo "distrib_test..."
 
     local v=$(version)
-    local interactive=${2:-yes}
+    local interactive=${1:-yes}
     echo "using version: $v"
     
     build
@@ -186,9 +186,8 @@ distrib_test() {
 
 distrib() {
     echo "distrib..."
-
     local v=$(version)
-    local interactive=${2:-yes}
+    local interactive=${1:-yes}
     echo "using version: $v"
     
     build
@@ -196,7 +195,8 @@ distrib() {
     create_package_dir "$v"
     package
 
-    if [ "$interactive" == "yes" ]
+    echo $interactive
+    if [[ "$interactive" == "yes" ]]
     then
         read -p "Press enter to deploy"
     fi
