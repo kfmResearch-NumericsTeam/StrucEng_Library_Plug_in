@@ -1,0 +1,2 @@
+queries:
+  - exclude: lgtm [cs/local-not-disposed]
