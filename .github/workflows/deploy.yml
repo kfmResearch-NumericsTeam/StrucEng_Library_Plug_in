@@ -4,9 +4,12 @@ name: deploy
 on:
   workflow_dispatch:
      inputs:
+      update-version:
+        type: boolean
+        description: Update version
       version:
         description: "Version (x.x.x-suffix)"
-        required: true
+        required: false
 jobs:
   build:
     runs-on: ubuntu-18.04
