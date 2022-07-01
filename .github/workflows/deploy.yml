@@ -15,4 +15,4 @@ jobs:
           "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
       - name: Deploy
         run: |
-          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh distrib_test"
+          "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" distrib_test
