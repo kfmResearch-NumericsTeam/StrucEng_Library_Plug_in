@@ -3,7 +3,7 @@ using Eto.Forms;
 
 namespace StrucEngLib.Sm
 {
-    /// <summary></summary>
+    /// <summary>Form to show an image</summary>
     public class ShowImageForm: Form
     {
 
