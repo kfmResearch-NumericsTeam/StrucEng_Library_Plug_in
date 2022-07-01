@@ -45,8 +45,6 @@ namespace StrucEngLib.Sm
 
             layout.AddRow(TableLayout.HorizontalScaled(new Label {Text = "Step"}, (_dbSteps = new DropDown())));
 
-            // layout.Add(new Label());
-
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Mindestbewehrung", nameof(_vm.Mindestbewehrung), true);
             UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Druckzoneniteration", nameof(_vm.Druckzoneniteration),
                 true);

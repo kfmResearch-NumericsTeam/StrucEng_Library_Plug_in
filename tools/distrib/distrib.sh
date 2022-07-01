@@ -39,6 +39,8 @@ source_environment() {
 
     if [[ -z "${YAK_TOKEN}" ]]; then
         echo "YAK_TOKEN not set, deployment will likely fail"
+    else
+        echo "YAK_TOKEN is set."
     fi
 }
 
@@ -199,8 +201,8 @@ distrib() {
         read -p "Press enter to deploy"
     fi
 
-    source_environment
-    deploy
+    # source_environment
+    # deploy
 }
 
 unit_test() {

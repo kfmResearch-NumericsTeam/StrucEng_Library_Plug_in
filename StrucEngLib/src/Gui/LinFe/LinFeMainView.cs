@@ -14,6 +14,7 @@ using StrucEngLib.Step;
 namespace StrucEngLib
 {
     /// <summary>
+    /// Main view for lin fe
     /// </summary>
     public class LinFeMainView : Scrollable
     {

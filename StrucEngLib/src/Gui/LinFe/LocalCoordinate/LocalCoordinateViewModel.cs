@@ -42,7 +42,7 @@ namespace StrucEngLib.LocalCoordinate
 
         private void OnShowCodeElementNumbers()
         {
-            string sourceCode = new ExecElementNumbers(_vm).BuildScript();
+            var sourceCode = new ExecElementNumbers(_vm).BuildScript();
             var dialog = new InspectPythonDialog(sourceCode);
             var dialogRc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
