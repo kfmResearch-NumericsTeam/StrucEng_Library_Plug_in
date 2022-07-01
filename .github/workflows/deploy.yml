@@ -20,7 +20,7 @@ jobs:
           "${GITHUB_WORKSPACE}/tools/vagrant/setup_ubuntu_18_04.sh"
       
       - name: Update version
-      - if: ${{github.event.inputs.update-version=='true' }}
+        if: ${{github.event.inputs.update-version=='true' }}
         run: |
           "${GITHUB_WORKSPACE}/tools/distrib/distrib.sh" update_version ${{github.event.inputs.version}}
           
