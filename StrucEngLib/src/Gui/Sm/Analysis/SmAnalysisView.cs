@@ -25,13 +25,14 @@ namespace StrucEngLib.Sm
 
         private void BindGui()
         {
+            DataContext = _vm;
             _grid.DataStore = _vm.AnalysisViewItems;
             _grid.DataContext = _vm;
 
             _grid.SelectedItemBinding.BindDataContext((SmAnalysisViewModel m) => m.SelectedItem);
             _detailView.Bind<SmAnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
-            _detailView.Bind<bool>(nameof(this.Enabled), _vm, nameof(_vm.SelectedItemVisible));
+            _detailView.BindDataContext(v => v.DataContext, (SmAnalysisViewModel m) => m.SelectedItem);
         }
 
         private void BuildGui()
@@ -92,7 +93,7 @@ namespace StrucEngLib.Sm
             {
                 Spacing = new Size(5, 10),
                 Padding = new Padding(5),
-                Visible = false
+                Visible = true
             });
         }
     }

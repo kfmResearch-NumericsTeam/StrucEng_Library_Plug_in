@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
@@ -16,14 +17,30 @@ namespace StrucEngLib.Sm
         public ObservableCollection<SmAnalysisItemViewModel> AnalysisViewItems { get; }
         private SmAnalysisItemViewModel _selectedItem;
         public bool SelectedItemVisible => SelectedItem != null && SelectedItem.Include;
-
+        
         public SmAnalysisItemViewModel SelectedItem
         {
             get => _selectedItem;
             set
             {
+                if (_selectedItem != null)
+                {
+                    _selectedItem.PropertyChanged -= SelectedItemIncludeChanged;
+                }
                 _selectedItem = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedItemVisible));
+                if (_selectedItem != null)
+                {
+                    _selectedItem.PropertyChanged += SelectedItemIncludeChanged;
+                }
+            }
+        }
+
+        private void SelectedItemIncludeChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedItem.Include))
+            {
                 OnPropertyChanged(nameof(SelectedItemVisible));
             }
         }

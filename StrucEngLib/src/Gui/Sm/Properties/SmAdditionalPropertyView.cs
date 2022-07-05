@@ -19,7 +19,7 @@ namespace StrucEngLib.Sm
         public SmAdditionalPropertyView()
         {
             Padding = new Padding(5);
-            Spacing = new Size(5, 5);
+            Spacing = new Size(5, 1);
 
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()

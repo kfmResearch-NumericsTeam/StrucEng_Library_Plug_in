@@ -19,43 +19,66 @@ namespace StrucEngLib.Sm
             Padding = new Padding(5);
             Spacing = new Size(5, 10);
 
-            // UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Mindestbewehrung", nameof(_vm.Mindestbewehrung), true);
-            // UiUtils.AddLabelDropdownRowBoolean(layout, _vm, "Druckzoneniteration", nameof(_vm.Druckzoneniteration),
-            //     true);
-            // TODO Remaining fields
-            
             Add(gbDetail = new GroupBox
             {
-                Padding = new Padding(5),
                 Visible = true,
-                Content = new TableLayout
+                Content = new DynamicLayout()
                 {
-                    Padding = new Padding(10, 10),
-                    Spacing = new Size(10, 10),
+                    Spacing = new Size(5, 1),
                     Rows =
                     {
-                        new TableRow(TextBox("Schubnachweis", "", model => model.Schubnachweis, "sia")),
-                        new TableRow(TextBox("Code", "", model => model.Code, "sia")),
-                        new TableRow(TextBox("axes_scale", "", model => model.AxesScale, "100")),
-                        new TableRow(CheckBox("as", "xi_top", model => model.AsXiTop)),
-                        new TableRow(CheckBox("as", "xi_bot", model => model.AsXiBot)),
-                        new TableRow(CheckBox("as", "eta_top", model => model.AsEtaTop)),
-                        new TableRow(CheckBox("as", "eta_bot", model => model.AsEtaBot)),
-                        new TableRow(CheckBox("as", "z", model => model.AsZ)),
-                        new TableRow(CheckBox("CC", "top", model => model.CCTop)),
-                        new TableRow(CheckBox("CC", "bot", model => model.CCBot)),
-                        new TableRow(CheckBox("k", "top", model => model.KTop)),
-                        new TableRow(CheckBox("k", "bot", model => model.KBot)),
-                        new TableRow(CheckBox("t", "top", model => model.TTop)),
-                        new TableRow(CheckBox("t", "bot", model => model.TBot)),
-                        new TableRow(CheckBox("psi", "top", model => model.PsiTop)),
-                        new TableRow(CheckBox("psi", "bot", model => model.PsiBot)),
-                        new TableRow(CheckBox("Fall", "top", model => model.FallTop)),
-                        new TableRow(CheckBox("Fall", "bot", model => model.FallBot)),
-                        new TableRow(CheckBox("m", "cc_top", model => model.MCcTop)),
-                        new TableRow(CheckBox("m", "cc_bot", model => model.MCcBot)),
-                        new TableRow(CheckBox("m", "shear_c", model => model.MShearC)),
-                        new TableRow(CheckBox("m", "c_total", model => model.MCTotal)),
+                        new TableLayout
+                        {
+                            Spacing = new Size(1, 2),
+                            Padding = new Padding(10, 10, 10, 0),
+                            Rows =
+                            {
+                                new TableRow(TextBox("Schubnachweis", "", model => model.Schubnachweis, "sia")),
+                                new TableRow(TextBox("Code", "", model => model.Code, "sia")),
+                                new TableRow(TextBox("axes_scale", "", model => model.AxesScale, "100")),
+                                new TableRow(TrueFalseDropDown("Mindestbewehrung", "", model => model.Mindestbewehrung)),
+                                new TableRow(TrueFalseDropDown("Druckzoneniteration", "", model => model.Druckzoneniteration))
+                            }
+                        },
+                        new TableLayout
+                        {
+                            Padding = new Padding(10, 5, 10, 10),
+                            Spacing = new Size(1, 5),
+                            Rows =
+                            {
+                                new TableRow(
+                                    CheckBox("as", "xi_top", model => model.AsXiTop),
+                                    CheckBox("as", "xi_bot", model => model.AsXiBot),
+                                    CheckBox("as", "eta_top", model => model.AsEtaTop),
+                                    CheckBox("as", "eta_bot", model => model.AsEtaBot),
+                                    CheckBox("as", "z", model => model.AsZ),
+                                    new Label() // XXX: Last element not enlarged
+                                ),
+                                new TableRow(
+                                    CheckBox("CC", "top", model => model.CCTop),
+                                    CheckBox("CC", "bot", model => model.CCBot)),
+                                new TableRow(
+                                    CheckBox("k", "top", model => model.KTop),
+                                    CheckBox("k", "bot", model => model.KBot)),
+                                new TableRow(
+                                    CheckBox("t", "top", model => model.TTop),
+                                    CheckBox("t", "bot", model => model.TBot)),
+
+                                new TableRow(
+                                    CheckBox("psi", "top", model => model.PsiTop),
+                                    CheckBox("psi", "bot", model => model.PsiBot)),
+
+                                new TableRow(
+                                    CheckBox("Fall", "top", model => model.FallTop),
+                                    CheckBox("Fall", "bot", model => model.FallBot)),
+
+                                new TableRow(
+                                    CheckBox("m", "cc_top", model => model.MCcTop),
+                                    CheckBox("m", "cc_bot", model => model.MCcBot),
+                                    CheckBox("m", "shear_c", model => model.MShearC),
+                                    CheckBox("m", "c_total", model => model.MCTotal)),
+                            }
+                        }
                     }
                 }
             });
@@ -63,48 +86,6 @@ namespace StrucEngLib.Sm
             gbDetail.BindDataContext(lab => lab.Text,
                 Binding.Property<SmAnalysisItemViewModel, string>((m => m.StepName))
                     .Convert(s => "Output for Step " + s));
-        }
-
-        protected static void ClickHelp(TableCell c1, TableCell c2)
-        {
-            try
-            {
-                c1.Control.MouseDown += (sender, args) =>
-                {
-                    if (c2.Control is CheckBox c) c.Checked = !c.Checked;
-                };
-            }
-            catch (Exception)
-            {
-                // XXX: Ignore
-            }
-        }
-
-        protected static Control BinaryRow(TableCell c1, TableCell c2)
-        {
-            ClickHelp(c1, c2);
-            return TableLayout.HorizontalScaled(c1, c2);
-        }
-
-        protected static TableRow Row(TableCell label, params TableCell[] args)
-        {
-            var r = new TableRow();
-            r.Cells.Add(label);
-            foreach (var c in args)
-            {
-                r.Cells.Add(c);
-            }
-
-            return r;
-        }
-
-        protected static TableCell TextCell(string text)
-        {
-            var c = new TableCell()
-            {
-                Control = (new Label() {Text = text,}),
-            };
-            return c;
         }
 
         protected static TableCell TableCellWithControl(string text, string textSubscriptSuffix,
@@ -151,24 +132,27 @@ namespace StrucEngLib.Sm
             {
                 Control = (cb = new CheckBox()
                 {
-                    ToolTip = toolTip,
-                    Text = text,
+                    ToolTip = toolTip
                 }),
             };
             cb.BindDataContext(p => p.Checked, Binding.Property(propertyExpression));
             return TableCellWithControl(text, textSubscriptSuffix, cb, toolTip);
         }
 
-        // protected static TableCell DropDown(string text, string textSubscriptSuffix,
-        //     Expression<Func<SmAnalysisItemViewModel, string>> propertyExpression)
-        // {
-        //     DropDown db = new DropDown()
-        //     {
-        //
-        //     };
-        //     // db.BindDataContext<SmAnalysisItemViewModel>(p => p.SelectedValue, Binding.Property(propertyExpression));
-        //     return TableCellWithControl(text, textSubscriptSuffix, cb, toolTip);
-        // }
+        protected static TableCell TrueFalseDropDown(string text, string textSubscriptSuffix,
+            Expression<Func<SmAnalysisItemViewModel, object>> propertyExpression, bool selectTrue = true)
+        {
+            DropDown db = new DropDown()
+            {
+            };
+            db.DataStore = new[] {"true", "false"};
+            db.SelectedIndex = selectTrue ? 0 : 1;
+            
+            db.SelectedValueBinding.BindDataContext(
+                Binding.Property(propertyExpression));
+            
+            return TableCellWithControl(text, textSubscriptSuffix, db, "");
+        }
 
         protected static TableCell TextBox(
             string text,

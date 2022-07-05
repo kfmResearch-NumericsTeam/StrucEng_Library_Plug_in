@@ -198,26 +198,26 @@ namespace StrucEngLib.Sm
             }
         }
 
-        private bool _TBot = true;
+        private bool _tBot = true;
 
         public bool TBot
         {
-            get => _TBot;
+            get => _tBot;
             set
             {
-                _TBot = value;
+                _tBot = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool _TTop = true;
+        private bool _tTop = true;
 
         public bool TTop
         {
-            get => _TTop;
+            get => _tTop;
             set
             {
-                _TTop = value;
+                _tTop = value;
                 OnPropertyChanged();
             }
         }
@@ -322,7 +322,7 @@ namespace StrucEngLib.Sm
         public SmAnalysisItemViewModel(SmAnalysisSetting model)
         {
             Model = model;
-            init();
+            Init();
             ModelToVm(model, this);
         }
 
@@ -396,34 +396,34 @@ namespace StrucEngLib.Sm
             m.MCTotal = v.MCTotal;
         }
 
-        public void init()
+        public void Init()
         {
             Include = false;
             AxesScale = "";
-            Druckzoneniteration = "";
-            Mindestbewehrung = "";
+            Druckzoneniteration = "true";
+            Mindestbewehrung = "true";
             Schubnachweis = "";
             Code = "";
 
-            AsXiBot = false;
-            AsXiTop = false;
-            AsEtaBot = false;
-            AsEtaTop = false;
-            AsZ = false;
-            CCBot = false;
-            CCTop = false;
-            KBot = false;
-            KTop = false;
-            TBot = false;
-            TTop = false;
-            PsiBot = false;
-            PsiTop = false;
-            FallBot = false;
-            FallTop = false;
-            MCcBot = false;
-            MCcTop = false;
-            MShearC = false;
-            MCTotal = false;
+            AsXiBot = true;
+            AsXiTop = true;
+            AsEtaBot = true;
+            AsEtaTop = true;
+            AsZ = true;
+            CCBot = true;
+            CCTop = true;
+            KBot = true;
+            KTop = true;
+            TBot = true;
+            TTop = true;
+            PsiBot = true;
+            PsiTop = true;
+            FallBot = true;
+            FallTop = true;
+            MCcBot = true;
+            MCcTop = true;
+            MShearC = true;
+            MCTotal = true;
         }
     }
 }
