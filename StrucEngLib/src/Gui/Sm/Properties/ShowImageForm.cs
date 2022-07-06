@@ -7,7 +7,7 @@ namespace StrucEngLib.Sm
     public class ShowImageForm: Form
     {
 
-        public ShowImageForm()
+        public ShowImageForm(System.Drawing.Bitmap image)
         {
             Maximizable = true;
             Minimizable = true;
@@ -19,7 +19,7 @@ namespace StrucEngLib.Sm
             Content = new ImageView()
             {
                 Size = new Size(500, 500),
-                // Image = Rhino.UI.EtoExtensions.ToEto()
+                Image = Rhino.UI.EtoExtensions.ToEto(image)
             };
         }
     }

@@ -23,6 +23,7 @@ namespace StrucEngLib.Sm
         public ErrorViewModel ErrorVm { get; }
         public SmSettingViewModel SmSettingVm { get; }
         public SmGenerateCodeViewModel GenerateCodeVm { get; }
+        public SmAnalysisViewModel AnalysisVm { get; }
 
         public SmMainViewModel(Workbench wb, MainViewModel mvm)
         {
@@ -30,6 +31,7 @@ namespace StrucEngLib.Sm
             MainViewModel = mvm;
             ErrorVm = new ErrorViewModel();
             SmSettingVm = new SmSettingViewModel(this);
+            AnalysisVm = new SmAnalysisViewModel(this);
             GenerateCodeVm = new SmGenerateCodeViewModel(this);
         }
 
@@ -44,6 +46,7 @@ namespace StrucEngLib.Sm
             {
                 ErrorVm,
                 SmSettingVm,
+                AnalysisVm,
                 GenerateCodeVm
             }.ForEach(vm => vm.UpdateModel());
         }
@@ -54,6 +57,7 @@ namespace StrucEngLib.Sm
             {
                 ErrorVm,
                 SmSettingVm,
+                AnalysisVm,
                 GenerateCodeVm
             }.ForEach(vm => vm.UpdateViewModel());
         }

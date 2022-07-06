@@ -21,7 +21,7 @@ namespace StrucEngLib.Analysis
             GroupBox gbDetail;
             Padding = new Padding(5);
             Spacing = new Size(5, 10);
-            
+
             Add(gbDetail = new GroupBox
             {
                 Padding = new Padding(5),
@@ -75,8 +75,24 @@ namespace StrucEngLib.Analysis
             return r;
         }
 
+        protected static void ClickHelp(TableCell c1, TableCell c2)
+        {
+            try
+            {
+                c1.Control.MouseDown += (sender, args) =>
+                {
+                    if (c2.Control is CheckBox c) c.Checked = !c.Checked;
+                };
+            }
+            catch (Exception)
+            {
+                // XXX: Ignore
+            }
+        }
+
         protected static Control BinaryRow(TableCell c1, TableCell c2)
         {
+            ClickHelp(c1, c2);
             return TableLayout.HorizontalScaled(c1, c2);
         }
 
@@ -105,43 +121,18 @@ namespace StrucEngLib.Analysis
             Expression<Func<AnalysisItemViewModel, bool?>> propertyExpression,
             string toolTip = null)
         {
-            CheckBox _cb;
+            CheckBox cb;
             var c = new TableCell()
             {
-                Control = (_cb = new CheckBox()
+                Control = (cb = new CheckBox()
                 {
                     ToolTip = toolTip,
                     Text = text,
                 }),
             };
-            _cb.BindDataContext(p => p.Checked,
+            cb.BindDataContext(p => p.Checked,
                 Binding.Property(propertyExpression));
             return c;
-        }
-
-        protected static TableCell[] CellWithRoot(TableCell root,
-            params TableCell[] children)
-        {
-            try
-            {
-                CheckBox cbRoot = (CheckBox) root.Control;
-                cbRoot.CheckedChanged += (sender, args) =>
-                {
-                    foreach (var cell in children)
-                    {
-                        var c = cell.Control as CheckBox;
-                        if (c != null) c.Checked = cbRoot.Checked;
-                    }
-                };
-            }
-            catch (Exception)
-            {
-                // XXX: Hacky/ Quick way to set children according to parent
-            }
-
-            var res = new List<TableCell>();
-            res.Add(root);
-            return res.Concat(children.ToList()).ToArray();
         }
     }
 }

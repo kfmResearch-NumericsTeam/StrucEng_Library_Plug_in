@@ -1,0 +1,9 @@
+## v0.0.3
+- Introduce this changelog
+- Introduce sandwich model
+- Generate code for sandwich model for multiple steps
+- Show visualization in sandwich model with sample images
+- Add option to set file name of generated python file
+- Add visual cues to show currently edited element
+- show button to inspect code on 'generate number' featuree
+- 

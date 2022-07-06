@@ -7,17 +7,16 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 
-namespace StrucEngLib.Analysis
+namespace StrucEngLib.Sm
 {
-    /// <summary>Main view for analysis</summary>
-    public class AnalysisView : DynamicLayout
+    /// <summary>View for sandwich analysis</summary>
+    public class SmAnalysisView : DynamicLayout
     {
-        private readonly AnalysisViewModel _vm;
+        private readonly SmAnalysisViewModel _vm;
         private GridView _grid;
-        private AnalysisItemView _detailView;
+        private SmAnalysisItemView _detailView;
 
-
-        public AnalysisView(AnalysisViewModel vm)
+        public SmAnalysisView(SmAnalysisViewModel vm)
         {
             _vm = vm;
             BuildGui();
@@ -26,11 +25,12 @@ namespace StrucEngLib.Analysis
 
         private void BindGui()
         {
+            DataContext = _vm;
             _grid.DataStore = _vm.AnalysisViewItems;
             _grid.DataContext = _vm;
 
-            _grid.SelectedItemBinding.BindDataContext((AnalysisViewModel m) => m.SelectedItem);
-            _detailView.Bind<AnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
+            _grid.SelectedItemBinding.BindDataContext((SmAnalysisViewModel m) => m.SelectedItem);
+            _detailView.Bind<SmAnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
             _detailView.Bind<bool>(nameof(this.Enabled), _vm, nameof(_vm.SelectedItemVisible));
         }
@@ -53,18 +53,36 @@ namespace StrucEngLib.Analysis
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Step\t\t\t\t\t\t\t",
+                HeaderText = "Step\t\t",
                 Editable = false,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new TextBoxCell()
                 {
-                    Binding = Binding.Property<AnalysisItemViewModel, string>(r => r.StepName)
-                        .Convert(step => "Step " + step),
+                    Binding = Binding.Property<SmAnalysisItemViewModel, string>(r => r.StepName)
+                        .Convert(step => "Step " + step + "")
                 },
-                
+
                 Resizable = true,
             });
             
+            _grid.Columns.Add(new GridColumn()
+            {
+                HeaderText = "Description\t\t\t\t",
+                Editable = true,
+                Expand = false,
+                HeaderTextAlignment = TextAlignment.Center,
+                DataCell = new CustomCell()
+                {
+                    CreateCell = (args =>
+                    {
+                        var l = new Label();
+                        l.BindDataContext(c => c.Text, Binding.Property((SmAnalysisItemViewModel m) => m.Model.Step.Summary()));
+                        return l;
+                    }),
+                },
+                Resizable = true,
+                AutoSize = true,
+            });
 
             _grid.Columns.Add(new GridColumn()
             {
@@ -73,7 +91,7 @@ namespace StrucEngLib.Analysis
                 HeaderTextAlignment = TextAlignment.Left,
                 DataCell = new CheckBoxCell()
                 {
-                    Binding = Binding.Property<AnalysisItemViewModel, bool?>(r => r.Include)
+                    Binding = Binding.Property<SmAnalysisItemViewModel, bool?>(r => r.Include)
                 },
                 Resizable = true,
                 AutoSize = true,
@@ -90,11 +108,11 @@ namespace StrucEngLib.Analysis
                 }
             });
             
-            AddRow(_detailView = new AnalysisItemView()
+            AddRow(_detailView = new SmAnalysisItemView()
             {
                 Spacing = new Size(5, 10),
                 Padding = new Padding(5),
-                Visible = false
+                Visible = true
             });
         }
     }
