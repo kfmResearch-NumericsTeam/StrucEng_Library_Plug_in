@@ -26,6 +26,7 @@ namespace StrucEngLib.Step
             _grid.DataStore = _listStepVm.StepItems;
             _grid.DataContext = _listStepVm;
             _grid.SelectedItemBinding.BindDataContext((ListStepViewModel m) => m.SelectedStepItem);
+            _listStepVm.UpdateModel();
         }
 
         private void Build()

@@ -32,7 +32,7 @@ namespace StrucEngLib.Sm
             _grid.SelectedItemBinding.BindDataContext((SmAnalysisViewModel m) => m.SelectedItem);
             _detailView.Bind<SmAnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
-            _detailView.BindDataContext(v => v.DataContext, (SmAnalysisViewModel m) => m.SelectedItem);
+            _detailView.Bind<bool>(nameof(this.Enabled), _vm, nameof(_vm.SelectedItemVisible));
         }
 
         private void BuildGui()
@@ -53,7 +53,7 @@ namespace StrucEngLib.Sm
             };
             _grid.Columns.Add(new GridColumn()
             {
-                HeaderText = "Step\t\t\t\t\t\t\t",
+                HeaderText = "Step\t\t",
                 Editable = false,
                 HeaderTextAlignment = TextAlignment.Center,
                 DataCell = new TextBoxCell()
@@ -63,6 +63,25 @@ namespace StrucEngLib.Sm
                 },
 
                 Resizable = true,
+            });
+            
+            _grid.Columns.Add(new GridColumn()
+            {
+                HeaderText = "Description\t\t\t\t",
+                Editable = true,
+                Expand = false,
+                HeaderTextAlignment = TextAlignment.Center,
+                DataCell = new CustomCell()
+                {
+                    CreateCell = (args =>
+                    {
+                        var l = new Label();
+                        l.BindDataContext(c => c.Text, Binding.Property((SmAnalysisItemViewModel m) => m.Model.Step.Summary()));
+                        return l;
+                    }),
+                },
+                Resizable = true,
+                AutoSize = true,
             });
 
             _grid.Columns.Add(new GridColumn()

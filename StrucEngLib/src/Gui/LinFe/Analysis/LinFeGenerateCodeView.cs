@@ -36,7 +36,7 @@ namespace StrucEngLib.Sm
             Content = new DynamicLayout()
             {
                 Padding = new Padding(5),
-                Spacing = new Size(10, 10),
+                Spacing = new Size(10, 5),
                 Rows =
                 {
                     settings,

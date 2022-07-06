@@ -27,7 +27,7 @@ namespace StrucEngLib.Sm
 
             var settings = new DynamicLayout()
             {
-                Padding = new Padding(5),
+                Padding = new Padding(5, 0, 5, 0),
                 Spacing = new Size(10, 0),
             };
             UiUtils.AddLabelTextRow(settings, _vm, "Name", nameof(SmGenerateCodeViewModel.FileName), "C:\\Temp\\Rahmen");
@@ -35,7 +35,7 @@ namespace StrucEngLib.Sm
             Content = new DynamicLayout()
             {
                 Padding = new Padding(5),
-                Spacing = new Size(10, 10),
+                Spacing = new Size(10, 5),
                 Rows =
                 {
                     settings,

@@ -28,12 +28,12 @@ namespace StrucEngLib.Sm
                     _selectedItem.PropertyChanged -= SelectedItemIncludeChanged;
                 }
                 _selectedItem = value;
-                OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
                 if (_selectedItem != null)
                 {
                     _selectedItem.PropertyChanged += SelectedItemIncludeChanged;
                 }
+                OnPropertyChanged();
             }
         }
 
@@ -91,7 +91,7 @@ namespace StrucEngLib.Sm
             {
                 if (s.Setting?.Include == true && !ContainsViewModelStepName(s.Order))
                 {
-                    AnalysisViewItems.Add(new SmAnalysisItemViewModel(new SmAnalysisSetting()
+                    AnalysisViewItems.Add(SmAnalysisItemViewModel.CreateNew(new SmAnalysisSetting()
                     {
                         Step = s
                     }));

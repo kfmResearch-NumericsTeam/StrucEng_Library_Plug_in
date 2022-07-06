@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino.UI.Controls;
 using StrucEngLib.Views;
 using Size = Eto.Drawing.Size;
 
@@ -30,7 +31,7 @@ namespace StrucEngLib.Sm
                         new TableLayout
                         {
                             Spacing = new Size(1, 2),
-                            Padding = new Padding(10, 10, 10, 0),
+                            Padding = new Padding(10, 10, 10, 5),
                             Rows =
                             {
                                 new TableRow(TextBox("Schubnachweis", "", model => model.Schubnachweis, "sia")),
@@ -43,7 +44,7 @@ namespace StrucEngLib.Sm
                         new TableLayout
                         {
                             Padding = new Padding(10, 5, 10, 10),
-                            Spacing = new Size(1, 5),
+                            Spacing = new Size(5, 10),
                             Rows =
                             {
                                 new TableRow(
@@ -113,11 +114,14 @@ namespace StrucEngLib.Sm
 
             var c1 = new TableCell()
             {
-                Control = l
+                Control = l,
+                ScaleWidth = true
             };
             var c2 = new TableCell()
             {
-                Control = control
+                Control = control,
+                ScaleWidth = true
+                
             };
             var table = TableLayout.HorizontalScaled(c1, c2);
             return table;
@@ -127,13 +131,9 @@ namespace StrucEngLib.Sm
             Expression<Func<SmAnalysisItemViewModel, bool?>> propertyExpression,
             string toolTip = null)
         {
-            CheckBox cb;
-            var c = new TableCell()
+            CheckBox cb = new CheckBox()
             {
-                Control = (cb = new CheckBox()
-                {
-                    ToolTip = toolTip
-                }),
+                ToolTip = toolTip
             };
             cb.BindDataContext(p => p.Checked, Binding.Property(propertyExpression));
             return TableCellWithControl(text, textSubscriptSuffix, cb, toolTip);

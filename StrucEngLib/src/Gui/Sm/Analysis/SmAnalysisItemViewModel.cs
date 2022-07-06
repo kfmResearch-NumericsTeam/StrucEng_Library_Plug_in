@@ -326,6 +326,14 @@ namespace StrucEngLib.Sm
             ModelToVm(model, this);
         }
 
+        public static SmAnalysisItemViewModel CreateNew(SmAnalysisSetting model)
+        {
+            SmAnalysisItemViewModel vm = new SmAnalysisItemViewModel(model);
+            vm.Init();
+            vm.UpdateModel();
+            return vm;
+        }
+
         public override void UpdateModel()
         {
             VmToModel(this, Model);
