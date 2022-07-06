@@ -1,3 +1,5 @@
+using System.IO;
+using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
@@ -36,7 +38,7 @@ namespace StrucEngLib.Sm
                     TextSubscript = "bot"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
-            UiUtils.AddLabelTextRow(this, 
+            UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
                     Text = "alpha",
@@ -50,15 +52,15 @@ namespace StrucEngLib.Sm
                     TextSubscript = "bot"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
-            
-            UiUtils.AddLabelTextRow(this, 
+
+            UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
                     Text = "beta",
                     TextSubscript = "top"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
-            UiUtils.AddLabelTextRow(this, 
+            UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
                     Text = "beta",
@@ -87,21 +89,8 @@ namespace StrucEngLib.Sm
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
 
-            AddRow(null);
-            AddRow(TableLayout.AutoSized((_btShowImage = new Button
-            {
-                Size = new Size(110, -1),
-                Text = "Show Image...",
-            })));
-
-            _btShowImage.Click += (sender, args) =>
-            {
-                var d = new ShowImageForm()
-                {
-                    Owner = RhinoEtoApp.MainWindow
-                };
-                d.Show();
-            };
+            AddSeparateRow(null);
+            AddSeparateRow(null);
         }
     }
 }

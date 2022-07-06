@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino.UI;
 
 namespace StrucEngLib.Sm
 {
@@ -75,6 +77,61 @@ namespace StrucEngLib.Sm
             _propLayoutHasData = new SmAdditionalPropertyView();
             _propLayout.Add(_propLayoutHasData);
             _propLayout.Add(_propLayoutNoData);
+                
+            ImageViews();
+        }
+        
+        private void ImageViews()
+        {
+            DynamicLayout imageLayout;
+            AddRow(new GroupBox
+            {
+                Text = "Visualization",
+                Padding = new Padding(5),
+                Content = imageLayout = new DynamicLayout
+                {
+                    Padding = new Padding(5),
+                    Spacing = new Size(5, 20),
+                }
+            });
+            
+            var img01 = new System.Drawing.Bitmap(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                    "StrucEngLib.EmbeddedResources.sm_image01.png"));
+
+            var img02 = new System.Drawing.Bitmap(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                    "StrucEngLib.EmbeddedResources.sm_image02.png"));
+
+            var imageLeft = new ImageView()
+            {
+                // Size = new Size(90, -1),
+                Image = Rhino.UI.EtoExtensions.ToEto(img01)
+            };
+            imageLeft.MouseDown += (sender, args) =>
+            {
+                var d = new ShowImageForm(img01)
+                {
+                    Owner = RhinoEtoApp.MainWindow
+                };
+                d.Show();
+            };
+            var imageRight = new ImageView()
+            {
+                // Size = new Size(90, -1),
+                Image = Rhino.UI.EtoExtensions.ToEto(img02)
+            };
+            imageRight.MouseDown += (sender, args) =>
+            {
+                var d = new ShowImageForm(img02)
+                {
+                    Owner = RhinoEtoApp.MainWindow
+                };
+                d.Show();
+            };
+
+            imageLayout.Add(imageLeft);
+            imageLayout.Add(imageRight);
         }
 
         private void BindGui()

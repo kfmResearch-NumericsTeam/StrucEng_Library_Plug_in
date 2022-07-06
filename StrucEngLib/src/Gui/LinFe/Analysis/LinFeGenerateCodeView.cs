@@ -30,7 +30,8 @@ namespace StrucEngLib.Sm
                 Padding = new Padding(5, 0),
                 Spacing = new Size(10, 0),
             };
-            UiUtils.AddLabelTextRow(settings, _vm, "Name", nameof(LinFeGenerateCodeViewModel.FileName),
+            UiUtils.AddLabelTextRow(settings, _vm, "Name", 
+                nameof(LinFeGenerateCodeViewModel.FileName),
                 "C:\\Temp\\Rahmen");
 
             Content = new DynamicLayout()

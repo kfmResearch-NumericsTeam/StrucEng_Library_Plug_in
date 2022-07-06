@@ -10,7 +10,6 @@ using StrucEngLib.Model.Sm;
 
 namespace StrucEngLibTest
 {
-
     /// <summary></summary>
     [TestFixture]
     public class PythonCodeGeneratorTest
@@ -141,7 +140,7 @@ namespace StrucEngLibTest
             });
             b.SandwichModel = new SandwichModel()
             {
-                StepName = "1"
+                FileName = "C:\\tmp"
             };
             var gen = new PythonCodeGenerator();
             AssertValidPythonCode(gen.GenerateSmmCode(b));
@@ -179,10 +178,26 @@ namespace StrucEngLibTest
                 }
             });
 
-            b.SandwichModel = new SandwichModel()
+            AddSandwichData(b);
+            var gen = new PythonCodeGenerator();
+            AssertValidPythonCode(gen.GenerateSmmCode(b));
+        }
+
+        private void AddSandwichData(Workbench b)
+        {
+            var prop = new SandwichProperty()
             {
-                StepName = "1"
+                DStrichBot = "123",
+                DStrichTop = "123",
+                FcK = "123",
+                FcThetaGradKern = "123",
+                FsD = "123",
+                AlphaBot = "123",
+                BetaBot = "123",
+                AlphaTop = "123",
+                BetaTop = "123",
             };
+            
             var step = new Step()
             {
                 Order = "1",
@@ -193,37 +208,45 @@ namespace StrucEngLibTest
                     StepId = "1"
                 }
             };
-            b.Steps.Add(step);
-            b.SandwichModel.Code = "sia";
-            b.SandwichModel.StepName = "1";
-            b.SandwichModel.AsEtaBot = true;
-            b.SandwichModel.AsXiBot = true;
-            b.SandwichModel.AsXiTop = true;
-            b.SandwichModel.AsEtaBot = true;
-            b.SandwichModel.AsEtaTop = true;
-            b.SandwichModel.AsZ = true;
-            b.SandwichModel.CCBot = true;
-            b.SandwichModel.CCTop = true;
-            b.SandwichModel.KBot = true;
-            b.SandwichModel.KTop = true;
-            b.SandwichModel.TBot = true;
-            b.SandwichModel.TTop = true;
-            b.SandwichModel.PsiBot = true;
-            b.SandwichModel.PsiTop = true;
-            b.SandwichModel.FallBot = true;
-            b.SandwichModel.FallTop = true;
-            b.SandwichModel.MCcBot = true;
-            b.SandwichModel.MCcTop = true;
-            b.SandwichModel.MShearC = true;
-            b.SandwichModel.MCTotal = true;
 
-            b.SandwichModel.AdditionalProperties.Add(new SandwichProperty()
+            var set = new SmAnalysisSetting()
             {
-                Layer = b.Layers[0],
-                AlphaBot = "123"
-            });
-            var gen = new PythonCodeGenerator();
-            AssertValidPythonCode(gen.GenerateSmmCode(b));
+                Include = true,
+                Step = step,
+                AxesScale = "1",
+                DruckzonenIteration = "1",
+                MindestBewehrung = "1",
+                Code = "1",
+                Schubnachweis = "1",
+                AsXiBot = true,
+                AsXiTop = true,
+                AsEtaBot = true,
+                AsEtaTop = true,
+                AsZ = true,
+                CCBot = true,
+                CCTop = true,
+                KBot = true,
+                KTop = true,
+                TBot = true,
+                TTop = true,
+                PsiBot = true,
+                PsiTop = true,
+                FallBot = true,
+                FallTop = true,
+                MCcBot = true,
+                MCcTop = true,
+                MShearC = true,
+                MCTotal = true,
+            };
+
+
+            prop.Layer = b.Layers[0];
+
+            b.SandwichModel = new SandwichModel()
+            {
+            };
+            b.SandwichModel.AdditionalProperties.Add(prop);
+            b.SandwichModel.AnalysisSettings.Add(set);
         }
     }
 }
