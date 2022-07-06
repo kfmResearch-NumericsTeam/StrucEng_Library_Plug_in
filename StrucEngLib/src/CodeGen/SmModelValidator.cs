@@ -52,13 +52,23 @@ namespace StrucEngLib
                     }
                 }
 
+                bool hasStep = false;
                 sm.AnalysisSettings?.ForEach(s =>
                 {
-                    if (String.IsNullOrWhiteSpace(s.Step.Order) && s.Include)
+                    hasStep = hasStep || s.Include;
+                    if (s.Step == null)
+                    {
+                        ctx.AddError("Invalid step (null) in analysis settings");
+                    }
+                    else if (String.IsNullOrWhiteSpace(s.Step.Order) && s.Include)
                     {
                         ctx.AddError("Invalid Step assigned to Sandwich Model");
                     }
                 });
+                if (!hasStep)
+                {
+                    ctx.AddWarning("No Step included in Output of Sandwich Model");
+                }
             }
 
             return ctx;
