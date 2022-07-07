@@ -62,6 +62,19 @@ namespace StrucEngLib
         private void EmitHeaders(EmitState s, string action, string targetPath = "C:\\Temp\\Rahmen",
             string customImports = "")
         {
+            string path = Path.GetDirectoryName(targetPath);
+            try
+            {
+                Directory.CreateDirectory(path);
+            }
+            catch (Exception e)
+            {
+                RhinoApp.WriteLine(e.Message);
+            }
+            
+            path = path + "\\\\";
+            string file = Path.GetFileName(targetPath); 
+            
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
@@ -95,8 +108,8 @@ from compas_fea.structure import Structure
 
 # Snippets based on code of Andrew Liew (github.com/andrewliew), Benjamin Berger (github.com/Beberger)
 
-name = '{Path.GetFileName(targetPath)}'
-path = '{Path.GetDirectoryName(targetPath)}'
+name = '{file}'
+path = '{path}'
 mdl = Structure(name=name, path=path)
 ";
             s.Buffer.Append(header);

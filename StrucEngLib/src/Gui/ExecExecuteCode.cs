@@ -1,10 +1,11 @@
 using System;
 using System.IO;
+using Rhino;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>Execute a python command</summary>
     public class ExecExecuteCode : CommandBase
     {
         private readonly MainViewModel _vm;
@@ -32,7 +33,9 @@ namespace StrucEngLib
         {
             string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
             File.WriteAllText(fileName, source);
-            Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
+            RhinoApp.WriteLine("Executing a python command. This may take a while. Rhino will freeze until this operation is done");
+            RhinoApp.WriteLine("The temporary file being executed can be found at " + fileName);
+            RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
         }
     }
 }
