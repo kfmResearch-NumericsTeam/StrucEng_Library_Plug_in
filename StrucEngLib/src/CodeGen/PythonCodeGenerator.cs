@@ -182,7 +182,7 @@ mdl = Structure(name=name, path=path)
         private string GenerateDisplacementForSet(EmitState s, Set set)
         {
             var args = new StringBuilder();
-            var name = "Unknown";
+            string name;
             switch (set.SetDisplacementType)
             {
                 case SetDisplacementType.GENERAL:

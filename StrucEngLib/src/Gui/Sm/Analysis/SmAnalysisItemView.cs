@@ -92,11 +92,6 @@ namespace StrucEngLib.Sm
         protected static TableCell TableCellWithControl(string text, string textSubscriptSuffix,
             Control control, string toolTip = null)
         {
-            var c = new TableCell()
-            {
-                Control = control
-            };
-
             var l = new SubscriptLabel()
             {
                 Text = text,

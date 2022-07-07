@@ -115,7 +115,6 @@ namespace StrucEngLib.Step
             var rc = dialog.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (rc == DialogResult.Ok)
             {
-                var selected = dialog.SelectedEntries;
                 var vm = SelectedStepItem;
                 vm.Model.Entries.Clear();
                 foreach (var e in dialog.SelectedEntries)

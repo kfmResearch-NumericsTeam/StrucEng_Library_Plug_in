@@ -37,7 +37,7 @@ namespace StrucEngLib
         public static Control CheckboxInputWithDataContextBinding(IndirectBinding<bool?> binding)
         {
             var cb = new CheckBox();
-            var ctx = cb.BindDataContext<CheckBox, bool?>(srcWidget => srcWidget.Checked, binding);
+            cb.BindDataContext<CheckBox, bool?>(srcWidget => srcWidget.Checked, binding);
             return cb;
         }
 
