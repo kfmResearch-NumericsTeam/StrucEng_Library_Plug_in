@@ -12,8 +12,6 @@ namespace StrucEngLib.Sm
     /// </summary>
     public class SmAdditionalPropertyView : DynamicLayout
     {
-        private Button _btShowImage;
-
         /// <summary>
         /// XXX: Requires DataContext to be set according to selection to change content of properties
         /// E.g._view.Bind<object>(nameof(_view.DataContext), _vm, nameof(_vm.SelectedProperty));

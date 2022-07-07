@@ -37,8 +37,6 @@ namespace StrucEngLib.Analysis
 
         private void BuildGui()
         {
-            Spacing = new Size(10, 10);
-            Padding = new Padding(5);
 
             _grid = new GridView()
             {

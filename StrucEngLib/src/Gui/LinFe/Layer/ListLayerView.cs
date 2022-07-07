@@ -69,8 +69,6 @@ namespace StrucEngLib.Layer
 
         protected void BuildGui()
         {
-            Padding = new Padding(5);
-            Spacing = new Size(5, 0);
             AddRow(
                 new GroupBox
                 {
