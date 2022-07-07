@@ -19,6 +19,9 @@ the [installation section in the
 wiki](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki/Installation)
 for more detailed instructions.
 
+### Released Versions
+Consider [CHANGELOG](./CHANGELOG) for a summary of changes in the recent versions. 
+
 ### Build
 The build setup is specified and reproducible with a linux based Vagrant image.
 Please consider [./tools/vagrant](./tools/vagrant) for detailed build instructions. 
