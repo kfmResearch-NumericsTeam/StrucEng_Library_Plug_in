@@ -62,19 +62,19 @@ namespace StrucEngLib
         private void EmitHeaders(EmitState s, string action, string targetPath = "C:\\Temp\\Rahmen",
             string customImports = "")
         {
-            string path = Path.GetDirectoryName(targetPath);
+            string path = "";
+            string file = "";
             try
             {
+                path = Path.GetDirectoryName(targetPath);
                 Directory.CreateDirectory(path);
+                file = Path.GetFileName(targetPath);
+                path = path + "\\\\";
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                RhinoApp.WriteLine(e.Message);
+                // ignore
             }
-            
-            path = path + "\\\\";
-            string file = Path.GetFileName(targetPath); 
-            
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
