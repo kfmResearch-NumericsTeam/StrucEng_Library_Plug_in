@@ -17,9 +17,21 @@
         </menu_item>
         <menu_item guid="33be54b0-de74-4ac7-903b-a467b090f74c">
           <text>
-            <locale_1033>Help...</locale_1033>
+            <locale_1033>Help</locale_1033>
           </text>
           <macro_id>9b2ebe53-f26d-4243-a396-9963705e2afc</macro_id>
+        </menu_item>
+        <menu_item guid="5cc66c68-0b2e-4fcc-a8fb-f7250735cd95">
+          <text>
+            <locale_1033>Changelog</locale_1033>
+          </text>
+          <macro_id>edf2bdeb-8a20-4cac-9b7b-d89e07cd65ee</macro_id>
+        </menu_item>
+        <menu_item guid="09bf8c71-f8c4-4c38-a5d4-f817234381be">
+          <text>
+            <locale_1033>About</locale_1033>
+          </text>
+          <macro_id>9787750e-6fb2-4794-81c1-ea42d0f2773b</macro_id>
         </menu_item>
       </menu>
     </menu>
@@ -58,19 +70,49 @@
       <text>
         <locale_1033>Macro 01</locale_1033>
       </text>
+      <help_text>
+        <locale_1033>Browse Wiki</locale_1033>
+      </help_text>
+      <menu_text>
+        <locale_1033>Help</locale_1033>
+      </menu_text>
+      <script>StrucEngLibHelp</script>
+    </macro_item>
+    <macro_item guid="edf2bdeb-8a20-4cac-9b7b-d89e07cd65ee" bitmap_id="ceb25f35-02a1-45a6-b914-f29fc1a00a73">
+      <text>
+        <locale_1033>Macro 02</locale_1033>
+      </text>
       <tooltip>
         <locale_1033 />
       </tooltip>
       <help_text>
-        <locale_1033>Browse Wiki</locale_1033>
+        <locale_1033>Show Changelog</locale_1033>
       </help_text>
       <button_text>
         <locale_1033 />
       </button_text>
       <menu_text>
-        <locale_1033>Help...</locale_1033>
+        <locale_1033>Changelog</locale_1033>
       </menu_text>
-      <script>OpenURL https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki</script>
+      <script>StrucEngLibChangelog</script>
+    </macro_item>
+    <macro_item guid="9787750e-6fb2-4794-81c1-ea42d0f2773b" bitmap_id="968ee024-eced-4992-8506-80fb20ffb838">
+      <text>
+        <locale_1033>Macro 03</locale_1033>
+      </text>
+      <tooltip>
+        <locale_1033 />
+      </tooltip>
+      <help_text>
+        <locale_1033>Show About</locale_1033>
+      </help_text>
+      <button_text>
+        <locale_1033 />
+      </button_text>
+      <menu_text>
+        <locale_1033>About</locale_1033>
+      </menu_text>
+      <script>StrucEngLibAbout</script>
     </macro_item>
   </macros>
   <bitmaps>
@@ -78,9 +120,11 @@
       <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
       <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAwCAYAAAAYX/pXAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVEhL7cGBAAAAAMOg+VNf4AhVAAAAVw0M
-MAABdHz1SwAAAABJRU5ErkJgggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
+      <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAABQCAYAAAAQq/UNAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAcSURBVFhH7cGBAAAAAMOg+VNf4QBVAAAAAACX
+GhRQAAHn9VY5AAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </small_bitmap>
@@ -88,9 +132,11 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
       <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
       <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAABICAYAAADs+TUPAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAeSURBVFhH7cExAQAAAMKg9U/tbwYgAAAAAAAA
-4NQAG0gAAXY6NDAAAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
+      <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAAB4CAYAAADogzKiAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAiSURBVGhD7cGBAAAAAMOg+VPf4ARVAAAAAAAA
+AAAAAAAcNS14AAH/Szg0AAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </normal_bitmap>
@@ -98,9 +144,11 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
       <bitmap_item guid="63618d99-cf69-4866-8ee7-5c2babba14f0" index="0" />
       <bitmap_item guid="bf3b1e0f-0957-491c-8b6b-7d681454e0cc" index="1" />
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAABgCAYAAAB8InCYAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAiSURBVGhD7cEBAQAAAIIg/69uSEAAAAAAAAAA
-AAAAAMC5GjBgAAFtDxevAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
+      <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAACgCAYAAABtym4sAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAqSURBVHhe7cEBAQAAAIIg/69uSEAAAAAAAAAA
+AAAAAAAAAAAAAAAAwLkaUKAAAd99Ae8AAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </large_bitmap>

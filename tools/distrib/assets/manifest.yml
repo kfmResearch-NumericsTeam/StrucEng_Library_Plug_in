@@ -3,5 +3,9 @@ name: StrucEngLibPlugin
 version: __VERSION__
 authors:
   - "kfmResearch"
-description: "StrucEngLibPlugin"
+description: >
+  Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library
+  includes mechanical models, saftey concepts, GUI's, load generator, etc. for the
+  structural analysis reinforced concrete and masonry.
 url: https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in
+icon: logo.png
