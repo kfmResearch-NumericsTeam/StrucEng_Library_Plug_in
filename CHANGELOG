@@ -1,4 +1,4 @@
-## v0.0.4 (pending)
+## v0.0.4
 - Add sandwich validation: warning if no steps assigned
 - Add logo
 - Add Commands: StrucEngLibAbout, StrucEngLibHelp, StrucEngLibChangelog
