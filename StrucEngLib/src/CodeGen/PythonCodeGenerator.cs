@@ -38,8 +38,17 @@ namespace StrucEngLib
         public string GenerateSmmCode(Workbench bench)
         {
             var state = new EmitState(bench);
-            const string customImports = "import sandwichmodel_main as SMM\n";
-
+            const string customImports = @"
+try:
+    # Package installed with StrucEngLib Dependency Installer
+    from Sandwichmodel import sandwichmodel_main as SMM
+except Exception:
+    pass
+try:
+    import sandwichmodel_main as SMM
+except Exception:
+    pass
+";
             EmitHeaders(state, "Generate Sandwich Code",
                 targetPath: state.Workbench.SandwichModel.FileName,
                 customImports: customImports);
@@ -325,16 +334,22 @@ mdl = Structure(name=name, path=path)
         {
             s.Workbench.Steps.Sort((s1, s2) => string.Compare(s1.Order, s2.Order, StringComparison.Ordinal));
             s.CommentLine("Steps");
+            
+            var steps = new HashSet<string>();
             if (s.Workbench.Steps.Count > 0)
             {
                 s.Line("mdl.add([");
-                s.Workbench.Steps.ForEach(step => { s.Line(EmitStep(s, step) + ","); });
+                s.Workbench.Steps.ForEach(step =>
+                {
+                    steps.Add(s.CreateStepName(step.Order));
+                    s.Line(EmitStep(s, step) + ",");
+                });
                 s.Line("])");
             }
 
-            if (s.StepNames.Keys.ToList().Count > 0)
+            if (steps.ToList().Count > 0)
             {
-                s.Line($"mdl.steps_order = {StringUtils.ListToPyStr(s.StepNames.Keys.ToList(), st => st)} ");
+                s.Line($"mdl.steps_order = {StringUtils.ListToPyStr(steps.OrderBy(st => st).ToList(), st => st)} ");
             }
         }
 

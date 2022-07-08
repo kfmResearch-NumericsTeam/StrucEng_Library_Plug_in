@@ -1,3 +1,8 @@
+## v0.0.5
+- Introduce dependency installer to install compas, sandwichmodel, compas-fea
+- Command: StrucEngLibInstallDependencies
+- Fix missing step_order in python output
+
 ## v0.0.4
 - Add sandwich validation: warning if no steps assigned
 - Add logo
