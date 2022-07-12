@@ -1,5 +1,5 @@
-## v0.0.7
-- Test to update Rhino Menubar on Plugin update
+## v0.0.8
+- Update Rhino Menu bar on new StrucEngLib update
 
 ## v0.0.6
 - Bugfix in code emit: displacement id not reused in step order
