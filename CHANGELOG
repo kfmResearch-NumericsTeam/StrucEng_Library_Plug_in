@@ -2,6 +2,7 @@
 - Bugfix in code emit: displacement id not reused in step order
 - Add 'test import' functionality in dependency installer
 - Linfe: Preselect local coordinates on select
+- update menu bar on new version update
  
 ## v0.0.5
 - Introduce dependency installer to install compas, sandwichmodel, compas-fea

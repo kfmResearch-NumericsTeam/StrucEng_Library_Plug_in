@@ -1,5 +1,9 @@
-﻿using Rhino;
+﻿using System;
+using System.IO;
+using System.Text;
+using Rhino;
 using Rhino.FileIO;
+using Rhino.PlugIns;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -9,7 +13,7 @@ namespace StrucEngLib
     /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
-        public new static string Version = "0.0.5";
+        public new static string Version = "0.0.6";
         public static string Website = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in";
 
         private static string _modelKey = "model";
@@ -20,7 +24,6 @@ namespace StrucEngLib
         {
             Instance = this;
             MainViewModel = new MainViewModel(new Workbench());
-            
         }
 
         public static StrucEngLibPlugin Instance { get; private set; }
@@ -65,6 +68,41 @@ namespace StrucEngLib
             MainViewModel.Dispose();
             var bench = WorkbenchFactory.Instance.DeserializeFromString(data);
             MainViewModel = new MainViewModel(bench);
+        }
+
+        protected override LoadReturnCode OnLoad(ref string errorMessage)
+        {
+            UpdateMenubar();
+            return LoadReturnCode.Success;
+        }
+
+        private void UpdateMenubar()
+        {
+            var pluginVersion = "0.0.6";
+            if (!string.IsNullOrEmpty(pluginVersion))
+            {
+                if (0 != string.Compare(Version, pluginVersion, StringComparison.OrdinalIgnoreCase))
+                {
+                    var sb = new StringBuilder();
+                    sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+                    sb.Append(@"\McNeel\Rhinoceros\7.0\UI\Plug-ins\");
+                    sb.AppendFormat("{0}.rui", Assembly.GetName().Name);
+                    var path = sb.ToString();
+                    if (File.Exists(path))
+                    {
+                        try
+                        {
+                            File.Delete(path);
+                        }
+                        catch
+                        {
+                            // XXX: Ignore
+                        }
+                    }
+
+                    Settings.SetString("PlugInVersion", Version);
+                }
+            }
         }
     }
 }

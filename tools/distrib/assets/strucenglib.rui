@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RhinoUI major_ver="3" minor_ver="0" guid="8abe4ee6-f165-420b-ab66-41762728ce82" localize="False" default_language_id="1033" dpi_scale="100">
+<RhinoUI major_ver="3" minor_ver="0" guid="276b9364-94cc-4908-bbfe-a8378ec62077" localize="False" default_language_id="1033" dpi_scale="100">
   <extend_rhino_menus>
     <menu guid="d58ceae7-fdb0-4104-80da-274b94ad44a9">
       <text>
@@ -15,17 +15,23 @@
           </text>
           <macro_id>7ea35ee4-2a65-48c9-a521-e5d86df1c99b</macro_id>
         </menu_item>
-        <menu_item guid="33be54b0-de74-4ac7-903b-a467b090f74c">
+        <menu_item guid="5ffa07c8-2d40-4388-8aff-49dce7eb8742">
           <text>
-            <locale_1033>Help</locale_1033>
+            <locale_1033>Install Dependencies...</locale_1033>
           </text>
-          <macro_id>9b2ebe53-f26d-4243-a396-9963705e2afc</macro_id>
+          <macro_id>fe5cfa80-8aed-46a1-bd85-0de9bbed3a92</macro_id>
         </menu_item>
         <menu_item guid="5cc66c68-0b2e-4fcc-a8fb-f7250735cd95">
           <text>
-            <locale_1033>Changelog</locale_1033>
+            <locale_1033>Changelog...</locale_1033>
           </text>
           <macro_id>edf2bdeb-8a20-4cac-9b7b-d89e07cd65ee</macro_id>
+        </menu_item>
+        <menu_item guid="33be54b0-de74-4ac7-903b-a467b090f74c">
+          <text>
+            <locale_1033>Help...</locale_1033>
+          </text>
+          <macro_id>9b2ebe53-f26d-4243-a396-9963705e2afc</macro_id>
         </menu_item>
         <menu_item guid="09bf8c71-f8c4-4c38-a5d4-f817234381be">
           <text>
@@ -74,7 +80,7 @@
         <locale_1033>Browse Wiki</locale_1033>
       </help_text>
       <menu_text>
-        <locale_1033>Help</locale_1033>
+        <locale_1033>Help...</locale_1033>
       </menu_text>
       <script>StrucEngLibHelp</script>
     </macro_item>
@@ -82,17 +88,11 @@
       <text>
         <locale_1033>Macro 02</locale_1033>
       </text>
-      <tooltip>
-        <locale_1033 />
-      </tooltip>
       <help_text>
         <locale_1033>Show Changelog</locale_1033>
       </help_text>
-      <button_text>
-        <locale_1033 />
-      </button_text>
       <menu_text>
-        <locale_1033>Changelog</locale_1033>
+        <locale_1033>Changelog...</locale_1033>
       </menu_text>
       <script>StrucEngLibChangelog</script>
     </macro_item>
@@ -100,19 +100,31 @@
       <text>
         <locale_1033>Macro 03</locale_1033>
       </text>
+      <help_text>
+        <locale_1033>Show About</locale_1033>
+      </help_text>
+      <menu_text>
+        <locale_1033>About</locale_1033>
+      </menu_text>
+      <script>StrucEngLibAbout</script>
+    </macro_item>
+    <macro_item guid="fe5cfa80-8aed-46a1-bd85-0de9bbed3a92" bitmap_id="483a1724-3fa0-4910-821d-3635492d5d90">
+      <text>
+        <locale_1033>Macro 04</locale_1033>
+      </text>
       <tooltip>
         <locale_1033 />
       </tooltip>
       <help_text>
-        <locale_1033>Show About</locale_1033>
+        <locale_1033 />
       </help_text>
       <button_text>
         <locale_1033 />
       </button_text>
       <menu_text>
-        <locale_1033>About</locale_1033>
+        <locale_1033>Install Dependencies...</locale_1033>
       </menu_text>
-      <script>StrucEngLibAbout</script>
+      <script>StrucEngLibInstallDependencies</script>
     </macro_item>
   </macros>
   <bitmaps>
@@ -122,9 +134,10 @@
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
       <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
       <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAABQCAYAAAAQq/UNAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAcSURBVFhH7cGBAAAAAMOg+VNf4QBVAAAAAACX
-GhRQAAHn9VY5AAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="483a1724-3fa0-4910-821d-3635492d5d90" index="5" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAABgCAYAAAAU0fKgAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAdSURBVFhH7cExAQAAAMKg9U9tBn8gAAAAAACA
+Sw0YYAABOBE4twAAAABJRU5ErkJgggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </small_bitmap>
@@ -134,9 +147,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
       <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
       <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAAB4CAYAAADogzKiAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAiSURBVGhD7cGBAAAAAMOg+VPf4ARVAAAAAAAA
-AAAAAAAcNS14AAH/Szg0AAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="483a1724-3fa0-4910-821d-3635492d5d90" index="5" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAACQCAYAAAASlKtNAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAlSURBVGhD7cGBAAAAAMOg+VMf4QJVAAAAAAAA
+AAAAAAAAAHDVADaQAAEv5CGMAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </normal_bitmap>
@@ -146,9 +160,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
       <bitmap_item guid="199b1174-bffe-461d-9280-25567873549e" index="2" />
       <bitmap_item guid="ceb25f35-02a1-45a6-b914-f29fc1a00a73" index="3" />
       <bitmap_item guid="968ee024-eced-4992-8506-80fb20ffb838" index="4" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAACgCAYAAABtym4sAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
-jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAqSURBVHhe7cEBAQAAAIIg/69uSEAAAAAAAAAA
-AAAAAAAAAAAAAAAAwLkaUKAAAd99Ae8AAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      <bitmap_item guid="483a1724-3fa0-4910-821d-3635492d5d90" index="5" />
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAADACAYAAABlPmF2AAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAuSURBVHhe7cEBAQAAAIIg/69uSEAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMC5GmDAAAHhKGIPAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </large_bitmap>
