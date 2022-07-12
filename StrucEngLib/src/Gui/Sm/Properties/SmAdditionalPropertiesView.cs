@@ -162,10 +162,14 @@ namespace StrucEngLib.Sm
             {
                 try
                 {
-                    // preselect first entry if possible
+                    // XXX: Preselect everything once to initialize data
+                    for (int i = 0; i < _vm.Properties.Count; i++)
+                    {
+                        _dropdownLayers.SelectedIndex = i;
+                    }
                     _dropdownLayers.SelectedIndex = 0;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     // XXX: Ignore
                 }

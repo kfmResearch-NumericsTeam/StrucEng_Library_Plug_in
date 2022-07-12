@@ -38,8 +38,6 @@ namespace StrucEngLib.Sm
                 {
                     UiUtils.GenerateTitle("Step 1: Define Materials and Constraints"),
                     new SmAdditionalPropertiesView(_vm.SmSettingVm),
-                    // UiUtils.GenerateTitle("Step 2: Define Model Settings"),
-                    // new SmSettingView(_vm.SmSettingVm),
                     UiUtils.GenerateTitle("Step 2: Run Analysis"),
                     new SmAnalysisView(_vm.AnalysisVm),
                     new SmGenerateCodeView(_vm.GenerateCodeVm),

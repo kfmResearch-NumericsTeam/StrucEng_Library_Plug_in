@@ -1,3 +1,6 @@
+## v0.0.6
+- Bugfix in code emit: displacement id not reused in step order
+
 ## v0.0.5
 - Introduce dependency installer to install compas, sandwichmodel, compas-fea
 - Command: StrucEngLibInstallDependencies

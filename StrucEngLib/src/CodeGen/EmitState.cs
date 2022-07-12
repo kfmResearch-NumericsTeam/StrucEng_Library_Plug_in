@@ -39,6 +39,7 @@ namespace StrucEngLib
         public Dictionary<Model.Layer, string> PropertyIds { get; } = new Dictionary<Model.Layer, string>();
         public Dictionary<Model.Layer, string> DisplacementIds { get; } = new Dictionary<Model.Layer, string>();
         public Dictionary<Model.Load, string> LoadIds { get; } = new Dictionary<Model.Load, string>();
+        public Dictionary<Model.Step, string> StepIds { get; } = new Dictionary<Model.Step, string>();
 
         public EmitState(Workbench bench)
         {

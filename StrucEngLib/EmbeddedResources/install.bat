@@ -3,10 +3,9 @@ echo This installs compas and dependencies for StrucEngLib. It may take a while.
 
 @echo on
 set conda="%1"
-set cenv=strucenglib2
+set cenv=strucenglib3
 
-
-call %conda% create --force -n %cenv% -c conda-forge python=3.9 compas --yes
+call %conda% create -n %cenv% -c conda-forge python=3.9 compas --yes
 call %conda% activate %cenv%
 call pip install compas_fea
 

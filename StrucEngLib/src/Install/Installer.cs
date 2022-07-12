@@ -14,12 +14,15 @@ namespace StrucEngLib
 {
     public class Installer : Form
     {
-        private string _abaqusHelp = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki/Installation";
+        private string _abaqusHelp =
+            "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki/Installation";
+
         private string _condaWebsite = "https://www.anaconda.com/products/distribution";
 
         private TextBox _tbAnaconda;
         private Button _btAbaqus;
         private Button _btInstallPython;
+        private Button _btOpenCondaBin;
         private Button _btSelectConda;
         private Button _btBrowseConda;
         private Button _btTest;
@@ -67,19 +70,17 @@ namespace StrucEngLib
                     Spacing = new Size(10, 15),
                     Rows =
                     {
-                        new DynamicRow()
-                        {
+                        TableLayout.HorizontalScaled(
                             new Label() {Text = "Anaconda Home Directory"},
                             (_tbAnaconda = new TextBox()
                             {
                                 PlaceholderText = "e.g. C:\\Temp\\Miniconda3a3\\",
-                            }),
-                        },
-                        new DynamicRow()
-                        {
+                            })
+                        ),
+                        TableLayout.HorizontalScaled(
                             (_btSelectConda = new Button() {Text = "Select Directory"}),
                             (_btBrowseConda = new Button() {Text = "Browse Website"})
-                        }
+                        ),
                     }
                 }
             });
@@ -97,10 +98,14 @@ namespace StrucEngLib
                         {
                             new Label() {Text = "Install Compas, Compas-FEA and SandwichModel"},
                         },
-                        new DynamicRow()
-                        {
-                            (_btInstallPython = new Button() {Text = "Install"})
-                        }
+                        new DynamicRow() {
+                        (_btInstallPython = new Button() {Text = "Install"})
+                        },
+                        TableLayout.HorizontalScaled(
+                            (_btTest = new Button() {Text = "Test Import"}),
+                            (_btOpenCondaBin = new Button() {Text = "Open condabin"})
+                        ),
+                        
                     }
                 }
             });
@@ -137,14 +142,8 @@ namespace StrucEngLib
 
         private void BindGui()
         {
-            _btAbaqus.Click += (sender, args) =>
-            {
-                System.Diagnostics.Process.Start(_abaqusHelp);
-            };
-            _btBrowseConda.Click += (sender, args) =>
-            {
-                System.Diagnostics.Process.Start(_condaWebsite);
-            };
+            _btAbaqus.Click += (sender, args) => { System.Diagnostics.Process.Start(_abaqusHelp); };
+            _btBrowseConda.Click += (sender, args) => { System.Diagnostics.Process.Start(_condaWebsite); };
             _btInstallPython.Click += (sender, args) =>
             {
                 string cmd = GetBatFile();
@@ -153,31 +152,78 @@ namespace StrucEngLib
                     RhinoApp.WriteLine("Anaconda home directory is null");
                     return;
                 }
+
                 var conda = _tbAnaconda.Text + "\\condabin\\conda.bat";
                 if (!File.Exists(conda))
                 {
                     RhinoApp.WriteLine("{0} does not exist!", conda);
                     return;
                 }
-                
+
                 RhinoApp.WriteLine(cmd, conda);
-                System.Diagnostics.Process.Start(cmd, conda);
+                try
+                {
+                    System.Diagnostics.Process.Start(cmd, conda);
+                }
+                catch (Exception e)
+                {
+                    RhinoApp.WriteLine(e.Message);
+                }
             };
             _btSelectConda.Click += (sender, args) =>
             {
-                
-                var dialog = new SelectFolderDialog ();
-                var result = dialog.ShowDialog (ParentWindow);
-                if (result == DialogResult.Ok) {
+                var dialog = new SelectFolderDialog();
+                var result = dialog.ShowDialog(ParentWindow);
+                if (result == DialogResult.Ok)
+                {
                     RhinoApp.WriteLine("Result: {0}, Folder: {1}", result, dialog.Directory);
                     _tbAnaconda.Text = dialog.Directory;
-
                 }
                 else
                 {
                     RhinoApp.WriteLine("Result: {0}", result);
                 }
             };
+
+            _btOpenCondaBin.Click += (sender, args) =>
+            {
+                if (String.IsNullOrWhiteSpace(_tbAnaconda.Text))
+                {
+                    RhinoApp.WriteLine("Anaconda home directory is null");
+                    return;
+                }
+
+                var conda = _tbAnaconda.Text + "\\condabin\\";
+                if (!Directory.Exists(conda))
+                {
+                    RhinoApp.WriteLine("{0} does not exist!", conda);
+                    return;
+                }
+
+                try
+                {
+                    RhinoApp.WriteLine("cmd {0}", conda);
+                    conda = conda.Replace(" ", "^ ");
+                    System.Diagnostics.Process.Start("C:\\Windows\\System32\\cmd.exe", $"/K \"cd /d {conda} \"");
+                }
+                catch (Exception e)
+                {
+                    RhinoApp.WriteLine(e.Message);
+                }
+            };
+
+            if (_btTest != null)
+            {
+                _btTest.Click += (sender, args) =>
+                {
+                    var cmd = $@"
+import imp
+imp.find_module('compas')
+imp.find_module('compas_fea')
+imp.find_module('Sandwichmodel')";
+                    new PythonExecutor().ExecuteCode(cmd);
+                };
+            }
         }
     }
 }

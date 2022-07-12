@@ -335,27 +335,29 @@ mdl = Structure(name=name, path=path)
             s.Workbench.Steps.Sort((s1, s2) => string.Compare(s1.Order, s2.Order, StringComparison.Ordinal));
             s.CommentLine("Steps");
             
-            var steps = new HashSet<string>();
+            // emit step definitions
             if (s.Workbench.Steps.Count > 0)
             {
                 s.Line("mdl.add([");
                 s.Workbench.Steps.ForEach(step =>
                 {
-                    steps.Add(s.CreateStepName(step.Order));
                     s.Line(EmitStep(s, step) + ",");
                 });
                 s.Line("])");
             }
 
-            if (steps.ToList().Count > 0)
+            // emit step order
+            var stepIds = s.StepIds.Values.ToList();
+            if (stepIds.Count > 0)
             {
-                s.Line($"mdl.steps_order = {StringUtils.ListToPyStr(steps.OrderBy(st => st).ToList(), st => st)} ");
+                s.Line($"mdl.steps_order = {StringUtils.ListToPyStr(stepIds.OrderBy(st => st).ToList(), st => st)} ");
             }
         }
 
         private string EmitStep(EmitState s, Model.Step step)
         {
             var stepName = s.CreateStepName(step.Order);
+            s.StepIds.Add(step, stepName);
 
             var loadNames = new List<string>();
             var dispNames = new List<string>();
@@ -368,7 +370,7 @@ mdl = Structure(name=name, path=path)
                         loadNames.Add(s.LoadIds[stepEntry.Value as Model.Load]);
                         break;
                     case StepType.Set:
-                        dispNames.Add(s.SetId(((Set) stepEntry.Value).Name));
+                        dispNames.Add(s.DisplacementIds[stepEntry.Value as Model.Set]);
                         break;
                     default:
                         // XXX: Ignore rest
