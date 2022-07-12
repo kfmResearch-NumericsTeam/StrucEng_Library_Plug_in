@@ -13,7 +13,7 @@ namespace StrucEngLib
     /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
-        public new static string Version = "0.0.6";
+        public new static string Version = "0.0.7-alpha1";
         public static string Website = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in";
 
         private static string _modelKey = "model";
@@ -78,10 +78,10 @@ namespace StrucEngLib
 
         private void UpdateMenubar()
         {
-            var pluginVersion = "0.0.6";
-            if (!string.IsNullOrEmpty(pluginVersion))
+            var v = Settings.GetString("PlugInVersion", null);
+            if (!string.IsNullOrEmpty(v))
             {
-                if (0 != string.Compare(Version, pluginVersion, StringComparison.OrdinalIgnoreCase))
+                if (0 != string.Compare(Version, v, StringComparison.OrdinalIgnoreCase))
                 {
                     var sb = new StringBuilder();
                     sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
