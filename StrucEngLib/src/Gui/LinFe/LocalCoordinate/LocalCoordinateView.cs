@@ -17,6 +17,7 @@ namespace StrucEngLib.LocalCoordinate
         {
             _vm = vm;
             BuildGui();
+            BindGui();
         }
 
         // XXX: Can be extension of root class
@@ -42,6 +43,12 @@ namespace StrucEngLib.LocalCoordinate
                     int i = 0;
                     return int.TryParse(s, out i) ? i : defVal;
                 });
+        }
+
+        private void BindGui()
+        {
+            DataContext = _vm;
+            _gridView.SelectedItemBinding.BindDataContext((LoadConstraintViewModel m) => m.SelectedConstraint);
         }
 
         private void BuildGui()

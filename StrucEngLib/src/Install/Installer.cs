@@ -199,7 +199,6 @@ namespace StrucEngLib
                     RhinoApp.WriteLine("{0} does not exist!", conda);
                     return;
                 }
-
                 try
                 {
                     RhinoApp.WriteLine("cmd {0}", conda);
@@ -220,7 +219,8 @@ namespace StrucEngLib
 import imp
 imp.find_module('compas')
 imp.find_module('compas_fea')
-imp.find_module('Sandwichmodel')";
+imp.find_module('Sandwichmodel')
+print('success :)')";
                     new PythonExecutor().ExecuteCode(cmd);
                 };
             }

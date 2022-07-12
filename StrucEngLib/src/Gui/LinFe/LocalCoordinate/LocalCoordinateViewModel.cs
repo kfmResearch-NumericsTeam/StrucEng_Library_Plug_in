@@ -24,6 +24,21 @@ namespace StrucEngLib.LocalCoordinate
         private readonly ObservableCollection<LocalCoordinateEntryViewModel> _loadConstraints;
         public ObservableCollection<LocalCoordinateEntryViewModel> LoadConstraints => _loadConstraints;
 
+        private LocalCoordinateEntryViewModel _selectedConstraint;
+        public LocalCoordinateEntryViewModel SelectedConstraint
+        {
+            get => _selectedConstraint;
+            set
+            {
+                _selectedConstraint = value;
+                if (_selectedConstraint != null)
+                {
+                    RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, _selectedConstraint.Origin.Name);
+                }
+                OnPropertyChanged();
+            }
+        }
+
         public LoadConstraintViewModel(LinFeMainViewModel vm)
         {
             _vm = vm;
