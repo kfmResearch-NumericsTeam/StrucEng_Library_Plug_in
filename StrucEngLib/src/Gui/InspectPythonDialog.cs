@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net.Mime;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino;
 using Rhino.Geometry;
 using Rhino.Input;
 using Rhino.UI;
@@ -22,24 +23,35 @@ namespace StrucEngLib
         public int State = STATE_CLOSE;
 
         private Button _execButton;
+        
+        private Button _openEditor;
 
         public InspectPythonDialog(string source)
         {
             this.Source = source;
-            Padding = new Padding(5);
+            // Padding = new Padding(5);
             Resizable = true;
             AutoSize = true;
-            Maximize();
+            ShowInTaskbar = true;
+            WindowStyle = WindowStyle.Default;
+            Size = new Size(1000, 800);
 
             Result = DialogResult.Cancel;
             WindowStyle = WindowStyle.Default;
 
-            Title = "Inspect and Modify Generated Python Code";
+            Title = "Inspect and modify code";
 
             _execButton = new Button()
             {
-                Text = "Execute Code"
+                Text = "Execute"
             };
+            
+            _openEditor = new Button()
+            {
+                Text = "Open Python Editor",
+                ToolTip = "Python code is copied into clipboard"
+                
+            }; 
 
             TextArea textArea = new TextArea()
             {
@@ -60,6 +72,13 @@ namespace StrucEngLib
                 Close(DialogResult.Ok);
             };
 
+            _openEditor.Click += (sender, args) =>
+            {
+                Clipboard.Instance.Text = textArea.Text;
+                RhinoApp.ExecuteCommand(RhinoDoc.ActiveDoc, "EditPythonScript");
+                Size = new Size(100, -1);
+            };
+
             Content = new TableLayout
             {
                 Padding = new Padding(5),
@@ -77,7 +96,7 @@ namespace StrucEngLib
                         },
                         Rows =
                         {
-                            new TableRow(DefaultButton, _execButton),
+                            new TableRow(DefaultButton, _execButton, _openEditor),
                         }
                     }))
                 }

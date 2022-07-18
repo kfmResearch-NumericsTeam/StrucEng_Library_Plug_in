@@ -1,3 +1,10 @@
+## v0.0.9
+- LinFe: Introduce spring forces, section forces, shell forces, 
+  section moments, shell moments for analysis output
+- Sandwichmodel: Validation with auto correct if missing analysis output in linfe.
+- Show more meaningful error message if python code throws an error
+- Add button to show python code in Rhino's EditPythonCode panel (code is copied to clipboard)  
+
 ## v0.0.8
 - Update Rhino Menu bar on new StrucEngLib update
 

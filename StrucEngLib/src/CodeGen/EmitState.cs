@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Rhino.DocObjects.Tables;
 using StrucEngLib.Model;
@@ -12,6 +13,8 @@ namespace StrucEngLib
     /// </summary>
     public class EmitState
     {
+        private int _indent = 0;
+        
         public string RemoveSpaces(string id) => id.Replace(" ", "_");
         public string LoadId() => "load_" + LoadIdCounter++;
         public string ElementId(string id) => RemoveSpaces(id) + "_element";
@@ -44,16 +47,32 @@ namespace StrucEngLib
         public EmitState(Workbench bench)
         {
             Workbench = bench;
+            _indent = 0;
+        }
+
+        private string GetIndent()
+        {
+            var b = new StringBuilder();
+            for (int i = 0; i < _indent; i++)
+            {
+                b.Append("    ");
+            }
+
+            return b.ToString();
         }
 
         public void Line(string s)
         {
+
+            Buffer.Append(GetIndent());
             Buffer.Append(s + Environment.NewLine);
         }
 
         public void CommentLine(string s)
         {
-            Buffer.Append(Environment.NewLine + "# " + s + Environment.NewLine);
+            Buffer.Append(Environment.NewLine);
+            Buffer.Append(GetIndent());
+            Buffer.Append("# " + s + Environment.NewLine);
         }
 
         public List<Element> Elements()
@@ -68,6 +87,21 @@ namespace StrucEngLib
             return Workbench.Layers
                 .Where(l => l.LayerType == LayerType.SET).ToList()
                 .Select(s => s as Set).ToList();
+        }
+
+        public void IncreaseIndent()
+        {
+            _indent++;
+        }
+
+        public void DecreaseIndent()
+        {
+            if (_indent == 0)
+            {
+                throw new Exception("Mismatching indent. Got negative");
+            }
+
+            _indent--;
         }
     }
 }
