@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino.UI.Controls;
+using static Eto.Drawing.FontFamilies;
 using Size = Eto.Drawing.Size;
 
 namespace StrucEngLib.Analysis
@@ -14,6 +16,11 @@ namespace StrucEngLib.Analysis
         private Control TextControlRow(Control text, Control value)
         {
             return TableLayout.HorizontalScaled(text, value);
+        }
+
+        private Font Bold()
+        {
+            return new Font(Sans, new Label().Font.Size, FontStyle.None);
         }
 
         public AnalysisItemView()
@@ -32,33 +39,102 @@ namespace StrucEngLib.Analysis
                     Spacing = new Size(10, 10),
                     Rows =
                     {
+                        new Label() {Text = "Nodes:", Font = Bold()},
                         BinaryRow(
                             TextCell("Reaction forces"),
-                            Cell("rf", i => i.Rf)
+                            Cell("rf, (rfx, rfy, rfz, rfm)", i => i.Rf)
                         ),
                         BinaryRow(
                             TextCell("Reaction moments"),
-                            Cell("rm", i => i.Rm)
+                            Cell("rm (rmx, rmy, rmz, rmm)", i => i.Rm)
                         ),
                         BinaryRow(
                             TextCell("Displacements"),
-                            Cell("u", i => i.U)
+                            Cell("u (ux, uy, uz, um)", i => i.U)
                         ),
                         BinaryRow(
                             TextCell("Rotations"),
-                            Cell("ur", i => i.Ur)
+                            Cell("ur (urx, ury, urz, rum)", i => i.Ur)
                         ),
                         BinaryRow(
                             TextCell("Concentrated forces"),
-                            Cell("cf", i => i.Cf)
+                            Cell("cf (cfx, cfy, cfz, cfm)", i => i.Cf)
                         ),
                         BinaryRow(
                             TextCell("Concentrated moments"),
-                            Cell("cm", i => i.Cm)
+                            Cell("cm (cmx, cmy, cmz, cmm)", i => i.Cm)
                         ),
+                        new Label() {Text = "Elements:", Font = Bold()},
+                        BinaryRow(
+                            TextCell("Spring forces"),
+                            Cell("spf (spfx, spfy, spfz)", i => i.SpringForces)
+                        ),
+                        BinaryRow(
+                            TextCell("Section forces"),
+                            Cell("sf (sf1, sf2, sf3)", i => i.SectionForces)
+                        ),
+                        BinaryRow(
+                            TextCell("Shell forces"),
+                            Cell("sf (sf1, sf2, sf3, sf4, sf5)", i => i.ShellForces)
+                        ),
+
+                        BinaryRow(
+                            TextCell("Section moments"),
+                            Cell("sm (sm1, sm2, sm3)", i => i.SectionMoments)
+                        ),
+
+                        BinaryRow(
+                            TextCell("Shell moments"),
+                            Cell("sm (sm1, sm2, sm3)", i => i.ShellMoments)
+                        ),
+
+                        // XXX: for now we dont include these settings
+                        /*
+                        BinaryRow(
+                            TextCell("Section strains"),
+                            Cell("se", i => i.SectionStrains)
+                        ),
+
+                        BinaryRow(
+                            TextCell("Section curvatures"),
+                            Cell("sk", i => i.SectionCurvatures)
+                        ),
+                        BinaryRow(
+                            TextCell("Shell curvatures"),
+                            Cell("sk", i => i.ShellCurvatures)
+                        ),
+                        BinaryRow(
+                            TextCell("Stress (beams)"),
+                            Cell("s", i => i.StressBeams)
+                        ),
+
+                        BinaryRow(
+                            TextCell("Stress (shells)"),
+                            Cell("s", i => i.StressShells)
+                        ),
+                        BinaryRow(
+                            TextCell("Stress (derived)"),
+                            Cell("s", i => i.StressDerived)
+                        ),
+
+                        BinaryRow(
+                            TextCell("Strain (beams)"),
+                            Cell("e", i => i.StrainBeams)
+                        ),
+                        BinaryRow(
+                            TextCell("Strain (shells)"),
+                            Cell("e", i => i.StrainShells)
+                        ),
+                        BinaryRow(
+                            TextCell("Strain (derived)"),
+                            Cell("e", i => i.StrainDerived)
+                        ),
+                        */
                     }
                 }
             });
+
+
             gbDetail.BindDataContext(lab => lab.Text,
                 Binding.Property<AnalysisItemViewModel, string>((m => m.StepName))
                     .Convert(s => "Output for Step " + s));
@@ -108,11 +184,11 @@ namespace StrucEngLib.Analysis
             return r;
         }
 
-        protected static TableCell TextCell(string text)
+        protected static TableCell TextCell(string text, bool spacing = true)
         {
             var c = new TableCell()
             {
-                Control = (new Label() {Text = text,}),
+                Control = (new Label() {Text = (spacing ? "   " : "") + text,}),
             };
             return c;
         }

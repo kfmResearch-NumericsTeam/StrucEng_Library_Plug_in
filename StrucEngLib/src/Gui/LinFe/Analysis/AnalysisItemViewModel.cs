@@ -41,6 +41,12 @@ namespace StrucEngLib.Analysis
             v.Ur = model.Ur;
             v.Cf = model.Cf;
             v.Cm = model.Cm;
+
+            v.ShellMoments = model.ShellMoments;
+            v.SectionMoments = model.SectionMoments;
+            v.ShellForces = model.ShellForces;
+            v.SectionForces = model.SectionForces;
+            v.SpringForces = model.SpringForces;
         }
 
         public static void VmToModel(AnalysisItemViewModel v, AnalysisSetting model)
@@ -53,6 +59,12 @@ namespace StrucEngLib.Analysis
             model.Ur = v.Ur ?? false;
             model.Cf = v.Cf ?? false;
             model.Cm = v.Cm ?? false;
+
+            model.ShellMoments = v.ShellMoments ?? false;
+            model.SectionMoments = v.SectionMoments ?? false;
+            model.ShellForces = v.ShellForces ?? false;
+            model.SectionForces = v.SectionForces ?? false;
+            model.SpringForces = v.SpringForces ?? false;
         }
 
         public void init()
@@ -64,6 +76,21 @@ namespace StrucEngLib.Analysis
             _ur = false;
             _cf = false;
             _cm = false;
+
+            _strainDerived = false;
+            _strainShells = false;
+            _strainBeams = false;
+            _stressDerived = false;
+            _stressShells = false;
+            _stressBeams = false;
+            _shellCurvatures = false;
+            _sectionCurvatures = false;
+            _sectionStrains = false;
+            _shellMoments = false;
+            _sectionMoments = false;
+            _shellForces = false;
+            _sectionForces = false;
+            _springForces = false;
         }
 
         private string _stepName;
@@ -167,11 +194,172 @@ namespace StrucEngLib.Analysis
             }
         }
 
-        public override string ToString()
+        private bool _strainDerived;
+
+        public bool? StrainDerived
         {
-            return $"{nameof(_stepName)}: {_stepName}, {nameof(_include)}: {_include}," +
-                   $" {nameof(_rf)}: {_rf}, {nameof(_rm)}: {_rm}, {nameof(_u)}: {_u}," +
-                   $" {nameof(_ur)}: {_ur}, {nameof(_cf)}: {_cf}, {nameof(_cm)}: {_cm}";
+            get => _strainDerived;
+            set
+            {
+                _strainDerived = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _strainShells;
+
+        public bool? StrainShells
+        {
+            get => _strainShells;
+            set
+            {
+                _strainShells = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _strainBeams;
+
+        public bool? StrainBeams
+        {
+            get => _strainBeams;
+            set
+            {
+                _strainBeams = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _stressDerived;
+
+        public bool? StressDerived
+        {
+            get => _stressDerived;
+            set
+            {
+                _stressDerived = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _stressShells;
+
+        public bool? StressShells
+        {
+            get => _stressShells;
+            set
+            {
+                _stressShells = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _stressBeams;
+
+        public bool? StressBeams
+        {
+            get => _stressBeams;
+            set
+            {
+                _stressBeams = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _shellCurvatures;
+
+        public bool? ShellCurvatures
+        {
+            get => _shellCurvatures;
+            set
+            {
+                _shellCurvatures = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _sectionCurvatures;
+
+        public bool? SectionCurvatures
+        {
+            get => _sectionCurvatures;
+            set
+            {
+                _sectionCurvatures = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _sectionStrains;
+
+        public bool? SectionStrains
+        {
+            get => _sectionStrains;
+            set
+            {
+                _sectionStrains = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _shellMoments;
+
+        public bool? ShellMoments
+        {
+            get => _shellMoments;
+            set
+            {
+                _shellMoments = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _sectionMoments;
+
+        public bool? SectionMoments
+        {
+            get => _sectionMoments;
+            set
+            {
+                _sectionMoments = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _shellForces;
+
+        public bool? ShellForces
+        {
+            get => _shellForces;
+            set
+            {
+                _shellForces = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _sectionForces;
+
+        public bool? SectionForces
+        {
+            get => _sectionForces;
+            set
+            {
+                _sectionForces = value ?? false;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _springForces;
+
+        public bool? SpringForces
+        {
+            get => _springForces;
+            set
+            {
+                _springForces = value ?? false;
+                OnPropertyChanged();
+            }
         }
     }
 }

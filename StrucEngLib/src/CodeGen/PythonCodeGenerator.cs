@@ -84,6 +84,7 @@ except Exception:
             {
                 // ignore
             }
+
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
@@ -334,15 +335,12 @@ mdl = Structure(name=name, path=path)
         {
             s.Workbench.Steps.Sort((s1, s2) => string.Compare(s1.Order, s2.Order, StringComparison.Ordinal));
             s.CommentLine("Steps");
-            
+
             // emit step definitions
             if (s.Workbench.Steps.Count > 0)
             {
                 s.Line("mdl.add([");
-                s.Workbench.Steps.ForEach(step =>
-                {
-                    s.Line(EmitStep(s, step) + ",");
-                });
+                s.Workbench.Steps.ForEach(step => { s.Line(EmitStep(s, step) + ","); });
                 s.Line("])");
             }
 
@@ -414,6 +412,9 @@ mdl = Structure(name=name, path=path)
                     sx.Select(setting => setting.Ur).Contains(true) ? "ur" : "",
                     sx.Select(setting => setting.Cf).Contains(true) ? "cf" : "",
                     sx.Select(setting => setting.Cm).Contains(true) ? "cm" : "",
+                    sx.Select(setting => setting.SpringForces).Contains(true) ? "spf" : "",
+                    sx.Select(setting => setting.SectionForces || setting.ShellForces).Contains(true) ? "sf" : "",
+                    sx.Select(setting => setting.SectionMoments || setting.ShellMoments).Contains(true) ? "sm" : "",
                 }.Where(setting => setting != "").ToList(), (id => id)
             );
             s.Line($"mdl.analyse_and_extract(software='abaqus', fields={fields})");
@@ -452,6 +453,28 @@ mdl = Structure(name=name, path=path)
                 EmitPlotData(s, step, "cmy", setting.Cm);
                 EmitPlotData(s, step, "cmz", setting.Cm);
                 EmitPlotData(s, step, "cmm", setting.Cm);
+
+                // spring forces
+                EmitPlotData(s, step, "spfx", setting.SpringForces);
+                EmitPlotData(s, step, "spfy", setting.SpringForces);
+                EmitPlotData(s, step, "spfz", setting.SpringForces);
+
+                // section forces
+                EmitPlotData(s, step, "sf1", setting.SectionForces);
+                EmitPlotData(s, step, "sf2", setting.SectionForces);
+                EmitPlotData(s, step, "sf3", setting.SectionForces);
+
+                // shell forces
+                EmitPlotData(s, step, "sf1", setting.ShellForces);
+                EmitPlotData(s, step, "sf2", setting.ShellForces);
+                EmitPlotData(s, step, "sf3", setting.ShellForces);
+                EmitPlotData(s, step, "sf4", setting.ShellForces);
+                EmitPlotData(s, step, "sf5", setting.ShellForces);
+
+                // section, shell moments together, as same keys
+                EmitPlotData(s, step, "sm1", setting.SectionMoments || setting.ShellMoments);
+                EmitPlotData(s, step, "sm2", setting.SectionMoments || setting.ShellMoments);
+                EmitPlotData(s, step, "sm3", setting.SectionMoments || setting.ShellMoments);
             });
         }
 
@@ -516,7 +539,7 @@ mdl = Structure(name=name, path=path)
             data.Append($"Druckzoneniteration = {s.PythonBoolean(sm.DruckzonenIteration)}, ");
             data.Append($"Schubnachweis = '{sm.Schubnachweis}', ");
             data.Append($"code = '{sm.Code}', ");
-            data.Append($"axes_scale = '{sm.AxesScale}'");
+            data.Append($"axes_scale = {sm.AxesScale}");
             data.Append(")");
             s.Line(data.ToString());
 
