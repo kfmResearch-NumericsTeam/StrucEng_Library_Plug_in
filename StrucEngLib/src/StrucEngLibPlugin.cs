@@ -13,7 +13,7 @@ namespace StrucEngLib
     /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
-        public new static string Version = "0.0.8";
+        public new static string Version = "0.0.9";
         public static string Website = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in";
 
         private static string _modelKey = "model";
