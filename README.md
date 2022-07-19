@@ -7,7 +7,7 @@
 
 
 # StrucEngLib Plugin
-Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechanical models, saftey concepts, GUI's, load generator, etc. for the structural analysis reinforced concrete and masonry.
+Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechanical models, saftey concepts, GUI's, load generator, etc. for the structural analysis of reinforced concrete and masonry.
 
   
 <p align="left">
