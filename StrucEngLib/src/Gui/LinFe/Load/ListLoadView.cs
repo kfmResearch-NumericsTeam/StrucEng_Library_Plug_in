@@ -121,6 +121,7 @@ namespace StrucEngLib.Load
                         }
                     }
                 });
+            ScrollHelper.ScrollParent(_lbSelectLoad);
             AddRow(
                 _gbPropsForLoad = new GroupBox
                 {

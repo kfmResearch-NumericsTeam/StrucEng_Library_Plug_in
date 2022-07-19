@@ -173,6 +173,7 @@ namespace StrucEngLib.Layer
                         Content = _vmDetailView.LayerDetailView
                     }
                 ));
+            ScrollHelper.ScrollParent(_dropdownLayers);
         }
     }
 }
