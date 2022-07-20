@@ -35,6 +35,7 @@ namespace StrucEngLib.Step
             {
                 Border = BorderType.None
             };
+            ScrollHelper.ScrollParent(_grid);
             _grid.AllowMultipleSelection = false;
             _grid.CellFormatting += (sender, args) =>
             {

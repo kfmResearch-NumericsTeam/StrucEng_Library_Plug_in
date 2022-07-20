@@ -58,6 +58,7 @@ namespace StrucEngLib.Sm
                     }
                 }
             });
+            ScrollHelper.ScrollParent(_dropdownLayers);
             AddRow(_gbProperties = new GroupBox
             {
                 Text = "Properties for Layer",
