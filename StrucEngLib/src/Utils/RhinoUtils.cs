@@ -54,7 +54,10 @@ namespace StrucEngLib
         {
             try
             {
-                var rhobjs = doc.Objects;
+                var settings = new ObjectEnumeratorSettings();
+                settings.NormalObjects = true;
+                settings.HiddenObjects = true;
+                var rhobjs = doc.Objects.GetObjectList(settings);
                 foreach (var t in rhobjs)
                 {
                     Rhino.Geometry.TextEntity tEntity = t.Geometry as Rhino.Geometry.TextEntity;
