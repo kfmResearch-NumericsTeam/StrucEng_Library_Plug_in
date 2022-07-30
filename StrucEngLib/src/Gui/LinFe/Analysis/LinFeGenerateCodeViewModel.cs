@@ -25,15 +25,12 @@ namespace StrucEngLib.Sm
             }
         }
 
-        public RelayCommand CommandNormalizeFont { get; }
-
         public LinFeGenerateCodeViewModel(LinFeMainViewModel vm)
         {
             _vm = vm;
             CommandInspectModel = new RelayCommand(OnInspectModel);
             CommandExecuteModel = new RelayCommand(OnExecuteModel);
             CommandResetData = new RelayCommand(OnResetData);
-            CommandNormalizeFont = new RelayCommand(OnNormalizeFont);
         }
         
         public sealed override void UpdateModel()
@@ -55,12 +52,6 @@ namespace StrucEngLib.Sm
             {
                 new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
             }
-        }
-        
-        private void OnNormalizeFont()
-        {
-            RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
-            RhinoApp.WriteLine("Normalizing Font of visible layers.");
         }
         
         private void OnExecuteModel()

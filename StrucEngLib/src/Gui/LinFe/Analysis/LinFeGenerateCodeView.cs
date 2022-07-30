@@ -12,7 +12,6 @@ namespace StrucEngLib.Sm
         private Button _btnInspectPython;
         private Button _btnExecPython;
         private LinkButton _btnClearData;
-        private LinkButton _btnNormalize;
 
         public LinFeGenerateCodeView(LinFeGenerateCodeViewModel vm)
         {
@@ -58,10 +57,6 @@ namespace StrucEngLib.Sm
                                 )
                             ),
                             new TableRow(
-                                new TableCell(
-                                    (_btnNormalize = new LinkButton() {Text = "Normalize Font Size"}),
-                                    false
-                                ),
                                 (_btnClearData = new LinkButton() {Text = "Reset Data"})
                                 ),
                         }
@@ -75,7 +70,6 @@ namespace StrucEngLib.Sm
             _btnExecPython.Command = _vm.CommandExecuteModel;
             _btnInspectPython.Command = _vm.CommandInspectModel;
             _btnClearData.Command = _vm.CommandResetData;
-            _btnNormalize.Command = _vm.CommandNormalizeFont;
         }
     }
 }
