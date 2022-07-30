@@ -1,6 +1,7 @@
 ## v0.0.10 (pending)
 - fix: scroll scrollbar of parent if mousewheel event in child, scroll was otherwise blocked.
-- No analysis output if a step contains a set (compas otherwise generates an error)
+- LinFE/SM: No analysis output if a step contains a set (compas otherwise generates an error)
+- Add button to 'normalize font size' to fix layers with too large font sizes from compas analysis output.
 
 ## v0.0.9
 - LinFe: Introduce spring forces, section forces, shell forces, 
