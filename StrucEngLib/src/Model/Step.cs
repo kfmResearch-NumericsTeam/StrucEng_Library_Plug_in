@@ -20,7 +20,12 @@ namespace StrucEngLib.Model
 
         public bool Contains(object o)
         {
-            return Entries.Select(e => e.Value).Contains(o);
+            return Entries.Any(e => e.Value.Equals(o));
+        }
+
+        public bool ContainsType(StepType type)
+        {
+            return Entries.Any(e => e.Type.Equals(type));
         }
 
         public void AddEntry(StepType type, object o)

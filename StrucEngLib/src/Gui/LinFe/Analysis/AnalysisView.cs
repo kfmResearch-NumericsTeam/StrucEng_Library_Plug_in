@@ -88,7 +88,7 @@ namespace StrucEngLib.Analysis
                 }
             });
             
-            AddRow(_detailView = new AnalysisItemView()
+            AddRow(_detailView = new AnalysisItemView(_vm)
             {
                 Spacing = new Size(5, 10),
                 Padding = new Padding(5),

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 
@@ -35,6 +36,28 @@ namespace StrucEngLib.Analysis
             _vm = vm;
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
             UpdateViewModel();
+            AddNewAndRemoveOldSteps(vm);
+            
+            vm.ListStepVm.StepChanged += (sender, args) => {
+                foreach (var avm in AnalysisViewItems)
+                {
+                    // XXX: If step contains a set, we cant generate analysis output for it.
+                    // So we reset it to contain no user data.
+                    if (!avm.HasOutput() && avm.Include == true)
+                    {
+                        avm.init();
+                        avm.Include = true;
+                    }    
+                }
+                // XXX: Force to redraw output (workaround, TODO)
+                var item = SelectedItem;
+                SelectedItem = null;
+                SelectedItem = item;
+            };
+        }
+
+        private void AddNewAndRemoveOldSteps(LinFeMainViewModel vm)
+        {
             vm.ListStepVm.StepItems.CollectionChanged += (sender, args) =>
             {
                 if (args.NewItems != null && args.NewItems.Count > 0)

@@ -22,6 +22,16 @@ namespace StrucEngLib.Step
 
         public ObservableCollection<StepEntryViewModel> StepItems;
 
+        /// <summary>
+        /// This EventHandler will fire if a new Step is Added or a property within StepItems is changed. 
+        /// </summary>
+        public event EventHandler<EventArgs> StepChanged;
+
+        protected void OnStepChanged(Object sender)
+        {
+            StepChanged?.Invoke(sender, new EventArgs());
+        }
+        
         private StepEntryViewModel _selectedStepItem;
 
         public StepEntryViewModel SelectedStepItem
@@ -32,12 +42,27 @@ namespace StrucEngLib.Step
                 _selectedStepItem = value;
                 OnPropertyChanged();
             }
+            
+        }
+
+        private void AddStepItem(StepEntryViewModel step)
+        {
+            StepItems.Add(step);
+            step.PropertyChanged += (sender, args) =>
+            {
+                OnStepChanged(step);
+            };
         }
 
         public ListStepViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             StepItems = new ObservableCollection<StepEntryViewModel>() { };
+            StepItems.CollectionChanged += (sender, args) =>
+            {
+                OnStepChanged(this);
+            };
+            
             UpdateVm();
 
             CommandDeleteStep = new RelayCommand(OnDeleteStep);
@@ -79,7 +104,7 @@ namespace StrucEngLib.Step
                     {
                         Order = step.Order
                     };
-                    StepItems.Add(sVm);
+                    AddStepItem(sVm);
                 }
             }
         }
@@ -152,7 +177,7 @@ namespace StrucEngLib.Step
                 {
                     Order = stepOrder
                 };
-                StepItems.Add(vm);
+                AddStepItem(vm);
             }
         }
 

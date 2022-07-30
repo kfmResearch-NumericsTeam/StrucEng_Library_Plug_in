@@ -80,11 +80,11 @@ namespace StrucEngLib
                                                $" Auto corrected.");
                                 setting.ShellForces = true;
                             }
-                            if (!setting.SectionMoments && !setting.ShellMoments)
+                            if (!setting.SectionMoments)
                             {
                                 ctx.AddWarning($"Sandwichmodel requires analysis output 'Section moments' or 'Shell moments' in step {step.Order} of LinFE model." +
                                                $" Auto corrected");
-                                setting.ShellMoments = true;
+                                setting.SectionMoments = true;
                             }
                         }
                     }
