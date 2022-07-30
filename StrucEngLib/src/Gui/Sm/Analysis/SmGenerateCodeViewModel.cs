@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Eto.Forms;
+using Rhino;
 
 namespace StrucEngLib.Sm
 {
@@ -10,6 +11,7 @@ namespace StrucEngLib.Sm
         public RelayCommand CommandInspectModel { get; }
         public RelayCommand CommandExecuteModel { get; }
         public RelayCommand CommandResetData { get; }
+        public RelayCommand CommandNormalizingFont { get; }
         
         private string _fileName;
 
@@ -29,6 +31,7 @@ namespace StrucEngLib.Sm
             CommandInspectModel = new RelayCommand(OnInspectModel);
             CommandExecuteModel = new RelayCommand(OnExecuteModel);
             CommandResetData = new RelayCommand(OnResetData);
+            CommandNormalizingFont = new RelayCommand(OnNormalizeFont);
         }
         
         public sealed override void UpdateModel()
@@ -45,6 +48,12 @@ namespace StrucEngLib.Sm
             {
                 FileName = _vm.Workbench.FileName;
             }   
+        }
+        
+        private void OnNormalizeFont()
+        {
+            RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
+            RhinoApp.WriteLine("Normalizing Font of visible layers.");
         }
         
         private void OnInspectModel()

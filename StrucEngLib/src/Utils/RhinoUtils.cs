@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using Eto.Drawing;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Input;
 using Rhino.Input.Custom;
+using Font = Rhino.DocObjects.Font;
 
 namespace StrucEngLib
 {
@@ -44,6 +48,28 @@ namespace StrucEngLib
             doc.Views.Redraw();
         }
 
+        
+        // Sets Text heights of all text entities in document to given size
+        public static void NormalizeTextHeights(Rhino.RhinoDoc doc, double textHeight = 3.0)
+        {
+            try
+            {
+                var rhobjs = doc.Objects;
+                foreach (var t in rhobjs)
+                {
+                    Rhino.Geometry.TextEntity tEntity = t.Geometry as Rhino.Geometry.TextEntity;
+                    if (tEntity == null) continue;
+                    tEntity.TextHeight = textHeight;
+                    t.CommitChanges();
+                }
+
+                doc.Views.Redraw();
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+        }
 
         public static string SelectLayerByMouse(RhinoDoc doc)
         {
