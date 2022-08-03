@@ -23,8 +23,11 @@ namespace StrucEngLib.Analysis
                 _selectedItem = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
+                
             }
         }
+        
+        
 
         public AnalysisViewModel(LinFeMainViewModel vm)
         {
@@ -37,7 +40,6 @@ namespace StrucEngLib.Analysis
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
             UpdateViewModel();
             AddNewAndRemoveOldSteps(vm);
-            
             vm.ListStepVm.StepChanged += (sender, args) => {
                 foreach (var avm in AnalysisViewItems)
                 {
@@ -85,7 +87,7 @@ namespace StrucEngLib.Analysis
             {
                 if (args.PropertyName == nameof(_selectedItem.Include))
                 {
-                    if (_selectedItem.Include == false)
+                    if (_selectedItem != null && _selectedItem.Include == false)
                     {
                         _selectedItem.init();
                     }

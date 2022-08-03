@@ -1,7 +1,7 @@
 using System;
-
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
@@ -11,7 +11,7 @@ namespace StrucEngLib.Step
 {
     using Layer = StrucEngLib.Model.Layer;
     using Load = StrucEngLib.Model.Load;
-    
+
     /// <summary>Main view model to assign steps to entries</summary>
     public class ListStepViewModel : ViewModelBase
     {
@@ -22,6 +22,21 @@ namespace StrucEngLib.Step
 
         public ObservableCollection<StepEntryViewModel> StepItems;
 
+        private StepEntryViewModel StepbyEntryObject(object entry)
+        {
+            foreach (var stepItem in StepItems)
+            {
+                if (stepItem.Model.Contains(entry))
+                {
+                    return stepItem;
+                }
+                
+            }
+            return null;
+        }
+        
+        
+
         /// <summary>
         /// This EventHandler will fire if a new Step is Added or a property within StepItems is changed. 
         /// </summary>
@@ -31,7 +46,7 @@ namespace StrucEngLib.Step
         {
             StepChanged?.Invoke(sender, new EventArgs());
         }
-        
+
         private StepEntryViewModel _selectedStepItem;
 
         public StepEntryViewModel SelectedStepItem
@@ -42,55 +57,82 @@ namespace StrucEngLib.Step
                 _selectedStepItem = value;
                 OnPropertyChanged();
             }
-            
         }
 
         private void AddStepItem(StepEntryViewModel step)
         {
             StepItems.Add(step);
-            step.PropertyChanged += (sender, args) =>
-            {
-                OnStepChanged(step);
-            };
+            step.PropertyChanged += (sender, args) => { OnStepChanged(step); };
         }
 
         public ListStepViewModel(LinFeMainViewModel mainVm)
         {
             _mainVm = mainVm;
             StepItems = new ObservableCollection<StepEntryViewModel>() { };
-            StepItems.CollectionChanged += (sender, args) =>
-            {
-                OnStepChanged(this);
-            };
-            
+            StepItems.CollectionChanged += (sender, args) => { OnStepChanged(this); };
+
             UpdateVm();
 
             CommandDeleteStep = new RelayCommand(OnDeleteStep);
             CommandChangeStep = new RelayCommand(OnChangeStep);
             CommandAddStep = new RelayCommand(OnAddStep);
 
-
-            // XXX: Redraw view model if something changes
-            _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
-            {
-                foreach (var item in StepItems)
-                {
-                    item.ModelUpdated();
-                }
-            };
-            _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
-            {
-                foreach (var item in StepItems)
-                {
-                    item.ModelUpdated();
-                }
-            };
+            InitEventListeners();
 
             if (StepItems.Count > 0)
             {
                 // XXX: Preselect first entry
                 SelectedStepItem = StepItems[0];
             }
+        }
+
+        private void InitEventListeners()
+        {
+            // XXX: Redraw view model if something changes
+            _mainVm.ListLayerVm.Layers.CollectionChanged += (sender, args) =>
+            {
+                // In case a layer is removed, we have to remove it from the step
+                if (args.OldItems != null)
+                {
+                    foreach (var removeLayer in args.OldItems)
+                    {
+                        var stepVm = StepbyEntryObject(removeLayer);
+                        stepVm?.Model.RemoveStepEntryWithValue(removeLayer);
+                    }
+                }
+                // Update set item text
+                foreach (var item in StepItems)
+                {
+                    item.ModelUpdated();
+                }
+            };
+
+
+            _mainVm.ListLoadVm.Loads.CollectionChanged += (sender, args) =>
+            {
+                // In case a load is removed, we have to remove it from the step
+                if (args.OldItems != null)
+                {
+                    foreach (var removeLayer in args.OldItems)
+                    {
+                        var stepVm = StepbyEntryObject(removeLayer);
+                        stepVm?.Model.RemoveStepEntryWithValue(removeLayer);
+                    }
+                }
+                foreach (var item in StepItems)
+                {
+                    item.ModelUpdated();
+                }
+            };
+            
+            // Update load item text
+            _mainVm.ListLoadVm.LoadChanged += (sender, args) =>
+            {
+                foreach (var item in StepItems)
+                {
+                    item.ModelUpdated();
+                }
+            };
         }
 
         private void UpdateVm()
