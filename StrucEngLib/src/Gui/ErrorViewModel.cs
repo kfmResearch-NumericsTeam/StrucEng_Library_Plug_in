@@ -20,6 +20,18 @@ namespace StrucEngLib
             }
         }
 
+        public ErrorViewModel()
+        {
+            
+            PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(Message) && Message != null && String.IsNullOrWhiteSpace(Message))
+                {
+                    StrucEngLibLog.Instance.WriteTaggedLine("error", Message);
+                }
+            };
+        }
+
         public void ShowException(string info, Exception e)
         {
             StringBuilder b = new StringBuilder();
