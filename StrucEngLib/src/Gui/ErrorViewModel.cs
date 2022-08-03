@@ -25,7 +25,7 @@ namespace StrucEngLib
             
             PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == nameof(Message) && Message != null && String.IsNullOrWhiteSpace(Message))
+                if (args.PropertyName == nameof(Message) && Message != null && !String.IsNullOrWhiteSpace(Message))
                 {
                     StrucEngLibLog.Instance.WriteTaggedLine("error", Message);
                 }

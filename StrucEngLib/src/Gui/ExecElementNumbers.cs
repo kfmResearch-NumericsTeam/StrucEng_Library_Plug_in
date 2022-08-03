@@ -83,8 +83,8 @@ if __name__=='__main__':
             File.WriteAllText(fileName, code);
             try
             {
-                Rhino.RhinoApp.WriteLine("Executing a python command. The first run of this may take a while. Rhino will freeze until this operation is done");
-                Rhino.RhinoApp.WriteLine("The temporary file being executed can be found at " + fileName);
+                StrucEngLibLog.Instance.WriteLine("Executing a python command. The first run of this may take a while. Rhino will freeze until this operation is done");
+                StrucEngLibLog.Instance.WriteLine("The temporary file being executed can be found at " + fileName);
                 Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
             }
             catch (Exception)

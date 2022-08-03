@@ -369,7 +369,7 @@ mdl = Structure(name=name, path=path)
                     return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList})";
                 }
                 default:
-                    RhinoApp.WriteLine("Ignoring unknown load: {0}", load.LoadType);
+                    StrucEngLibLog.Instance.WriteLine("Ignoring unknown load: {0}", load.LoadType);
                     throw new Exception($"Unknown load: {load.LoadType}");
             }
         }

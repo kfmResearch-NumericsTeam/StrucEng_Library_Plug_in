@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Rhino;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib.Model
 {
@@ -41,9 +42,9 @@ namespace StrucEngLib.Model
             }
             catch (Exception e)
             {
-                RhinoApp.WriteLine("Something went wrong wile reading the model: {0}", data);
-                RhinoApp.WriteLine(e.Message);
-                RhinoApp.WriteLine("We start off an empty model instead...");
+                StrucEngLibLog.Instance.WriteLine("Something went wrong wile reading the model: {0}", data);
+                StrucEngLibLog.Instance.WriteLine(e.Message);
+                StrucEngLibLog.Instance.WriteLine("We start off an empty model instead...");
             }
 
             return bench;
@@ -52,7 +53,7 @@ namespace StrucEngLib.Model
         public string SerializeToString(Workbench data)
         {
             var s = JsonConvert.SerializeObject(data, _settings);
-            RhinoApp.WriteLine("serialize: {0}", s);
+            StrucEngLibLog.Instance.WriteLine("serialize: {0}", s);
             return s;
         }
     }

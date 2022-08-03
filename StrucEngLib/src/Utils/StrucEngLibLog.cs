@@ -23,22 +23,34 @@ namespace StrucEngLib.Utils
 
         public void WriteLine(string format, params object[] args)
         {
-            RhinoApp.WriteLine(Tag() + String.Format(format, args));
+            WriteInternal(Tag() + String.Format(format, args));
         }
 
         public void WriteLine(string format)
         {
-            RhinoApp.WriteLine(Tag() + format);
+            WriteInternal(Tag() + format);
         }
 
         public void WriteTaggedLine(string tag, string format)
         {
-            RhinoApp.WriteLine(Tag(tag) + format);
+            WriteInternal(Tag(tag) + format);
         }
 
         public void WriteTaggedLine(string tag, string format, params object[] args)
         {
-            RhinoApp.WriteLine(Tag(tag) + String.Format(format, args));
+            WriteInternal(Tag(tag) + String.Format(format, args));
+        }
+        
+        private void WriteInternal(string msg)
+        {
+            try
+            {
+                Rhino.RhinoApp.WriteLine(msg);
+            }
+            catch (Exception e)
+            {
+                Console.Out.WriteLine(msg);
+            }
         }
     }
 }
