@@ -4,6 +4,7 @@
 - always normalize rhino layer font size to fix layers with too large font sizes from compas analysis output.
 - bugfix: linfe update step ui if layer/ load is removed 
 - change UI text fields to simple text fields without suggestion completion
+- Rhino select layers which are currently focused in strucenglib
 
 ## v0.0.9
 - LinFe: Introduce spring forces, section forces, shell forces, 
