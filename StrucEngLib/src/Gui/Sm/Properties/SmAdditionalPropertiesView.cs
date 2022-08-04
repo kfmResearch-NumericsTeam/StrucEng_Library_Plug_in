@@ -158,6 +158,10 @@ namespace StrucEngLib.Sm
             _propLayoutNoData.Bind<bool>(nameof(_propLayoutNoData.Visible), _vm, nameof(_vm.HasNoLayers));
             _propLayoutHasData.Bind<object>(nameof(_propLayoutHasData.DataContext), _vm, nameof(_vm.SelectedProperty));
 
+            _dropdownLayers.SelectedValueChanged += (sender, args) =>
+            {
+                _vm.RhinoSelectProperty();
+            }; 
 
             _vm.ViewModelInitialized += (sender, args) =>
             {

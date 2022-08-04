@@ -150,5 +150,15 @@ namespace StrucEngLib.Sm
                 m.AdditionalProperties.Add(p.Model);
             });
         }
+
+        public void RhinoSelectProperty()
+        {
+            if (SelectedProperty == null)
+            {
+                return;
+            }
+
+            RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, SelectedProperty.Model.Layer.GetName());
+        }
     }
 }

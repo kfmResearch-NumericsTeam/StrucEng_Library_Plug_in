@@ -30,12 +30,11 @@ namespace StrucEngLib.Step
                 {
                     return stepItem;
                 }
-                
             }
+
             return null;
         }
-        
-        
+
 
         /// <summary>
         /// This EventHandler will fire if a new Step is Added or a property within StepItems is changed. 
@@ -100,6 +99,7 @@ namespace StrucEngLib.Step
                         stepVm?.Model.RemoveStepEntryWithValue(removeLayer);
                     }
                 }
+
                 // Update set item text
                 foreach (var item in StepItems)
                 {
@@ -119,12 +119,13 @@ namespace StrucEngLib.Step
                         stepVm?.Model.RemoveStepEntryWithValue(removeLayer);
                     }
                 }
+
                 foreach (var item in StepItems)
                 {
                     item.ModelUpdated();
                 }
             };
-            
+
             // Update load item text
             _mainVm.ListLoadVm.LoadChanged += (sender, args) =>
             {
@@ -269,6 +270,20 @@ namespace StrucEngLib.Step
 
             order++;
             return order.ToString();
+        }
+
+        public void RhinoSelectStep()
+        {
+            if (SelectedStepItem == null) return;
+            var names = SelectedStepItem.Model.LayerNames();
+            if (names.Count == 0)
+            {
+                RhinoUtils.UnSelectAll(RhinoDoc.ActiveDoc);
+            }
+            else
+            {
+                RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, names.ToList());
+            }
         }
     }
 }

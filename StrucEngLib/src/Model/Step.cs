@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -32,6 +33,23 @@ namespace StrucEngLib.Model
         {
             StepEntry e = new StepEntry(type, o);
             Entries.Add(e);
+        }
+
+        public ICollection<StepEntry> EntriesByType(StepType type)
+        {
+            return new ReadOnlyCollection<StepEntry>(Entries.Where(e => e.Type == type).ToList());
+        }
+
+        /// <summary>
+        /// Get a list of all layer names included in the step
+        /// </summary>
+        public ICollection<string> LayerNames()
+        {
+            List<string> names = new List<string>();
+            names.AddRange(EntriesByType(StepType.Set).Select(e => ((Set) e.Value).Name));
+            names.AddRange(EntriesByType(StepType.Load)
+                .SelectMany(e => ((Load) e.Value).Layers.Select(l => l.GetName())));
+            return names.ToHashSet();
         }
 
         /// <summary> User readable summary of step </summary>

@@ -27,6 +27,7 @@ namespace StrucEngLib.Step
             _grid.DataContext = _listStepVm;
             _grid.SelectedItemBinding.BindDataContext((ListStepViewModel m) => m.SelectedStepItem);
             _listStepVm.UpdateModel();
+            _grid.SelectionChanged += (sender, args) => _listStepVm.RhinoSelectStep();
         }
 
         private void Build()

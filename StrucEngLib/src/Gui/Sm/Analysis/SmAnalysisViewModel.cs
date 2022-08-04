@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
 using StrucEngLib.Sm;
@@ -108,6 +109,12 @@ namespace StrucEngLib.Sm
                     }));
                 }
             });
+        }
+
+        public void RhinoSelectStep()
+        {
+            if (SelectedItem == null) return;
+            RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, SelectedItem.Model.Step.LayerNames());
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.ConstrainedExecution;
+using Newtonsoft.Json;
 using Rhino;
 
 namespace StrucEngLib.Utils
@@ -21,8 +22,36 @@ namespace StrucEngLib.Utils
 
         private String Tag(String suffix = null) => suffix == null ? "[strucenglib] " : $"[strucenglib/{suffix}] ";
 
+        private string Serialize(object o)
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(o, Formatting.None,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+            }
+            catch (Exception e)
+            {
+                return o.ToString();
+            }
+        }
+
+        private void ProcessArgs(ref object[] args)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (!(args[i] is string))
+                {
+                    args[i] = Serialize(args[i]);
+                }
+            }
+        }
+
         public void WriteLine(string format, params object[] args)
         {
+            ProcessArgs(ref args);
             WriteInternal(Tag() + String.Format(format, args));
         }
 
@@ -38,9 +67,10 @@ namespace StrucEngLib.Utils
 
         public void WriteTaggedLine(string tag, string format, params object[] args)
         {
+            ProcessArgs(ref args);
             WriteInternal(Tag(tag) + String.Format(format, args));
         }
-        
+
         private void WriteInternal(string msg)
         {
             try

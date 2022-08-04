@@ -23,11 +23,9 @@ namespace StrucEngLib.Analysis
                 _selectedItem = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedItemVisible));
-                
             }
         }
-        
-        
+
 
         public AnalysisViewModel(LinFeMainViewModel vm)
         {
@@ -40,7 +38,8 @@ namespace StrucEngLib.Analysis
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
             UpdateViewModel();
             AddNewAndRemoveOldSteps(vm);
-            vm.ListStepVm.StepChanged += (sender, args) => {
+            vm.ListStepVm.StepChanged += (sender, args) =>
+            {
                 foreach (var avm in AnalysisViewItems)
                 {
                     // XXX: If step contains a set, we cant generate analysis output for it.
@@ -49,8 +48,9 @@ namespace StrucEngLib.Analysis
                     {
                         avm.init();
                         avm.Include = true;
-                    }    
+                    }
                 }
+
                 // XXX: Force to redraw output (workaround, TODO)
                 var item = SelectedItem;
                 SelectedItem = null;
@@ -151,6 +151,12 @@ namespace StrucEngLib.Analysis
             {
                 OnNewStep(step);
             }
+        }
+
+        public void RhinoSelectStep()
+        {
+            if (SelectedItem == null) return;
+            RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, SelectedItem.StepModel.LayerNames());
         }
     }
 }

@@ -96,6 +96,20 @@ namespace StrucEngLib.Load
             _ignoreStoreVmToModel = false;
         }
 
+        public void RhinoSelectConnectedLayers()
+        {
+            if (Layers == null) return;
+            var names = Layers.ToList().Select(l => l.GetName()).ToList();
+            if (names.Count == 0)
+            {
+                RhinoUtils.UnSelectAll(RhinoDoc.ActiveDoc);
+            }
+            else
+            {
+                RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, names);
+            }
+        }
+
         protected void OnConnectLayer()
         {
             var dialog = new SelectLayerDialog(ListLayerVm.Layers.ToList());

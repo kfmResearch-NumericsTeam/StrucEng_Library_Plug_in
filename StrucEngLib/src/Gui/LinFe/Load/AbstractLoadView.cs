@@ -33,6 +33,10 @@ namespace StrucEngLib.Load
                     _vm.Layers.Clear();
                 }
             };
+            _tbConnectLayers.GotFocus += (sender, args) =>
+            {
+                _vm.RhinoSelectConnectedLayers();
+            };
         }
 
         protected void BuildGui()

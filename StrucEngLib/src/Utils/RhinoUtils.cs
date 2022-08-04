@@ -31,7 +31,7 @@ namespace StrucEngLib
             return true;
         }
         
-        public static bool SelectLayerByNames(RhinoDoc doc, List<string> names, bool unSelectAll = true)
+        public static bool SelectLayerByNames(RhinoDoc doc, IEnumerable<string> names, bool unSelectAll = true)
         {
             doc.Objects.UnselectAll();
             foreach (var name in names)
