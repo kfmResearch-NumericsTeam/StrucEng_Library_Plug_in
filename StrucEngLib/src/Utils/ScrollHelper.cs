@@ -1,3 +1,4 @@
+using System;
 using Eto.Drawing;
 using Eto.Forms;
 
@@ -11,7 +12,7 @@ namespace StrucEngLib
     {
         public static void ScrollParent(Control c)
         {
-            const int jump = 20;
+            const int jump = 40;
 
             if (c == null) return;
             c.MouseWheel += (sender, args) =>
@@ -21,8 +22,9 @@ namespace StrucEngLib
                 {
                     if (p is Scrollable s)
                     {
-                        s.ScrollPosition = new Point(s.ScrollPosition.X,
-                            (int) (s.ScrollPosition.Y - (args.Delta.Height * jump)));
+                        var j = (int) (s.ScrollPosition.Y - (args.Delta.Height * jump));
+                        j = Math.Max(0, j);
+                        s.ScrollPosition = new Point(s.ScrollPosition.X, j);
                     }
                 }
 
