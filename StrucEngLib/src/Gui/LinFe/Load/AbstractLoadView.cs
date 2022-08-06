@@ -43,7 +43,35 @@ namespace StrucEngLib.Load
         {
             Padding = new Padding(5) { };
             Spacing = new Size(5, 1);
-            AddRow(SelectLayerDialog.CreateUiElement(ref _btConnectLayers, ref _tbConnectLayers));
+            AddRow(CreateUiElement(ref _btConnectLayers, ref _tbConnectLayers));
+        }
+        
+        private Control CreateUiElement(ref Button button, ref TextBox label)
+        {
+            label = new TextBox();
+            label.ReadOnly = true;
+            label.AutoSelectMode = AutoSelectMode.Always;
+            label.PlaceholderText = "No Layers connected";
+            return new TableLayout
+            {
+                Spacing = new Size(5, 10),
+                Padding = new Padding()
+                {
+                    Bottom = 10,
+                },
+                Rows =
+                {
+                    new TableRow
+                    {
+                        ScaleHeight = false, Cells =
+                        {
+                            new TableCell((label), true),
+                            TableLayout.AutoSized(
+                                button = new Button {Text = "Connect...", Enabled = true})
+                        }
+                    },
+                }
+            };
         }
     }
 }
