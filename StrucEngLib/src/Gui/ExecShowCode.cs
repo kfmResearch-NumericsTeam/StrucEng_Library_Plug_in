@@ -6,7 +6,7 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>Command to show source code to then further execute it</summary>
     public class ExecShowCode : CommandBase
     {
         private readonly MainViewModel _vm;

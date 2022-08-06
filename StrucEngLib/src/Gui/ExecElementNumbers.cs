@@ -79,18 +79,7 @@ if __name__=='__main__':
 
         public void RunCode(string code)
         {
-            string fileName = Path.GetTempPath() + Guid.NewGuid().ToString() + ".py";
-            File.WriteAllText(fileName, code);
-            try
-            {
-                StrucEngLibLog.Instance.WriteLine("Executing a python command. The first run of this may take a while. Rhino will freeze until this operation is done");
-                StrucEngLibLog.Instance.WriteLine("The temporary file being executed can be found at " + fileName);
-                Rhino.RhinoApp.RunScript("_-RunPythonScript " + fileName, true);
-            }
-            catch (Exception)
-            {
-                // XXX Ignore
-            }
+            new ExecExecuteCode(_vm.MainViewModel, code).Execute(null);
         }
     }
 }
