@@ -7,7 +7,7 @@ using Eto.Forms;
 
 namespace StrucEngLib.Utils
 {
-    /// <summary></summary>
+    /// <summary>Utility class with class extensions</summary>
     public static class Extensions
     {
         

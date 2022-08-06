@@ -5,9 +5,11 @@ using StrucEngLib.Model.Sm;
 
 namespace StrucEngLib.Model
 {
+    /// <summary>
+    /// Main application model
+    /// </summary>
     public class Workbench
     {
-        /// <summary> Version for serialization purpose </summary>
         public string Version { get; } = "1";
 
         public List<Layer> Layers { get; } = new List<Layer>();
