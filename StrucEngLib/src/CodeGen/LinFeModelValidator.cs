@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Rhino;
 using Rhino.Runtime.InteropWrappers;
 using StrucEngLib;
@@ -27,7 +28,25 @@ namespace StrucEngLib
 
             ValidateLoads(model, ctx);
             ValidateSteps(model, ctx);
+            ValidateAnalysisSettings(model, ctx);
             return ctx;
+        }
+
+        private void ValidateAnalysisSettings(Workbench model, ErrorMessageContext ctx)
+        {
+            model.Steps.ForEach(step =>
+            {
+                if (step.Setting != null && step.Setting.Include)
+                {
+                    var s = step.Setting;
+                    if (s.AnySettingEnabled && step.ContainsAnyStepTypeSetNested())
+                    {
+                        ctx.AddWarning(
+                            $"Step {step.Order} contains a set and has analysis settings enabled. " +
+                            $"This may cause an error.");
+                    }
+                }
+            });
         }
 
         private void ValidateLayers(Workbench model, ErrorMessageContext ctx)
@@ -144,7 +163,8 @@ namespace StrucEngLib
             {
                 if (stepIds.Contains(step.Order))
                 {
-                    ctx.AddWarning($"Several steps contain the same step ID ({step.Order}). This will likely cause invalid state.");
+                    ctx.AddWarning(
+                        $"Several steps contain the same step ID ({step.Order}). This will likely cause invalid state.");
                 }
                 else
                 {
@@ -155,7 +175,7 @@ namespace StrucEngLib
                 {
                     ctx.AddWarning($"Step Id {step.Order} not numeric");
                 }
-                
+
                 hasAnalysis = hasAnalysis || (step.Setting != null && step.Setting.Include == true);
 
                 if (step.Entries == null || step.Entries.Count == 0)

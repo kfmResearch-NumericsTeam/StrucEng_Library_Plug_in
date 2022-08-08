@@ -35,6 +35,17 @@ namespace StrucEngLib.Model
             Entries.Add(e);
         }
 
+        /// <summary>
+        /// Returns true if step contains any LayerType Set in either the step entry or nested in a load.
+        /// </summary>
+        public bool ContainsAnyStepTypeSetNested()
+        {
+            return ContainsType(StepType.Set) || EntriesByType(StepType.Load).ToList()
+                .Select(type => type.Value).Cast<Model.Load>().ToList()
+                .SelectMany(load => load.Layers).ToList()
+                .Any(layer => layer.LayerType == LayerType.SET);
+        }
+
         public ICollection<StepEntry> EntriesByType(StepType type)
         {
             return new ReadOnlyCollection<StepEntry>(Entries.Where(e => e.Type == type).ToList());

@@ -92,7 +92,7 @@ namespace StrucEngLib.Analysis
             });
 
             gbDetail.BindDataContext(view => view.Content,
-                Binding.Property<AnalysisItemViewModel, bool>(m => m.HasOutput())
+                Binding.Property<AnalysisItemViewModel, bool>(m => m.AnalysisSettingsAllowed())
                     .Convert<Control>(b => b ? Output() : NoOutputAvailable()));
             
             gbDetail.BindDataContext(lab => lab.Text,

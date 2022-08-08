@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -18,6 +19,10 @@ namespace StrucEngLib.Model
         
         public bool SectionMoments { get; set; }
         public bool ShellForces { get; set; }
+        
+        public bool AnySettingEnabled =>
+            Include && new List<bool?>() {Rf, Rm, U, Ur, Cf, Cm, SectionMoments, ShellForces}.Any(f => f == true);
+
 
         public override string ToString()
         {

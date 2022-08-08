@@ -44,7 +44,7 @@ namespace StrucEngLib.Analysis
                 {
                     // XXX: If step contains a set, we cant generate analysis output for it.
                     // So we reset it to contain no user data.
-                    if (!avm.HasOutput() && avm.Include == true)
+                    if (!avm.AnalysisSettingsAllowed() && avm.Include == true)
                     {
                         avm.init();
                         avm.Include = true;

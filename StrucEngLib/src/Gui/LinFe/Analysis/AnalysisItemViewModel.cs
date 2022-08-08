@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Eto.Forms;
@@ -31,12 +33,13 @@ namespace StrucEngLib.Analysis
             VmToModel(this, Model);
         }
 
-        public bool HasOutput() => !StepModel.ContainsType(StepType.Set);
+        // True if analysis output can contain settings
+        public bool AnalysisSettingsAllowed() => !StepModel.ContainsAnyStepTypeSetNested();
 
         public static void ModelToVm(AnalysisSetting model, AnalysisItemViewModel v)
         {
             v.StepName = model.StepId;
-            
+
             v.Include = model.Include;
             v.Rf = model.Rf;
             v.Rm = model.Rm;
@@ -45,7 +48,7 @@ namespace StrucEngLib.Analysis
             v.Cf = model.Cf;
             v.Cm = model.Cm;
 
-            
+
             v.SectionMoments = model.SectionMoments;
             v.ShellForces = model.ShellForces;
         }
@@ -60,7 +63,7 @@ namespace StrucEngLib.Analysis
             model.Ur = v.Ur ?? false;
             model.Cf = v.Cf ?? false;
             model.Cm = v.Cm ?? false;
-            
+
             model.SectionMoments = v.SectionMoments ?? false;
             model.ShellForces = v.ShellForces ?? false;
         }
@@ -75,7 +78,7 @@ namespace StrucEngLib.Analysis
             _cf = false;
             _cm = false;
 
-         
+
             _sectionMoments = false;
             _shellForces = false;
         }
