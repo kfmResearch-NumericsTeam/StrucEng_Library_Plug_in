@@ -5,6 +5,9 @@ using Rhino.UI.Forms;
 
 namespace StrucEngLib.Utils
 {
+    /// <summary>
+    /// Simple dialog to show when Rhino freezes during code execution.
+    /// </summary>
     class FreezeDialog : Form
     {
         public FreezeDialog()
