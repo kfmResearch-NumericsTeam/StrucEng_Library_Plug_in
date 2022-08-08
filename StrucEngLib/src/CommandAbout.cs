@@ -4,6 +4,7 @@ using Rhino;
 using Rhino.Commands;
 using Rhino.UI;
 using Rhino.UI.Controls;
+using StrucEngLib.Utils;
 using Command = Rhino.Commands.Command;
 
 namespace StrucEngLib
