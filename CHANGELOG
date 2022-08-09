@@ -1,4 +1,4 @@
-## v0.0.10 (pending)
+## v0.0.10
 - fix: scroll scrollbar of parent if mousewheel event in child, scroll was otherwise blocked.
 - LinFE/SM: No analysis output if a step contains a set, also not within a load, (compas otherwise generates an error)
 - always normalize rhino layer font size to fix layers with too large font sizes from compas analysis output.
