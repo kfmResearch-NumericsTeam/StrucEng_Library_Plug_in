@@ -220,6 +220,8 @@ namespace StrucEngLib
                 else
                 {
                     ValidateLayerNames(load.Layers, ctx);
+                    var hasElement = false;
+                    var hasSet = false;
                     load.Layers.ForEach(loadLayer =>
                     {
                         if (!model.Layers.Contains(loadLayer))
@@ -228,7 +230,20 @@ namespace StrucEngLib
                                 $"Load '{load.Description}' contains a layer '{loadLayer.GetName()}' " +
                                 $"which was not added as a layer to the model.");
                         }
+
+                        if (loadLayer.LayerType == LayerType.ELEMENT)
+                        {
+                            hasElement = true;
+                        }
+                        else if (loadLayer.LayerType == LayerType.SET)
+                        {
+                            hasSet = true;
+                        }
                     });
+                    if (hasElement && hasSet)
+                    {
+                        ctx.AddInfo($"Load '{load.Description}' contains sets and elements.");
+                    }
                 }
 
                 if (load.LoadType == LoadType.Area)
