@@ -26,7 +26,7 @@ namespace StrucEngLibTest
         public void TestGenerateLinFeCode1()
         {
             var b = WorkbenchUtils.CreateSampleWorkBench();
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             var res = gen.GenerateLinFeCode(b);
             Console.WriteLine(res);
             Assert.IsNotEmpty(res);
@@ -41,7 +41,7 @@ namespace StrucEngLibTest
         public void TestEmptyWorkbench()
         {
             var b = new Workbench();
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             var res = gen.GenerateLinFeCode(b);
             AssertValidPythonCode(res);
         }
@@ -77,7 +77,7 @@ namespace StrucEngLibTest
                     ElementNumber = 100
                 }
             });
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             var res = gen.GenerateLinFeCode(b);
             AssertValidPythonCode(res);
         }
@@ -91,7 +91,7 @@ namespace StrucEngLibTest
                 Name = "Set1",
                 SetDisplacementType = SetDisplacementType.PINNED,
             });
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             var res = gen.GenerateLinFeCode(b);
             AssertValidPythonCode(res);
         }
@@ -142,7 +142,7 @@ namespace StrucEngLibTest
             {
                 FileName = "C:\\tmp"
             };
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             AssertValidPythonCode(gen.GenerateSmmCode(b));
         }
 
@@ -179,7 +179,7 @@ namespace StrucEngLibTest
             });
 
             AddSandwichData(b);
-            var gen = new PythonCodeGenerator();
+            var gen = new CompasFea1CodeGenerator();
             AssertValidPythonCode(gen.GenerateSmmCode(b));
         }
 

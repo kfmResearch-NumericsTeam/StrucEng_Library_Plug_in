@@ -43,8 +43,8 @@ namespace StrucEngLib
                 d.Close();
             }
         }
-
-        private string AddCustomHandlers(string snippet)
+        
+        public string AddCustomHandlers(string snippet)
         {
             var headerTxt = new StreamReader(
                     Assembly.GetExecutingAssembly().GetManifestResourceStream(HeaderRes) ??

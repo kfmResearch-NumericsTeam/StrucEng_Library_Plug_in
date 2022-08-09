@@ -53,7 +53,7 @@ namespace StrucEngLib
                 return;
             }
 
-            PythonCodeGenerator codeGen = new PythonCodeGenerator();
+            CompasFea1CodeGenerator codeGen = new CompasFea1CodeGenerator();
             var sourceCode = "";
             try
             {

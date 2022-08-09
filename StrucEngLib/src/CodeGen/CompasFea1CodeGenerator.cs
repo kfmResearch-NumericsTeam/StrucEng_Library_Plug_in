@@ -14,7 +14,7 @@ namespace StrucEngLib
     /// <summary>
     /// Code generator to generate python code
     /// </summary>
-    public class PythonCodeGenerator
+    public class CompasFea1CodeGenerator
     {
         public string GenerateLinFeCode(Workbench bench)
         {
@@ -323,7 +323,7 @@ mdl = Structure(name=name, path=path)
                     var xx = s.EmitIfNotEmpty("xx", p.XX);
                     var yy = s.EmitIfNotEmpty("yy", p.YY);
 
-                    return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList})";
+                    return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} nodes={layersList})";
                 }
                 default:
                     StrucEngLibLog.Instance.WriteLine("Ignoring unknown load: {0}", load.LoadType);
