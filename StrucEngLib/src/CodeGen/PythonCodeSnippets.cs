@@ -2,8 +2,6 @@ namespace StrucEngLib
 {
     public class PythonCodeSnippets
     {
-   
-        
         public static readonly string CODEGEN_HEADER = @"
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic

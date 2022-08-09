@@ -5,7 +5,7 @@ using StrucEngLib.Model;
 
 namespace StrucEngLib.Layer
 {
-    /// <summary>View model for set data</summary>
+    /// <summary>View model for set properties</summary>
     public class SetViewModel : NewSectionViewModel<SetDisplacementType>
     {
         private readonly LinFeMainViewModel _vm;

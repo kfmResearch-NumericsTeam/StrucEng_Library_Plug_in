@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Step;
 
@@ -25,6 +26,7 @@ namespace StrucEngLib.Analysis
             }
         }
 
+
         public AnalysisViewModel(LinFeMainViewModel vm)
         {
             if (vm.ListStepVm == null)
@@ -35,6 +37,29 @@ namespace StrucEngLib.Analysis
             _vm = vm;
             AnalysisViewItems = new ObservableCollection<AnalysisItemViewModel>();
             UpdateViewModel();
+            AddNewAndRemoveOldSteps(vm);
+            vm.ListStepVm.StepChanged += (sender, args) =>
+            {
+                foreach (var avm in AnalysisViewItems)
+                {
+                    // XXX: If step contains a set, we cant generate analysis output for it.
+                    // So we reset it to contain no user data.
+                    if (!avm.AnalysisSettingsAllowed() && avm.Include == true)
+                    {
+                        avm.init();
+                        avm.Include = true;
+                    }
+                }
+
+                // XXX: Force to redraw output (workaround, TODO)
+                var item = SelectedItem;
+                SelectedItem = null;
+                SelectedItem = item;
+            };
+        }
+
+        private void AddNewAndRemoveOldSteps(LinFeMainViewModel vm)
+        {
             vm.ListStepVm.StepItems.CollectionChanged += (sender, args) =>
             {
                 if (args.NewItems != null && args.NewItems.Count > 0)
@@ -62,7 +87,7 @@ namespace StrucEngLib.Analysis
             {
                 if (args.PropertyName == nameof(_selectedItem.Include))
                 {
-                    if (_selectedItem.Include == false)
+                    if (_selectedItem != null && _selectedItem.Include == false)
                     {
                         _selectedItem.init();
                     }
@@ -126,6 +151,12 @@ namespace StrucEngLib.Analysis
             {
                 OnNewStep(step);
             }
+        }
+
+        public void RhinoSelectStep()
+        {
+            if (SelectedItem == null) return;
+            RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, SelectedItem.StepModel.LayerNames());
         }
     }
 }

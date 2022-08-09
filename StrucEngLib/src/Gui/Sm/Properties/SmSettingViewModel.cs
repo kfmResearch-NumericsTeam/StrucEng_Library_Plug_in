@@ -132,7 +132,11 @@ namespace StrucEngLib.Sm
             }
 
             UpdateLayerVisibility();
+            
+            // XXX: No need to reflect selection during initialization
+            _rhinoSelectProperty = false;
             ViewModelInitialized?.Invoke(this, new EventArgs());
+            _rhinoSelectProperty = true;
         }
 
         public override void UpdateModel()
@@ -149,6 +153,17 @@ namespace StrucEngLib.Sm
                 p.UpdateModel();
                 m.AdditionalProperties.Add(p.Model);
             });
+        }
+        
+        private bool _rhinoSelectProperty = false;
+        public void RhinoSelectProperty()
+        {
+            if (SelectedProperty == null || ! _rhinoSelectProperty)
+            {
+                return;
+            }
+
+            RhinoUtils.SelectLayerByName(RhinoDoc.ActiveDoc, SelectedProperty.Model.Layer.GetName());
         }
     }
 }

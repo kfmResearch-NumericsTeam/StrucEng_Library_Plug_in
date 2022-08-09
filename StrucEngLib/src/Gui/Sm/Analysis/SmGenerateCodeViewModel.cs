@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Eto.Forms;
+using Rhino;
 
 namespace StrucEngLib.Sm
 {

@@ -1,5 +1,7 @@
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Eto.Forms;
+using Rhino;
 
 namespace StrucEngLib.Sm
 {
@@ -51,7 +53,7 @@ namespace StrucEngLib.Sm
                 new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
             }
         }
-
+        
         private void OnExecuteModel()
         {
             var model = _vm.BuildModel();

@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Linq;
+using Eto.Drawing;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Input;
 using Rhino.Input.Custom;
+using StrucEngLib.Utils;
+using Font = Rhino.DocObjects.Font;
 
 namespace StrucEngLib
 {
@@ -17,24 +23,30 @@ namespace StrucEngLib
 
             if (unSelectAll)
             {
-                doc.Objects.UnselectAll();    
+                doc.Objects.UnselectAll();
             }
-            
-            for (int i = 0; i < rhobjs.Length; i++) 
+
+            for (int i = 0; i < rhobjs.Length; i++)
                 rhobjs[i].Select(selectType);
-            
+
             doc.Views.Redraw();
             return true;
         }
-        
-        public static bool SelectLayerByNames(RhinoDoc doc, List<string> names, bool unSelectAll = true)
+
+        public static bool SelectLayerByNames(RhinoDoc doc, IEnumerable<string> names, bool unSelectAll = true)
         {
+            if (!names.Any())
+            {
+                UnSelectAll(doc);
+                return true;
+            }
+
             doc.Objects.UnselectAll();
             foreach (var name in names)
             {
                 SelectLayerByName(doc, name, false);
-
             }
+
             return true;
         }
 
@@ -44,6 +56,30 @@ namespace StrucEngLib
             doc.Views.Redraw();
         }
 
+
+        // Sets Text heights of all text entities in document to given size
+        public static void NormalizeTextHeights(Rhino.RhinoDoc doc, double textHeight = 3.0)
+        {
+            try
+            {
+                var settings = new ObjectEnumeratorSettings();
+                settings.NormalObjects = true;
+                settings.HiddenObjects = true;
+                var rhobjs = doc.Objects.GetObjectList(settings);
+                foreach (var t in rhobjs)
+                {
+                    Rhino.Geometry.TextEntity tEntity = t.Geometry as Rhino.Geometry.TextEntity;
+                    if (tEntity == null) continue;
+                    tEntity.TextHeight = textHeight;
+                    t.CommitChanges();
+                }
+                doc.Views.Redraw();
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+        }
 
         public static string SelectLayerByMouse(RhinoDoc doc)
         {

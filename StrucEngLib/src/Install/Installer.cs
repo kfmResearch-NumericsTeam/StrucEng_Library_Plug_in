@@ -9,6 +9,7 @@ using Rhino;
 using Rhino.Commands;
 using Rhino.Runtime;
 using Rhino.UI.Controls;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
@@ -149,25 +150,25 @@ namespace StrucEngLib
                 string cmd = GetBatFile();
                 if (String.IsNullOrWhiteSpace(_tbAnaconda.Text))
                 {
-                    RhinoApp.WriteLine("Anaconda home directory is null");
+                    StrucEngLibLog.Instance.WriteLine("Anaconda home directory is null");
                     return;
                 }
 
                 var conda = _tbAnaconda.Text + "\\condabin\\conda.bat";
                 if (!File.Exists(conda))
                 {
-                    RhinoApp.WriteLine("{0} does not exist!", conda);
+                    StrucEngLibLog.Instance.WriteLine("{0} does not exist!", conda);
                     return;
                 }
 
-                RhinoApp.WriteLine(cmd, conda);
+                StrucEngLibLog.Instance.WriteLine(cmd, conda);
                 try
                 {
                     System.Diagnostics.Process.Start(cmd, conda);
                 }
                 catch (Exception e)
                 {
-                    RhinoApp.WriteLine(e.Message);
+                    StrucEngLibLog.Instance.WriteLine(e.Message);
                 }
             };
             _btSelectConda.Click += (sender, args) =>
@@ -176,12 +177,12 @@ namespace StrucEngLib
                 var result = dialog.ShowDialog(ParentWindow);
                 if (result == DialogResult.Ok)
                 {
-                    RhinoApp.WriteLine("Result: {0}, Folder: {1}", result, dialog.Directory);
+                    StrucEngLibLog.Instance.WriteLine("Result: {0}, Folder: {1}", result, dialog.Directory);
                     _tbAnaconda.Text = dialog.Directory;
                 }
                 else
                 {
-                    RhinoApp.WriteLine("Result: {0}", result);
+                    StrucEngLibLog.Instance.WriteLine("Result: {0}", result);
                 }
             };
 
@@ -189,25 +190,25 @@ namespace StrucEngLib
             {
                 if (String.IsNullOrWhiteSpace(_tbAnaconda.Text))
                 {
-                    RhinoApp.WriteLine("Anaconda home directory is null");
+                    StrucEngLibLog.Instance.WriteLine("Anaconda home directory is null");
                     return;
                 }
 
                 var conda = _tbAnaconda.Text + "\\condabin\\";
                 if (!Directory.Exists(conda))
                 {
-                    RhinoApp.WriteLine("{0} does not exist!", conda);
+                    StrucEngLibLog.Instance.WriteLine("{0} does not exist!", conda);
                     return;
                 }
                 try
                 {
-                    RhinoApp.WriteLine("cmd {0}", conda);
+                    StrucEngLibLog.Instance.WriteLine("cmd {0}", conda);
                     conda = conda.Replace(" ", "^ ");
                     System.Diagnostics.Process.Start("C:\\Windows\\System32\\cmd.exe", $"/K \"cd /d {conda} \"");
                 }
                 catch (Exception e)
                 {
-                    RhinoApp.WriteLine(e.Message);
+                    StrucEngLibLog.Instance.WriteLine(e.Message);
                 }
             };
 

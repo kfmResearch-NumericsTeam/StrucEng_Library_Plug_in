@@ -48,10 +48,10 @@ namespace StrucEngLib.Sm
                             Rows =
                             {
                                 new TableRow(
-                                    CheckBox("as", "xi_top", model => model.AsXiTop),
-                                    CheckBox("as", "xi_bot", model => model.AsXiBot),
-                                    CheckBox("as", "eta_top", model => model.AsEtaTop),
-                                    CheckBox("as", "eta_bot", model => model.AsEtaBot),
+                                    CheckBox("as", "ξ_top", model => model.AsXiTop),
+                                    CheckBox("as", "ξ_bot", model => model.AsXiBot),
+                                    CheckBox("as", "η_top", model => model.AsEtaTop),
+                                    CheckBox("as", "η_bot", model => model.AsEtaBot),
                                     CheckBox("as", "z", model => model.AsZ),
                                     new Label() // XXX: Last element not enlarged
                                 ),
@@ -66,8 +66,8 @@ namespace StrucEngLib.Sm
                                     CheckBox("t", "bot", model => model.TBot)),
 
                                 new TableRow(
-                                    CheckBox("psi", "top", model => model.PsiTop),
-                                    CheckBox("psi", "bot", model => model.PsiBot)),
+                                    CheckBox("Ψ", "top", model => model.PsiTop),
+                                    CheckBox("Ψ", "bot", model => model.PsiBot)),
 
                                 new TableRow(
                                     CheckBox("Fall", "top", model => model.FallTop),

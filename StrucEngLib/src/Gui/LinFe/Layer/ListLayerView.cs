@@ -50,7 +50,6 @@ namespace StrucEngLib.Layer
                     .Convert(l => l != null ? "Properties for " + l.GetName() : ""));
 
             _tbLayerToAdd.Bind<string>(nameof(_tbLayerToAdd.Text), _vmListLayer, nameof(_vmListLayer.LayerToAdd));
-
             _dropdownLayers.ItemTextBinding = Binding.Property((Model.Layer t) => t.ToString());
             _dropdownLayers.DataStore = _vmListLayer.Layers;
             _dropdownLayers.Bind<Model.Layer>(nameof(_dropdownLayers.SelectedValue), _vmListLayer,
@@ -173,6 +172,7 @@ namespace StrucEngLib.Layer
                         Content = _vmDetailView.LayerDetailView
                     }
                 ));
+            ScrollHelper.ScrollParent(_dropdownLayers);
         }
     }
 }

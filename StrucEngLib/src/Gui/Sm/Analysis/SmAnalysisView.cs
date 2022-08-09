@@ -33,6 +33,10 @@ namespace StrucEngLib.Sm
             _detailView.Bind<SmAnalysisItemViewModel>(nameof(_detailView.DataContext), _vm, nameof(_vm.SelectedItem));
             _detailView.Bind<bool>(nameof(_detailView.Visible), _vm, nameof(_vm.SelectedItemVisible));
             _detailView.Bind<bool>(nameof(this.Enabled), _vm, nameof(_vm.SelectedItemVisible));
+            _grid.SelectionChanged += (sender, args) =>
+            {
+                _vm.RhinoSelectStep();
+            };
         }
 
         private void BuildGui()
@@ -42,6 +46,7 @@ namespace StrucEngLib.Sm
             {
                 Border = BorderType.None
             };
+            ScrollHelper.ScrollParent(_grid);
             _grid.AllowMultipleSelection = false;
             _grid.CellFormatting += (sender, args) =>
             {

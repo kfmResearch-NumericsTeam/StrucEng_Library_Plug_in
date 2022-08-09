@@ -131,6 +131,7 @@ namespace StrucEngLib.LocalCoordinate
                 args.ForegroundColor = Colors.Black;
                 args.Font = new TextBox().Font;
             };
+            ScrollHelper.ScrollParent(_gridView);
         }
 
         private GridColumn ColItem(string header, IndirectBinding<string> b, TextAlignment align = TextAlignment.Left)

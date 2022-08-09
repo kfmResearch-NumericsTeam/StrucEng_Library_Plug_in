@@ -39,7 +39,7 @@ namespace StrucEngLib
             Result = DialogResult.Cancel;
             WindowStyle = WindowStyle.Default;
 
-            Title = "Inspect and modify code";
+            Title = "Generated code";
 
             _execButton = new Button()
             {
@@ -48,7 +48,7 @@ namespace StrucEngLib
             
             _openEditor = new Button()
             {
-                Text = "Open Python Editor",
+                Text = "Open Editor",
                 ToolTip = "Python code is copied into clipboard"
                 
             }; 

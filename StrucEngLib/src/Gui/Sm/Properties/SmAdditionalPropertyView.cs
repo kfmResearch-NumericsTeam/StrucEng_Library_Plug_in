@@ -24,7 +24,7 @@ namespace StrucEngLib.Sm
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "d_strich",
+                    Text = "d'",
                     TextSubscript = "top"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichTop), "40");
@@ -32,21 +32,21 @@ namespace StrucEngLib.Sm
                 this,
                 new SubscriptLabel()
                 {
-                    Text = "d_strich",
+                    Text = "d'",
                     TextSubscript = "bot"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot), "40");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "alpha",
+                    Text = "α",
                     TextSubscript = "top"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaTop), "0");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "alpha",
+                    Text = "α",
                     TextSubscript = "bot"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.AlphaBot), "0");
@@ -54,36 +54,36 @@ namespace StrucEngLib.Sm
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "beta",
+                    Text = "β",
                     TextSubscript = "top"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaTop), "90");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "beta",
+                    Text = "β",
                     TextSubscript = "bot"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.BetaBot), "90");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "fc",
-                    TextSubscript = "k"
+                    Text = "f",
+                    TextSubscript = "ck"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcK), "20");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "fc",
-                    TextSubscript = "theta_grad_kern"
+                    Text = "f",
+                    TextSubscript = "c_θ_grad_kern"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FcThetaGradKern), "45");
             UiUtils.AddLabelTextRow(this,
                 new SubscriptLabel()
                 {
-                    Text = "fc",
-                    TextSubscript = "d"
+                    Text = "f",
+                    TextSubscript = "sd"
                 },
                 Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.FsD), "435");
 

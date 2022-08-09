@@ -8,6 +8,7 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib.Load
 {
@@ -19,6 +20,9 @@ namespace StrucEngLib.Load
     public class ListLoadViewModel : ViewModelBase
     {
         private readonly LinFeMainViewModel _mainVm;
+        
+        /// <summary> Raised if a setting within a load is changed</summary> 
+        public event EventHandler LoadChanged;
 
         public ObservableCollection<ListItem> LoadNames { get; }
 
@@ -174,13 +178,10 @@ namespace StrucEngLib.Load
                 return;
             }
         }
-
-        /// <summary> Raised if a setting within a load is changed </summary> 
-        public event EventHandler LoadSettingsChanged;
-
+        
         public void OnLoadSettingChanged()
         {
-            LoadSettingsChanged?.Invoke(this, EventArgs.Empty);
+            LoadChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void SelectLayerByName()

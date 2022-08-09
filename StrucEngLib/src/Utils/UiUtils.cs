@@ -20,7 +20,8 @@ namespace StrucEngLib
         public static Control TextInputWithDataContextBinding(IndirectBinding<string> binding, string defaultValue = "")
         {
             // Usage: IndirectBinding<string> binding = Binding.Property<SmAdditionalPropertyViewModel, string>(m => m.DStrichBot);
-            var tb = new ComboBoxWithMemory();
+            // var tb = new ComboBoxWithMemory();
+            var tb = new TextBox();
             var ctx = tb.BindDataContext(srcWidget => srcWidget.Text, binding);
             tb.DataContextChanged += (sender, args) =>
             {
@@ -86,7 +87,8 @@ namespace StrucEngLib
             string defaultVal = "")
         {
             Label l;
-            var tb = new ComboBoxWithMemory(propName);
+            // var tb = new ComboBoxWithMemory(propName);
+            var tb = new TextBox();
             tb.Bind<string>(nameof(tb.Text), vm, propName, DualBindingMode.TwoWay);
             dynamicLayout.Add(TableLayout.HorizontalScaled(l = new Label {Text = label}, tb));
             FocusOnClick(l, tb);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
 using StrucEngLib.Sm;
@@ -17,7 +18,7 @@ namespace StrucEngLib.Sm
         public ObservableCollection<SmAnalysisItemViewModel> AnalysisViewItems { get; }
         private SmAnalysisItemViewModel _selectedItem;
         public bool SelectedItemVisible => SelectedItem != null && SelectedItem.Include;
-        
+
         public SmAnalysisItemViewModel SelectedItem
         {
             get => _selectedItem;
@@ -27,12 +28,14 @@ namespace StrucEngLib.Sm
                 {
                     _selectedItem.PropertyChanged -= SelectedItemIncludeChanged;
                 }
+
                 _selectedItem = value;
                 OnPropertyChanged(nameof(SelectedItemVisible));
                 if (_selectedItem != null)
                 {
                     _selectedItem.PropertyChanged += SelectedItemIncludeChanged;
                 }
+
                 OnPropertyChanged();
             }
         }
@@ -63,40 +66,55 @@ namespace StrucEngLib.Sm
             }
         }
 
-        private bool ContainsViewModelStepName(string name)
+        private bool ViewModelContainsStepName(string name)
         {
             return AnalysisViewItems.Any(vm => vm.StepName.Equals(name));
         }
 
-        private bool ContainsModelStepName(string name)
+        private bool ModelContainsStepName(string name)
         {
             return _vm.Workbench.Steps != null &&
-                   _vm.Workbench.Steps.Any(s => s.Order.Equals(name)
-                                                && s.Setting != null
-                                                && s.Setting.Include);
+                   _vm.Workbench.Steps.Any(
+                       s => s.Order.Equals(name)
+                            && s.Setting != null
+                            && s.Setting.Include
+                            && !s.ContainsType(StepType.Set));
         }
 
         public sealed override void UpdateViewModel()
         {
             AnalysisViewItems.Clear();
-            // We only add steps which are also defined in LinFE and are "included"
+            // XXX: We only add steps which are also defined in LinFE and are "included"
+            // and contain no 'set' layer.
+
+            // Add existing Analysis settings from sandwich model
             _vm.Workbench?.SandwichModel?.AnalysisSettings?.ForEach(m =>
             {
-                if (ContainsModelStepName(m.Step.Order))
+                if (ModelContainsStepName(m.Step.Order))
                 {
                     AnalysisViewItems.Add(new SmAnalysisItemViewModel(m));
                 }
             });
-            _vm.Workbench?.Steps?.ForEach(s =>
+
+            // Add new analysis setting based of steps
+            _vm.Workbench?.Steps?.ForEach(modelStep =>
             {
-                if (s.Setting?.Include == true && !ContainsViewModelStepName(s.Order))
+                if (modelStep.Setting?.Include == true
+                    && !modelStep.ContainsType(StepType.Set)
+                    && !ViewModelContainsStepName(modelStep.Order))
                 {
                     AnalysisViewItems.Add(SmAnalysisItemViewModel.CreateNew(new SmAnalysisSetting()
                     {
-                        Step = s
+                        Step = modelStep
                     }));
                 }
             });
+        }
+
+        public void RhinoSelectStep()
+        {
+            if (SelectedItem == null) return;
+            RhinoUtils.SelectLayerByNames(RhinoDoc.ActiveDoc, SelectedItem.Model.Step.LayerNames());
         }
     }
 }

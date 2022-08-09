@@ -57,10 +57,8 @@ namespace StrucEngLib.Sm
                                 )
                             ),
                             new TableRow(
-                                new TableCell(
-                                    (_btnClearData = new LinkButton() {Text = "Reset Data"}),
-                                    false
-                                ))
+                                (_btnClearData = new LinkButton() {Text = "Reset Data"})
+                                ),
                         }
                     }
                 }

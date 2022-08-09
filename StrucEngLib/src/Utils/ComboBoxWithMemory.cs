@@ -44,8 +44,13 @@ namespace StrucEngLib
         /// <summary>
         /// The bucket indicates the notification channel for updates
         /// </summary>
-        public ComboBoxWithMemory(string memoryBucket = "default")
+        public ComboBoxWithMemory(string memoryBucket = null)
         {
+            if (memoryBucket == null)
+            {
+                return;
+            }
+            
             _memoryBucket = memoryBucket;
             MemorySet = new HashSet<string>();
             AutoComplete = true;

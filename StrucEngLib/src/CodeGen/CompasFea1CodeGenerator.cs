@@ -14,34 +14,14 @@ namespace StrucEngLib
     /// <summary>
     /// Code generator to generate python code
     /// </summary>
-    public class PythonCodeGenerator
+    public class CompasFea1CodeGenerator
     {
-
-
-        private void EmitExceptionBodyHeader(EmitState s)
-        {
-            s.Line("try: ");        
-            s.IncreaseIndent();          
-        }
-
-        private void EmitExcpetionBodyFooter(EmitState s)
-        {
-            s.DecreaseIndent();
-            s.Line("");
-            s.Line("");
-            s.Line("except Exception:");
-            s.IncreaseIndent();
-            s.Line("raise Exception(_strucenglib_format())");
-            s.DecreaseIndent();
-        }
-        
         public string GenerateLinFeCode(Workbench bench)
         {
             var state = new EmitState(bench);
             EmitHeaders(state, "Generate LinFe Code",
                 targetPath: state.Workbench.FileName);
-            
-            EmitExceptionBodyHeader(state);
+
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -52,7 +32,6 @@ namespace StrucEngLib
             EmitSteps(state);
             EmitSummary(state);
             EmitRun(state);
-            EmitExcpetionBodyFooter(state);
 
             return state.Buffer.ToString();
         }
@@ -74,8 +53,6 @@ except Exception:
             EmitHeaders(state, "Generate Sandwich Code",
                 targetPath: state.Workbench.SandwichModel.FileName,
                 customImports: customImports);
-            
-            EmitExceptionBodyHeader(state);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -89,28 +66,8 @@ except Exception:
             EmitRun(state);
             state.Workbench.SandwichModel?.AnalysisSettings?
                 .ForEach(s => EmitSmm(state, s));
-            
-            EmitExcpetionBodyFooter(state);
             return state.Buffer.ToString();
         }
-        
-        private string ExceptionHandlerFunction()
-        {
-            const string code = @"
-def _strucenglib_format():
-    import traceback
-    msg = 'StrucEngLib Plugin failed to execute code.\n'
-    msg += 'Investigate traceback shown below and in Rhino command log. '
-    msg += 'Consider Wiki with StrucEngLibHelp command for more help. \n\n'
-    msg += 'Traceback: \n'
-    msg += traceback.format_exc()
-    msg += '\n'
-    print(msg)
-    return msg
-";
-            return code;
-        }
-
 
         private void EmitHeaders(EmitState s, string action, string targetPath = "C:\\Temp\\Rahmen",
             string customImports = "")
@@ -135,8 +92,6 @@ def _strucenglib_format():
 # Code generated at {DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}
 # Issued by user {Environment.UserName}
 # Action: {action}
-
-{ExceptionHandlerFunction()}
 
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
@@ -368,10 +323,10 @@ mdl = Structure(name=name, path=path)
                     var xx = s.EmitIfNotEmpty("xx", p.XX);
                     var yy = s.EmitIfNotEmpty("yy", p.YY);
 
-                    return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} elements={layersList})";
+                    return $"PointLoad(name='{loadId}', {x} {y} {z} {xx} {yy} {zz} nodes={layersList})";
                 }
                 default:
-                    RhinoApp.WriteLine("Ignoring unknown load: {0}", load.LoadType);
+                    StrucEngLibLog.Instance.WriteLine("Ignoring unknown load: {0}", load.LoadType);
                     throw new Exception($"Unknown load: {load.LoadType}");
             }
         }
@@ -458,9 +413,8 @@ mdl = Structure(name=name, path=path)
                     sx.Select(setting => setting.Ur).Contains(true) ? "ur" : "",
                     sx.Select(setting => setting.Cf).Contains(true) ? "cf" : "",
                     sx.Select(setting => setting.Cm).Contains(true) ? "cm" : "",
-                    sx.Select(setting => setting.SpringForces).Contains(true) ? "spf" : "",
-                    sx.Select(setting => setting.SectionForces || setting.ShellForces).Contains(true) ? "sf" : "",
-                    sx.Select(setting => setting.SectionMoments || setting.ShellMoments).Contains(true) ? "sm" : "",
+                    sx.Select(setting => setting.ShellForces).Contains(true) ? "sf" : "",
+                    sx.Select(setting => setting.SectionMoments).Contains(true) ? "sm" : "",
                 }.Where(setting => setting != "").ToList(), (id => id)
             );
             s.Line($"mdl.analyse_and_extract(software='abaqus', fields={fields})");
@@ -500,16 +454,6 @@ mdl = Structure(name=name, path=path)
                 EmitPlotData(s, step, "cmz", setting.Cm);
                 EmitPlotData(s, step, "cmm", setting.Cm);
 
-                // spring forces
-                EmitPlotData(s, step, "spfx", setting.SpringForces);
-                EmitPlotData(s, step, "spfy", setting.SpringForces);
-                EmitPlotData(s, step, "spfz", setting.SpringForces);
-
-                // section forces
-                EmitPlotData(s, step, "sf1", setting.SectionForces);
-                EmitPlotData(s, step, "sf2", setting.SectionForces);
-                EmitPlotData(s, step, "sf3", setting.SectionForces);
-
                 // shell forces
                 EmitPlotData(s, step, "sf1", setting.ShellForces);
                 EmitPlotData(s, step, "sf2", setting.ShellForces);
@@ -518,9 +462,9 @@ mdl = Structure(name=name, path=path)
                 EmitPlotData(s, step, "sf5", setting.ShellForces);
 
                 // section, shell moments together, as same keys
-                EmitPlotData(s, step, "sm1", setting.SectionMoments || setting.ShellMoments);
-                EmitPlotData(s, step, "sm2", setting.SectionMoments || setting.ShellMoments);
-                EmitPlotData(s, step, "sm3", setting.SectionMoments || setting.ShellMoments);
+                EmitPlotData(s, step, "sm1", setting.SectionMoments);
+                EmitPlotData(s, step, "sm2", setting.SectionMoments);
+                EmitPlotData(s, step, "sm3", setting.SectionMoments);
             });
         }
 

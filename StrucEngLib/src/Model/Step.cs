@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -20,13 +21,46 @@ namespace StrucEngLib.Model
 
         public bool Contains(object o)
         {
-            return Entries.Select(e => e.Value).Contains(o);
+            return Entries.Any(e => e.Value.Equals(o));
+        }
+
+        public bool ContainsType(StepType type)
+        {
+            return Entries.Any(e => e.Type.Equals(type));
         }
 
         public void AddEntry(StepType type, object o)
         {
             StepEntry e = new StepEntry(type, o);
             Entries.Add(e);
+        }
+
+        /// <summary>
+        /// Returns true if step contains any LayerType Set in either the step entry or nested in a load.
+        /// </summary>
+        public bool ContainsAnyStepTypeSetNested()
+        {
+            return ContainsType(StepType.Set) || EntriesByType(StepType.Load).ToList()
+                .Select(type => type.Value).Cast<Model.Load>().ToList()
+                .SelectMany(load => load.Layers).ToList()
+                .Any(layer => layer.LayerType == LayerType.SET);
+        }
+
+        public ICollection<StepEntry> EntriesByType(StepType type)
+        {
+            return new ReadOnlyCollection<StepEntry>(Entries.Where(e => e.Type == type).ToList());
+        }
+
+        /// <summary>
+        /// Get a list of all layer names included in the step
+        /// </summary>
+        public ICollection<string> LayerNames()
+        {
+            List<string> names = new List<string>();
+            names.AddRange(EntriesByType(StepType.Set).Select(e => ((Set) e.Value).Name));
+            names.AddRange(EntriesByType(StepType.Load)
+                .SelectMany(e => ((Load) e.Value).Layers.Select(l => l.GetName())));
+            return names.ToHashSet();
         }
 
         /// <summary> User readable summary of step </summary>

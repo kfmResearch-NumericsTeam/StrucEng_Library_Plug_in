@@ -5,7 +5,8 @@ using StrucEngLib.Model;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>Abstract view model to show a dropbox with a selection
+    /// of 'sections' and a detail view according to selection.</summary>
     public abstract class NewSectionViewModel<ENUM_T> : ViewModelBase
     {
         public ObservableCollection<ListItem> EntryNames { get; }

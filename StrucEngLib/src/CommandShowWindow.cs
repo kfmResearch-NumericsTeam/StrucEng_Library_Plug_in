@@ -1,4 +1,5 @@
-﻿using Rhino;
+﻿using Eto.Drawing;
+using Rhino;
 using Rhino.Commands;
 using Rhino.UI;
 using Command = Rhino.Commands.Command;
@@ -13,7 +14,6 @@ namespace StrucEngLib
         public CommandShowWindow()
         {
             Instance = this;
-            Panels.RegisterPanel(PlugIn, typeof(MainView), "StrucEngLib Plugin", null);
         }
 
         public static CommandShowWindow Instance { get; private set; }

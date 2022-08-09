@@ -4,6 +4,8 @@ using System.Text;
 using Rhino;
 using Rhino.FileIO;
 using Rhino.PlugIns;
+using Rhino.UI;
+using Rhino.UI.ObjectProperties;
 using StrucEngLib.Model;
 
 namespace StrucEngLib
@@ -13,7 +15,7 @@ namespace StrucEngLib
     /// </summary>
     public class StrucEngLibPlugin : Rhino.PlugIns.PlugIn
     {
-        public new static string Version = "0.0.9";
+        public new static string Version = "0.0.10";
         public static string Website = "https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in";
 
         private static string _modelKey = "model";
@@ -72,8 +74,17 @@ namespace StrucEngLib
 
         protected override LoadReturnCode OnLoad(ref string errorMessage)
         {
+            RegisterPanels();
             UpdateMenubar();
             return LoadReturnCode.Success;
+        }
+
+        private void RegisterPanels()
+        {
+            var stream = Assembly.GetManifestResourceStream(
+                "StrucEngLib.EmbeddedResources.plugin-utility.generic.ico");
+            var icon = stream != null ? new System.Drawing.Icon(stream) : null;
+            Panels.RegisterPanel(this, typeof(MainView), "StrucEngLib", icon);
         }
 
         private void UpdateMenubar()

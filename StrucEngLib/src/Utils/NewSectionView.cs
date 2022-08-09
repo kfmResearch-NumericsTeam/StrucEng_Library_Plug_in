@@ -6,7 +6,7 @@ using StrucEngLib.Views;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>View for NewSelectionViewModel</summary>
     public class NewSelectionView<ENUM> : DynamicLayout
     {
         private readonly string _sectionLabel;
