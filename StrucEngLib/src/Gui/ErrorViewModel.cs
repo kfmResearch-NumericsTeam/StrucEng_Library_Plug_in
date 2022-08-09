@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Rhino;
+using Rhino.UI;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -9,6 +11,11 @@ namespace StrucEngLib
     public class ErrorViewModel : ViewModelBase
     {
         private string _message = "";
+
+        public enum ViewResult
+        {
+            Ok, Cancel
+        }
 
         public string Message
         {
@@ -32,7 +39,7 @@ namespace StrucEngLib
             };
         }
 
-        public void ShowException(string info, Exception e)
+        public ViewResult ShowException(string info, Exception e)
         {
             StringBuilder b = new StringBuilder();
             b.Append(
@@ -63,10 +70,10 @@ namespace StrucEngLib
                 // XXX: Ignore errors caused by serialization error context
             }
 
-            ShowMessage(b.ToString(), false);
+            return ShowMessage(b.ToString(), false);
         }
 
-        public void DebugMessage(params object[] values)
+        public ViewResult DebugMessage(params object[] values)
         {
             var b = new StringBuilder();
             foreach (var o in values)
@@ -83,19 +90,18 @@ namespace StrucEngLib
                 b.Append("\n");
             }
 
-            ShowMessages(new List<string>() {b.ToString()}, false);
+            return ShowMessages(new List<string>() {b.ToString()}, false);
         }
 
-        public void ShowMessage(string m, bool enumerate = true)
+        public ViewResult ShowMessage(string m, bool enumerate = true)
         {
             // XXX: For now a simple show text dialog is enough
-            ShowMessages(new List<string>() {m});
+            return ShowMessages(new List<string>() {m});
         }
 
-        public void ShowMessages(List<string> ms, bool enumerate = true)
+        public ViewResult ShowMessages(List<string> ms, bool enumerate = true)
         {
             StringBuilder b = new StringBuilder();
-            b.Append("The following messages occured: \n\n");
             foreach (var m in ms)
             {
                 if (enumerate)
@@ -109,13 +115,30 @@ namespace StrucEngLib
             }
 
             Message = b.ToString();
-            Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");
+            var res = ShowDialog();
             Message = "";
+            return res;
         }
 
-        public void ShowMessages(ErrorMessageContext[] ctxx, bool enumerate = true)
+        private ViewResult ShowDialog()
         {
-            StringBuilder b = new StringBuilder("The following messages occured: \n\n");
+            var d = new MessageDialog("The following messages have occured:", Message);
+            var dialogRc = d.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
+            if (dialogRc == Eto.Forms.DialogResult.Ok)
+            {
+
+                if (d.Result == MessageDialog.ResultStateEnum.OK)
+                {
+                    return ViewResult.Ok;
+                }
+            }
+
+            return ViewResult.Cancel;
+        }
+
+        public ViewResult ShowMessages(IEnumerable<ErrorMessageContext> ctxx, bool enumerate = true)
+        {
+            StringBuilder b = new StringBuilder();
             foreach (var ctx in ctxx)
             {
                 PrepareErrorMessage(ctx, b, enumerate);
@@ -123,13 +146,14 @@ namespace StrucEngLib
             }
 
             Message = b.ToString();
-            Rhino.UI.Dialogs.ShowTextDialog(Message, "Messages");
+            var res = ShowDialog();
             Message = "";
+            return res;
         }
 
-        public void ShowMessages(ErrorMessageContext ctx, bool enumerate = true)
+        public ViewResult ShowMessages(ErrorMessageContext ctx, bool enumerate = true)
         {
-            ShowMessages(new[] {ctx}, enumerate);
+            return ShowMessages(new[] {ctx}, enumerate);
         }
 
         private void AppendText(StringBuilder b, string m, bool enumerate = true, int indent = 1)

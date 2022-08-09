@@ -34,7 +34,12 @@ namespace StrucEngLib
                 var ctx = validate.ValidateModel(_model);
                 if (ctx.Messages.Count != 0)
                 {
-                    _vm.ErrorVm.ShowMessages(ctx);
+                    var res = _vm.ErrorVm.ShowMessages(ctx);
+                    if (res == ErrorViewModel.ViewResult.Cancel)
+                    {
+                        return;
+                    }
+                    
                     if (ctx.GetByType(MessageType.Error).Count > 0)
                     {
                         // XXX: Only stop if ctx contains error msg, otherwise continue
