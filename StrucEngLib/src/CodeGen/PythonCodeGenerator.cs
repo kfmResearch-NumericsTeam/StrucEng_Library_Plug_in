@@ -16,30 +16,12 @@ namespace StrucEngLib
     /// </summary>
     public class PythonCodeGenerator
     {
-        private void EmitExceptionBodyHeader(EmitState s)
-        {
-            s.Line("try: ");
-            s.IncreaseIndent();
-        }
-
-        private void EmitExcpetionBodyFooter(EmitState s)
-        {
-            s.DecreaseIndent();
-            s.Line("");
-            s.Line("");
-            s.Line("except Exception:");
-            s.IncreaseIndent();
-            s.Line("raise Exception(_strucenglib_format())");
-            s.DecreaseIndent();
-        }
-
         public string GenerateLinFeCode(Workbench bench)
         {
             var state = new EmitState(bench);
             EmitHeaders(state, "Generate LinFe Code",
                 targetPath: state.Workbench.FileName);
 
-            EmitExceptionBodyHeader(state);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -50,7 +32,6 @@ namespace StrucEngLib
             EmitSteps(state);
             EmitSummary(state);
             EmitRun(state);
-            EmitExcpetionBodyFooter(state);
 
             return state.Buffer.ToString();
         }
@@ -72,8 +53,6 @@ except Exception:
             EmitHeaders(state, "Generate Sandwich Code",
                 targetPath: state.Workbench.SandwichModel.FileName,
                 customImports: customImports);
-
-            EmitExceptionBodyHeader(state);
             EmitElements(state);
             EmitSets(state);
             EmitMaterials(state);
@@ -87,28 +66,8 @@ except Exception:
             EmitRun(state);
             state.Workbench.SandwichModel?.AnalysisSettings?
                 .ForEach(s => EmitSmm(state, s));
-
-            EmitExcpetionBodyFooter(state);
             return state.Buffer.ToString();
         }
-
-        private string ExceptionHandlerFunction()
-        {
-            const string code = @"
-def _strucenglib_format():
-    import traceback
-    msg = 'StrucEngLib Plugin failed to execute code.\n'
-    msg += 'Investigate traceback shown below and in Rhino command log. '
-    msg += 'Consider Wiki with StrucEngLibHelp command for more help. \n\n'
-    msg += 'Traceback: \n'
-    msg += traceback.format_exc()
-    msg += '\n'
-    print(msg)
-    return msg
-";
-            return code;
-        }
-
 
         private void EmitHeaders(EmitState s, string action, string targetPath = "C:\\Temp\\Rahmen",
             string customImports = "")
@@ -133,8 +92,6 @@ def _strucenglib_format():
 # Code generated at {DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}
 # Issued by user {Environment.UserName}
 # Action: {action}
-
-{ExceptionHandlerFunction()}
 
 from compas_fea.cad import rhino
 from compas_fea.structure import ElasticIsotropic
