@@ -76,14 +76,14 @@ namespace StrucEngLib
                             // Sandwich model requires analysis output sf1-5 and sm
                             if (!setting.ShellForces)
                             {
-                                ctx.AddWarning($"Sandwichmodel requires analysis output 'Shell forces' in step {step.Order} of LinFE model." +
+                                ctx.AddInfo($"Sandwichmodel requires analysis output 'Shell forces' in step {step.Order} of LinFE model." +
                                                $" Auto corrected.");
                                 setting.ShellForces = true;
                             }
                             if (!setting.SectionMoments)
                             {
-                                ctx.AddWarning($"Sandwichmodel requires analysis output 'Section moments' or 'Shell moments' in step {step.Order} of LinFE model." +
-                                               $" Auto corrected");
+                                ctx.AddInfo($"Sandwichmodel requires analysis output 'Section moments' or 'Shell moments' in step {step.Order} of LinFE model." +
+                                            $" Auto corrected");
                                 setting.SectionMoments = true;
                             }
                         }
