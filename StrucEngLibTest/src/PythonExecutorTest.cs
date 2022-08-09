@@ -22,21 +22,5 @@ namespace StrucEngLibTest
             CompiledCode code = scriptSource.Compile();
             return code;
         }
-
-        [Test]
-        public void TestBoilerPlate()
-        {
-            PythonExecutor p = new PythonExecutor();
-            var code = "print(1337)";
-            var res = p.AddCustomHandlers(code);
-            
-            Console.WriteLine(res);
-            Assert.IsNotEmpty(res);
-            Assert.IsNotNull(res);
-
-            var newCode = CompilePython(res);
-            Console.WriteLine(newCode.ToString());
-            Assert.NotNull(newCode.ToString());
-        }
     }
 }
