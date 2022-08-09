@@ -106,7 +106,7 @@ namespace StrucEngLib
             {
                 if (enumerate)
                 {
-                    b.Append("\t- " + m + "\n");
+                    b.Append("- " + m + "\n");
                 }
                 else
                 {
