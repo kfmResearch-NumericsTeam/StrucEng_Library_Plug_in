@@ -5,7 +5,7 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
-    /// <summary></summary>
+    /// <summary>Execute code as Rhino RunPython script. this is UI blocking</summary>
     public class PythonExecutorMainThread : ICodeExecutor
     {
         public void Execute(string pyCode, Action onDone = null)

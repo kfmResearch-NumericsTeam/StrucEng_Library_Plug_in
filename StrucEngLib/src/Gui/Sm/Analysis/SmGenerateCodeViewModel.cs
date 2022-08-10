@@ -1,35 +1,18 @@
 using System.Runtime.CompilerServices;
 using Eto.Forms;
 using Rhino;
+using StrucEngLib.Gui;
 
 namespace StrucEngLib.Sm
 {
     /// <summary>Vm for Analysis Control in Sandwich Model</summary>
-    public class SmGenerateCodeViewModel : ViewModelBase
+    public class SmGenerateCodeViewModel : CommonGenerateCodeViewModel
     {
         private readonly SmMainViewModel _vm;
-        public RelayCommand CommandInspectModel { get; }
-        public RelayCommand CommandExecuteModel { get; }
-        public RelayCommand CommandResetData { get; }
         
-        private string _fileName;
-
-        public string FileName
-        {
-            get => _fileName;
-            set
-            {
-                _fileName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public SmGenerateCodeViewModel(SmMainViewModel vm)
+        public SmGenerateCodeViewModel(SmMainViewModel vm): base(vm.MainViewModel)
         {
             _vm = vm;
-            CommandInspectModel = new RelayCommand(OnInspectModel);
-            CommandExecuteModel = new RelayCommand(OnExecuteModel);
-            CommandResetData = new RelayCommand(OnResetData);
         }
         
         public sealed override void UpdateModel()
@@ -38,39 +21,42 @@ namespace StrucEngLib.Sm
             {
                 _vm.Workbench.SandwichModel.FileName = FileName;
             }
+            _vm.Workbench.ExecuteInBackground = _executeInBackground;
         }
 
         public sealed override void UpdateViewModel()
         {
+            base.UpdateViewModel();
             if (_vm.Workbench.SandwichModel != null)
             {
                 FileName = _vm.Workbench.FileName;
-            }   
+            }
+            ExecuteInBackground = _vm.Workbench.ExecuteInBackground;
         }
-        
-        private void OnInspectModel()
+
+        protected override void OnInspectModel()
         {
             var model = _vm.BuildModel();
             var gen = new ExecGenerateSmCode(_vm, model);
             gen.Execute(null);
             if (gen.Success)
             {
-                new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
+                new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode, _executeInBackground).Execute(null);
             }
         }
 
-        private void OnExecuteModel()
+        protected override void OnExecuteModel()
         {
             var model = _vm.BuildModel();
             var gen = new ExecGenerateSmCode(_vm, model);
             gen.Execute(null);
             if (gen.Success)
             {
-                new ExecExecuteCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
+                new ExecExecuteCode(_vm.MainViewModel, gen.GeneratedCode, _executeInBackground).Execute(null);
             }
         }
 
-        private void OnResetData()
+        protected override void OnResetData()
         {
             new ExecClearModelData(ExecClearModelData.ClearState.SANDWICH).Execute(null);
         }

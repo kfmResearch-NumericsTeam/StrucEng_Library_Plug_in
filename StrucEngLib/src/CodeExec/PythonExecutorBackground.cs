@@ -13,6 +13,9 @@ using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
+    /// <summary>
+    /// Execute code in background worker (experimental)
+    /// </summary>
     public class PythonExecutorBackground : ICodeExecutor
     {
         public void Execute(string code, Action onDone = null)

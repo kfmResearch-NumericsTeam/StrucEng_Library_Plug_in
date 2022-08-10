@@ -11,11 +11,13 @@ namespace StrucEngLib
     {
         private readonly MainViewModel _vm;
         private readonly string _code;
+        private readonly bool _execInBackground;
 
-        public ExecShowCode(MainViewModel vm, string code)
+        public ExecShowCode(MainViewModel vm, string code, bool execInBackground = false)
         {
             _vm = vm;
             _code = code;
+            _execInBackground = execInBackground;
         }
 
         public override void Execute(object parameter)
@@ -29,7 +31,7 @@ namespace StrucEngLib
 
                 if (dialog.State == InspectPythonDialog.STATE_EXEC)
                 {
-                    new ExecExecuteCode(_vm, sourceCode).Execute(null);
+                    new ExecExecuteCode(_vm, sourceCode, _execInBackground).Execute(null);
                 }
             }
         }

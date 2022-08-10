@@ -1,4 +1,5 @@
 ## v0.0.11 (pending)
+- introduce background executor to run python script without freezing rhino
 
 ## v0.0.10
 - fix: scroll scrollbar of parent if mousewheel event in child, scroll was otherwise blocked.
