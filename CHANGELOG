@@ -1,5 +1,5 @@
-## v0.0.11 (pending)
-- introduce background executor to run python script without freezing rhino
+## v0.0.11
+- introduce background executor to run python script without freezing rhino (checkbox to run in background)
 
 ## v0.0.10
 - fix: scroll scrollbar of parent if mousewheel event in child, scroll was otherwise blocked.
