@@ -1,6 +1,5 @@
 [![Continuous Integration](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml/badge.svg?branch=master)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/distrib_sh_build.yml)
 [![CodeQL](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/actions/workflows/codeql-analysis.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/kfmresearch-numericsteam/struceng_library_plug_in/badge)](https://www.codefactor.io/repository/github/kfmresearch-numericsteam/struceng_library_plug_in)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/alerts/)
 [![Latest tagged version](https://img.shields.io/github/v/tag/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in.svg)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/blob/master/CHANGELOG)
 [![Browse Wiki](https://img.shields.io/badge/Browse-Wiki-lightgrey)](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki)
