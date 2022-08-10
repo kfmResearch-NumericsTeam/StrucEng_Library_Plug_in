@@ -31,9 +31,11 @@ namespace StrucEngLib
 
         protected void OnGenerateModel(string source)
         {
-            new PythonExecutor().ExecuteCode(source);
-            StrucEngLibLog.Instance.WriteLine("Normalizing Rhino layer text...");
-            RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
+            new PythonExecutor().ExecuteAsync(source, () =>
+            {
+                StrucEngLibLog.Instance.WriteLine("Normalizing Rhino layer text...");
+                RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);    
+            });
         }
     }
 }

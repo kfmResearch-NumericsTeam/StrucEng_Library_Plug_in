@@ -222,7 +222,7 @@ imp.find_module('compas')
 imp.find_module('compas_fea')
 imp.find_module('Sandwichmodel')
 print('success :)')";
-                    new PythonExecutor().ExecuteCode(cmd);
+                    new PythonExecutor().Execute(cmd);
                 };
             }
         }

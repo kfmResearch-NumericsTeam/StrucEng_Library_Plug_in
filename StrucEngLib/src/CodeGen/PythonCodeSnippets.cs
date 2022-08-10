@@ -40,13 +40,14 @@ mdl = Structure(name=name, path=path)
 # Elements
 
 rhino.add_nodes_elements_from_layers(mdl, mesh_type='ShellElement', layers=['elset_deck','elset_wall_left','elset_wall_right'])
+rhino.add_sets_from_layers(mdl, layers=['nset_pinned'])
+
+
 mdl.elements[150].axes.update({{'ex': [0, 0, 1], 'ey': [0, -1, 0], 'ez': [1, 0, 0]}})
 
 mdl.elements[1].axes.update({{'ex': [1, 0, 0], 'ey': [0, -1, 0], 'ez': [0, 0, -1]}})
 mdl.elements[200].axes.update({{'ex': [0, 0, -1], 'ey': [0, -1, 0], 'ez': [-1, 0, 0]}})
 # Sets
-
-rhino.add_sets_from_layers(mdl, layers=['nset_pinned'])
 
 # Materials
 

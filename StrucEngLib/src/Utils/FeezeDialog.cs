@@ -30,7 +30,7 @@ namespace StrucEngLib.Utils
                 Rows =
                 {
                     new TableRow(null,
-                        new Label {Text = "StrucEngLib is executing code. Rhino freezes until this operation is completed. This may take some time. "},
+                        new Label {Text = "StrucEngLib is executing code. Rhino may freeze until this operation is completed. This may take some time."},
                         null)
                 }
             };
