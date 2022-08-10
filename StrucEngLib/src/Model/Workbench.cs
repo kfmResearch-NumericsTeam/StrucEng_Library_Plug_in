@@ -18,6 +18,9 @@ namespace StrucEngLib.Model
 
         /// <summary> The path to the generated file </summary>
         public string FileName { get; set; }
+        
+        /// <summary> Setting to run code in background </summary>
+        public bool ExecuteInBackground { get; set; }
 
         public SandwichModel SandwichModel { get; set; }
 

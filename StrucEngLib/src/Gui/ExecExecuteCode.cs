@@ -10,11 +10,13 @@ namespace StrucEngLib
     {
         private readonly MainViewModel _vm;
         private readonly string _code;
+        private readonly bool _inBackground;
 
-        public ExecExecuteCode(MainViewModel vm, string code)
+        public ExecExecuteCode(MainViewModel vm, string code, bool inBackground = false)
         {
             _vm = vm;
             _code = code;
+            _inBackground = inBackground;
         }
 
         public override void Execute(object _)
@@ -31,9 +33,22 @@ namespace StrucEngLib
 
         protected void OnGenerateModel(string source)
         {
-            new PythonExecutor().ExecuteCode(source);
-            StrucEngLibLog.Instance.WriteLine("Normalizing Rhino layer text...");
-            RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
+            if (_inBackground)
+            {
+                new PythonExecutor().ExecuteAsync(source, () =>
+                {
+                    StrucEngLibLog.Instance.WriteLine("Normalizing Rhino layer text...");
+                    RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
+                });
+            }
+            else
+            {
+                new PythonExecutor().Execute(source, () =>
+                {
+                    StrucEngLibLog.Instance.WriteLine("Normalizing Rhino layer text...");
+                    RhinoUtils.NormalizeTextHeights(RhinoDoc.ActiveDoc);
+                });
+            }
         }
     }
 }

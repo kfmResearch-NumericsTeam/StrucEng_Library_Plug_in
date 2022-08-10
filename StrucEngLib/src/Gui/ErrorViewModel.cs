@@ -38,7 +38,6 @@ namespace StrucEngLib
                 }
             };
         }
-
         public ViewResult ShowException(string info, Exception e)
         {
             StringBuilder b = new StringBuilder();

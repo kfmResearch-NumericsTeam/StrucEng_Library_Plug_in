@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Eto.Forms;
 using Rhino;
+using Rhino.UI;
 using StrucEngLib.Utils;
 
 namespace StrucEngLib
@@ -24,10 +25,9 @@ namespace StrucEngLib
 
         public override void Execute(object parameter)
         {
-            var res = MessageBox.Show("All user data associated with StrucEngLib was deleted.",
-                MessageBoxType.Information);
-
-            if (res == DialogResult.Ok)
+            var res = Dialogs.ShowMessage("Do you want to delete all associated data from StrucEngLib?", "Delete data",
+                ShowMessageButton.YesNo, ShowMessageIcon.Warning);
+            if (res == ShowMessageResult.Yes)
             {
                 if (_clearState == ClearState.ALL)
                 {
@@ -40,7 +40,6 @@ namespace StrucEngLib
                     MainView.Instance.DisposeUi();
                     StrucEngLibPlugin.Instance.ResetSandwichData();
                     MainView.Instance.LoadUi();
-                    
                 }
             }
         }

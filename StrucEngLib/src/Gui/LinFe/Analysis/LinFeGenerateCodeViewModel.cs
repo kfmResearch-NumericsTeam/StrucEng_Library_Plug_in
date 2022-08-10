@@ -2,70 +2,56 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Eto.Forms;
 using Rhino;
+using StrucEngLib.Gui;
 
-namespace StrucEngLib.Sm
-{
+namespace StrucEngLib
+{   
     /// <summary>Vm for Analysis Control in Sandwich Model</summary>
-    public class LinFeGenerateCodeViewModel : ViewModelBase
+    public class LinFeGenerateCodeViewModel : CommonGenerateCodeViewModel
     {
-        private readonly LinFeMainViewModel _vm;
-        public RelayCommand CommandInspectModel { get; }
-        public RelayCommand CommandExecuteModel { get; }
-        public RelayCommand CommandResetData { get; }
-        
-        private string _fileName;
-
-        public string FileName
-        {
-            get => _fileName;
-            set
-            {
-                _fileName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public LinFeGenerateCodeViewModel(LinFeMainViewModel vm)
+        private LinFeMainViewModel _vm;
+        public LinFeGenerateCodeViewModel(LinFeMainViewModel vm): base(vm.MainViewModel)
         {
             _vm = vm;
-            CommandInspectModel = new RelayCommand(OnInspectModel);
-            CommandExecuteModel = new RelayCommand(OnExecuteModel);
-            CommandResetData = new RelayCommand(OnResetData);
         }
         
-        public sealed override void UpdateModel()
+        public override void UpdateModel()
         {
+            base.UpdateModel();
+            _vm.Workbench.ExecuteInBackground = _executeInBackground;
             _vm.Workbench.FileName = FileName;
         }
 
-        public sealed override void UpdateViewModel()
+        public override void UpdateViewModel()
         {
+            base.UpdateViewModel();
+            ExecuteInBackground = _vm.Workbench.ExecuteInBackground;
             FileName = _vm.Workbench.FileName;
         }
-        
-        private void OnInspectModel()
+
+        protected override void OnInspectModel()
         {
             var model = _vm.BuildModel();
             var gen = new ExecGenerateLinFeCode(_vm, model);
             gen.Execute(null);
             if (gen.Success)
             {
-                new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
-            }
-        }
-        
-        private void OnExecuteModel()
-        {
-            var model = _vm.BuildModel();
-            var gen = new ExecGenerateLinFeCode(_vm, model);
-            gen.Execute(null);
-            if (gen.Success)
-            {
-                new ExecExecuteCode(_vm.MainViewModel, gen.GeneratedCode).Execute(null);
+                new ExecShowCode(_vm.MainViewModel, gen.GeneratedCode, _executeInBackground).Execute(null);
             }
         }
 
-        private void OnResetData()
+        protected override void OnExecuteModel()
+        {
+            var model = _vm.BuildModel();
+            var gen = new ExecGenerateLinFeCode(_vm, model);
+            gen.Execute(null);
+            if (gen.Success)
+            {
+                new ExecExecuteCode(_vm.MainViewModel, gen.GeneratedCode, _executeInBackground).Execute(null);
+            }
+        }
+
+        protected override void OnResetData()
         {
             new ExecClearModelData(ExecClearModelData.ClearState.ALL).Execute(null);
         }

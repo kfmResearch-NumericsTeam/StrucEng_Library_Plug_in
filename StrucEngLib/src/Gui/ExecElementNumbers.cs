@@ -79,7 +79,7 @@ if __name__=='__main__':
 
         public void RunCode(string code)
         {
-            new ExecExecuteCode(_vm.MainViewModel, code).Execute(null);
+            new ExecExecuteCode(_vm.MainViewModel, code, false).Execute(null);
         }
     }
 }
