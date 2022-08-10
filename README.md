@@ -11,7 +11,7 @@ Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechani
 
   
 <p align="left">
-    <img src="./.github/strucenglib_gh.png" alt="strucenglib" width="700"/>
+    <img src="https://user-images.githubusercontent.com/2311941/183869882-6bfad852-f495-4ffc-91e1-8e0277bd8fd5.png" alt="strucenglib" width="700"/>
 </p>
 
 ### Installation
