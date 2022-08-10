@@ -7,9 +7,7 @@
 
 
 # StrucEngLib Plugin
-Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechanical models, saftey concepts, GUI's, load generator, etc. for the structural analysis of reinforced concrete and masonry. 
-
-This plugin integrates functionality of [Compas Finite element analysis (FEA 1)](https://compas.dev/compas_fea/latest/index.html) into [Rhinoceros 3D](https://www.rhino3d.com/de/).
+Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechanical models, saftey concepts, GUI's, load generator, etc. for the structural analysis of reinforced concrete and masonry. This plugin integrates functionality of [Compas Finite element analysis (FEA 1)](https://compas.dev/compas_fea/latest/index.html) into [Rhinoceros 3D](https://www.rhino3d.com/de/).
 
   
 <p align="left">
