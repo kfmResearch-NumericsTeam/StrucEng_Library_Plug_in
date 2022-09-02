@@ -37,7 +37,9 @@ namespace StrucEngLib.Sm
         private void BuildUi()
         {
             BackgroundColor = new Label().BackgroundColor;
+            var layout = new DynamicLayout();
             var holder = new EtoCollapsibleSectionHolder();
+            layout.AddRow(holder);
             ScrollHelper.ScrollParent(holder);
             new[]
             {
@@ -45,14 +47,15 @@ namespace StrucEngLib.Sm
                     new AboutSmView()),
                 
                 new CollapsibleSectionHolder("Step 1: Define Materials and Constraints",
-                    new SmAdditionalPropertiesView(_vm.SmSettingVm)),
+                new SmAdditionalPropertiesView(_vm.SmSettingVm)),
 
                 new CollapsibleSectionHolder("Step 2: Run Analysis",
                     new SmAnalysisView(_vm.AnalysisVm),
-                    new SmGenerateCodeView(_vm.GenerateCodeVm),
-                    new Label())
+                    new SmGenerateCodeView(_vm.GenerateCodeVm)
+                    )
             }.ToList().ForEach(e => holder.Add(e));
-            Content = holder;
+            // layout.Add(null);
+            Content = layout;
         }
 
         public void DisposeUi()

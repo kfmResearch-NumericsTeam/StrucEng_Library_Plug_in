@@ -30,10 +30,10 @@ namespace StrucEngLib.Utils
         {
             get => _label;
         }
-
+        
         public override int SectionHeight
         {
-            get => this.Content.Height;
+            get => Content.Height; 
         }
     }
 }

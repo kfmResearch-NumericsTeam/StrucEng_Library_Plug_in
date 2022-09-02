@@ -23,7 +23,7 @@ namespace StrucEngLib.Model
         }
         public override string ToString()
         {
-            return "Set: " + Name;
+            return "Constraint: " + Name;
         }
         
         public string GetName()

@@ -113,7 +113,7 @@ namespace StrucEngLib.Layer
                                     new TableRow(_rdlElementSetSelection = new RadioButtonList()
                                     {
                                         Orientation = Orientation.Horizontal,
-                                        DataStore = new[] {"Element      ", "Set   "},
+                                        DataStore = new[] {"Element      ", "Constraint   "},
                                         SelectedIndex = 0
                                     })
                                 }

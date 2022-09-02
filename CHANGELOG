@@ -1,5 +1,6 @@
 ## v0.0.12 (pending)
 - Introduce collapsible panels in linfe and sandwich model
+- change of terminology: we refer to a set from now on as a 'constraint'
 
 ## v0.0.11
 - introduce background executor to run python script without freezing rhino (checkbox to run in background)
