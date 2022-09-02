@@ -84,7 +84,7 @@ namespace StrucEngLib
             var stream = Assembly.GetManifestResourceStream(
                 "StrucEngLib.EmbeddedResources.plugin-utility.generic.ico");
             var icon = stream != null ? new System.Drawing.Icon(stream) : null;
-            Panels.RegisterPanel(this, typeof(MainView), "StrucEngLib", icon);
+            Panels.RegisterPanel(this, typeof(MainView), "StrucEng Library", icon);
         }
 
         private void UpdateMenubar()

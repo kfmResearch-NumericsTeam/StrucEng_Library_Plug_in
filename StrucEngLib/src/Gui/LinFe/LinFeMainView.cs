@@ -1,15 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
+using Rhino.UI.Controls;
 using StrucEngLib.Analysis;
 using StrucEngLib.Layer;
 using StrucEngLib.Load;
 using StrucEngLib.LocalCoordinate;
 using StrucEngLib.Sm;
 using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib
 {
@@ -31,20 +35,30 @@ namespace StrucEngLib
             BackgroundColor = new Label().BackgroundColor;
             Padding = new Padding();
             var layout = new DynamicLayout();
-            layout.Padding = new Padding(10, 10);
-            layout.Spacing = new Size(0, 10);
-            
-            layout.AddRow(UiUtils.GenerateTitle("Step 1: Define Parts, Materials and Constraints"));
-            layout.AddRow(new ListLayerView(vm));
-            layout.AddRow(UiUtils.GenerateTitle("Step 2: Define Local Coordinates"));
-            layout.AddRow(new LoadConstraintView(new LoadConstraintViewModel(vm)));
-            layout.AddRow(UiUtils.GenerateTitle("Step 3: Define Loads"));
-            layout.AddRow(new ListLoadView(vm.ListLoadVm));
-            layout.AddRow(UiUtils.GenerateTitle("Step 4: Define Analysis Steps"));
-            layout.AddRow(new ListStepView(vm.ListStepVm));
-            layout.AddRow(UiUtils.GenerateTitle("Step 5: Run Analysis"));
-            layout.AddRow(new AnalysisView(vm.AnalysisVm));
-            layout.AddRow(new LinFeGenerateCodeView(vm.GenerateCodeVm));
+            var holder = new EtoCollapsibleSectionHolder();
+            layout.AddRow(holder);
+            ScrollHelper.ScrollParent(holder);
+            new[]
+            {
+                new CollapsibleSectionHolder("About LinFE Model",
+                    new AboutLinFeView()),
+
+                new CollapsibleSectionHolder("Step 1: Define Parts, Materials and Constraints",
+                    new ListLayerView(vm)),
+
+                new CollapsibleSectionHolder("Step 2: Define Local Coordinates",
+                    new LoadConstraintView(new LoadConstraintViewModel(vm))),
+
+                new CollapsibleSectionHolder("Step 3: Define Loads",
+                    new ListLoadView(vm.ListLoadVm)),
+
+                new CollapsibleSectionHolder("Step 4: Define Analysis Steps",
+                    new ListStepView(vm.ListStepVm)),
+
+                new CollapsibleSectionHolder("Step 5: Run Analysis",
+                    new AnalysisView(vm.AnalysisVm),
+                    new LinFeGenerateCodeView(vm.GenerateCodeVm))
+            }.ToList().ForEach(e => holder.Add(e));
             Content = layout;
         }
 

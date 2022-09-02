@@ -1,9 +1,16 @@
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
+using Rhino.UI.Controls;
+using StrucEngLib.Analysis;
 using StrucEngLib.Layer;
+using StrucEngLib.Load;
+using StrucEngLib.LocalCoordinate;
+using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
 namespace StrucEngLib.Sm
 {
@@ -30,20 +37,22 @@ namespace StrucEngLib.Sm
         private void BuildUi()
         {
             BackgroundColor = new Label().BackgroundColor;
-            Content = new DynamicLayout()
+            var holder = new EtoCollapsibleSectionHolder();
+            ScrollHelper.ScrollParent(holder);
+            new[]
             {
-                Padding = new Padding(10, 10),
-                Spacing = new Size(0, 10),
-                Rows =
-                {
-                    UiUtils.GenerateTitle("Step 1: Define Materials and Constraints"),
-                    new SmAdditionalPropertiesView(_vm.SmSettingVm),
-                    UiUtils.GenerateTitle("Step 2: Run Analysis"),
+                new CollapsibleSectionHolder("About Sandwich Model",
+                    new AboutSmView()),
+                
+                new CollapsibleSectionHolder("Step 1: Define Materials and Constraints",
+                    new SmAdditionalPropertiesView(_vm.SmSettingVm)),
+
+                new CollapsibleSectionHolder("Step 2: Run Analysis",
                     new SmAnalysisView(_vm.AnalysisVm),
                     new SmGenerateCodeView(_vm.GenerateCodeVm),
-                    new Label()
-                }
-            };
+                    new Label())
+            }.ToList().ForEach(e => holder.Add(e));
+            Content = holder;
         }
 
         public void DisposeUi()

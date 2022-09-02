@@ -160,6 +160,16 @@ namespace StrucEngLib
                 }
             };
         }
+        
+        public static Control GenerateLabel(string text, double scaleFactor = 1, bool bold = false)
+        {
+            var s = new Label().Font.Size * scaleFactor;
+            return new Label()
+            {
+                Text = text,
+                Font = new Font(FontFamilies.Sans, (float) s, bold ? FontStyle.Bold : FontStyle.None)
+            };
+        }
 
         protected static void FocusOnClick(Control toClick, Control toFocus)
         {
