@@ -1,16 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Principal;
-using Rhino.Geometry.Collections;
-using StrucEngLib.Analysis;
-using StrucEngLib.Layer;
-using StrucEngLib.Load;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
-using StrucEngLib.Sm;
-using StrucEngLib.Step;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// Main View Model for Sandwich Model

@@ -1,16 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Views;
 
-namespace StrucEngLib
+
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Utility code for views
@@ -158,6 +152,16 @@ namespace StrucEngLib
                 {
                     Font = new Font(FontFamilies.Sans, s, FontStyle.None)
                 }
+            };
+        }
+        
+        public static Control GenerateLabel(string text, double scaleFactor = 1, bool bold = false)
+        {
+            var s = new Label().Font.Size * scaleFactor;
+            return new Label()
+            {
+                Text = text,
+                Font = new Font(FontFamilies.Sans, (float) s, bold ? FontStyle.Bold : FontStyle.None)
             };
         }
 

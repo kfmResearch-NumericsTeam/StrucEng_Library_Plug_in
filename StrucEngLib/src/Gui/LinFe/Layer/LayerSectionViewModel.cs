@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// Vm for Section information

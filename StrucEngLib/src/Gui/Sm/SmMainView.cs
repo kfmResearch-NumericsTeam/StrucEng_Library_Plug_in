@@ -1,11 +1,9 @@
-using System.Diagnostics;
-using System.Linq.Expressions;
-using Eto.Drawing;
+using System.Linq;
 using Eto.Forms;
-using Rhino;
-using StrucEngLib.Layer;
+using Rhino.UI.Controls;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// Main View for Sandwich Model
@@ -30,20 +28,24 @@ namespace StrucEngLib.Sm
         private void BuildUi()
         {
             BackgroundColor = new Label().BackgroundColor;
-            Content = new DynamicLayout()
+            var layout = new DynamicLayout();
+            var holder = new EtoCollapsibleSectionHolder();
+            layout.AddRow(holder);
+            ScrollHelper.ScrollParent(holder);
+            new[]
             {
-                Padding = new Padding(10, 10),
-                Spacing = new Size(0, 10),
-                Rows =
-                {
-                    UiUtils.GenerateTitle("Step 1: Define Materials and Constraints"),
-                    new SmAdditionalPropertiesView(_vm.SmSettingVm),
-                    UiUtils.GenerateTitle("Step 2: Run Analysis"),
+                new CollapsibleSectionHolder("About Sandwich Model",
+                    new AboutSmView()),
+                
+                new CollapsibleSectionHolder("Step 1: Define Materials and Constraints",
+                new SmAdditionalPropertiesView(_vm.SmSettingVm)),
+
+                new CollapsibleSectionHolder("Step 2: Run Analysis",
                     new SmAnalysisView(_vm.AnalysisVm),
-                    new SmGenerateCodeView(_vm.GenerateCodeVm),
-                    new Label()
-                }
-            };
+                    new SmGenerateCodeView(_vm.GenerateCodeVm)
+                    )
+            }.ToList().ForEach(e => holder.Add(e));
+            Content = layout;
         }
 
         public void DisposeUi()

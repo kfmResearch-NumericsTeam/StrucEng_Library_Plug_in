@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using StrucEngLib.Analysis;
-using StrucEngLib.Layer;
-using StrucEngLib.Load;
+using StrucEngLib.Gui.LinFe.Analysis;
+using StrucEngLib.Gui.LinFe.Layer;
+using StrucEngLib.Gui.LinFe.Load;
+using StrucEngLib.Gui.LinFe.Step;
 using StrucEngLib.Model;
-using StrucEngLib.Sm;
-using StrucEngLib.Step;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui.LinFe
 {
     /// <summary>
     /// Context class with references to all primary view model of LinFe

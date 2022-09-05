@@ -1,19 +1,15 @@
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Analysis;
-using StrucEngLib.Load;
-using StrucEngLib.LocalCoordinate;
-using StrucEngLib.Model;
-using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// View to show layer information
     /// </summary>
     public class ListLayerView : DynamicLayout
     {
-        private Button _btnMouseSelect;
+        private Button _btnMouseClear;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
         private ListBox _dropdownLayers;
@@ -40,7 +36,7 @@ namespace StrucEngLib.Layer
         protected void BindGui()
         {
             _btnAddLayer.Command = _vmListLayer.CommandOnAddLayer;
-            _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
+            _btnMouseClear.Command = _vmListLayer.CommandClearMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
 
             _gbPropertiesForLayer.BindDataContext(
@@ -56,6 +52,7 @@ namespace StrucEngLib.Layer
                 nameof(_vmListLayer.SelectedLayer));
             _rdlElementSetSelection.Bind<int>(nameof(_rdlElementSetSelection.SelectedIndex), _vmListLayer,
                 nameof(_vmListLayer.LayerToAddType));
+            
             _gbSelectLayer.Bind<bool>(nameof(_gbSelectLayer.Visible), _vmListLayer,
                 nameof(_vmListLayer.SelectLayerViewVisible), DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<bool>(nameof(_gbPropertiesForLayer.Visible), _vmDetailView,
@@ -92,12 +89,12 @@ namespace StrucEngLib.Layer
                                             new TableCell(
                                                 (_tbLayerToAdd = new TextBox
                                                     {
-                                                        PlaceholderText = "Type or Select Layer to add",
+                                                        PlaceholderText = "Select layer in Rhino document",
                                                         AutoSelectMode = AutoSelectMode.OnFocus
                                                     }
                                                 ),
                                                 true),
-                                            new TableCell((_btnMouseSelect = new Button {Text = "Select..."}))
+                                            new TableCell((_btnMouseClear = new Button {Text = "Clear"}))
                                         }
                                     },
                                 }
@@ -113,14 +110,15 @@ namespace StrucEngLib.Layer
                                     new TableRow(_rdlElementSetSelection = new RadioButtonList()
                                     {
                                         Orientation = Orientation.Horizontal,
-                                        DataStore = new[] {"Element      ", "Set   "},
-                                        SelectedIndex = 0
+                                        DataStore = new[] {"Element      ", "Constraint   "},
+                                        SelectedIndex = -1
                                     })
                                 }
                             },
                             new TableLayout
                             {
                                 Spacing = new Size(10, 10),
+                                Padding = new Padding(0) {Top = 2, Bottom = 0},
                                 Rows =
                                 {
                                     new TableRow(

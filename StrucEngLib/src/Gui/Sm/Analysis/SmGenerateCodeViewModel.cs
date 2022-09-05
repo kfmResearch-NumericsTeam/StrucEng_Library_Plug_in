@@ -1,9 +1,4 @@
-using System.Runtime.CompilerServices;
-using Eto.Forms;
-using Rhino;
-using StrucEngLib.Gui;
-
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>Vm for Analysis Control in Sandwich Model</summary>
     public class SmGenerateCodeViewModel : CommonGenerateCodeViewModel

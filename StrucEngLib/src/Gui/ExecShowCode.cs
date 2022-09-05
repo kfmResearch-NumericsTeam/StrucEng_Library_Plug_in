@@ -1,10 +1,8 @@
-using System;
 using Rhino;
 using Rhino.UI;
-using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Command to show source code to then further execute it</summary>
     public class ExecShowCode : CommandBase

@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Views;
 
-namespace StrucEngLib
+namespace StrucEngLib.Utils
 {
     /// <summary>View for NewSelectionViewModel</summary>
     public class NewSelectionView<ENUM> : DynamicLayout

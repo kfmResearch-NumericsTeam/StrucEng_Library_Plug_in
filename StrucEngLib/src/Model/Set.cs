@@ -1,7 +1,7 @@
 namespace StrucEngLib.Model
 {
     /// <summary>
-    /// Set model
+    /// Set model, A set is also referred to as a 'constraint'
     /// </summary>
     public class Set : Layer
     {
@@ -23,7 +23,7 @@ namespace StrucEngLib.Model
         }
         public override string ToString()
         {
-            return "Set: " + Name;
+            return "Constraint: " + Name;
         }
         
         public string GetName()

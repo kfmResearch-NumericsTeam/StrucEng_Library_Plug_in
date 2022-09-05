@@ -1,8 +1,9 @@
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     using Load = StrucEngLib.Model.Load;
 

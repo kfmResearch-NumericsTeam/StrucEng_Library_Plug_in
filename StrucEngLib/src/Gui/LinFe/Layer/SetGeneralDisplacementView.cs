@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// View to show information about general displacements

@@ -6,8 +6,9 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Step
+namespace StrucEngLib.Gui.LinFe.Step
 {
     using Layer = StrucEngLib.Model.Layer;
     using Load = StrucEngLib.Model.Load;
@@ -234,7 +235,7 @@ namespace StrucEngLib.Step
                     if (l.LayerType == LayerType.SET)
                     {
                         var newEntry = new StepEntry(StepType.Set, l);
-                        var desc = "Set: " + l.GetName();
+                        var desc = "Constraint: " + l.GetName();
                         entries.Add(new KeyValuePair<string, StepEntry>(desc, newEntry));
                     }
                 }

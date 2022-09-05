@@ -1,11 +1,7 @@
-using System;
-using System.IO;
-using Eto.Forms;
-using Rhino;
 using Rhino.UI;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Clears all user data</summary>
     public class ExecClearModelData : CommandBase

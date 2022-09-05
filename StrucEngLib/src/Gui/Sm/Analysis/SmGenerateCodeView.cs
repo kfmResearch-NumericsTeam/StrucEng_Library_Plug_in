@@ -1,8 +1,4 @@
-using Eto.Drawing;
-using Eto.Forms;
-using StrucEngLib.Gui;
-
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// View for Analysis control in sandwich model

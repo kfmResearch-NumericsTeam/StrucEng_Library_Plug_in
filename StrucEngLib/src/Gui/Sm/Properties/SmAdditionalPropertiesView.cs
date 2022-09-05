@@ -3,8 +3,9 @@ using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// View for Additional Properties in Sandwich Model
@@ -58,7 +59,6 @@ namespace StrucEngLib.Sm
                     }
                 }
             });
-            ScrollHelper.ScrollParent(_dropdownLayers);
             AddRow(_gbProperties = new GroupBox
             {
                 Text = "Properties for Layer",
@@ -80,22 +80,11 @@ namespace StrucEngLib.Sm
             _propLayout.Add(_propLayoutNoData);
                 
             ImageViews();
+            ScrollHelper.ScrollParent(_dropdownLayers);
         }
         
         private void ImageViews()
-        {
-            DynamicLayout imageLayout;
-            AddRow(new GroupBox
-            {
-                Text = "Visualization",
-                Padding = new Padding(5),
-                Content = imageLayout = new DynamicLayout
-                {
-                    Padding = new Padding(5),
-                    Spacing = new Size(5, 20),
-                }
-            });
-            
+        {   
             var img01 = new System.Drawing.Bitmap(
                 Assembly.GetExecutingAssembly().GetManifestResourceStream(
                     "StrucEngLib.EmbeddedResources.sm_image01.png"));
@@ -106,7 +95,7 @@ namespace StrucEngLib.Sm
 
             var imageLeft = new ImageView()
             {
-                // Size = new Size(90, -1),
+                Size = new Size(-1, 100),
                 Image = Rhino.UI.EtoExtensions.ToEto(img01)
             };
             imageLeft.MouseDown += (sender, args) =>
@@ -119,7 +108,7 @@ namespace StrucEngLib.Sm
             };
             var imageRight = new ImageView()
             {
-                // Size = new Size(90, -1),
+                Size = new Size(-1, 100),
                 Image = Rhino.UI.EtoExtensions.ToEto(img02)
             };
             imageRight.MouseDown += (sender, args) =>
@@ -130,9 +119,22 @@ namespace StrucEngLib.Sm
                 };
                 d.Show();
             };
-
-            imageLayout.Add(imageLeft);
-            imageLayout.Add(imageRight);
+            
+            AddRow(new GroupBox
+            {
+                Text = "Visualization",
+                Padding = new Padding(5),
+                Content = new DynamicLayout()
+                {
+                    Padding = new Padding(5),
+                    Spacing = new Size(5, 20),
+                    Rows =
+                    {
+                        imageLeft,
+                        imageRight
+                    }
+                }
+            });
         }
 
         private void BindGui()
@@ -168,13 +170,13 @@ namespace StrucEngLib.Sm
                 try
                 {
                     // XXX: Preselect everything once to initialize data
-                    for (int i = 0; i < _vm.Properties.Count; i++)
+                    for (var i = 0; i < _vm.Properties.Count; i++)
                     {
                         _dropdownLayers.SelectedIndex = i;
                     }
                     _dropdownLayers.SelectedIndex = 0;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // XXX: Ignore
                 }

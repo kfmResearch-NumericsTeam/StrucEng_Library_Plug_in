@@ -3,7 +3,7 @@ using System.Runtime.ConstrainedExecution;
 using Newtonsoft.Json;
 using Rhino;
 
-namespace StrucEngLib.Utils
+namespace StrucEngLib
 {
     /// <summary>Logging singleton for sturcenglib</summary>
     public class StrucEngLibLog
@@ -32,7 +32,7 @@ namespace StrucEngLib.Utils
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return o.ToString();
             }
@@ -71,13 +71,13 @@ namespace StrucEngLib.Utils
             WriteInternal(Tag(tag) + String.Format(format, args));
         }
 
-        private void WriteInternal(string msg)
+        private static void WriteInternal(string msg)
         {
             try
             {
-                Rhino.RhinoApp.WriteLine(msg);
+                RhinoApp.WriteLine(msg);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.Out.WriteLine(msg);
             }

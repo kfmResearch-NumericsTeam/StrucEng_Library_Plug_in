@@ -1,13 +1,6 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using Eto.Forms;
-using Rhino;
-using StrucEngLib.Analysis;
-using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>Vm for a single analysis item</summary>
     public class SmAnalysisItemViewModel : ViewModelBase

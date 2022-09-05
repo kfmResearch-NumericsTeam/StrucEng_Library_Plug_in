@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using Eto.Forms;
 using Rhino;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>View model for set properties</summary>
     public class SetViewModel : NewSectionViewModel<SetDisplacementType>

@@ -8,8 +8,9 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.LocalCoordinate
+namespace StrucEngLib.Gui.LinFe.LocalCoordinate
 {
     using Layer = StrucEngLib.Model.Layer;
 

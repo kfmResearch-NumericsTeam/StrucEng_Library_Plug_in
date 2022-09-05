@@ -5,7 +5,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// LayerDetailsViewModel builds subviews which show detail information for a layer.

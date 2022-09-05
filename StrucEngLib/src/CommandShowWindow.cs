@@ -1,7 +1,7 @@
-﻿using Eto.Drawing;
-using Rhino;
+﻿using Rhino;
 using Rhino.Commands;
 using Rhino.UI;
+using StrucEngLib.Gui;
 using Command = Rhino.Commands.Command;
 
 namespace StrucEngLib

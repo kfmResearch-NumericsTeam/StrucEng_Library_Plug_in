@@ -1,9 +1,8 @@
 using System;
-using System.IO;
 using Rhino;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Execute a python command</summary>
     public class ExecExecuteCode : CommandBase

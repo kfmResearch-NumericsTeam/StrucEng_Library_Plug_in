@@ -1,7 +1,7 @@
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>Form to show an image</summary>
     public class ShowImageForm: Form

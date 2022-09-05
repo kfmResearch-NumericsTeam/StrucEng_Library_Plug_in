@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino.UI.Controls;
-using StrucEngLib.Views;
+using StrucEngLib.Utils;
 using Size = Eto.Drawing.Size;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>Renders a single analysis item for Sandwich Model</summary>
     public class SmAnalysisItemView : DynamicLayout

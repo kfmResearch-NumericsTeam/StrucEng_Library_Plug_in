@@ -4,8 +4,9 @@ using System.Text;
 using Eto.Drawing;
 using Eto.Forms;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Step
+namespace StrucEngLib.Gui.LinFe.Step
 {
     /// <summary>Main view to assign steps to entries</summary>
     public class ListStepView : DynamicLayout

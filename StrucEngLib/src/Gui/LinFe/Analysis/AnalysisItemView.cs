@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino.UI.Controls;
 using static Eto.Drawing.FontFamilies;
 using Size = Eto.Drawing.Size;
 
-namespace StrucEngLib.Analysis
+namespace StrucEngLib.Gui.LinFe.Analysis
 {
     /// <summary>Renders a single analysis item</summary>
     public class AnalysisItemView : DynamicLayout
@@ -42,11 +39,13 @@ namespace StrucEngLib.Analysis
                     new Label() {Text = "Nodes:", Font = Bold()},
                     BinaryRow(
                         TextCell("Reaction forces"),
-                        Cell("rf, (rfx, rfy, rfz, rfm)", i => i.Rf)
+                        Cell("rf, (rfx, rfy, rfz, rfm)", i => i.Rf),
+                        enabled: false
                     ),
                     BinaryRow(
                         TextCell("Reaction moments"),
-                        Cell("rm (rmx, rmy, rmz, rmm)", i => i.Rm)
+                        Cell("rm (rmx, rmy, rmz, rmm)", i => i.Rm),
+                        enabled: false
                     ),
                     BinaryRow(
                         TextCell("Displacements"),
@@ -54,18 +53,21 @@ namespace StrucEngLib.Analysis
                     ),
                     BinaryRow(
                         TextCell("Rotations"),
-                        Cell("ur (urx, ury, urz, rum)", i => i.Ur)
+                        Cell("ur (urx, ury, urz, rum)", i => i.Ur),
+                        enabled: false
                     ),
                     BinaryRow(
                         TextCell("Concentrated forces"),
-                        Cell("cf (cfx, cfy, cfz, cfm)", i => i.Cf)
+                        Cell("cf (cfx, cfy, cfz, cfm)", i => i.Cf),
+                        enabled: false
                     ),
                     BinaryRow(
                         TextCell("Concentrated moments"),
-                        Cell("cm (cmx, cmy, cmz, cmm)", i => i.Cm)
+                        Cell("cm (cmx, cmy, cmz, cmm)", i => i.Cm),
+                        enabled: false
                     ),
                     new Label() {Text = "Elements:", Font = Bold()},
-                    
+
                     BinaryRow(
                         TextCell("Shell forces"),
                         Cell("sf (sf1, sf2, sf3, sf4, sf5)", i => i.ShellForces)
@@ -94,7 +96,7 @@ namespace StrucEngLib.Analysis
             gbDetail.BindDataContext(view => view.Content,
                 Binding.Property<AnalysisItemViewModel, bool>(m => m.AnalysisSettingsAllowed())
                     .Convert<Control>(b => b ? Output() : NoOutputAvailable()));
-            
+
             gbDetail.BindDataContext(lab => lab.Text,
                 Binding.Property<AnalysisItemViewModel, string>((m => m.StepName))
                     .Convert(s => "Output for Step " + s));
@@ -115,9 +117,17 @@ namespace StrucEngLib.Analysis
             }
         }
 
-        protected static Control BinaryRow(TableCell c1, TableCell c2)
+        protected static Control BinaryRow(TableCell c1, TableCell c2, bool enabled = true)
         {
             ClickHelp(c1, c2);
+            c1.Control.Enabled = enabled;
+            c2.Control.Enabled = enabled;
+            if (!enabled)
+            {
+                c1.Control.ToolTip = "This feature is not available";
+                c2.Control.ToolTip = "This feature is not available";
+            }
+
             return TableLayout.HorizontalScaled(c1, c2);
         }
 

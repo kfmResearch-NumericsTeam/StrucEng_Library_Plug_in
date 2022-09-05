@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using StrucEngLib.Gui.LinFe;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Invokes compas, draws compas element numbers onto rhino canvas</summary>
     public class ExecElementNumbers : AsyncCommandBase

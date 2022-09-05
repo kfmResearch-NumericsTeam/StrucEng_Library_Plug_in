@@ -1,15 +1,8 @@
-using System;
-using System.ComponentModel;
-using System.Net.Mime;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
-using Rhino.Geometry;
-using Rhino.Input;
-using Rhino.UI;
 
-
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>
     /// Dialog to inspect generated python code

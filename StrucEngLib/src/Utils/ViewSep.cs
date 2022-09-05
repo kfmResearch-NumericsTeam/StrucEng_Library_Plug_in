@@ -4,7 +4,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino.Commands;
 
-namespace StrucEngLib.Views
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Class to draw a text and a separation line next to it

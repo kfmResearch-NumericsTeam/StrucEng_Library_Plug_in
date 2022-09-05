@@ -4,7 +4,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino.Commands;
 
-namespace StrucEngLib.Views
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Subscript Label
@@ -41,7 +41,6 @@ namespace StrucEngLib.Views
             {
                 Font = new Font(FontFamilies.Sans, subs, FontStyle.None),
                 VerticalAlignment = VerticalAlignment.Bottom,
-                BackgroundColor = Colors.Green
             };
 
             Content = new StackLayout

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// A Combobox Implementation which shares input across all instances and auto suggests already entered text.

@@ -12,13 +12,19 @@ namespace StrucEngLib.Utils
         private readonly Button _execOk;
         private readonly Button _execCancel;
 
+        public TextArea TextArea
+        {
+            get;
+            private set;
+        }
+
         public enum ResultStateEnum
         {
-            OK,
-            CANCEL
+            Ok,
+            Cancel
         };
 
-        public ResultStateEnum Result { get; set; }
+        public new ResultStateEnum Result { get; set; }
 
         public MessageDialog(string title, string content)
         {
@@ -31,7 +37,7 @@ namespace StrucEngLib.Utils
             Size = new Size(700, 400);
 
             WindowStyle = WindowStyle.Default;
-            Result = ResultStateEnum.CANCEL;
+            Result = ResultStateEnum.Cancel;
 
             _execOk = new Button()
             {
@@ -43,21 +49,22 @@ namespace StrucEngLib.Utils
                 Text = "Cancel",
             };
 
-            TextArea textArea = new TextArea()
+            TextArea = new TextArea()
             {
                 Text = content,
+                ReadOnly = true,
             };
-            textArea.KeyDown += KeyDownHandel; 
+            TextArea.KeyDown += KeyDownHandel; 
 
             _execOk.Click += (sender, e) =>
             {
-                Result = ResultStateEnum.OK;
+                Result = ResultStateEnum.Ok;
                 Close(DialogResult.Ok);
             };
 
             _execCancel.Click += (sender, e) =>
             {
-                Result = ResultStateEnum.CANCEL;
+                Result = ResultStateEnum.Cancel;
                 Close(DialogResult.Ok);
             };
 
@@ -67,7 +74,7 @@ namespace StrucEngLib.Utils
                 Spacing = new Size(5, 5),
                 Rows =
                 {
-                    new TableRow {ScaleHeight = true, Cells = {new TableCell(textArea, true)}},
+                    new TableRow {ScaleHeight = true, Cells = {new TableCell(TextArea, true)}},
                     new TableRow(
                         new DynamicLayout()
                         {

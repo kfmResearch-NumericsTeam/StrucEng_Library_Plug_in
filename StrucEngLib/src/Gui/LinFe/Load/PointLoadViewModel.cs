@@ -2,7 +2,7 @@ using Microsoft.SqlServer.Server;
 using Rhino;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     /// <summary>Point load vm</summary>
     public class PointLoadViewModel : AbstractLoadViewModel

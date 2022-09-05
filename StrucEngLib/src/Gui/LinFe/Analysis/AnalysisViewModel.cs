@@ -1,10 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using Rhino;
+using StrucEngLib.Gui.LinFe.Step;
 using StrucEngLib.Model;
-using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Analysis
+namespace StrucEngLib.Gui.LinFe.Analysis
 {
     /// <summary>VM to attach settings to a step. For each aggregated step we create a settings object</summary>
     public class AnalysisViewModel : ViewModelBase
