@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using StrucEngLib.Gui.Settings;
 using StrucEngLib.Model;
 using StrucEngLib.Sm;
 
@@ -14,6 +15,7 @@ namespace StrucEngLib
         public ErrorViewModel ErrorVm { get; }
         public LinFeMainViewModel LinFeMainVm { get; }
         public SmMainViewModel SmMainVm { get; }
+        public SettingsMainViewModel SettingsVm { get; }
 
         private UnhandledExceptionEventHandler _exceptionHandler;
 
@@ -29,6 +31,7 @@ namespace StrucEngLib
             ErrorVm = new ErrorViewModel();
             LinFeMainVm = new LinFeMainViewModel(wb, this);
             SmMainVm = new SmMainViewModel(wb, this);
+            SettingsVm = new SettingsMainViewModel(wb, this);
 
             _exceptionHandler = (sender, args) =>
             {
@@ -39,6 +42,7 @@ namespace StrucEngLib
             AppDomain.CurrentDomain.UnhandledException += _exceptionHandler;
             LinFeMainVm.UpdateViewModel();
             SmMainVm.UpdateViewModel();
+            SettingsVm.UpdateViewModel();
         }
 
         public override void Dispose()
@@ -51,7 +55,7 @@ namespace StrucEngLib
         {
             new List<ViewModelBase>()
             {
-                ErrorVm, LinFeMainVm, SmMainVm,
+                ErrorVm, LinFeMainVm, SmMainVm, SettingsVm
             }.ForEach(vm => vm.UpdateModel());
         }
 
@@ -81,6 +85,14 @@ namespace StrucEngLib
         {
             LinFeMainVm?.UpdateModel();
             SmMainVm?.UpdateViewModel();
+        }
+
+        // Stores data into model and updates view model
+        public void ReloadSettings()
+        {
+            LinFeMainVm?.UpdateModel();
+            SmMainVm?.UpdateModel();
+            SettingsVm?.UpdateViewModel();
         }
     }
 }

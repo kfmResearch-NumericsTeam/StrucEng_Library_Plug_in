@@ -4,6 +4,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
+using StrucEngLib.Gui.Settings;
 using StrucEngLib.Layer;
 using StrucEngLib.Sm;
 
@@ -17,6 +18,8 @@ namespace StrucEngLib
     {
         private LinFeMainView _linFeMainView;
         private SmMainView _smMainView;
+        private SettingsMainView _settingsMainView;
+        
         private Color _bgColor = new Label().BackgroundColor;
 
         public static Guid PanelId => typeof(MainView).GUID;
@@ -30,7 +33,7 @@ namespace StrucEngLib
 
         public void LoadUi()
         {
-            TabPage pageLinFe, pageSm;
+            TabPage pageLinFe, pageSm, pageSettings;
             Content = new TabControl()
             {
                 BackgroundColor = _bgColor,
@@ -48,21 +51,30 @@ namespace StrucEngLib
                         BackgroundColor = _bgColor,
                         Text = "Sandwich Model",
                         Content = _smMainView = new SmMainView(StrucEngLibPlugin.Instance.MainViewModel.SmMainVm),
+                    }),
+                    (pageSettings = new TabPage
+                    {
+                        BackgroundColor = _bgColor,
+                        Text = "Settings",
+                        Content = _settingsMainView = new SettingsMainView(StrucEngLibPlugin.Instance.MainViewModel.SettingsVm),
                     })
                 }
             };
             pageSm.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadSandwich(); };
             pageLinFe.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadLinFe(); };
+            pageSettings.Click += (sender, args) => { StrucEngLibPlugin.Instance.MainViewModel.ReloadSettings(); };
         }
 
         public void DisposeUi()
         {
             _linFeMainView?.DisposeUi();
             _smMainView?.DisposeUi();
+            _settingsMainView?.DisposeUi();
             Content.Dispose();
             Content = null;
             _linFeMainView = null;
             _smMainView = null;
+            _settingsMainView = null;
         }
 
         public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)

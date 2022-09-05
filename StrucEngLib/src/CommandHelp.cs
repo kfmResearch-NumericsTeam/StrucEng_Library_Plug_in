@@ -1,3 +1,4 @@
+using System;
 using Rhino;
 using Rhino.Commands;
 using Rhino.Runtime;
@@ -18,8 +19,14 @@ namespace StrucEngLib
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            PythonScript ps = PythonScript.Create();
-            ps.ExecuteScript($"import webbrowser; webbrowser.open('{Url}')");
+            try
+            {
+                PythonScript ps = PythonScript.Create();
+                ps.ExecuteScript($"import webbrowser; webbrowser.open('{Url}')");
+            }
+            catch (Exception)
+            {   
+            }
             return Result.Success;
         }
     }
