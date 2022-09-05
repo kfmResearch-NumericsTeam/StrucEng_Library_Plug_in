@@ -18,7 +18,7 @@ namespace StrucEngLib.Load
     public class SelectLayerDialog : Dialog<DialogResult>
     {
         public List<Layer> SelectedLayers { get; } = new List<Layer>();
-        private Dictionary<CheckBox, Layer> _checkboxMap;
+        private readonly Dictionary<CheckBox, Layer> _checkboxMap = new Dictionary<CheckBox, Layer>();
 
         public SelectLayerDialog(List<Layer> layers)
         {
@@ -65,12 +65,12 @@ namespace StrucEngLib.Load
 
         private void AddCheckboxes(DynamicLayout layout, List<Layer> layers)
         {
-            _checkboxMap = new Dictionary<CheckBox, Layer>();
+            _checkboxMap.Clear();
             layout.AddRow(new Label() {Text = "Select layers for load:"});
 
             foreach (var l in layers)
             {
-                CheckBox c = new CheckBox();
+                var c = new CheckBox();
                 _checkboxMap[c] = l;
                 c.Text = l.GetName();
                 layout.AddRow(c);

@@ -234,7 +234,7 @@ namespace StrucEngLib.Step
                     if (l.LayerType == LayerType.SET)
                     {
                         var newEntry = new StepEntry(StepType.Set, l);
-                        var desc = "Set: " + l.GetName();
+                        var desc = "Constraint: " + l.GetName();
                         entries.Add(new KeyValuePair<string, StepEntry>(desc, newEntry));
                     }
                 }

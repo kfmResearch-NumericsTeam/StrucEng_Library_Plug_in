@@ -100,7 +100,7 @@ namespace StrucEngLib.Model
                         }
 
                         var set = e.Value as Set;
-                        s.Append("Set: " + set.Name + " ");
+                        s.Append("Constraint: " + set.Name + " ");
                         multiLine = true;
                     }
                 }

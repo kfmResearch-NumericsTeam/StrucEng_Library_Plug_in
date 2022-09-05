@@ -126,7 +126,7 @@ namespace StrucEngLib
             if (dialogRc == Eto.Forms.DialogResult.Ok)
             {
 
-                if (d.Result == MessageDialog.ResultStateEnum.OK)
+                if (d.Result == MessageDialog.ResultStateEnum.Ok)
                 {
                     return ViewResult.Ok;
                 }

@@ -169,13 +169,13 @@ namespace StrucEngLib.Sm
                 try
                 {
                     // XXX: Preselect everything once to initialize data
-                    for (int i = 0; i < _vm.Properties.Count; i++)
+                    for (var i = 0; i < _vm.Properties.Count; i++)
                     {
                         _dropdownLayers.SelectedIndex = i;
                     }
                     _dropdownLayers.SelectedIndex = 0;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // XXX: Ignore
                 }
