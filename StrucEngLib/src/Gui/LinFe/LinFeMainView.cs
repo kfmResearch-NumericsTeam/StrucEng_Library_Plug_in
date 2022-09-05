@@ -33,9 +33,9 @@ namespace StrucEngLib
         public void LoadUi(LinFeMainViewModel vm)
         {
             BackgroundColor = new Label().BackgroundColor;
-            Padding = new Padding();
             var layout = new DynamicLayout();
             var holder = new EtoCollapsibleSectionHolder();
+            
             layout.AddRow(holder);
             ScrollHelper.ScrollParent(holder);
             new[]
@@ -59,6 +59,7 @@ namespace StrucEngLib
                     new AnalysisView(vm.AnalysisVm),
                     new LinFeGenerateCodeView(vm.GenerateCodeVm))
             }.ToList().ForEach(e => holder.Add(e));
+
             Content = layout;
         }
 

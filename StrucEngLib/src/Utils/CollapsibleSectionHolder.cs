@@ -10,10 +10,18 @@ namespace StrucEngLib.Utils
         private LocalizeStringPair _label;
         private DynamicLayout _layout;
 
+        public bool ExpandedByDefault { get; set; } = false;
+
+        public override bool InitiallyExpanded
+        {
+            get => ExpandedByDefault;
+        }
+
         public CollapsibleSectionHolder(string label, params Control[] controls)
         {
             _label = new LocalizeStringPair(label, label);
             _layout = new DynamicLayout();
+
             foreach (var control in controls)
             {
                 ScrollHelper.ScrollParent(control);
@@ -30,10 +38,14 @@ namespace StrucEngLib.Utils
         {
             get => _label;
         }
-        
+
         public override int SectionHeight
         {
-            get => Content.Height; 
+            /*
+             * Set this to 0 otherwise rhino will unfold
+             * all sections if we dynamically change the size of a section
+             */
+            get => 0;
         }
     }
 }
