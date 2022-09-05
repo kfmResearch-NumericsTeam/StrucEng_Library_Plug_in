@@ -13,7 +13,7 @@ namespace StrucEngLib.Layer
     /// </summary>
     public class ListLayerView : DynamicLayout
     {
-        private Button _btnMouseSelect;
+        private Button _btnMouseClear;
         private Button _btnAddLayer;
         private Button _btnDeleteLayer;
         private ListBox _dropdownLayers;
@@ -40,7 +40,7 @@ namespace StrucEngLib.Layer
         protected void BindGui()
         {
             _btnAddLayer.Command = _vmListLayer.CommandOnAddLayer;
-            _btnMouseSelect.Command = _vmListLayer.CommandOnMouseSelect;
+            _btnMouseClear.Command = _vmListLayer.CommandClearMouseSelect;
             _btnDeleteLayer.Command = _vmListLayer.CommandOnDeleteLayer;
 
             _gbPropertiesForLayer.BindDataContext(
@@ -56,6 +56,7 @@ namespace StrucEngLib.Layer
                 nameof(_vmListLayer.SelectedLayer));
             _rdlElementSetSelection.Bind<int>(nameof(_rdlElementSetSelection.SelectedIndex), _vmListLayer,
                 nameof(_vmListLayer.LayerToAddType));
+            
             _gbSelectLayer.Bind<bool>(nameof(_gbSelectLayer.Visible), _vmListLayer,
                 nameof(_vmListLayer.SelectLayerViewVisible), DualBindingMode.TwoWay);
             _gbPropertiesForLayer.Bind<bool>(nameof(_gbPropertiesForLayer.Visible), _vmDetailView,
@@ -92,12 +93,12 @@ namespace StrucEngLib.Layer
                                             new TableCell(
                                                 (_tbLayerToAdd = new TextBox
                                                     {
-                                                        PlaceholderText = "Type or Select Layer to add",
+                                                        PlaceholderText = "Select layer in Rhino document",
                                                         AutoSelectMode = AutoSelectMode.OnFocus
                                                     }
                                                 ),
                                                 true),
-                                            new TableCell((_btnMouseSelect = new Button {Text = "Select..."}))
+                                            new TableCell((_btnMouseClear = new Button {Text = "Clear"}))
                                         }
                                     },
                                 }
@@ -114,13 +115,14 @@ namespace StrucEngLib.Layer
                                     {
                                         Orientation = Orientation.Horizontal,
                                         DataStore = new[] {"Element      ", "Constraint   "},
-                                        SelectedIndex = 0
+                                        SelectedIndex = -1
                                     })
                                 }
                             },
                             new TableLayout
                             {
                                 Spacing = new Size(10, 10),
+                                Padding = new Padding(0) {Top = 2, Bottom = 0},
                                 Rows =
                                 {
                                     new TableRow(

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Eto.Drawing;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Utils;
@@ -121,7 +122,9 @@ namespace StrucEngLib
 
         private ViewResult ShowDialog()
         {
-            var d = new MessageDialog("The following messages have occured:", Message);
+            var d = new MessageDialog("The following messages have occured:", Message)
+            {   
+            };
             var dialogRc = d.ShowSemiModal(RhinoDoc.ActiveDoc, RhinoEtoApp.MainWindow);
             if (dialogRc == Eto.Forms.DialogResult.Ok)
             {

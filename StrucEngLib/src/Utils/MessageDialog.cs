@@ -12,6 +12,12 @@ namespace StrucEngLib.Utils
         private readonly Button _execOk;
         private readonly Button _execCancel;
 
+        public TextArea TextArea
+        {
+            get;
+            private set;
+        }
+
         public enum ResultStateEnum
         {
             Ok,
@@ -43,11 +49,12 @@ namespace StrucEngLib.Utils
                 Text = "Cancel",
             };
 
-            TextArea textArea = new TextArea()
+            TextArea = new TextArea()
             {
                 Text = content,
+                ReadOnly = true,
             };
-            textArea.KeyDown += KeyDownHandel; 
+            TextArea.KeyDown += KeyDownHandel; 
 
             _execOk.Click += (sender, e) =>
             {
@@ -67,7 +74,7 @@ namespace StrucEngLib.Utils
                 Spacing = new Size(5, 5),
                 Rows =
                 {
-                    new TableRow {ScaleHeight = true, Cells = {new TableCell(textArea, true)}},
+                    new TableRow {ScaleHeight = true, Cells = {new TableCell(TextArea, true)}},
                     new TableRow(
                         new DynamicLayout()
                         {
