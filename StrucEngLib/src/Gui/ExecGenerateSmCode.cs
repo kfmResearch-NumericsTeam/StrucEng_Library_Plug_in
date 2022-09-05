@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Rhino;
-using Rhino.UI;
+using StrucEngLib.Gui.Sm;
 using StrucEngLib.Model;
-using StrucEngLib.Sm;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Generate Code for Sandwich Model</summary>
     public class ExecGenerateSmCode : CommandBase

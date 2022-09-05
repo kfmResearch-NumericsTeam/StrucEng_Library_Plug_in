@@ -1,13 +1,9 @@
 using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Rhino;
-using Rhino.UI;
+using StrucEngLib.Gui.LinFe;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Generate Code</summary>
     public class ExecGenerateLinFeCode : CommandBase

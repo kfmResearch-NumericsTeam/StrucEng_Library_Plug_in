@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Eto.Drawing;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>Error messages vm</summary>
     public class ErrorViewModel : ViewModelBase

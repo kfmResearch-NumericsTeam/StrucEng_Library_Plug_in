@@ -4,7 +4,7 @@ using System.Text;
 using Eto.Forms;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.Step
+namespace StrucEngLib.Gui.LinFe.Step
 {
     using Layer = StrucEngLib.Model.Layer;
     using Load = StrucEngLib.Model.Load;

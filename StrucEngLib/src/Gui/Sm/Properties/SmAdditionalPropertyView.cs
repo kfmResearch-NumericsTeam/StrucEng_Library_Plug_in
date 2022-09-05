@@ -1,11 +1,9 @@
-using System.IO;
-using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino.UI;
-using StrucEngLib.Views;
+using StrucEngLib.Gui.Sm;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui
 {
     /// <summary>
     /// View model for a single additional property in sandwich model

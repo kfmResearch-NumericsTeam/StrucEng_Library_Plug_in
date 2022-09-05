@@ -4,7 +4,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino.Commands;
 
-namespace StrucEngLib.Views
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Subscript Label

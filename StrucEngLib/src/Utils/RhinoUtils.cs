@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
-using Eto.Drawing;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Input;
 using Rhino.Input.Custom;
-using StrucEngLib.Utils;
-using Font = Rhino.DocObjects.Font;
 
-namespace StrucEngLib
+namespace StrucEngLib.Utils
 {
     public class RhinoUtils
     {

@@ -1,16 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Views;
 
-namespace StrucEngLib
+
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Utility code for views

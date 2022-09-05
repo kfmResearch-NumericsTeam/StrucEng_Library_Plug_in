@@ -1,7 +1,7 @@
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui.LinFe
 {
     /// <summary>About LinFe</summary>
     public class AboutLinFeView: DynamicLayout

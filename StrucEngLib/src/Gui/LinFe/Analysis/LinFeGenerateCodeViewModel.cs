@@ -1,10 +1,4 @@
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using Eto.Forms;
-using Rhino;
-using StrucEngLib.Gui;
-
-namespace StrucEngLib
+namespace StrucEngLib.Gui.LinFe.Analysis
 {   
     /// <summary>Vm for Analysis Control in Sandwich Model</summary>
     public class LinFeGenerateCodeViewModel : CommonGenerateCodeViewModel

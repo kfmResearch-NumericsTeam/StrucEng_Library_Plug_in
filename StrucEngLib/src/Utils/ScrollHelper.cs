@@ -2,7 +2,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib
+namespace StrucEngLib.Utils
 {
     /// <summary>
     /// Utility to scroll a parent on a mouse wheel event

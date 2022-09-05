@@ -11,7 +11,7 @@ using Rhino.Runtime;
 using Rhino.UI.Controls;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Install
 {
     public class Installer : Form
     {

@@ -3,8 +3,9 @@ using System.Reflection;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.UI;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// View for Additional Properties in Sandwich Model

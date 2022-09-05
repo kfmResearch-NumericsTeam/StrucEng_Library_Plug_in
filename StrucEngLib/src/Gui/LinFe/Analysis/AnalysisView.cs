@@ -1,13 +1,8 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Analysis
+namespace StrucEngLib.Gui.LinFe.Analysis
 {
     /// <summary>Main view for analysis</summary>
     public class AnalysisView : DynamicLayout

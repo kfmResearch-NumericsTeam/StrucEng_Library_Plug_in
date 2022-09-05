@@ -1,6 +1,6 @@
 using StrucEngLib.Model;
 
-namespace StrucEngLib.LocalCoordinate
+namespace StrucEngLib.Gui.LinFe.LocalCoordinate
 {
     /// <summary>
     /// Represents a single entry in the list

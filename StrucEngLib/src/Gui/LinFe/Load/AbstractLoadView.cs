@@ -2,7 +2,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     /// <summary>Abstract view class with base functionality for loads</summary>
     public abstract class AbstractLoadView : DynamicLayout

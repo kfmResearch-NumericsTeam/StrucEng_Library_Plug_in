@@ -6,8 +6,9 @@ using Eto.Forms;
 using Rhino;
 using Rhino.UI;
 using StrucEngLib.Model;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Step
+namespace StrucEngLib.Gui.LinFe.Step
 {
     using Layer = StrucEngLib.Model.Layer;
     using Load = StrucEngLib.Model.Load;

@@ -1,12 +1,8 @@
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Analysis;
-using StrucEngLib.Load;
-using StrucEngLib.LocalCoordinate;
-using StrucEngLib.Model;
-using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// View to show layer information

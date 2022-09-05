@@ -1,14 +1,12 @@
 using System;
-using System.Diagnostics;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
 using Rhino.UI;
+using StrucEngLib.Gui.LinFe;
 using StrucEngLib.Gui.Settings;
-using StrucEngLib.Layer;
-using StrucEngLib.Sm;
+using StrucEngLib.Gui.Sm;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>
     /// Main Panel of the rhino plugin

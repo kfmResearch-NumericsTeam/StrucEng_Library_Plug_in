@@ -5,7 +5,7 @@ using Rhino;
 using Rhino.FileIO;
 using Rhino.PlugIns;
 using Rhino.UI;
-using Rhino.UI.ObjectProperties;
+using StrucEngLib.Gui;
 using StrucEngLib.Model;
 
 namespace StrucEngLib

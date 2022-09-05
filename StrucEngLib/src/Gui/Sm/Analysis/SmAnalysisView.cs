@@ -1,13 +1,9 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>View for sandwich analysis</summary>
     public class SmAnalysisView : DynamicLayout

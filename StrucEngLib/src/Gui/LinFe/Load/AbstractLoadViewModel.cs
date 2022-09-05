@@ -5,9 +5,10 @@ using System.Text;
 using Eto.Forms;
 using Rhino;
 using Rhino.UI;
-using StrucEngLib.Layer;
+using StrucEngLib.Gui.LinFe.Layer;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {   
     /// <summary>Abstract vm for load related views</summary>
     public abstract class AbstractLoadViewModel : ViewModelBase

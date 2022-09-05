@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using StrucEngLib.Model;
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// Vm for General Displacement attributes

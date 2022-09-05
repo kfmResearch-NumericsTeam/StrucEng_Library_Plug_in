@@ -1,8 +1,8 @@
 using Eto.Drawing;
 using Eto.Forms;
-using StrucEngLib.Gui;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui
 {
     /// <summary>
     /// Abstract view with control buttons to generate code

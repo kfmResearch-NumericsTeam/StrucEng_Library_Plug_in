@@ -2,9 +2,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Rhino;
+using StrucEngLib.Gui.Sm;
 using StrucEngLib.Model.Sm;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>Vm for general settings of sandwich model</summary>
     public class SmSettingViewModel : ViewModelBase

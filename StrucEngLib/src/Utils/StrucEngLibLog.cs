@@ -3,7 +3,7 @@ using System.Runtime.ConstrainedExecution;
 using Newtonsoft.Json;
 using Rhino;
 
-namespace StrucEngLib.Utils
+namespace StrucEngLib
 {
     /// <summary>Logging singleton for sturcenglib</summary>
     public class StrucEngLibLog

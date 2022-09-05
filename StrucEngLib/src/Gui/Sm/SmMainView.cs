@@ -1,18 +1,9 @@
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
-using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
 using Rhino.UI.Controls;
-using StrucEngLib.Analysis;
-using StrucEngLib.Layer;
-using StrucEngLib.Load;
-using StrucEngLib.LocalCoordinate;
-using StrucEngLib.Step;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>
     /// Main View for Sandwich Model
@@ -54,7 +45,6 @@ namespace StrucEngLib.Sm
                     new SmGenerateCodeView(_vm.GenerateCodeVm)
                     )
             }.ToList().ForEach(e => holder.Add(e));
-            // layout.Add(null);
             Content = layout;
         }
 

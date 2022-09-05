@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
-using Rhino.UI.Controls;
 using static Eto.Drawing.FontFamilies;
 using Size = Eto.Drawing.Size;
 
-namespace StrucEngLib.Analysis
+namespace StrucEngLib.Gui.LinFe.Analysis
 {
     /// <summary>Renders a single analysis item</summary>
     public class AnalysisItemView : DynamicLayout

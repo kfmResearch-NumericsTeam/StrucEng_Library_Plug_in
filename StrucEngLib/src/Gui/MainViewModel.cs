@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using StrucEngLib.Gui.LinFe;
 using StrucEngLib.Gui.Settings;
+using StrucEngLib.Gui.Sm;
 using StrucEngLib.Model;
-using StrucEngLib.Sm;
 
-
-namespace StrucEngLib
+namespace StrucEngLib.Gui
 {
     /// <summary>
     /// Context class with references to all primary view model

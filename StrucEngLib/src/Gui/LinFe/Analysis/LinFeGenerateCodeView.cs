@@ -1,7 +1,4 @@
-using Eto.Drawing;
-using Eto.Forms;
-
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.LinFe.Analysis
 {
     /// <summary>
     /// View for Analysis control in sandwich model

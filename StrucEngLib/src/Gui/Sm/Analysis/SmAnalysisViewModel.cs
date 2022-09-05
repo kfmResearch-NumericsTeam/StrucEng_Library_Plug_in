@@ -1,14 +1,13 @@
-using System;
+
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Model.Sm;
-using StrucEngLib.Sm;
-using StrucEngLib.Step;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>View Model for Analysis Output of Sandwich Model</summary>
     public class SmAnalysisViewModel : ViewModelBase

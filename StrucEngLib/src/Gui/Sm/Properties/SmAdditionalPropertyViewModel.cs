@@ -1,6 +1,7 @@
+using StrucEngLib.Gui.Sm;
 using StrucEngLib.Model.Sm;
 
-namespace StrucEngLib.Sm
+namespace StrucEngLib.Gui.Sm
 {
     /// <summary>View Model for a single additional property in sandwich model</summary>
     public class SmAdditionalPropertyViewModel : ViewModelBase

@@ -1,21 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Eto.Drawing;
 using Eto.Forms;
-using Rhino;
-using Rhino.UI;
 using Rhino.UI.Controls;
-using StrucEngLib.Analysis;
-using StrucEngLib.Layer;
-using StrucEngLib.Load;
-using StrucEngLib.LocalCoordinate;
-using StrucEngLib.Sm;
-using StrucEngLib.Step;
+using StrucEngLib.Gui.LinFe.Analysis;
+using StrucEngLib.Gui.LinFe.Layer;
+using StrucEngLib.Gui.LinFe.Load;
+using StrucEngLib.Gui.LinFe.LocalCoordinate;
+using StrucEngLib.Gui.LinFe.Step;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib
+namespace StrucEngLib.Gui.LinFe
 {
     /// <summary>
     /// Main view for lin fe

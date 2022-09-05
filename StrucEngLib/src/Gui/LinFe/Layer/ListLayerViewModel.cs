@@ -8,7 +8,7 @@ using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
 
-namespace StrucEngLib.Layer
+namespace StrucEngLib.Gui.LinFe.Layer
 {
     /// <summary>
     /// Main vm for layer information

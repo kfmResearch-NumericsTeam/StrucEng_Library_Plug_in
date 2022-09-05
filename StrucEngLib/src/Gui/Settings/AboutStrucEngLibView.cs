@@ -1,10 +1,8 @@
 using System;
 using System.Reflection;
-using System.Security.Policy;
 using Eto.Drawing;
 using Eto.Forms;
 using Rhino.Runtime;
-using StrucEngLib.Utils;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace StrucEngLib.Gui.Settings

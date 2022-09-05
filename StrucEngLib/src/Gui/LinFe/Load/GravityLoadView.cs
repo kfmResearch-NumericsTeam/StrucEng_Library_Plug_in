@@ -1,4 +1,6 @@
-namespace StrucEngLib.Load
+using StrucEngLib.Utils;
+
+namespace StrucEngLib.Gui.LinFe.Load
 {
     /// <summary>Gravity Load View</summary>
     public class GravityLoadView : AbstractLoadView

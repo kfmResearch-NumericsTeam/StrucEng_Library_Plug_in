@@ -10,7 +10,7 @@ using Rhino.UI;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     using Load = StrucEngLib.Model.Load;
     

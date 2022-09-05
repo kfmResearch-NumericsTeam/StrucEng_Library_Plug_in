@@ -11,7 +11,7 @@ using Rhino.UI;
 using StrucEngLib.Model;
 using Layer = StrucEngLib.Model.Layer;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     /// <summary>
     /// Vm for Area load

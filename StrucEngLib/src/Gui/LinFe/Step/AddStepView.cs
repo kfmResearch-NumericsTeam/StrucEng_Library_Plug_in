@@ -7,7 +7,7 @@ using Rhino;
 using StrucEngLib.Model;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib.Step
+namespace StrucEngLib.Gui.LinFe.Step
 {
     /// <summary>Simple View to select entries to group into a step</summary>
     public class AddStepView : Dialog<DialogResult>

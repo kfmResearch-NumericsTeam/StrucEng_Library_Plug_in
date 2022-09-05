@@ -1,8 +1,7 @@
-using System.Reflection;
 using Rhino;
 using Rhino.Commands;
-using Rhino.Runtime;
 using Rhino.UI;
+using StrucEngLib.Install;
 using Command = Rhino.Commands.Command;
 
 namespace StrucEngLib

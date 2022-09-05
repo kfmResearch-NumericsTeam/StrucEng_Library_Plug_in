@@ -1,4 +1,6 @@
-namespace StrucEngLib.Load
+using StrucEngLib.Utils;
+
+namespace StrucEngLib.Gui.LinFe.Load
 {
     /// <summary>
     /// View for area load

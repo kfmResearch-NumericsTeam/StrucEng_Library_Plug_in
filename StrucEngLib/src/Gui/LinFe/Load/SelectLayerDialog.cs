@@ -5,7 +5,7 @@ using Eto.Forms;
 using Rhino;
 using StrucEngLib.Utils;
 
-namespace StrucEngLib.Load
+namespace StrucEngLib.Gui.LinFe.Load
 {
     using Layer = StrucEngLib.Model.Layer;
 

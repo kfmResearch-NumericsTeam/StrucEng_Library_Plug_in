@@ -4,8 +4,9 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using Eto.Drawing;
 using Eto.Forms;
+using StrucEngLib.Utils;
 
-namespace StrucEngLib.LocalCoordinate
+namespace StrucEngLib.Gui.LinFe.LocalCoordinate
 {
     /// <summary>View for LoadConstraints</summary>
     public class LoadConstraintView : DynamicLayout

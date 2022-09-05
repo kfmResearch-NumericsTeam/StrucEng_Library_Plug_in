@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Eto.Forms;
-using StrucEngLib.Model;
 
-namespace StrucEngLib
+namespace StrucEngLib.Utils
 {
     /// <summary>Abstract view model to show a dropbox with a selection
     /// of 'sections' and a detail view according to selection.</summary>
