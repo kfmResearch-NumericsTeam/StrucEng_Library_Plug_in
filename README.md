@@ -14,10 +14,7 @@ Rhinoceros 3D Plugin For StrucEng Library. The StrucEng Library includes mechani
 </p>
 
 ### Installation
-To install, search for "StrucEngLib" in Rhino's Package Store. Please consider
-the [installation section in the
-wiki](https://github.com/kfmResearch-NumericsTeam/StrucEng_Library_Plug_in/wiki/Installation)
-for more detailed instructions.
+https://strucenglib.ethz.ch/strucenglib_plugin/home/
 
 ### Released Versions
 Consider [CHANGELOG](./CHANGELOG) for a summary of changes in the recent versions. 
