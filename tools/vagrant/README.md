@@ -1,6 +1,6 @@
 ## Reproducible Build
 
-### Linux
+### Linux (Recommended)
 
 The development build of this project is captured in a vagrant linux box. For a
 reproducible setup on linux, install the following binaries:
@@ -23,7 +23,7 @@ This setup will cross compile strucenglib on linux for windows.
 The official build system for this project is Linux.
 
 ### Windows
-On windows, install Rhino, dotnet and visual studio, import the project in
+If you prefer to build on windows, install Rhino, dotnet and visual studio, import the project in
 visual studio and build the solution with "build".
 
 Consider Rhino's guide how to bootstrap a hello world project.
