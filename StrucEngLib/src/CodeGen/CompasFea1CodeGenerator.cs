@@ -433,7 +433,7 @@ mdl = Structure(name=name, path=path)
 
             if (s.Workbench.ExecuteOnServer)
             {
-                s.Line($"mdl = connect.analyse_and_extract('{s.Workbench.RemoteServer}', mdl, software='abaqus', fields={fields})");
+                s.Line($"mdl = connect.analyse_and_extract('{s.Workbench.RemoteServer}', mdl, software='abaqus', cpus=8, fields={fields})");
             }
             else
             {
