@@ -66,7 +66,7 @@ namespace StrucEngLib.Gui
                                 (_btnClearData = new LinkButton() {Text = "Reset Data"}),
                                 (_cbExperimentalExec = new CheckBox()
                                     {
-                                        Text = "Execute in Background", Enabled = true,
+                                        Text = "Execute in Background (experimental)", Enabled = true,
                                         ToolTip =
                                             "Executes model in a background thread such that Rhino does not freeze (experimental)."
                                     }
