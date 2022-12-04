@@ -12,7 +12,7 @@ namespace StrucEngLib.Gui
         public RelayCommand CommandExecuteModel { get; }
         public RelayCommand CommandResetData { get; }
 
-        protected bool _executeInBackground = true;
+        protected bool _executeInBackground = false;
 
         public bool? ExecuteInBackground
         {

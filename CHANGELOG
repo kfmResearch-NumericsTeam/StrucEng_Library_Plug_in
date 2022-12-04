@@ -1,6 +1,7 @@
 ## v0.0.13 (pending)
 - introduce strucenglib connect to execute FEA on remote host
 - Add checkbox to either execute locally or remote
+- run in background is off by default
 
 ## v0.0.12, 2022-09-05
 - Introduce collapsible panels in linfe and sandwich model
