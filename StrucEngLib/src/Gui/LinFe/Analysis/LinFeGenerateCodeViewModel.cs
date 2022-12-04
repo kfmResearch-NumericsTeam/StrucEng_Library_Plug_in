@@ -14,6 +14,7 @@ namespace StrucEngLib.Gui.LinFe.Analysis
             base.UpdateModel();
             _vm.Workbench.ExecuteInBackground = _executeInBackground;
             _vm.Workbench.FileName = FileName;
+            _vm.Workbench.ExecuteOnServer = _executeOnServer;
         }
 
         public override void UpdateViewModel()
@@ -21,6 +22,7 @@ namespace StrucEngLib.Gui.LinFe.Analysis
             base.UpdateViewModel();
             ExecuteInBackground = _vm.Workbench.ExecuteInBackground;
             FileName = _vm.Workbench.FileName;
+            ExecuteOnServer = _vm.Workbench.ExecuteOnServer;
         }
 
         protected override void OnInspectModel()

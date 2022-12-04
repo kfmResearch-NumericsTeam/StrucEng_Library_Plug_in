@@ -24,6 +24,19 @@ namespace StrucEngLib.Gui
             }
         }
         
+        protected bool _executeOnServer = false;
+        
+        public bool? ExecuteOnServer
+        {
+            get => _executeOnServer;
+            set
+            {
+                _executeOnServer = (bool) ((value == null) ? false : value);
+                OnPropertyChanged();
+            }
+        }
+
+        
         protected string _fileName;
 
         public string FileName
