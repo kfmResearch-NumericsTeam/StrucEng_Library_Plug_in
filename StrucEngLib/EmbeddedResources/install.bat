@@ -17,6 +17,10 @@ pip install https://github.com/kfmResearch-NumericsTeam/StrucEng_Library/archive
 call python -m compas_rhino.install -v 7.0 -p Sandwichmodel
 call python -m compas_rhino.install -v 7.0 -p Printerfunctions
 
+Rem Install connection layer
+call pip install https://github.com/kfmResearch-NumericsTeam/Struc_Eng_Library_Server/archive/master.zip#subdirectory=strucenglib_connect
+call python -m compas_rhino.install -v 7.0 -p strucenglib_connect
+
 @echo off
 echo 
 echo If something broke, try to delete conda environment %cenv% and retry

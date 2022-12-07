@@ -15,6 +15,7 @@ namespace StrucEngLib.Gui
         protected Button _btnExecPython;
         protected LinkButton _btnClearData;
         private CheckBox _cbExperimentalExec;
+        private CheckBox _cbExecOnServer;
 
         protected CommonGenerateCodeView(CommonGenerateCodeViewModel vm, string titleText)
         {
@@ -65,9 +66,19 @@ namespace StrucEngLib.Gui
                                 (_btnClearData = new LinkButton() {Text = "Reset Data"}),
                                 (_cbExperimentalExec = new CheckBox()
                                     {
-                                        Text = "Execute in Background", Enabled = true,
+                                        Text = "Execute in Background (experimental)", Enabled = true,
                                         ToolTip =
                                             "Executes model in a background thread such that Rhino does not freeze (experimental)."
+                                    }
+                                )
+                            ),
+                            new TableRow(
+                                null,
+                                (_cbExecOnServer = new CheckBox()
+                                    {
+                                        Text = "Execute on Remote Server", Enabled = true,
+                                        ToolTip =
+                                            "Sends model to a remote server to execute."
                                     }
                                 )
                             )
@@ -85,6 +96,8 @@ namespace StrucEngLib.Gui
             _btnClearData.Command = _vm.CommandResetData;
             _cbExperimentalExec.BindDataContext(c => c.Checked,
                 Binding.Property((CommonGenerateCodeViewModel m) => m.ExecuteInBackground));
+            _cbExecOnServer.BindDataContext(c => c.Checked,
+                Binding.Property((CommonGenerateCodeViewModel m) => m.ExecuteOnServer));
         }
     }
 }

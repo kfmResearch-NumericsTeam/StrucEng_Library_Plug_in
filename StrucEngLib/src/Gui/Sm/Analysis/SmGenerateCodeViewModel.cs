@@ -17,6 +17,7 @@ namespace StrucEngLib.Gui.Sm
                 _vm.Workbench.SandwichModel.FileName = FileName;
             }
             _vm.Workbench.ExecuteInBackground = _executeInBackground;
+            _vm.Workbench.ExecuteOnServer = _executeOnServer;
         }
 
         public sealed override void UpdateViewModel()
@@ -27,6 +28,7 @@ namespace StrucEngLib.Gui.Sm
                 FileName = _vm.Workbench.FileName;
             }
             ExecuteInBackground = _vm.Workbench.ExecuteInBackground;
+            ExecuteOnServer = _vm.Workbench.ExecuteOnServer;
         }
 
         protected override void OnInspectModel()

@@ -86,6 +86,12 @@ except Exception:
                 // ignore
             }
 
+            string strucEngLibConnect = "";
+            if (s.Workbench.ExecuteOnServer)
+            {
+                strucEngLibConnect = "from strucenglib_connect import connect";
+            }
+
             string header = $@"
 # This is auto generated code by StrucEngLib Plugin {StrucEngLibPlugin.Version}
 # Find source at {StrucEngLibPlugin.Website}
@@ -115,6 +121,7 @@ from compas_fea.structure import RollerDisplacementXZ
 from compas_fea.structure import ShellSection
 from compas_fea.structure import Structure
 
+{strucEngLibConnect}
 {customImports}
 
 # Snippets based on code of Andrew Liew (github.com/andrewliew), Benjamin Berger (github.com/Beberger)
@@ -400,7 +407,13 @@ mdl = Structure(name=name, path=path)
 
         private void EmitRun(EmitState s)
         {
-            s.CommentLine("Run");
+            var title = "Run";
+            if (s.Workbench.ExecuteOnServer)
+            {
+                title += " on Sever " + s.Workbench.RemoteServer;
+            }
+            s.CommentLine(title);
+            
             var sx = s.Workbench.Steps
                 .Where(step => step.Setting != null && step.Setting.Include)
                 .Select(step => step.Setting)
@@ -417,8 +430,16 @@ mdl = Structure(name=name, path=path)
                     sx.Select(setting => setting.SectionMoments).Contains(true) ? "sm" : "",
                 }.Where(setting => setting != "").ToList(), (id => id)
             );
-            s.Line($"mdl.analyse_and_extract(software='abaqus', fields={fields})");
 
+            if (s.Workbench.ExecuteOnServer)
+            {
+                s.Line($"mdl = connect.analyse_and_extract('{s.Workbench.RemoteServer}', mdl, software='abaqus', fields={fields})");
+            }
+            else
+            {
+                s.Line($"mdl.analyse_and_extract(software='abaqus', fields={fields})");
+            }
+            
             sx.ForEach(setting =>
             {
                 var step = s.CreateStepName(setting.StepId);
