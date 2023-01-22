@@ -24,7 +24,7 @@ namespace StrucEngLib.Model
         
         public bool ExecuteOnServer { get; set; }
 
-        public string RemoteServer { get; set; } = "ws://ibkpika.ethz.ch:8080";
+        public string RemoteServer { get; set; } = "ws://ibkpika.ethz.ch:8080/api/compute";
 
         public SandwichModel SandwichModel { get; set; }
 
