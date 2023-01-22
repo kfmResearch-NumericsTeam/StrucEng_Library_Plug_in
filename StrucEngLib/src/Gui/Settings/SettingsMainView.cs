@@ -27,6 +27,8 @@ namespace StrucEngLib.Gui.Settings
             {
                 new CollapsibleSectionHolder("About The StrucEng Library",
                     new AboutStrucEngLibView()),
+                new CollapsibleSectionHolder("Remote Server",
+                    new RemoteServerSettingsView(vm)),
             }.ToList().ForEach(e => holder.Add(e));
 
             Content = layout;

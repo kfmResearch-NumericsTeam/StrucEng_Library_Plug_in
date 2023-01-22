@@ -10,6 +10,17 @@ namespace StrucEngLib.Gui.Settings
         public MainViewModel MainViewModel { get; }
         public ErrorViewModel ErrorVm { get; set; }
         public Workbench Workbench { get; }
+        
+        public string RemoteServer
+        {
+            get => Workbench.RemoteServer;
+            set
+            {
+                Workbench.RemoteServer = value;
+                OnPropertyChanged();
+            }
+        }
+        
 
         public SettingsMainViewModel(Workbench wb, MainViewModel mvm)
         {
